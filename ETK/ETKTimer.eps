@@ -1,0 +1,109 @@
+// ETKTimer
+import customText as ct;
+const timerLength = 100;
+const timers = EUDArray(100);
+
+object Entry {
+    var callback: EUDFuncPtr (2, 1);
+    var index;
+    var originalTime;
+    var time;
+    var intervalCount;
+    var loops;
+    var ptr;
+    var completionCallback: EUDFuncPtr (1, 0);
+    
+    function tick() {
+    	if (this.time > 0) {
+    		this.time--;
+    	}
+    }
+  
+    function call() {
+        return this.callback(this.ptr, this.intervalCount);
+    }
+};
+
+function _getTimerEntry(i): Entry {
+	return timers[i];
+}
+
+function _getNextFreeTimerSlot() {
+	for (var i = 0; i < timerLength; i++) {
+		if (timers[i] == 0) {
+			return i; 
+		}
+	}
+	StringBuffer().print("ERROR: Out of timer slots");
+	return 0;
+}
+
+function getTimerIDForUnit(unitPointer) {
+	for (var i = 0; i < timerLength; i++) {
+		if (_getTimerEntry(i) != 0 && _getTimerEntry(i).ptr == unitPointer) {
+			return i; 
+		}
+	}
+	return timerLength;
+}
+
+function isTimerRunningForUnit(unitPointer) {
+	return getTimerIDForUnit(unitPointer) != timerLength;
+}
+
+function _addTimerEntry(entry: Entry) {
+	const i = _getNextFreeTimerSlot();
+	entry.index = i;
+	timers[i] = entry;
+	return i;
+
+}
+
+
+function tick() {
+	for (var i = 0; i < timerLength; i++) {
+		if (timers[i] != 0) {
+			const entry = _getTimerEntry(i);
+			entry.tick();
+			if (entry.time == 0) {
+				const shouldContinue = entry.call();
+				if (!entry.loops || !shouldContinue) {
+					if (entry.completionCallback != 0) {
+						entry.completionCallback(entry.ptr);
+					}
+					Entry.free(entry);
+					timers[i] = 0;
+				} else if(entry.loops && shouldContinue) {
+					entry.time = entry.originalTime;
+					entry.intervalCount++;
+				}
+			}
+		}
+	}
+}
+
+function add(time, ptr, callback) {
+	const entry = Entry.alloc();
+	entry.callback = callback;
+	entry.originalTime = time;
+	entry.intervalCount = 0;
+	entry.time = time;
+	entry.loops = false;
+	entry.ptr = ptr;
+	entry.completionCallback = 0;
+	_addTimerEntry(entry);
+	return entry;
+}
+
+function addInterval(time, ptr, callback) {
+	const entry = Entry.alloc();
+	entry.callback = callback;
+	entry.originalTime = time;
+	entry.intervalCount = 0;
+	entry.time = time;
+	entry.loops = true;
+	entry.ptr = ptr;
+	entry.completionCallback = 0;
+	_addTimerEntry(entry);
+	return entry;
+}

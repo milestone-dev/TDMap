@@ -1,0 +1,527 @@
+//ETKUtils.eps
+
+import ETK.ETKUnit;
+import ETK.ETKConstants;
+import ETK.ETKTimer;
+import TriggerEditor.TETools as te;
+import customText as ct;
+
+// TODO: Make these runtime configurable for other projects in the future
+const IMAGE_SPRITE_UNIT_TYPE = $U("Scanner Sweep");
+const OVERLAY_SPRITE_UNIT_TYPE = $U("Protoss Observer");
+const MISSILE_LAUNCHER_UNIT_TYPE = $U("Protoss Corsair");
+const FLASH_UNIT_TYPE = $U("Protoss Shuttle");
+const TARGET_UNIT_TYPE = 161; // Unused Protoss Building 2
+
+const ETKUtilsEffectsPlayerID = $P8;
+var pathableTestUnit32x32;
+var pathableTestUnit16x16;
+
+function abs(n) {
+	return n.AtLeast(1<<31) ? -n : n;
+}
+
+function offsetPoint(x, xOffset, y, yOffset) {
+	return y+xOffset, y+yOffset;
+}
+
+// DAT functions. TODO: Move to its own module later
+
+function setUnitWeapon(unitType, weaponID) {
+	bwrite(0x65FD00 + 6624 + unitType * 1, weaponID);
+	bwrite(0x65FD00 + 14776 + unitType * 1, weaponID);
+}
+
+function setUnitInitialDirection(unitType, direction) {
+	bwrite(0x65FD00 + 2288 + unitType * 1, direction);
+}
+
+function setImageDrawFunction(image, drawFunctionID) {
+	bwrite(0x666778 + 14000 + image * 1, drawFunctionID);
+}
+
+function setUnitImage(unitType, imageID) {
+	const flingyID = bread(0x65FD00 + 18424 + unitType * 1);
+	const spriteID = wread(0x6C9858 + 2752 + flingyID * 2);
+	wwrite(0x665AC0 + 1696 + spriteID * 2, imageID);
+}
+
+function getUnitImage(unitType) {
+	const flingyID = bread(0x65FD00 + 18424 + unitType * 1);
+	const spriteID = wread(0x6C9858 + 2752 + flingyID * 2);
+	return wread(0x665AC0 + 1696 + spriteID * 2);
+}
+
+function setFlingyImage(flingyID, imageID) {
+	const spriteID = wread(0x6C9858 + 2752 + flingyID * 2);
+	wwrite(0x665AC0 + 1696 + spriteID * 2, imageID);
+}
+
+function setSpriteImage(spriteID, imageID) {
+	wwrite(0x665AC0 + 1696 + spriteID * 2, imageID);
+}
+
+// Generic functions
+
+function SetPColor(pnum, color) {
+    const pcolor_dst = 0x581D76 + 8 * pnum;
+    const mcolor_dst = 0x581DD6 + pnum;
+    bwrite(pcolor_dst, color);
+    bwrite(mcolor_dst, color);
+}
+
+function BuildCheckEPD(unitEPD, unitType) {
+    if(
+        wread_epd(unitEPD + 0x098 / 4,  0x098 % 4) == unitType || 
+        wread_epd(unitEPD + 0x09A / 4,  0x09A % 4) == unitType || 
+        wread_epd(unitEPD + 0x09C / 4,  0x09C % 4) == unitType || 
+        wread_epd(unitEPD + 0x09E / 4,  0x09E % 4) == unitType || 
+        wread_epd(unitEPD + 0x0A0 / 4,  0x0A0 % 4) == unitType
+    ){
+        return True;
+    }
+    return False;
+}
+
+function isLocationPathable(location) {
+	MoveUnit(1, ETKConstants.Unit_UnusedZergBuilding5, $P8, $L("Anywhere"), location);
+ 	if (Bring($P8, Exactly, 1, ETKConstants.Unit_UnusedZergBuilding5, location)) {
+		MoveUnit(1, ETKConstants.Unit_UnusedZergBuilding5, $P8, $L("Anywhere"), $L("ETKUtilityStorageLocation"));
+		return true;
+ 	}
+	MoveUnit(1, ETKConstants.Unit_UnusedZergBuilding5, $P8, $L("Anywhere"), $L("ETKUtilityStorageLocation")); 	
+	return false;
+}
+
+function offsetLocation(location,x,y) {
+    addloc(location,x,y);
+}
+
+function SetLocationToUnitEPD(Location ,unit ,X ,Y) {
+    const xpos = wread_epd(unit + X / 4, 0);
+    const ypos = wread_epd(unit + Y / 4, 2);
+    setloc(Location, xpos, ypos);
+}
+
+function setLocationToPoint(location, x, y) {
+    setloc(location, x, y);
+}
+
+function getLocationPoint(location) {
+   	const locTable = EPD(0x58DC4C);
+	const lx1 = dwread_epd(locTable + location * 5);
+	const ly1 = dwread_epd(locTable + location * 5 + 1);
+	return lx1, ly1;
+}
+
+function setLocationToRect(location, x, y, w, h) {
+    setloc(location, x, y, x+w, y+h);
+}
+
+function setLocationToLocation(location, sourceLocation) {
+	const locTable = EPD(0x58DC4C);
+	const lx1 = dwread_epd(locTable + sourceLocation * 5);
+	const lx2 = dwread_epd(locTable + sourceLocation * 5 + 2);
+	const ly1 = dwread_epd(locTable + sourceLocation * 5 + 1);
+	const ly2 = dwread_epd(locTable + sourceLocation * 5 + 3);
+    setloc(location, lx1, ly1, lx2, ly2);
+}
+
+function centerLocationOnPoint(location, x, y, w, h) {
+	x -= w/2;
+	y -= h/2;
+    setloc(location, x, y, x+w, y+h);
+}
+
+function centerLocationOnUnit(location, unit, w, h) {
+	const x, y = ETKUnit.getPosition(unit);
+	centerLocationOnPoint(location, x, y, w, h);
+}
+
+function moveUtilLocationToPoint(x, y) {
+    setLocationToPoint($L("ETKUtilityLocation"), x, y);
+}
+
+function moveUtilLocationToUnit(unit) {
+	SetLocationToUnitEPD($L("ETKUtilityLocation"), unit, 0x028, 0x02A);
+}
+
+function EUDTurbo() {
+	SetMemory(0x6509A0, SetTo, 0);
+}
+
+function getNextUnitEPD(){
+	return epdread_epd(EPD(0x628438));
+}
+
+function getNextUnitPtr(){
+	return dwread_epd(EPD(0x628438));
+}
+
+function getLocationPosition(location) {
+	const locTable = EPD(0x58DC4C);
+	const lx1 = dwread_epd(locTable + location * 5);
+	const lx2 = dwread_epd(locTable + location * 5 + 2);
+	const ly1 = dwread_epd(locTable + location * 5 + 1);
+	const ly2 = dwread_epd(locTable + location * 5 + 3);
+	const w = lx1-lx2;
+	const h = ly1-ly2;
+	return lx1+w, ly1+h; // TODO: This seems to return the bottom right position?
+}
+
+function CUnitInLocation(unit, location) {
+	const locTable = EPD(0x58DC4C);
+	const lx1 = dwread_epd(locTable + location * 5);
+	const lx2 = dwread_epd(locTable + location * 5 + 2);
+	const ly1 = dwread_epd(locTable + location * 5 + 1);
+	const ly2 = dwread_epd(locTable + location * 5 + 3);
+	
+	const ux = ETKUnit.getPositionX(unit);
+	const uy = ETKUnit.getPositionY(unit);
+	
+	return ux >= lx1 && ux <= lx2 && uy >= ly1 && uy <= ly2;
+}
+
+function decrementTimers(timerVar) {
+	const timers = EUDArray.cast(timerVar);
+	for (var i = 0; i < 5; i++) {
+		if (timers[i] > 0) {
+			timers[i] -= 1;
+		}
+	}
+}
+
+function displayTimers(timersVar) {
+	const timers = EUDArray.cast(timersVar);
+	for (var i = 0; i < 5; i++) {
+		if (timers[i] > 0) {
+			ct.chatAnnouncement(timers[i]);
+		}
+	}
+}
+
+function createImageSpriteAtLocation(image, location) {
+	SetMemoryX(0x00666458, SetTo, image, 0x0000ffff);
+	CreateUnit(1, IMAGE_SPRITE_UNIT_TYPE, location, ETKUtilsEffectsPlayerID);
+	RemoveUnit(IMAGE_SPRITE_UNIT_TYPE, AllPlayers);	
+	SetMemoryX(0x00666458, SetTo, 546, 0x0000ffff);
+}
+
+function createImageSpriteAtPoint(image, x, y) {
+	moveUtilLocationToPoint(x,y);
+	createImageSpriteAtLocation(image, $L("ETKUtilityLocation"));
+}
+
+function createImageSpriteAtUnitPosition(image, unit) {
+	moveUtilLocationToUnit(unit);
+	createImageSpriteAtLocation(image, $L("ETKUtilityLocation"));
+}
+
+function createImageSpriteAtUnitPositionDelayed(unit, image, time) {
+	ETKTimer.add(time, unit, EUDFuncPtr (2, 0) (function(callbackUnit, intervalCount) {
+		createImageSpriteAtUnitPosition(callbackUnit, image);
+	}));
+}
+
+function createImageSpriteAtUnitPositionWithOffset(unit, image, xOffset, yOffset) {
+	moveUtilLocationToUnit(unit);
+	offsetLocation($L("ETKUtilityLocation"), xOffset, yOffset);
+	createImageSpriteAtLocation(image, $L("ETKUtilityLocation"));
+}
+
+function dealDamageToPlayerUnitsAtLocation(damage, location, playerIndexStart, playerIndexEnd) {
+	foreach(player : EUDLoopRange(playerIndexStart, playerIndexEnd)) {
+		foreach(ptr, enemyUnit : EUDLoopPlayerUnit(player)) {
+			if (CUnitInLocation(enemyUnit, location)) {
+				ETKUnit.damage(enemyUnit, damage);
+			}
+		}
+	}
+}
+
+function dealDamageToUnitsAtLocation(damage, location, player) {
+	foreach(ptr, enemyUnit : EUDLoopPlayerUnit(player)) {
+		if (CUnitInLocation(enemyUnit, location)) {
+			ETKUnit.damage(enemyUnit, damage);
+		}
+	}
+}
+
+function applyFunctionToPlayerUnitsAtLocation(func: EUDFuncPtr (1, 0), location, playerIndexStart, playerIndexEnd) {
+	foreach(player : EUDLoopRange(playerIndexStart, playerIndexEnd)) {
+		foreach(ptr, unit : EUDLoopPlayerUnit(player)) {
+			if (CUnitInLocation(unit, location)) {
+				func(unit);
+			}
+		}
+	}
+}
+
+function applyFunctionToPlayerUnitsInRectangleAroundUnit(func: EUDFuncPtr (1, 0), playerIndexStart, playerIndexEnd, rectangleSide, unit) {
+    centerLocationOnUnit($L("Anysize"), unit, rectangleSide, rectangleSide);
+	foreach(player : EUDLoopRange(playerIndexStart, playerIndexEnd)) {
+		foreach(ptr, unit : EUDLoopPlayerUnit(player)) {
+			if (CUnitInLocation(unit, $L("Anysize"))) {
+				func(unit);
+			}
+		}
+	}
+}
+
+function displayNotEnoughEnergyMessage(playerID) {
+	//Not implemented
+	
+}
+
+function findUnitOfType(unitType, playerID) {
+	foreach(ptr, unit : EUDLoopPlayerUnit(playerID)) {
+		if (ETKUnit.getUnitType(unit) == unitType) {
+			return unit;
+		}
+	}
+	return 0;
+}
+
+function findUnitOfTypePtr(unitType, playerID) {
+	foreach(ptr, unit : EUDLoopPlayerUnit(playerID)) {
+		if (ETKUnit.getUnitType(unit) == unitType) {
+			return ptr;
+		}
+	}
+	return 0;
+}	
+
+function findUnitOfTypeInLocation(location, unitType, playerID) {
+	foreach(ptr, unit : EUDLoopPlayerUnit(playerID)) {
+		if (ETKUnit.getUnitType(unit) == unitType) {
+			if (CUnitInLocation(unit, location)) {
+				return unit;
+			}	
+		}
+	}
+	return 0;
+}	
+
+function findUnitOfTypesInLocation(location, unitTypes: EUDArray, unitTypesCount, playerID) {
+	foreach(ptr, unit : EUDLoopPlayerUnit(playerID)) {
+		for(var i = 0; i < unitTypesCount; i++) {
+			if (ETKUnit.getUnitType(unit) == unitTypes[i]) {
+				if (CUnitInLocation(unit, location)) {
+					return unit;
+				}
+			}
+		}
+	}
+	return 0;
+}
+
+function findUnitInLocationWithCustomFlag(location, customFlag, playerID) {
+	foreach(ptr, unit : EUDLoopPlayerUnit(playerID)) {
+		if (ETKUnit.getCustomValue(unit) == customFlag) {
+			if (CUnitInLocation(unit, location)) {
+				return unit;
+			}
+		}
+	}
+	return 0;
+}
+
+function createUnit(unitType, location, playerID) {
+	const epd = getNextUnitEPD();
+	CreateUnit(1,unitType, location, playerID);
+	return epd;
+}
+
+function replaceUnit(unit, unitType) {
+	moveUtilLocationToUnit(unit);
+	const playerID = ETKUnit.getPlayerID(unit);
+	RemoveUnitAt(1, ETKUnit.getUnitType(unit), $L("ETKUtilityLocation"), playerID);
+	return createUnit(unitType, $L("ETKUtilityLocation"), playerID);
+}
+
+function createUnitSafe(unitType, location, playerID) {
+	if (!isLocationPathable(location)) {
+		StringBuffer().print("Error: Cannot create unit ", unitType);
+		return 0;
+	}
+	const epd = getNextUnitEPD();
+	createUnit(unitType, location, playerID);
+	return epd;
+}
+
+function createUnitsSafe(count, unitType, location, playerID) {
+	if (isLocationPathable(location)) {
+		CreateUnit(count,unitType, location, playerID);
+	}
+}
+
+function canExecuteCustomTargetAbility(unit, orderID, energy, targetingMode, playerTargetingMode) {
+	// Assuming current player
+	if (!ETKUnit.getOrder(unit) == orderID) {
+		return false;
+	}
+	
+	if (!ETKUnit.hasEnergy(unit, energy)) {
+		ct.chatAnnouncement("Not enough energy");
+		return false;
+	}
+	
+	if (targetingMode == 1 && !ETKUnit.isOrderTargetUnitValid(unit)) {
+		ct.chatAnnouncement("Must target units");
+		return false;
+	}
+
+	return true;
+}
+
+function updateOverlay(unit) {
+	const connectedUnit = ETKUnit.getConnectedUnit(unit);
+	if (connectedUnit != 0) {					
+		if (ETKUnit.getOrder(connectedUnit) == ETKConstants.Order_Die) {
+			ETKUnit.setOrder(unit, ETKConstants.Order_Die);
+		}
+		ETKUnit.setPosition(unit, ETKUnit.getPositionX(connectedUnit), ETKUnit.getPositionY(connectedUnit));
+	}
+}
+
+function unitHasOverlay(unit) {
+	foreach(overlayUnitRaw, overlayUnit : EUDLoopPlayerUnit(ETKUtilsEffectsPlayerID)) {
+		if (ETKUnit.getUnitType(overlayUnit) == OVERLAY_SPRITE_UNIT_TYPE && ETKUnit.getConnectedUnit(overlayUnit) == unit) {
+			return true;
+		}
+	}
+	return false;
+}
+
+function getOverlayForUnit(unit) {
+	foreach(overlayUnitRaw, overlayUnit : EUDLoopPlayerUnit(ETKUtilsEffectsPlayerID)) {
+		if (ETKUnit.getUnitType(overlayUnit) == OVERLAY_SPRITE_UNIT_TYPE && ETKUnit.getConnectedUnit(overlayUnit) == unit) {
+			return overlayUnit;
+		}
+	}
+	return 0;
+}
+
+function destroyOverlayForUnit(unit) {
+	ETKUnit.destroy(getOverlayForUnit(unit));
+	ETKUnit.setConnectedUnit(unit, 0);
+}
+
+function createOverlayForUnit(unit, imageID, removeTimer) {
+	if (unitHasOverlay(unit)) {
+		destroyOverlayForUnit(unit);
+	}
+	moveUtilLocationToUnit(unit);
+	setUnitImage(OVERLAY_SPRITE_UNIT_TYPE, imageID);
+	const overlayUnit = createUnit(OVERLAY_SPRITE_UNIT_TYPE, $L("Anywhere"), ETKUtilsEffectsPlayerID);
+	ETKUnit.removeCollision(overlayUnit);
+	ETKUnit.setConnectedUnit(overlayUnit, unit);
+	ETKUnit.setConnectedUnit(unit, overlayUnit);
+	if (removeTimer > 0) {
+		ETKUnit.setRemoveTimer(overlayUnit, removeTimer);
+	}
+	updateOverlay(overlayUnit);
+	return overlayUnit;
+}
+
+function degToDir(deg) {
+	var dir = (((deg*1000)/360)*255)/1000;
+	dir += 63;
+	if (dir > 255) {
+		dir -= 255;
+	}
+	return dir;
+}
+
+function dirToDeg(dir) {
+	var atan = (((dir*1000)/255)*360)/1000;
+	atan -= 82;
+	if (atan > 360 - 82) {
+		atan += 360;
+	}
+	return atan;
+}
+
+function getPositionFromDirection(originUnit, direction, distance) {
+	var targetX = ETKUnit.getPositionX(originUnit);
+	var targetY = ETKUnit.getPositionY(originUnit);
+	const lx,ly = lengthdir(distance, dirToDeg(direction));
+	return targetX + lx, targetY + ly;
+}
+
+function getDirectionFromPosition(originUnit, x, y) {
+	const originX = ETKUnit.getPositionX(originUnit);
+	const originY = ETKUnit.getPositionY(originUnit);
+	const tanY = y - originY;
+	const tanX = x - originX;
+	const direction = degToDir(atan2(tanY, tanX));
+	return direction;
+}
+
+function isMultiplayer() {
+	if (dwread(0x0057F0B4) == 1) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+function fireMissile(weaponID, originX, originY, targetX, targetY) {
+	moveUtilLocationToPoint(originX, originY);
+	var cannon = createUnit(MISSILE_LAUNCHER_UNIT_TYPE, $L("ETKUtilityLocation"), ETKUtilsEffectsPlayerID);
+	ETKUnit.removeCollision(cannon);
+	moveUtilLocationToPoint(targetX, targetY);
+	var target = createUnit(TARGET_UNIT_TYPE, $L("ETKUtilityLocation"), ETKUtilsEffectsPlayerID);
+	ETKUnit.removeCollision(target);
+	ETKUnit.setConnectedUnit(cannon, target);
+	ETKUnit.setConnectedUnit(target, cannon);
+	setUnitWeapon(MISSILE_LAUNCHER_UNIT_TYPE, weaponID);
+	ETKUnit.attackUnit(cannon, target);
+	ETKTimer.add(12, cannon, EUDFuncPtr (2, 0) (function(callbackUnit, intervalCount) {
+		ETKUnit.stop(callbackUnit);
+	}));
+	return cannon;
+}
+
+function randomArrayItem(array:EUDArray, length) {
+	return array[(rand() % length)];
+}
+
+function concatenateIntegers(x, y) {
+    var pow = 10;
+    while(y >= pow) {
+        var pow = pow * 10;
+    }
+    x = x * pow;
+    return x + y;        
+}
+
+
+function createFlashCopyOfUnit(unit, location) {
+	const flashDirection = (((ETKUnit.getVelocityDirection1(unit) * 100) / 255) * 31) / 100;
+	setUnitInitialDirection(FLASH_UNIT_TYPE, flashDirection);
+	const unitImageID = getUnitImage(ETKUnit.getUnitType(unit));
+	setUnitImage(FLASH_UNIT_TYPE, unitImageID);
+	setImageDrawFunction(unitImageID, 17); // Set to Warp Flash
+	const flashUnit = createUnit(FLASH_UNIT_TYPE, $L("ETKUtilityLocation"), ETKUtilsEffectsPlayerID);
+	ETKUnit.removeCollision(flashUnit);
+	setImageDrawFunction(unitImageID, 0); // Reset for later use
+	ETKTimer.add(2, flashUnit, EUDFuncPtr (2, 0) (function(unit, intervalCount) {
+   		RemoveUnit(FLASH_UNIT_TYPE, ETKUtilsEffectsPlayerID);
+	}));
+	return flashUnit;
+}
+
+function knockbackUnit(unit, direction, distance) {
+	moveUtilLocationToUnit(unit);
+	createFlashCopyOfUnit(unit, $L("ETKUtilityLocation"));
+	const knockbackX, knockbackY = getPositionFromDirection(unit, direction, distance);
+	moveUtilLocationToUnit(unit);
+	setLocationToPoint($L("ETKUtilityLocation2"), knockbackX, knockbackY);
+	MoveUnit(1, ETKUnit.getUnitType(unit), ETKUnit.getPlayerID(unit), $L("ETKUtilityLocation"), $L("ETKUtilityLocation2"));
+}
+
+function setup() {
+	pathableTestUnit32x32 = createUnit(ETKConstants.Unit_UnusedProtossBuilding1, $L("ETKUtilityStorageLocation"), $P8);
+	pathableTestUnit16x16 = createUnit(ETKConstants.Unit_UnusedZergBuilding5, $L("ETKUtilityStorageLocation"), $P8);
+}

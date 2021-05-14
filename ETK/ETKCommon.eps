@@ -1,0 +1,13 @@
+//ETKCommon.eps
+
+function dwwrite_epd(epd, addr, value) {
+    SetMemoryEPD(epd + addr / 4, SetTo, value);
+}
+
+function PTR(epd) {
+    return 4 * epd + 0x58A364;
+}
+
+function makeUnitStackable(epd) {
+    dwwrite_epd(epd + (0xDC / 4), dwread_epd(epd + (0xDC / 4)) | 0x200000);
+}

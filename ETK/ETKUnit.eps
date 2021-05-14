@@ -1,0 +1,5051 @@
+//ETKUnit.eps
+import ETK.ETKConstants as Constant;
+import ETK.ETKCommon as Common;
+
+
+// AUTO GENEREATED
+
+/***
+ * @Summary.us-EN
+ * Get the Prev of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getPrev(unitPointer) {
+    return dwread_epd(unitPointer + 0x000 / 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the Prev of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setPrev(unitPointer, value) {
+    Common.dwwrite_epd(unitPointer, 0x000, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the Next of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getNext(unitPointer) {
+    return dwread_epd(unitPointer + 0x004 / 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the Next of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setNext(unitPointer, value) {
+    Common.dwwrite_epd(unitPointer, 0x004, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the Hitpoints of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getHitpoints(unitPointer) {
+    return dwread_epd(unitPointer + 0x008 / 4) / 256;
+}
+
+
+/***
+ * @Summary.us-EN
+ * Get the Hitpoints of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getHitpointsRaw(unitPointer) {
+    return dwread_epd(unitPointer + 0x008 / 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the Hitpoints of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.hitpoints.us-EN
+ * The new hitpoints
+***/
+function setHitpoints(unitPointer, hitpoints) {
+    Common.dwwrite_epd(unitPointer, 0x008, hitpoints * 256);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the Sprite of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getSprite(unitPointer) {
+    return dwread_epd(unitPointer + 0x00C / 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the Sprite of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.sprite.us-EN
+ * The new sprite
+***/
+function setSprite(unitPointer, sprite) {
+    Common.dwwrite_epd(unitPointer, 0x00C, sprite);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the MoveTargetX of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getMoveTargetX(unitPointer) {
+    return wread_epd(unitPointer + 0x010 / 4, 0x010 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the MoveTargetX of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setMoveTargetX(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x010 / 4, 0x010 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the MoveTargetY of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getMoveTargetY(unitPointer) {
+    return wread_epd(unitPointer + 0x012 / 4, 0x012 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the MoveTargetY of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setMoveTargetY(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x012 / 4, 0x012 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the MoveTargetUnit of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getMoveTargetUnit(unitPointer) {
+    return dwread_epd(unitPointer + 0x014 / 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the MoveTargetUnit of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setMoveTargetUnit(unitPointer, value) {
+    dwwrite_epd(unitPointer + 0x014 / 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the NextMovementWaypointX of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getNextMovementWaypointX(unitPointer) {
+    return wread_epd(unitPointer + 0x018 / 4, 0x018 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the NextMovementWaypointX of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setNextMovementWaypointX(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x018 / 4, 0x018 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the NextMovementWaypointY of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getNextMovementWaypointY(unitPointer) {
+    return wread_epd(unitPointer + 0x01A / 4, 0x01A % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the NextMovementWaypointY of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setNextMovementWaypointY(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x01A / 4, 0x01A % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the NextTargetWaypointX of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getNextTargetWaypointX(unitPointer) {
+    return wread_epd(unitPointer + 0x01C / 4, 0x01C % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the NextTargetWaypointX of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setNextTargetWaypointX(unitPointer, value) {
+    dwwrite_epd(unitPointer + 0x01C / 4, 0x01C % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the NextTargetWaypointY of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getNextTargetWaypointY(unitPointer) {
+    return wread_epd(unitPointer + 0x01E / 4, 0x01E % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the NextTargetWaypointY of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setNextTargetWaypointY(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x01E / 4, 0x01E % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the MovementFlags of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getMovementFlags(unitPointer) {
+    return bread_epd(unitPointer + 0x020 / 4, 0x020 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the MovementFlags of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setMovementFlags(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x020 / 4, 0x020 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the CurrentDirection1 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getCurrentDirection1(unitPointer) {
+    return bread_epd(unitPointer + 0x021 / 4, 0x021 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the CurrentDirection1 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setCurrentDirection1(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x021 / 4, 0x021 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the FlingyTurnRadius of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getFlingyTurnRadius(unitPointer) {
+    return bread_epd(unitPointer + 0x022 / 4, 0x022 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the FlingyTurnRadius of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setFlingyTurnRadius(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x022 / 4, 0x022 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the VelocityDirection1 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getVelocityDirection1(unitPointer) {
+    return bread_epd(unitPointer + 0x023 / 4, 0x023 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the VelocityDirection1 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setVelocityDirection1(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x023 / 4, 0x023 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the FlingyID of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getFlingyID(unitPointer) {
+    return wread_epd(unitPointer + 0x024 / 4, 0x024 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the FlingyID of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setFlingyID(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x024 / 4, 0x024 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the Unknown26 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getUnknown26(unitPointer) {
+    return bread_epd(unitPointer + 0x026 / 4, 0x026 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the Unknown26 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setUnknown26(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x026 / 4, 0x026 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the FlingyMovementType of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getFlingyMovementType(unitPointer) {
+    return bread_epd(unitPointer + 0x027 / 4, 0x027 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the FlingyMovementType of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setFlingyMovementType(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x027 / 4, 0x027 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the PositionX of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getPositionX(unitPointer) {
+    return wread_epd(unitPointer + 0x028 / 4, 0x028 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the PositionX of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setPositionX(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x028 / 4, 0x028 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the PositionY of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getPositionY(unitPointer) {
+    return wread_epd(unitPointer + 0x02A / 4, 0x02A % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the PositionY of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setPositionY(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x02A / 4, 0x02A % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the HaltX of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getHaltX(unitPointer) {
+    return dwread_epd(unitPointer + 0x02C / 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the HaltX of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setHaltX(unitPointer, value) {
+    Common.dwwrite_epd(unitPointer, 0x02C, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the HaltY of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getHaltY(unitPointer) {
+    return dwread_epd(unitPointer + 0x030 / 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the HaltY of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setHaltY(unitPointer, value) {
+    Common.dwwrite_epd(unitPointer, 0x030, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the FlingyTopSpeed of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getFlingyTopSpeed(unitPointer) {
+    return dwread_epd(unitPointer + 0x034 / 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the FlingyTopSpeed of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setFlingyTopSpeed(unitPointer, value) {
+    Common.dwwrite_epd(unitPointer, 0x034, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the CurrentSpeed1 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getCurrentSpeed1(unitPointer) {
+    return dwread_epd(unitPointer + 0x038 / 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the CurrentSpeed1 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setCurrentSpeed1(unitPointer, value) {
+    Common.dwwrite_epd(unitPointer, 0x038, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the CurrentSpeed2 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getCurrentSpeed2(unitPointer) {
+    return dwread_epd(unitPointer + 0x03C / 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the CurrentSpeed2 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setCurrentSpeed2(unitPointer, value) {
+    Common.dwwrite_epd(unitPointer, 0x03C, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the CurrentSpeedX of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getCurrentSpeedX(unitPointer) {
+    return dwread_epd(unitPointer + 0x040 / 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the CurrentSpeedX of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setCurrentSpeedX(unitPointer, value) {
+    Common.dwwrite_epd(unitPointer, 0x040, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the CurrentSpeedY of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getCurrentSpeedY(unitPointer) {
+    return dwread_epd(unitPointer + 0x044 / 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the CurrentSpeedY of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setCurrentSpeedY(unitPointer, value) {
+    Common.dwwrite_epd(unitPointer, 0x044, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the FlingyAcceleration of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getFlingyAcceleration(unitPointer) {
+    return wread_epd(unitPointer + 0x048 / 4, 0x048 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the FlingyAcceleration of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setFlingyAcceleration(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x048 / 4, 0x048 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the CurrentDirection2 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getCurrentDirection2(unitPointer) {
+    return bread_epd(unitPointer + 0x04A / 4, 0x04A % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the CurrentDirection2 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setCurrentDirection2(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x04A / 4, 0x04A % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the VelocityDirection2 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getVelocityDirection2(unitPointer) {
+    return bread_epd(unitPointer + 0x04B / 4, 0x04B % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the VelocityDirection2 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setVelocityDirection2(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x04B / 4, 0x04B % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the PlayerID of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getPlayerID(unitPointer) {
+    return bread_epd(unitPointer + 0x04C / 4, 0x04C % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the PlayerID of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setPlayerID(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x04C / 4, 0x04C % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the OrderID of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getOrderID(unitPointer) {
+    return bread_epd(unitPointer + 0x04D / 4, 0x04D % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the OrderID of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setOrderID(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x04D / 4, 0x04D % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the OrderState of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getOrderState(unitPointer) {
+    return bread_epd(unitPointer + 0x04E / 4, 0x04E % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the OrderState of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setOrderState(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x04E / 4, 0x04E % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the OrderSignal of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getOrderSignal(unitPointer) {
+    return bread_epd(unitPointer + 0x04F / 4, 0x04F % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the OrderSignal of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setOrderSignal(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x04F / 4, 0x04F % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the OrderUnitType of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getOrderUnitType(unitPointer) {
+    return wread_epd(unitPointer + 0x050 / 4, 0x050 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the OrderUnitType of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setOrderUnitType(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x050 / 4, 0x050 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the 52Flag of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function get52Flag(unitPointer) {
+    return wread_epd(unitPointer + 0x052 / 4, 0x052 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the 52Flag of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function set52Flag(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x052 / 4, 0x052 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the MainOrderTimer of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getMainOrderTimer(unitPointer) {
+    return bread_epd(unitPointer + 0x054 / 4, 0x054 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the MainOrderTimer of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setMainOrderTimer(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x054 / 4, 0x054 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the GroundWeaponCooldown of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getGroundWeaponCooldown(unitPointer) {
+    return bread_epd(unitPointer + 0x055 / 4, 0x055 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the GroundWeaponCooldown of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setGroundWeaponCooldown(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x055 / 4, 0x055 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the AirWeaponCooldown of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getAirWeaponCooldown(unitPointer) {
+    return bread_epd(unitPointer + 0x056 / 4, 0x056 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the AirWeaponCooldown of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setAirWeaponCooldown(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x056 / 4, 0x056 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the SpellCooldown of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getSpellCooldown(unitPointer) {
+    return bread_epd(unitPointer + 0x057 / 4, 0x057 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the SpellCooldown of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setSpellCooldown(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x057 / 4, 0x057 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the OrderTargetX of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getOrderTargetX(unitPointer) {
+    return wread_epd(unitPointer + 0x058 / 4, 0x058 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the OrderTargetX of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setOrderTargetX(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x058 / 4, 0x058 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the OrderTargetY of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getOrderTargetY(unitPointer) {
+    return wread_epd(unitPointer + 0x05A / 4, 0x05A % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the OrderTargetY of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setOrderTargetY(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x05A / 4, 0x05A % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the OrderTargetUnit of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getOrderTargetUnit(unitPointer) {
+    return dwread_epd(unitPointer + 0x05C / 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the OrderTargetUnit of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setOrderTargetUnit(unitPointer, value) {
+    Common.dwwrite_epd(unitPointer, 0x05C, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the Shields of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getShields(unitPointer) {
+    return dwread_epd(unitPointer + 0x060 / 4) / 256;
+}
+
+/***
+ * @Summary.us-EN
+ * Set the Shields of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setShields(unitPointer, shields) {
+    Common.dwwrite_epd(unitPointer, 0x060, shields * 256);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the UnitType of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getUnitType(unitPointer) {
+    return wread_epd(unitPointer + 0x064 / 4, 0x064 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the UnitType of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setUnitType(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x064 / 4, 0x064 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the 66Flag of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function get66Flag(unitPointer) {
+    return wread_epd(unitPointer + 0x066 / 4, 0x066 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the 66Flag of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function set66Flag(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x066 / 4, 0x066 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the PreviousPlayerUnit of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getPreviousPlayerUnit(unitPointer) {
+    return dwread_epd(unitPointer + 0x068 / 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the PreviousPlayerUnit of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setPreviousPlayerUnit(unitPointer, value) {
+    Common.dwwrite_epd(unitPointer, 0x068, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the NextPlayerUnit of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getNextPlayerUnit(unitPointer) {
+    return dwread_epd(unitPointer + 0x06C / 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the NextPlayerUnit of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setNextPlayerUnit(unitPointer, value) {
+    Common.dwwrite_epd(unitPointer, 0x06C, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the SubUnit of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getSubUnit(unitPointer) {
+    return dwread_epd(unitPointer + 0x070 / 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the SubUnit of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setSubUnit(unitPointer, value) {
+    Common.dwwrite_epd(unitPointer, 0x070, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the OrderQueueHead of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getOrderQueueHead(unitPointer) {
+    return dwread_epd(unitPointer + 0x074 / 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the OrderQueueHead of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setOrderQueueHead(unitPointer, value) {
+    Common.dwwrite_epd(unitPointer, 0x074, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the OrderQueueTail of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getOrderQueueTail(unitPointer) {
+    return dwread_epd(unitPointer + 0x078 / 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the OrderQueueTail of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setOrderQueueTail(unitPointer, value) {
+    Common.dwwrite_epd(unitPointer, 0x078, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the AutoTargetUnit of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getAutoTargetUnit(unitPointer) {
+    return dwread_epd(unitPointer + 0x07C / 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the AutoTargetUnit of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setAutoTargetUnit(unitPointer, value) {
+    Common.dwwrite_epd(unitPointer, 0x07C, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the OrderQueueCount of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getOrderQueueCount(unitPointer) {
+    return bread_epd(unitPointer + 0x084 / 4, 0x084 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the OrderQueueCount of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setOrderQueueCount(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x084 / 4, 0x084 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the OrderQueueTimer of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getOrderQueueTimer(unitPointer) {
+    return bread_epd(unitPointer + 0x085 / 4, 0x085 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the OrderQueueTimer of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setOrderQueueTimer(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x085 / 4, 0x085 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the Unknown86 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getUnknown86(unitPointer) {
+    return bread_epd(unitPointer + 0x086 / 4, 0x086 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the Unknown86 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setUnknown86(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x086 / 4, 0x086 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the AttackNotifyTimer of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getAttackNotifyTimer(unitPointer) {
+    return bread_epd(unitPointer + 0x087 / 4, 0x087 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the AttackNotifyTimer of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setAttackNotifyTimer(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x087 / 4, 0x087 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the PreviousUnitType of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getPreviousUnitType(unitPointer) {
+    return wread_epd(unitPointer + 0x088 / 4, 0x088 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the PreviousUnitType of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setPreviousUnitType(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x088 / 4, 0x088 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the LastEventTimer of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getLastEventTimer(unitPointer) {
+    return bread_epd(unitPointer + 0x08A / 4, 0x08A % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the LastEventTimer of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setLastEventTimer(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x08A / 4, 0x08A % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the LastEventColor of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getLastEventColor(unitPointer) {
+    return bread_epd(unitPointer + 0x08B / 4, 0x08B % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the LastEventColor of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setLastEventColor(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x08B / 4, 0x08B % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the 8Flag of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function get8Flag(unitPointer) {
+    return wread_epd(unitPointer + 0x08C / 4, 0x08C % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the 8Flag of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function set8Flag(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x08C / 4, 0x08C % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the RankIncrease of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getRankIncrease(unitPointer) {
+    return bread_epd(unitPointer + 0x08E / 4, 0x08E % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the RankIncrease of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setRankIncrease(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x08E / 4, 0x08E % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the KillCount of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getKillCount(unitPointer) {
+    return bread_epd(unitPointer + 0x08F / 4, 0x08F % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the KillCount of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setKillCount(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x08F / 4, 0x08F % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the LastAttackingPlayer of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getLastAttackingPlayer(unitPointer) {
+    return bread_epd(unitPointer + 0x090 / 4, 0x090 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the LastAttackingPlayer of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setLastAttackingPlayer(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x090 / 4, 0x090 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the SecondaryOrderTimer of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getSecondaryOrderTimer(unitPointer) {
+    return bread_epd(unitPointer + 0x091 / 4, 0x091 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the SecondaryOrderTimer of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setSecondaryOrderTimer(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x091 / 4, 0x091 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the AIActionFlag of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getAIActionFlag(unitPointer) {
+    return bread_epd(unitPointer + 0x092 / 4, 0x092 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the AIActionFlag of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setAIActionFlag(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x092 / 4, 0x092 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the UserActionFlags of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getUserActionFlags(unitPointer) {
+    return bread_epd(unitPointer + 0x093 / 4, 0x093 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the UserActionFlags of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setUserActionFlags(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x093 / 4, 0x093 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the CurrentButtonSet of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getCurrentButtonSet(unitPointer) {
+    return wread_epd(unitPointer + 0x094 / 4, 0x094 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the CurrentButtonSet of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setCurrentButtonSet(unitPointer, value) {
+    wwrite_epd(0x094 / 4, 0x094 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the IsCloaked of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getIsCloaked(unitPointer) {
+    return bread_epd(unitPointer + 0x096 / 4, 0x096 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the IsCloaked of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setIsCloaked(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x096 / 4, 0x096 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the MovementState of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getMovementState(unitPointer) {
+    return bread_epd(unitPointer + 0x097 / 4, 0x097 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the MovementState of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setMovementState(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x097 / 4, 0x097 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the BuildQueue1 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getBuildQueue1(unitPointer) {
+    return wread_epd(unitPointer + 0x098 / 4, 0x098 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the BuildQueue1 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setBuildQueue1(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x098 / 4, 0x098 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the BuildQueue2 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getBuildQueue2(unitPointer) {
+    return wread_epd(unitPointer + 0x09A / 4, 0x09A % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the BuildQueue2 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setBuildQueue2(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x09A / 4, 0x09A % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the BuildQueue3 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getBuildQueue3(unitPointer) {
+    return wread_epd(unitPointer + 0x09C / 4, 0x09C % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the BuildQueue3 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setBuildQueue3(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x09C / 4, 0x09C % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the BuildQueue4 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getBuildQueue4(unitPointer) {
+    return wread_epd(unitPointer + 0x09E / 4, 0x09E % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the BuildQueue4 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setBuildQueue4(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x09E / 4, 0x09E % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the BuildQueue5 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getBuildQueue5(unitPointer) {
+    return wread_epd(unitPointer + 0x0A0 / 4, 0x0A0 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the BuildQueue5 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setBuildQueue5(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x0A0 / 4, 0x0A0 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the Energy of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getEnergy(unitPointer) {
+    return wread_epd(unitPointer + 0x0A2 / 4,  0x0A2 % 4) / 256;
+}
+
+/***
+ * @Summary.us-EN
+ * Set the Energy of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setEnergy(unitPointer, energy) {
+    Common.dwwrite_epd(unitPointer, 0x0,(energy * 256) * 65536);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the BuildQueueSlot of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getBuildQueueSlot(unitPointer) {
+    return bread_epd(unitPointer + 0x0A4 / 4, 0x0A4 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the BuildQueueSlot of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setBuildQueueSlot(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x0A4 / 4, 0x0A4 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the UniquenessIdentifier of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getUniquenessIdentifier(unitPointer) {
+    return bread_epd(unitPointer + 0x0A5 / 4, 0x0A5 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the UniquenessIdentifier of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setUniquenessIdentifier(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x0A5 / 4, 0x0A5 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the SecondaryOrderID of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getSecondaryOrderID(unitPointer) {
+    return bread_epd(unitPointer + 0x0A6 / 4, 0x0A6 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the SecondaryOrderID of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setSecondaryOrderID(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x0A6 / 4, 0x0A6 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the BuildingOverlayState of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getBuildingOverlayState(unitPointer) {
+    return bread_epd(unitPointer + 0x0A7 / 4, 0x0A7 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the BuildingOverlayState of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setBuildingOverlayState(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x0A7 / 4, 0x0A7 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the HpGain of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getHpGain(unitPointer) {
+    return wread_epd(unitPointer + 0x0A8 / 4, 0x0A8 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the HpGain of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setHpGain(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x0A8 / 4, 0x0A8 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the ShieldGain of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getShieldGain(unitPointer) {
+    return wread_epd(unitPointer + 0x0AA / 4, 0x0AA % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the ShieldGain of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setShieldGain(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x0AA / 4, 0x0AA % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the RemainingBuildTime of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getRemainingBuildTime(unitPointer) {
+    return wread_epd(unitPointer + 0x0AC / 4, 0x0AC % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the RemainingBuildTime of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setRemainingBuildTime(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x0AC / 4, 0x0AC % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the PreviousHitpoints of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setPreviousHitpoints(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x0AE / 4,  0x0AE % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the PreviousHitpoints of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getPreviousHitpoints(unitPointer) {
+    return wread_epd(unitPointer + 0x0AE / 4,  0x0AE % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the LoadedUnitIndex1 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getLoadedUnitIndex1(unitPointer) {
+    return wread_epd(unitPointer + 0x0B0 / 4, 0x0B0 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the LoadedUnitIndex1 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setLoadedUnitIndex1(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x0B0 / 4, 0x0B0 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the LoadedUnitIndex2 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getLoadedUnitIndex2(unitPointer) {
+    return wread_epd(unitPointer + 0x0B2 / 4, 0x0B2 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the LoadedUnitIndex2 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setLoadedUnitIndex2(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x0B2 / 4, 0x0B2 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the LoadedUnitIndex3 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getLoadedUnitIndex3(unitPointer) {
+    return wread_epd(unitPointer + 0x0B4 / 4, 0x0B4 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the LoadedUnitIndex3 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setLoadedUnitIndex3(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x0B4 / 4, 0x0B4 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the LoadedUnitIndex4 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getLoadedUnitIndex4(unitPointer) {
+    return wread_epd(unitPointer + 0x0B6 / 4, 0x0B6 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the LoadedUnitIndex4 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setLoadedUnitIndex4(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x0B6 / 4, 0x0B6 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the LoadedUnitIndex5 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getLoadedUnitIndex5(unitPointer) {
+    return wread_epd(unitPointer + 0x0B8 / 4, 0x0B8 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the LoadedUnitIndex5 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setLoadedUnitIndex5(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x0B8 / 4, 0x0B8 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the LoadedUnitIndex6 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getLoadedUnitIndex6(unitPointer) {
+    return wread_epd(unitPointer + 0x0BA / 4, 0x0BA % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the LoadedUnitIndex6 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setLoadedUnitIndex6(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x0BA / 4, 0x0BA % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the LoadedUnitIndex7 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getLoadedUnitIndex7(unitPointer) {
+    return wread_epd(unitPointer + 0x0BC / 4, 0x0BC % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the LoadedUnitIndex7 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setLoadedUnitIndex7(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x0BC / 4, 0x0BC % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the LoadedUnitIndex8 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getLoadedUnitIndex8(unitPointer) {
+    return wread_epd(unitPointer + 0x0BE / 4, 0x0BE % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the LoadedUnitIndex8 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setLoadedUnitIndex8(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x0BE / 4, 0x0BE % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the SpiderMineCount of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getSpiderMineCount(unitPointer) {
+    return bread_epd(unitPointer + 0x0C0 / 4, 0x0C0 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the SpiderMineCount of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setSpiderMineCount(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x0C0 / 4, 0x0C0 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the PInHanger of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getPInHanger(unitPointer) {
+    return dwread_epd(unitPointer + 0x0C0 / 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the PInHanger of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setPInHanger(unitPointer, value) {
+    Common.dwwrite_epd(unitPointer, 0x0C0, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the POutHanger of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getPOutHanger(unitPointer) {
+    return dwread_epd(unitPointer + 0x0C4 / 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the POutHanger of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setPOutHanger(unitPointer, value) {
+    Common.dwwrite_epd(unitPointer, 0x0C4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the InHangerCount of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getInHangerCount(unitPointer) {
+    return bread_epd(unitPointer + 0x0C8 / 4, 0x0C8 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the InHangerCount of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setInHangerCount(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x0C8 / 4, 0x0C8 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the OutHangerCount of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getOutHangerCount(unitPointer) {
+    return bread_epd(unitPointer + 0x0C9 / 4, 0x0C9 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the OutHangerCount of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setOutHangerCount(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x0C9 / 4, 0x0C9 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the FighterParent of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getFighterParent(unitPointer) {
+    return dwread_epd(unitPointer + 0x0C0 / 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the FighterParent of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setFighterParent(unitPointer, value) {
+    Common.dwwrite_epd(unitPointer, 0x0C0, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the FighterPrev of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getFighterPrev(unitPointer) {
+    return dwread_epd(unitPointer + 0x0C4 / 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the FighterPrev of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setFighterPrev(unitPointer, value) {
+    Common.dwwrite_epd(unitPointer, 0x0C4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the FighterNext of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getFighterNext(unitPointer) {
+    return dwread_epd(unitPointer + 0x0C8 / 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the FighterNext of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setFighterNext(unitPointer, value) {
+    Common.dwwrite_epd(unitPointer, 0x0C8, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the FighterInHanger of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getFighterInHanger(unitPointer) {
+    return bread_epd(unitPointer + 0x0CC / 4, 0x0CC % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the FighterInHanger of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setFighterInHanger(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x0CC / 4, 0x0CC % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the Unknown00 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getUnknown00(unitPointer) {
+    return dwread_epd(unitPointer + 0x0C0 / 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the Unknown00 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setUnknown00(unitPointer, value) {
+    Common.dwwrite_epd(unitPointer, 0x0C0, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the Unknown04 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getUnknown04(unitPointer) {
+    return dwread_epd(unitPointer + 0x0C4 / 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the Unknown04 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setUnknown04(unitPointer, value) {
+    Common.dwwrite_epd(unitPointer, 0x0C4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the FlagSpawnFrame of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getFlagSpawnFrame(unitPointer) {
+    return dwread_epd(unitPointer + 0x0C8 / 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the FlagSpawnFrame of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setFlagSpawnFrame(unitPointer, value) {
+    Common.dwwrite_epd(unitPointer, 0x0C8, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the Addon of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getAddon(unitPointer) {
+    return dwread_epd(unitPointer + 0x0C0 / 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the Addon of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setAddon(unitPointer, value) {
+    Common.dwwrite_epd(unitPointer, 0x0C0, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the AddonBuildType of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getAddonBuildType(unitPointer) {
+    return wread_epd(unitPointer + 0x0C4 / 4, 0x0C4 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the AddonBuildType of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setAddonBuildType(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x0C4 / 4, 0x0C4 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the UpgradeResearchTime of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getUpgradeResearchTime(unitPointer) {
+    return wread_epd(unitPointer + 0x0C6 / 4, 0x0C6 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the UpgradeResearchTime of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setUpgradeResearchTime(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x0C6 / 4, 0x0C6 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the TechType of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getTechType(unitPointer) {
+    return bread_epd(unitPointer + 0x0C8 / 4, 0x0C8 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the TechType of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setTechType(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x0C8 / 4, 0x0C8 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the UpgradeType of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getUpgradeType(unitPointer) {
+    return bread_epd(unitPointer + 0x0C9 / 4, 0x0C9 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the UpgradeType of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setUpgradeType(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x0C9 / 4, 0x0C9 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the LarvaTimer of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getLarvaTimer(unitPointer) {
+    return bread_epd(unitPointer + 0x0CA / 4, 0x0CA % 4) / 65536 ;
+}
+
+/***
+ * @Summary.us-EN
+ * Set the LarvaTimer of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setLarvaTimer(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x0CA / 4, 0x0CA % 4, value * 65536);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the LandingTimer of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getLandingTimer(unitPointer) {
+    return bread_epd(unitPointer + 0x0CB / 4, 0x0CB % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the LandingTimer of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setLandingTimer(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x0CB / 4, 0x0CB % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the CreepTimer of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getCreepTimer(unitPointer) {
+    return bread_epd(unitPointer + 0x0CC / 4, 0x0CC % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the CreepTimer of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setCreepTimer(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x0CC / 4, 0x0CC % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the UpgradeLevel of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getUpgradeLevel(unitPointer) {
+    return bread_epd(unitPointer + 0x0CD / 4, 0x0CD % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the UpgradeLevel of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setUpgradeLevel(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x0CD / 4, 0x0CD % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the UnknownE of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getUnknownE(unitPointer) {
+    return wread_epd(unitPointer + 0x0CE / 4, 0x0CE % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the UnknownE of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setUnknownE(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x0CE / 4, 0x0CE % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the Powerup of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getPowerup(unitPointer) {
+    return dwread_epd(unitPointer + 0x0C0 / 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the Powerup of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setPowerup(unitPointer, value) {
+    Common.dwwrite_epd(unitPointer, 0x0C0, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the TargetResourceX of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getTargetResourceX(unitPointer) {
+    return wread_epd(unitPointer + 0x0C4 / 4, 0x0C4 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the TargetResourceX of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setTargetResourceX(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x0C4 / 4, 0x0C4 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the TargetResourceY of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getTargetResourceY(unitPointer) {
+    return wread_epd(unitPointer + 0x0C6 / 4, 0x0C6 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the TargetResourceY of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setTargetResourceY(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x0C6 / 4, 0x0C6 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the TargetResourceUnit of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getTargetResourceUnit(unitPointer) {
+    return dwread_epd(unitPointer + 0x0C8 / 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the TargetResourceUnit of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setTargetResourceUnit(unitPointer, value) {
+    Common.dwwrite_epd(unitPointer, 0x0C8, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the RepairResourceLossTimer of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getRepairResourceLossTimer(unitPointer) {
+    return wread_epd(unitPointer + 0x0CC / 4, 0x0CC % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the RepairResourceLossTimer of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setRepairResourceLossTimer(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x0CC / 4, 0x0CC % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the HarvestTarget of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getHarvestTarget(unitPointer) {
+    return dwread_epd(unitPointer + 0x0D0 / 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the HarvestTarget of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setHarvestTarget(unitPointer, value) {
+    Common.dwwrite_epd(unitPointer, 0x0D0, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the PrevHarvestUnit of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getPrevHarvestUnit(unitPointer) {
+    return dwread_epd(unitPointer + 0x0D4 / 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the PrevHarvestUnit of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setPrevHarvestUnit(unitPointer, value) {
+    Common.dwwrite_epd(unitPointer, 0x0D4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the NextHarvestUnit of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getNextHarvestUnit(unitPointer) {
+    return dwread_epd(unitPointer + 0x0D8 / 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the NextHarvestUnit of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setNextHarvestUnit(unitPointer, value) {
+    Common.dwwrite_epd(unitPointer, 0x0D8, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the ResourceCount of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getResourceCount(unitPointer) {
+    return wread_epd(unitPointer + 0x0D0 / 4, 0x0D0 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the ResourceCount of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setResourceCount(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x0D0 / 4, 0x0D0 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the ResourceIscript of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getResourceIscript(unitPointer) {
+    return bread_epd(unitPointer + 0x0D2 / 4, 0x0D2 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the ResourceIscript of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setResourceIscript(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x0D2 / 4, 0x0D2 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the GatherQueueCount of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getGatherQueueCount(unitPointer) {
+    return bread_epd(unitPointer + 0x0D3 / 4, 0x0D3 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the GatherQueueCount of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setGatherQueueCount(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x0D3 / 4, 0x0D3 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the NextGatherer of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getNextGatherer(unitPointer) {
+    return dwread_epd(unitPointer + 0x0D4 / 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the NextGatherer of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setNextGatherer(unitPointer, value) {
+    Common.dwwrite_epd(unitPointer, 0x0D4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the ResourceGroup of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getResourceGroup(unitPointer) {
+    return bread_epd(unitPointer + 0x0D8 / 4, 0x0D8 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the ResourceGroup of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setResourceGroup(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x0D8 / 4, 0x0D8 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the ResourceBelongsToAI of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getResourceBelongsToAI(unitPointer) {
+    return bread_epd(unitPointer + 0x0D9 / 4, 0x0D9 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the ResourceBelongsToAI of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setResourceBelongsToAI(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x0D9 / 4, 0x0D9 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the NydusExit of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getNydusExit(unitPointer) {
+    return dwread_epd(unitPointer + 0x0D0 / 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the NydusExit of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setNydusExit(unitPointer, value) {
+    Common.dwwrite_epd(unitPointer, 0x0D0, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the GhostNukeDot of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getGhostNukeDot(unitPointer) {
+    return dwread_epd(unitPointer + 0x0D0 / 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the GhostNukeDot of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setGhostNukeDot(unitPointer, value) {
+    Common.dwwrite_epd(unitPointer, 0x0D0, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the PylonpPowerTemplate of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getPylonpPowerTemplate(unitPointer) {
+    return dwread_epd(unitPointer + 0x0D0 / 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the PylonpPowerTemplate of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setPylonpPowerTemplate(unitPointer, value) {
+    Common.dwwrite_epd(unitPointer, 0x0D0, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the SiloNuke of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getSiloNuke(unitPointer) {
+    return dwread_epd(unitPointer + 0x0D0 / 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the SiloNuke of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setSiloNuke(unitPointer, value) {
+    Common.dwwrite_epd(unitPointer, 0x0D0, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the SiloReady of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getSiloReady(unitPointer) {
+    return bread_epd(unitPointer + 0x0D4 / 4, 0x0D4 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the SiloReady of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setSiloReady(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x0D4 / 4, 0x0D4 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the HatcheryHarvestValueLeft of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getHatcheryHarvestValueLeft(unitPointer) {
+    return wread_epd(unitPointer + 0x0D0 / 4, 0x0D0 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the HatcheryHarvestValueLeft of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setHatcheryHarvestValueLeft(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x0D0 / 4, 0x0D0 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the HatcheryHarvestValueTop of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getHatcheryHarvestValueTop(unitPointer) {
+    return wread_epd(unitPointer + 0x0D2 / 4, 0x0D2 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the HatcheryHarvestValueTop of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setHatcheryHarvestValueTop(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x0D2 / 4, 0x0D2 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the HatcheryHarvestValueRight of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getHatcheryHarvestValueRight(unitPointer) {
+    return wread_epd(unitPointer + 0x0D4 / 4, 0x0D4 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the HatcheryHarvestValueRight of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setHatcheryHarvestValueRight(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x0D4 / 4, 0x0D4 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the HatcheryHarvestValueBottom of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getHatcheryHarvestValueBottom(unitPointer) {
+    return wread_epd(unitPointer + 0x0D6 / 4, 0x0D6 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the HatcheryHarvestValueBottom of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setHatcheryHarvestValueBottom(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x0D6 / 4, 0x0D6 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the OriginX of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getOriginX(unitPointer) {
+    return wread_epd(unitPointer + 0x0D0 / 4, 0x0D0 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the OriginX of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setOriginX(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x0D0 / 4, 0x0D0 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the OriginY of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getOriginY(unitPointer) {
+    return wread_epd(unitPointer + 0x0D2 / 4, 0x0D2 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the OriginY of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setOriginY(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x0D2 / 4, 0x0D2 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the StatusFlags of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getStatusFlags(unitPointer) {
+    return dwread_epd(unitPointer + 0x0DC / 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the StatusFlags of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setStatusFlags(unitPointer, value) {
+     Common.dwwrite_epd(unitPointer, 0x0DC, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the ResourceType of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getResourceType(unitPointer) {
+    return bread_epd(unitPointer + 0x0E0 / 4, 0x0E0 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the ResourceType of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setResourceType(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x0E0 / 4, 0x0E0 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the WireframeRandomizer of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getWireframeRandomizer(unitPointer) {
+    return bread_epd(unitPointer + 0x0E1 / 4, 0x0E1 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the WireframeRandomizer of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setWireframeRandomizer(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x0E1 / 4, 0x0E1 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the SecondaryOrderState of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getSecondaryOrderState(unitPointer) {
+    return bread_epd(unitPointer + 0x0E2 / 4, 0x0E2 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the SecondaryOrderState of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setSecondaryOrderState(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x0E2 / 4, 0x0E2 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the RecentOrderTimer of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getRecentOrderTimer(unitPointer) {
+    return bread_epd(unitPointer + 0x0E3 / 4, 0x0E3 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the RecentOrderTimer of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setRecentOrderTimer(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x0E3 / 4, 0x0E3 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the VisibilityStatus of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getVisibilityStatus(unitPointer) {
+    return dwread_epd(unitPointer + 0x0E4 / 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the VisibilityStatus of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setVisibilityStatus(unitPointer, value) {
+    Common.dwwrite_epd(unitPointer, 0x0E4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the SecondaryOrderPositionX of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getSecondaryOrderPositionX(unitPointer) {
+    return wread_epd(unitPointer + 0x0E8 / 4, 0x0E8 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the SecondaryOrderPositionX of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setSecondaryOrderPositionX(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x0E8 / 4, 0x0E8 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the SecondaryOrderPositionY of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getSecondaryOrderPositionY(unitPointer) {
+    return wread_epd(unitPointer + 0x0EA / 4, 0x0EA % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the SecondaryOrderPositionY of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setSecondaryOrderPositionY(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x0EA / 4, 0x0EA % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the CurrentBuildUnit of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getCurrentBuildUnit(unitPointer) {
+    return dwread_epd(unitPointer + 0x0EC / 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the CurrentBuildUnit of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setCurrentBuildUnit(unitPointer, value) {
+    Common.dwwrite_epd(unitPointer, 0x0EC, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the PreviousBurrowedUnit of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getPreviousBurrowedUnit(unitPointer) {
+    return dwread_epd(unitPointer + 0x0F0 / 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the PreviousBurrowedUnit of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setPreviousBurrowedUnit(unitPointer, value) {
+    Common.dwwrite_epd(unitPointer, 0x0F0, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the NextBurrowedUnit of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getNextBurrowedUnit(unitPointer) {
+    return dwread_epd(unitPointer + 0x0F4 / 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the NextBurrowedUnit of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setNextBurrowedUnit(unitPointer, value) {
+    Common.dwwrite_epd(unitPointer, 0x0F4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the RallyPositionX of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getRallyPositionX(unitPointer) {
+    return wread_epd(unitPointer + 0x0F8 / 4, 0x0F8 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the RallyPositionX of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setRallyPositionX(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x0F8 / 4, 0x0F8 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the RallyPositionY of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getRallyPositionY(unitPointer) {
+    return wread_epd(unitPointer + 0x0FA / 4, 0x0FA % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the RallyPositionY of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setRallyPositionY(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x0FA / 4, 0x0FA % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the RallyUnit of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getRallyUnit(unitPointer) {
+    return dwread_epd(unitPointer + 0x0FC / 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the RallyUnit of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setRallyUnit(unitPointer, value) {
+    Common.dwwrite_epd(unitPointer, 0x0FC, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the PylonPrevPsiProvider of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getPylonPrevPsiProvider(unitPointer) {
+    return dwread_epd(unitPointer + 0x0F8 / 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the PylonPrevPsiProvider of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setPylonPrevPsiProvider(unitPointer, value) {
+    Common.dwwrite_epd(unitPointer, 0x0F8, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the PylonNextPsiProvider of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getPylonNextPsiProvider(unitPointer) {
+    return dwread_epd(unitPointer + 0x0FC / 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the PylonNextPsiProvider of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setPylonNextPsiProvider(unitPointer, value) {
+    Common.dwwrite_epd(unitPointer, 0x0FC, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the Path of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getPath(unitPointer) {
+    return dwread_epd(unitPointer + 0x100 / 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the Path of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setPath(unitPointer, value) {
+    Common.dwwrite_epd(unitPointer, 0x100, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the PathingCollisionInterval of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getPathingCollisionInterval(unitPointer) {
+    return bread_epd(unitPointer + 0x104 / 4, 0x104 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the PathingCollisionInterval of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setPathingCollisionInterval(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x104 / 4, 0x104 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the PathingFlags of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getPathingFlags(unitPointer) {
+    return bread_epd(unitPointer + 0x105 / 4, 0x105 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the PathingFlags of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setPathingFlags(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x105 / 4, 0x105 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the 106Flag of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function get106Flag(unitPointer) {
+    return bread_epd(unitPointer + 0x106 / 4, 0x106 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the 106Flag of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function set106Flag(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x106 / 4, 0x106 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the IsBeingHealed of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getIsBeingHealed(unitPointer) {
+    return bread_epd(unitPointer + 0x107 / 4, 0x107 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the IsBeingHealed of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setIsBeingHealed(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x107 / 4, 0x107 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the ContourBoundsLeft of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getContourBoundsLeft(unitPointer) {
+    return wread_epd(unitPointer + 0x108 / 4, 0x108 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the ContourBoundsLeft of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setContourBoundsLeft(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x108 / 4, 0x108 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the ContourBoundsTop of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getContourBoundsTop(unitPointer) {
+    return wread_epd(unitPointer + 0x10A / 4, 0x10A % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the ContourBoundsTop of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setContourBoundsTop(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x10A / 4, 0x10A % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the ContourBoundsRight of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getContourBoundsRight(unitPointer) {
+    return wread_epd(unitPointer + 0x10C / 4, 0x10C % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the ContourBoundsRight of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setContourBoundsRight(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x10C / 4, 0x10C % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the ContourBoundsBottom of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getContourBoundsBottom(unitPointer) {
+    return wread_epd(unitPointer + 0x10E / 4, 0x10E % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the ContourBoundsBottom of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setContourBoundsBottom(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x10E / 4, 0x10E % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the RemoveTimer of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getRemoveTimer(unitPointer) {
+    return wread_epd(unitPointer + 0x110 / 4, 0x110 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the RemoveTimer of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setRemoveTimer(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x110 / 4, 0x110 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the DefenseMatrixDamage of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getDefenseMatrixDamage(unitPointer) {
+    return wread_epd(unitPointer + 0x112 / 4, 0x112 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the DefenseMatrixDamage of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setDefenseMatrixDamage(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x112 / 4, 0x112 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the DefenseMatrixTimer of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getDefenseMatrixTimer(unitPointer) {
+    return bread_epd(unitPointer + 0x114 / 4, 0x114 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the DefenseMatrixTimer of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setDefenseMatrixTimer(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x114 / 4, 0x114 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the StimTimer of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getStimTimer(unitPointer) {
+    return bread_epd(unitPointer + 0x115 / 4, 0x115 % 4) / 256;
+}
+
+/***
+ * @Summary.us-EN
+ * Set the StimTimer of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setStimTimer(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x115 / 4, 0x115 % 4, value * 256);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the EnsnareTimer of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getEnsnareTimer(unitPointer) {
+    return bread_epd(unitPointer + 0x116 / 4, 0x116 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the EnsnareTimer of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setEnsnareTimer(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x116 / 4, 0x116 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the LockdownTimer of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getLockdownTimer(unitPointer) {
+    return bread_epd(unitPointer + 0x117 / 4, 0x117 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the LockdownTimer of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setLockdownTimer(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x117 / 4, 0x117 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the IrradiateTimer of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getIrradiateTimer(unitPointer) {
+    return bread_epd(unitPointer + 0x118 / 4, 0x118 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the IrradiateTimer of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setIrradiateTimer(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x118 / 4, 0x118 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the StasisTimer of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getStasisTimer(unitPointer) {
+    return bread_epd(unitPointer + 0x119 / 4, 0x119 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the StasisTimer of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setStasisTimer(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x119 / 4, 0x119 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the PlagueTimer of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getPlagueTimer(unitPointer) {
+    return bread_epd(unitPointer + 0x11A / 4, 0x11A % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the PlagueTimer of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setPlagueTimer(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x11A / 4, 0x11A % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the StormTimer of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getStormTimer(unitPointer) {
+    return bread_epd(unitPointer + 0x11B / 4, 0x11B % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the StormTimer of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setStormTimer(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x11B / 4, 0x11B % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the IrradiatedBy of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getIrradiatedBy(unitPointer) {
+    return dwread_epd(unitPointer + 0x11C / 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the IrradiatedBy of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setIrradiatedBy(unitPointer, value) {
+    Common.dwwrite_epd(unitPointer, 0x11C, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the IrradiatePlayerID of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getIrradiatePlayerID(unitPointer) {
+    return bread_epd(unitPointer + 0x120 / 4, 0x120 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the IrradiatePlayerID of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setIrradiatePlayerID(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x120 / 4, 0x120 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the ParasiteFlag of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getParasiteFlag(unitPointer) {
+    return bread_epd(unitPointer + 0x121 / 4, 0x121 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the ParasiteFlag of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setParasiteFlag(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x121 / 4, 0x121 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the CycleCounter of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getCycleCounter(unitPointer) {
+    return bread_epd(unitPointer + 0x122 / 4, 0x122 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the CycleCounter of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setCycleCounter(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x122 / 4, 0x122 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the IsBlind of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getIsBlind(unitPointer) {
+    return bread_epd(unitPointer + 0x123 / 4, 0x123 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the IsBlind of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setIsBlind(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x123 / 4, 0x123 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the MaelstromTimer of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getMaelstromTimer(unitPointer) {
+    return bread_epd(unitPointer + 0x124 / 4, 0x124 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the MaelstromTimer of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setMaelstromTimer(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x124 / 4, 0x124 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the Unused125 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getUnused125(unitPointer) {
+    return bread_epd(unitPointer + 0x125 / 4, 0x125 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the Unused125 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setUnused125(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x125 / 4, 0x125 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the AcidSporeCount of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getAcidSporeCount(unitPointer) {
+    return bread_epd(unitPointer + 0x126 / 4, 0x126 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the AcidSporeCount of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setAcidSporeCount(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x126 / 4, 0x126 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the AcidSporeTime1 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getAcidSporeTime1(unitPointer) {
+    return bread_epd(unitPointer + 0x127 / 4, 0x127 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the AcidSporeTime1 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setAcidSporeTime1(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x127 / 4, 0x127 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the AcidSporeTime2 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getAcidSporeTime2(unitPointer) {
+    return bread_epd(unitPointer + 0x128 / 4, 0x128 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the AcidSporeTime2 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setAcidSporeTime2(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x128 / 4, 0x128 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the AcidSporeTime3 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getAcidSporeTime3(unitPointer) {
+    return bread_epd(unitPointer + 0x129 / 4, 0x129 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the AcidSporeTime3 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setAcidSporeTime3(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x129 / 4, 0x129 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the AcidSporeTime4 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getAcidSporeTime4(unitPointer) {
+    return bread_epd(unitPointer + 0x12A / 4, 0x12A % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the AcidSporeTime4 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setAcidSporeTime4(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x12A / 4, 0x12A % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the AcidSporeTime5 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getAcidSporeTime5(unitPointer) {
+    return bread_epd(unitPointer + 0x12B / 4, 0x12B % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the AcidSporeTime5 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setAcidSporeTime5(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x12B / 4, 0x12B % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the AcidSporeTime6 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getAcidSporeTime6(unitPointer) {
+    return bread_epd(unitPointer + 0x12C / 4, 0x12C % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the AcidSporeTime6 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setAcidSporeTime6(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x12C / 4, 0x12C % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the AcidSporeTime7 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getAcidSporeTime7(unitPointer) {
+    return bread_epd(unitPointer + 0x12D / 4, 0x12D % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the AcidSporeTime7 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setAcidSporeTime7(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x12D / 4, 0x12D % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the AcidSporeTime8 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getAcidSporeTime8(unitPointer) {
+    return bread_epd(unitPointer + 0x12E / 4, 0x12E % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the AcidSporeTime8 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setAcidSporeTime8(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x12E / 4, 0x12E % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the AcidSporeTime9 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getAcidSporeTime9(unitPointer) {
+    return bread_epd(unitPointer + 0x12F / 4, 0x12F % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the AcidSporeTime9 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setAcidSporeTime9(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x12F / 4, 0x12F % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the BulletBehaviour3by3AttackSequence of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getBulletBehaviour3by3AttackSequence(unitPointer) {
+    return wread_epd(unitPointer + 0x130 / 4, 0x130 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the BulletBehaviour3by3AttackSequence of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setBulletBehaviour3by3AttackSequence(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x130 / 4, 0x130 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the Padding132 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getPadding132(unitPointer) {
+    return wread_epd(unitPointer + 0x132 / 4, 0x132 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the Padding132 of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setPadding132(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x132 / 4, 0x132 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the PAI of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getPAI(unitPointer) {
+    return dwread_epd(unitPointer + 0x134 / 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the PAI of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setPAI(unitPointer, value) {
+    Common.dwwrite_epd(unitPointer, 0x134, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the AirStrength of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getAirStrength(unitPointer) {
+    return wread_epd(unitPointer + 0x138 / 4, 0x138 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the AirStrength of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setAirStrength(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x138 / 4, 0x138 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the GroundStrength of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getGroundStrength(unitPointer) {
+    return wread_epd(unitPointer + 0x13A / 4, 0x13A % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the GroundStrength of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setGroundStrength(unitPointer, value) {
+    wwrite_epd(unitPointer + 0x13A / 4, 0x13A % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the FinderLeft of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getFinderLeft(unitPointer) {
+    return bread_epd(unitPointer + 0x13C / 4, 0x13C % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the FinderLeft of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setFinderLeft(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x13C / 4, 0x13C % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the FinderRight of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getFinderRight(unitPointer) {
+    return bread_epd(unitPointer + 0x140 / 4, 0x140 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the FinderRight of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setFinderRight(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x140 / 4, 0x140 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the FinderTop of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getFinderTop(unitPointer) {
+    return bread_epd(unitPointer + 0x144 / 4, 0x144 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the FinderTop of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setFinderTop(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x144 / 4, 0x144 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the FinderBottom of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getFinderBottom(unitPointer) {
+    return bread_epd(unitPointer + 0x148 / 4, 0x148 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the FinderBottom of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setFinderBottom(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x148 / 4, 0x148 % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the RepulseUnknown of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getRepulseUnknown(unitPointer) {
+    return bread_epd(unitPointer + 0x14C / 4, 0x14C % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the RepulseUnknown of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setRepulseUnknown(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x14C / 4, 0x14C % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the RepulseAngle of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getRepulseAngle(unitPointer) {
+    return bread_epd(unitPointer + 0x14D / 4, 0x14D % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the RepulseAngle of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setRepulseAngle(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x14D / 4, 0x14D % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the BRepMtxX of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getBRepMtxX(unitPointer) {
+    return bread_epd(unitPointer + 0x14E / 4, 0x14E % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the BRepMtxX of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setBRepMtxX(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x14E / 4, 0x14E % 4, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the BRepMtxY of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getBRepMtxY(unitPointer) {
+    return bread_epd(unitPointer + 0x14F / 4, 0x14F % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the BRepMtxY of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setBRepMtxY(unitPointer, value) {
+    bwrite_epd(unitPointer + 0x14F / 4, 0x14F % 4, value);
+}
+
+
+// Helper functions
+
+
+function isUnitType(unitPointer, unitType) {
+    return getUnitType(unitPointer) == unitType;
+}
+
+/***
+ * @Summary.us-EN
+ * Get the MaxHitpoints of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getMaxHitpoints(unitPointer) {
+    const unitType = getUnitType(unitPointer);
+    return dwread(0x65FD00 + 9808 + unitType * 4) / 256;
+}
+
+/***
+ * @Summary.us-EN
+ * Get the MaxShields of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getMaxShields(unitPointer) {
+    const unitType = getUnitType(unitPointer);
+    return wread(0x65FD00 + 4352 + unitType * 2);
+}
+
+
+/***
+ * @Summary.us-EN
+ * Get the TopSpeed of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getTopSpeed(unitPointer) {
+    return getCurrentSpeed2(unitPointer);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the TopSpeed of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.speed.us-EN
+ * The new speed value
+***/
+function setTopSpeed(unitPointer, speed) {
+    setCurrentSpeed2(unitPointer, speed);
+    setFlingyTopSpeed(unitPointer, speed);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the OriginalTopSpeed of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getOriginalTopSpeed(unitPointer) {
+    const unitType = getUnitType(unitPointer);
+    return dwread(0x6C9858 + 1696 + unitType * 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the Acceleration of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getAcceleration(unitPointer) {
+    return wread_epd(unitPointer + 0x048 / 4,  0x048 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the Acceleration of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.acceleration.us-EN
+ * The new acceleration value
+***/
+function setAcceleration(unitPointer, acceleration) {
+    wwrite_epd(unitPointer + 0x048 / 4,  0x048 % 4, acceleration);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the Order of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getOrder(unitPointer) {
+    return bread_epd(unitPointer + 0x04D / 4,  0x04D % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the Order of the unit. Consult ETKConstant "Order_" constants for reference.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.order.us-EN
+ * The new order (ETKConstant)
+***/
+function setOrder(unitPointer, order) {
+    bwrite_epd(unitPointer + 0x04D / 4,  0x04D % 4, order);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the SecondaryOrder of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getSecondaryOrder(unitPointer) {
+    return bread_epd(unitPointer + 0x0A6 / 4,  0x0A6 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the SecondaryOrder of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setSecondaryOrder(unitPointer, order) {
+    bwrite_epd(unitPointer + 0x0A6 / 4,  0x0A6 % 4, order);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the CommandCard of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getCommandCard(unitPointer) {
+    return wread_epd(unitPointer + 0x094 / 4,  0x094 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the CommandCard of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setCommandCard(unitPointer, id) {
+    wwrite_epd(unitPointer + 0x094 / 4,  0x094 % 4, id);
+}
+
+function increment106Flag(unitPointer) {
+    set106Flag(unitPointer, get106Flag(unitPointer) + 1);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the Position of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.x.us-EN
+ * The new x value
+ * @param.y.us-EN
+ * The new y value
+***/
+function setPosition(unitPointer, x, y) {
+    setPositionX(unitPointer, x);
+    setPositionY(unitPointer, y + y*65536);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the Position of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getPosition(unitPointer) {
+    return getPositionX(unitPointer), getPositionY(unitPointer);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the ResourceCarryCount of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getResourceCarryCount(unitPointer) {
+    return bread_epd(unitPointer + 0x0CF / 4,  0x0CF % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the ResourceCarryCount of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setResourceCarryCount(unitPointer, count) {
+    bwrite_epd(unitPointer + 0x0CF / 4,  0x0CF % 4, count);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the IsCarryingSomething of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getIsCarryingSomething(unitPointer) {
+    return bread_epd(unitPointer + 0x0CE / 4,  0x0CE % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the IsCarryingSomething of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setIsCarryingSomething(unitPointer, flag) {
+    bwrite_epd(unitPointer + 0x0CE / 4,  0x0CE % 4, flag);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the ConnectedUnit of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setConnectedUnit(unitPointer, value) {
+    Common.dwwrite_epd(unitPointer, 0x080, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the ConnectedUnit of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getConnectedUnit(unitPointer) {
+    return dwread_epd(unitPointer + 0x080 / 4);
+}
+
+// TARGETING 
+
+/***
+ * @Summary.us-EN
+ * Get the TargetX of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getTargetX(unitPointer) {
+    return wread_epd(unitPointer + 0x058 / 4,  0x058 % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the TargetY of the unit.
+ * @param.unitPointer.us-EN
+ * The unit unitPointer
+***/
+function getTargetY(unitPointer) {
+    return wread_epd(unitPointer + 0x05A / 4,  0x05A % 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the TargetUnit of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getTargetUnit(unitPointer) {
+    return Common.EPD(dwread_epd(unitPointer + 0x05C / 4));
+}
+
+/***
+ * @Summary.us-EN
+ * Return whether the target unit is a valid unit
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function isOrderTargetUnitValid(unitPointer) {
+    return Common.PTR(getTargetUnit(unitPointer)) > 0;
+}
+
+/***
+ * @Summary.us-EN
+ * Set the Target Unit of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.targetUnit.us-EN
+ * The target unit (Note: Will be converted to raw ptr)
+***/
+function setTargetUnit(unitPointer, targetUnit) {
+    const targetUnitPtr = Common.PTR(targetUnit);
+    Common.dwwrite_epd(unitPointer, 0x05C, targetUnitPtr);
+}
+
+/***
+ * @Summary.us-EN
+ * Cler the Target Unit of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function clearTargetUnit(unitPointer) {
+    Common.dwwrite_epd(unitPointer, 0x05C, 0);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the Target Resource Unit of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getTargetResource(unitPointer) {
+    return EPD(dwread_epd(unitPointer + 0x0C8 / 4));
+}
+
+/***
+ * @Summary.us-EN
+ * Return whether the target resource is a valid unit
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function isTargetResourceUnitValid(unitPointer) {
+    return Common.PTR(getTargetResource(unitPointer)) > 0;
+}
+
+/***
+ * @Summary.us-EN
+ * Removes the collision for the unit
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function removeCollision(unitPointer) {
+    SetMemoryEPD(unitPointer + 0x0DC / 4, SetTo, 0x00130001);
+}
+
+/***
+ * @Summary.us-EN
+ * Sets whether the unit should have collision or not
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.enableCollision.us-EN
+ * Whether the unit should have collision
+***/
+
+function setCollision(unitPointer, enableCollision) {
+
+    // TODO: Function not yet finished. Figure out what flags are 
+    // correct to set, and then set them without modifying other
+    // flags.
+    /*
+    function setBit(number, position, bitValue) {
+        const mask = 1 << position;
+        return (number & ~mask) | ((bitValue << position) & mask);
+    }
+
+    */
+    //0x00040000 - Ignore Tile Collision
+    //0x00200000 - No Collide
+    // 0x001... normal, 0x002... nocollide
+    // 0x0001... isUnit 0x0001, 0x0004 ignore tile collision    
+    var flag = getStatusFlags(unitPointer);
+    if (enableCollision) {
+        flag = 0x00110001;
+        flag = 0x00000001;
+    } else {
+        flag = 0x00240001;
+        flag = 0x00240001;
+    }
+    setStatusFlags(unitPointer, flag);
+}
+
+/***
+ * @Summary.us-EN
+ * Order the unit to attack the target unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.targetUnitPointer.us-EN
+ * The target unit pointer
+***/
+function attackUnit(unitPointer, targetUnitPointer) {
+    setTargetUnit(unitPointer, targetUnitPointer);
+    setOrder(unitPointer, Constant.Order_AttackUnit_Normal);
+}
+
+/***
+ * @Summary.us-EN
+ * Order the unit to move to the target point.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.x.us-EN
+ * The target X coordinat
+ * @param.y.us-EN
+ * The target Y coordinate
+***/
+function orderToPoint(unitPointer, x, y) {
+    setOrderTargetX(unitPointer, x);
+    setOrderTargetY(unitPointer, y);
+    setOrder(unitPointer, Constant.Order_Ignore_Normal);
+}
+
+function orderToPoint2(unitPointer, x, y) {
+    setMoveTargetX(unitPointer, x);
+    setMoveTargetY(unitPointer, y);
+    setOrder(unitPointer, Constant.Order_Ignore_Normal);
+}
+
+
+/***
+ * @Summary.us-EN
+ * Order the unit to stop
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function stop(unitPointer) {
+    setOrder(unitPointer, Constant.Order_Stop);
+}
+
+/***
+ * @Summary.us-EN
+ * Destroy the unit
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function destroy(unitPointer) {
+    setOrder(unitPointer, Constant.Order_Die);
+}
+
+/***
+ * @Summary.us-EN
+ * Heal the unit for a defined amount of hp
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function heal(unitPointer, hp) {
+    var healValue = getHitpoints(unitPointer) + hp;
+    if (healValue >= getMaxHitpoints(unitPointer)) {
+        healValue = getMaxHitpoints(unitPointer);
+    }
+    setHitpoints(unitPointer, healValue);
+}
+
+/***
+ * @Summary.us-EN
+ * Damage the unit for a defined amount of damage points. Returns true if the damage was enough to kill the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.damagePoints.us-EN
+ * The amount of damage points to damage the unit
+***/
+function damage(unitPointer, damagePoints) {
+    // if (getHitpointsRaw(unitPointer) < 256) {
+    //     return false;
+    // }
+
+    // // TODO Look up actual subunit status 
+    // if (getOrder(unitPointer, Constant.Order_Die)
+    //     || getOrder(unitPointer, Constant.Order_Fatal)
+    //     || getHitpoints(unitPointer) == 0
+    //     ) {
+    //     return false;
+    // }
+    const unitType = getUnitType(unitPointer);
+    if (unitType == 4 || unitType == 6 || unitType == 18 || unitType == 24 || unitType == 26) {
+        return false;
+    }
+    const hp = getHitpoints(unitPointer);
+    if (damagePoints >= hp) {
+        setOrder(unitPointer, Constant.Order_Die);
+        return true;
+    } else {
+        setHitpoints(unitPointer, hp - damagePoints);
+        return false;
+    }
+}
+
+/***
+ * @Summary.us-EN
+ * Heal the unit for a defined amount of shields
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.shieldPoints.us-EN
+ * The amount of shields to heal
+***/
+function healShields(unitPointer, shieldPoints) {
+    var healValue = getShields(unitPointer) + shieldPoints;
+    if (healValue >= getMaxShields(unitPointer)) {
+        healValue = getMaxShields(unitPointer);
+    }
+    setShields(unitPointer, healValue);
+}
+
+
+/***
+ * @Summary.us-EN
+ * Damage the unit for a defined amount of damage points. Returns true if the damage exhausted the shield
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.damagePoints.us-EN
+ * The amount of damage points to damage the unit
+***/
+function damageShields(unitPointer, damagePoints) {
+    const shields = getShields(unitPointer);
+    if (damagePoints >= shields) {
+        setShields(unitPointer, 0);
+        return true;
+    } else {
+        setShields(unitPointer, shields - damagePoints);
+        return false;
+    }
+}
+
+function setDirection(unitPointer, value) {
+    setVelocityDirection1(unitPointer, value);
+    setVelocityDirection2(unitPointer, value);
+    setCurrentDirection1(unitPointer, value);
+    setCurrentDirection2(unitPointer, value);
+}
+
+/***
+ * @Summary.us-EN
+ * Make the units move around randomly
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function junkYardDog(unitPointer) {
+    setOrder(unitPointer, Constant.Order_Move_JunkYardDog);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the custom value of the unit. Alias for get106Flag
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getCustomValue(unitPointer) {
+    return get106Flag(unitPointer);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the custom value of the unit. Alias for set106Flag
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setCustomValue(unitPointer, value) {
+    set106Flag(unitPointer, value);
+}
+
+// TBC
+function removeStatusFlag(unitPointer, flags) {
+    dwsubtract_epd(unitPointer + 0xDC / 4, flags & dwread_epd(unitPointer + 0xDC / 4));
+}
+
+// TBC
+function addStatusFlags(unitPointer ,flags) {
+    SetMemoryXEPD(unitPointer + 0xDC/4, SetTo, flags, flags);
+}

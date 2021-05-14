@@ -1,0 +1,216 @@
+import ETK.ETKUnit as Unit;
+import ETK.ETKUtils as Utils;
+import ETK.ETKTimer as Timer;
+import ETK.ETKConstants as Const;
+import Weapons;
+import customText as ct;
+
+const pp = StringBuffer(256);
+const MouseLeftButtonPress = EUDArray(6);
+const MouseLeftButtonDown = EUDArray(6);
+const MouseRightButtonPress = EUDArray(6);
+const MouseRightButtonDown = EUDArray(6);
+const MouseMiddleButtonPress = EUDArray(6);
+const KeyQDown = EUDArray(6);
+const KeyPDown = EUDArray(6);
+
+const FireLocation = $L("Splash");
+
+// TODO replace with objects
+
+const PlayerWeaponIndex = EUDArray(6);
+const PlayerWeaponCooldown = EUDArray(6);
+
+const MouseLoc = [
+	$L("MouseLoc1"),
+	$L("MouseLoc2"),
+	$L("MouseLoc3"),
+	$L("MouseLoc4"),
+	$L("MouseLoc5"),
+	$L("MouseLoc6"),
+];
+
+const SelectionAddresses = [
+	0x6284E8,
+	0x628518,
+	0x628548,
+	0x628578,
+	0x6285A8,
+	0x6285D8,
+];
+
+const SelectedUnitID = EUDArray(6);
+
+function updateSelectedUnit(playerID) {
+	const address = SelectionAddresses[playerID];
+	if(Memory(address, Exactly, 0)) {
+		SelectedUnitID[playerID] = 0;
+		return;
+	}
+	const slot = 0;
+	const ptr = dwread(address + 48 * playerID + 4 * slot);
+	const epd = EPD(ptr);
+	SelectedUnitID[playerID] = epd;
+	// pp.printfAt(2, "Is PTR {} EPD {}", ptr, epd);
+}
+
+function selectTrap(unit, trapID) {
+	var imageID;
+	switch(trapID) {
+		case 0: imageID = Const.Image_Ensnare_Overlay_Large; break;
+		case 1: imageID = Const.Image_Flames3_Type3_Large; break;
+		case 2: imageID = Const.Image_Zerg_Building_Rubble_Small; break;
+	}
+	// pp.printf("selectTrap {}", trapID, imageID);
+
+	// canno
+	const trapSpriteID = 212;
+	Utils.setSpriteImage(trapSpriteID, imageID);
+	const trap = Utils.replaceUnit(unit, Const.Unit_TerranBeacon);
+	Unit.setCustomValue(trap, trapID);
+	Utils.setSpriteImage(trapSpriteID, Const.Image_Photon_Cannon);
+}
+
+const Screen = StringBuffer();
+
+function initMap() {
+	EUDRegisterObjectToNamespace("MouseLeftButtonPress", MouseLeftButtonPress);
+	EUDRegisterObjectToNamespace("MouseLeftButtonDown", MouseLeftButtonDown);
+	EUDRegisterObjectToNamespace("MouseRightButtonPress", MouseRightButtonPress);
+	EUDRegisterObjectToNamespace("MouseRightButtonDown", MouseRightButtonDown);
+
+	EUDRegisterObjectToNamespace("MouseMiddleButtonPress", MouseMiddleButtonPress);
+	EUDRegisterObjectToNamespace("KeyQDown", KeyQDown);
+	EUDRegisterObjectToNamespace("KeyPDown", KeyPDown);
+
+	Weapons.loadWeapons();
+}
+
+function onPluginStart() {
+	randomize();
+	initMap();
+	Utils.setup();
+}
+
+
+
+function dealTrapDamage(unit, damage, imageID, effect, cooldown) {
+	if (Unit.getGroundWeaponCooldown(unit) > 0) {
+		Unit.setGroundWeaponCooldown(unit, Unit.getGroundWeaponCooldown(unit) - 1);
+		return;
+	}
+
+	Utils.centerLocationOnUnit($L("Trap"), unit, 64, 64);
+	foreach(ptr, enemyUnit : EUDLoopPlayerUnit($P7)) {
+		if (Utils.CUnitInLocation(enemyUnit, $L("Trap"))) {
+			if (imageID != 0) {
+				Utils.createImageSpriteAtUnitPosition(imageID, unit);
+			}
+			if (damage != 0) {
+				Unit.damage(enemyUnit, damage);
+			}
+			if (effect != 0) {
+				Unit.setTopSpeed(enemyUnit, Unit.getOriginalTopSpeed(enemyUnit) / 4);
+			}
+		}
+	}
+	Unit.setGroundWeaponCooldown(unit, cooldown);
+}
+
+function beforeTriggerExec() {
+	Utils.EUDTurbo();
+	Timer.tick();
+	EUDPlayerLoop()();
+	if (getcurpl() < $P7) {
+		const playerID = getcurpl();
+		updateSelectedUnit(playerID);
+		const selectedUnit = SelectedUnitID[playerID];
+
+		// pp.printfAt(0, "Right = {} Q = {} P = {}", MouseRightButtonPress[playerID], KeyQDown[playerID], KeyPDown[playerID]);
+
+		// TOGGLING LEVEL TRAPS
+		if (KeyPDown[playerID]) {
+			SetSwitch((0), (6));
+		}
+
+		// REPLACING TRAPS
+		foreach(ptr, unit : EUDLoopPlayerUnit(playerID)) {
+			if (Unit.getUnitType(unit) == Const.Unit_TerranBeacon) {
+				switch(Unit.getCustomValue(unit)) {
+					case 0:
+						dealTrapDamage(unit, 0, Const.Image_Ensnare_Overlay_Medium, 1, 12);
+						break;
+					case 1:
+						dealTrapDamage(unit, 5, Const.Image_Flames1_Type2_Large, 0, 16);
+						break;
+					case 2:
+						dealTrapDamage(unit, 12, Const.Image_Sunken_Colony_Tentacle, 0, 18);
+						break;
+				}
+			}
+		}
+
+		// PLACING TRAPS
+		if (Unit.getUnitType(selectedUnit) == Const.Unit_KhaydarinCrystalFormation) {
+
+			if ( Unit.getOrder(selectedUnit) == Const.Order_Build_SCV) {
+				var x, y = Utils.getLocationPoint(MouseLoc[playerID]);
+				x = ((x / 32) * 32) + 32;
+				y = ((y / 32) * 32) + 32;
+				Utils.centerLocationOnPoint(FireLocation, x, y, 64, 64);
+				Utils.offsetLocation(MouseLoc[playerID], 16, 16);
+
+				CreateUnit(1, Const.Unit_TerranFlagBeacon, FireLocation, playerID);
+				Unit.setOrder(selectedUnit, Const.Order_Nothing2_Normal);
+			}
+		}
+
+		// UPGRADING TRAPS
+		if (Unit.getUnitType(selectedUnit) == Const.Unit_TerranFlagBeacon) {
+			const queueUnitType = Unit.getBuildQueue1(selectedUnit);
+
+			if (queueUnitType != Const.Unit_None) {
+				selectTrap(selectedUnit, queueUnitType);
+			}
+		}
+
+		// SWITCHING WEAPONS
+		var weaponID = PlayerWeaponIndex[playerID];
+
+		if (PlayerWeaponCooldown[playerID] > 0) {
+			PlayerWeaponCooldown[playerID]--;
+		}
+
+		if (KeyQDown[playerID] != 0) {
+			weaponID++;
+			if (!Weapons.isWeaponValid(weaponID)) {
+				weaponID = 0;
+			}
+			PlayerWeaponIndex[playerID] = weaponID;
+        	PlayWAV("sound\\bullet\\LaserHit.wav");
+		}
+
+
+		// PEW PEW
+		if (Unit.getUnitType(selectedUnit) != Const.Unit_TerranSCV) {
+
+			// ct.chatAnnouncement("Right click to fire. [", weaponID,"]");
+
+			const weapon = Weapons.getWeapon(weaponID);
+
+			if (PlayerWeaponCooldown[playerID] == 0 && MouseRightButtonPress[playerID]) {
+				const x, y = Utils.getLocationPoint(MouseLoc[playerID]);
+				Utils.centerLocationOnPoint(FireLocation, x, y, weapon.radius, weapon.radius);
+		        Weapons.playWeaponSfx(weapon.id);
+		        if (weapon.imageID) {
+		            Utils.createImageSpriteAtLocation(weapon.imageID, FireLocation);
+		        }
+		        if (Bring($P7, AtLeast, 1, Const.Unit_AnyUnit, FireLocation)) {
+					weapon.fire(x, y, FireLocation, weapon.id);
+					PlayerWeaponCooldown[playerID] = weapon.cooldown;
+		        }
+			}
+		}
+	}
+	EUDEndPlayerLoop();
+}
