@@ -25,10 +25,20 @@ function isTrapValid(id) {
     return getTrap(id) != 0 && id < TRAP_COUNT;
 }
 
-function addTrap(Trap : TrapType) {
-    Trap.id = TRAP_COUNT;
-    TRAP_OBJ[TRAP_COUNT] = Trap;
-    TRAP_COUNT++;
+function addTrap(Trap : TrapType, id) {
+    Trap.id = id;
+    TRAP_OBJ[id] = Trap;
+}
+
+function addTrapObj(id, spriteImageID, projectileImageID, fireFunction, baseDamage, radius, cooldown) {
+    const trap = TrapType.alloc();
+    trap.spriteImageID = spriteImageID;
+    trap.projectileImageID = projectileImageID;
+    trap.fire = fireFunction;
+    trap.baseDamage = baseDamage;
+    trap.radius = radius;
+    trap.cooldown = cooldown;
+    addTrap(trap, id);
 }
 
 function loadTraps() {
@@ -41,6 +51,7 @@ function loadTraps() {
         }
 
         Utils.centerLocationOnUnit($L("Trap"), unit, trap.radius, trap.radius);
+
         foreach(ptr, enemyUnit : EUDLoopPlayerUnit($P7)) {
             if (Utils.CUnitInLocation(enemyUnit, $L("Trap"))) {
                 if (trap.projectileImageID != 0) {
@@ -62,7 +73,7 @@ function loadTraps() {
     trap0.radius = 64;
     trap0.cooldown = 4;
     trap0.fire = defaultFire;
-    addTrap(trap0);
+    addTrap(trap0, 0);
 
     const trap1 = TrapType.alloc();
     trap1.spriteImageID = Const.Image_Maelstrom_Hit;
@@ -71,7 +82,7 @@ function loadTraps() {
     trap1.radius = 64;
     trap1.cooldown = 8;
     trap1.fire = defaultFire;
-    addTrap(trap1);
+    addTrap(trap1, 1);
 
     const trap2 = TrapType.alloc();
     trap2.spriteImageID = Const.Image_Egg_Spawn;
@@ -80,6 +91,55 @@ function loadTraps() {
     trap2.radius = 64;
     trap2.cooldown = 18;
     trap2.fire = defaultFire;
-    addTrap(trap2);
+    addTrap(trap2, 2);
 
+    addTrapObj(
+        3,
+        Const.Image_Stasis_Field_Hit,
+        Const.Image_Hallucination_Death3,
+        defaultFire,
+        34,
+        64,
+        18
+    );
+
+    addTrapObj(
+        5,
+        Const.Image_Stasis_Field_Hit,
+        Const.Image_Hallucination_Death3,
+        defaultFire,
+        34,
+        64,
+        18
+    );
+
+    addTrapObj(
+        7,
+        Const.Image_Stasis_Field_Hit,
+        Const.Image_Hallucination_Death3,
+        defaultFire,
+        34,
+        64,
+        18
+    );
+
+    addTrapObj(
+        8,
+        Const.Image_Stasis_Field_Hit,
+        Const.Image_Hallucination_Death3,
+        defaultFire,
+        34,
+        64,
+        18
+    );
+
+    addTrapObj(
+        9,
+        Const.Image_Stasis_Field_Hit,
+        Const.Image_Hallucination_Death3,
+        defaultFire,
+        34,
+        64,
+        18
+    );
 }

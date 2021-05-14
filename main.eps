@@ -56,21 +56,11 @@ function updateSelectedUnit(playerID) {
 }
 
 function selectTrap(unit, trapID) {
-	var imageID;
-	switch(trapID) {
-		case 0: imageID = Const.Image_Hallucination_Death3; break;
-		case 1: imageID = Const.Image_Science_Vessel_Overlay_Part2; break;
-		case 2: imageID = Const.Image_Stasis_Field_Hit; break;
-
-		// case 0: imageID = Const.Image_Unused_Heal_Medium; break;
-		// case 1: imageID = Const.Image_Mind_Control_Hit_Large; break;
-		// case 2: imageID = Const.Image_Yamato_Gun_Overlay; break;
-		// case 0: imageID = Const.Image_Ensnare_Overlay_Large; break;
-		// case 1: imageID = Const.Image_Flames3_Type3_Large; break;
-		// case 2: imageID = Const.Image_Zerg_Building_Rubble_Small; break;
-	}
-	pp.printf("selectTrap {}", trapID, imageID);
-
+	if (trapID == 99) {
+		Utils.removeUnit(unit);
+		return;
+	} 
+	pp.printf("selectTrap {}", trapID);
 	const trap = Traps.getTrap(trapID);
 	const trapSpriteID = 212;
 	Utils.setSpriteImage(trapSpriteID, trap.spriteImageID);
@@ -101,33 +91,6 @@ function onPluginStart() {
 	Utils.setup();
 }
 
-
-
-function dealTrapDamage(unit, damage, imageID, effect, cooldown) {
-	const trap = Traps.getTrap(Unit.getCustomValue(unit));
-	trap.fire(unit);
-	// if (Unit.getGroundWeaponCooldown(unit) > 0) {
-	// 	Unit.setGroundWeaponCooldown(unit, Unit.getGroundWeaponCooldown(unit) - 1);
-	// 	return;
-	// }
-
-	// Utils.centerLocationOnUnit($L("Trap"), unit, 64, 64);
-	// foreach(ptr, enemyUnit : EUDLoopPlayerUnit($P7)) {
-	// 	if (Utils.CUnitInLocation(enemyUnit, $L("Trap"))) {
-	// 		if (imageID != 0) {
-	// 			Utils.createImageSpriteAtUnitPosition(imageID, unit);
-	// 		}
-	// 		if (damage != 0) {
-	// 			Unit.damage(enemyUnit, damage);
-	// 		}
-	// 		if (effect != 0) {
-	// 			Unit.setTopSpeed(enemyUnit, Unit.getOriginalTopSpeed(enemyUnit) / 4);
-	// 		}
-	// 	}
-	// }
-	// Unit.setGroundWeaponCooldown(unit, cooldown);
-}
-
 function beforeTriggerExec() {
 	Utils.EUDTurbo();
 	Timer.tick();
@@ -147,21 +110,11 @@ function beforeTriggerExec() {
 		// TRAPS ACTIVE
 		foreach(ptr, unit : EUDLoopPlayerUnit(playerID)) {
 			if (Unit.getUnitType(unit) == Const.Unit_TerranBeacon) {
-				const trap = Traps.getTrap(Unit.getCustomValue(unit));
-				trap.fire(unit);
-				/*
-				switch(Unit.getCustomValue(unit)) {
-					case 0:
-						dealTrapDamage(unit, 0, Const.Image_Ensnare_Overlay_Medium, 1, 12);
-						break;
-					case 1:
-						dealTrapDamage(unit, 5, Const.Image_Flames1_Type2_Large, 0, 16);
-						break;
-					case 2:
-						dealTrapDamage(unit, 12, Const.Image_Sunken_Colony_Tentacle, 0, 18);
-						break;
-				}
-				*/
+				Utils.centerLocationOnUnit($L("Trap"), unit, 64, 64);
+		        if (Bring($P7, AtLeast, 1, Const.Unit_AnyUnit, $L("Trap"))) {
+					const trap = Traps.getTrap(Unit.getCustomValue(unit));
+					trap.fire(unit);
+		        }
 			}
 		}
 

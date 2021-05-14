@@ -332,6 +332,11 @@ function createUnit(unitType, location, playerID) {
 	return epd;
 }
 
+function removeUnit(unit) {
+	moveUtilLocationToUnit(unit);
+	RemoveUnitAt(1, ETKUnit.getUnitType(unit), $L("ETKUtilityLocation"), ETKUnit.getPlayerID(unit));
+}
+
 function replaceUnit(unit, unitType) {
 	moveUtilLocationToUnit(unit);
 	const playerID = ETKUnit.getPlayerID(unit);
