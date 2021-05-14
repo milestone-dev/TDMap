@@ -3,6 +3,7 @@ import ETK.ETKUtils as Utils;
 import ETK.ETKTimer as Timer;
 import ETK.ETKConstants as Const;
 import Weapons;
+import Traps;
 import customText as ct;
 
 const pp = StringBuffer(256);
@@ -57,18 +58,25 @@ function updateSelectedUnit(playerID) {
 function selectTrap(unit, trapID) {
 	var imageID;
 	switch(trapID) {
-		case 0: imageID = Const.Image_Ensnare_Overlay_Large; break;
-		case 1: imageID = Const.Image_Flames3_Type3_Large; break;
-		case 2: imageID = Const.Image_Zerg_Building_Rubble_Small; break;
-	}
-	// pp.printf("selectTrap {}", trapID, imageID);
+		case 0: imageID = Const.Image_Hallucination_Death3; break;
+		case 1: imageID = Const.Image_Science_Vessel_Overlay_Part2; break;
+		case 2: imageID = Const.Image_Stasis_Field_Hit; break;
 
-	// canno
+		// case 0: imageID = Const.Image_Unused_Heal_Medium; break;
+		// case 1: imageID = Const.Image_Mind_Control_Hit_Large; break;
+		// case 2: imageID = Const.Image_Yamato_Gun_Overlay; break;
+		// case 0: imageID = Const.Image_Ensnare_Overlay_Large; break;
+		// case 1: imageID = Const.Image_Flames3_Type3_Large; break;
+		// case 2: imageID = Const.Image_Zerg_Building_Rubble_Small; break;
+	}
+	pp.printf("selectTrap {}", trapID, imageID);
+
+	const trap = Traps.getTrap(trapID);
 	const trapSpriteID = 212;
-	Utils.setSpriteImage(trapSpriteID, imageID);
-	const trap = Utils.replaceUnit(unit, Const.Unit_TerranBeacon);
-	Unit.setCustomValue(trap, trapID);
-	Utils.setSpriteImage(trapSpriteID, Const.Image_Photon_Cannon);
+	Utils.setSpriteImage(trapSpriteID, trap.spriteImageID);
+	const trapUnit = Utils.replaceUnit(unit, Const.Unit_TerranBeacon);
+	Unit.setCustomValue(trapUnit, trap.id);
+	Utils.setSpriteImage(trapSpriteID, Const.Image_Terran_Construction_Large);
 }
 
 const Screen = StringBuffer();
@@ -84,6 +92,7 @@ function initMap() {
 	EUDRegisterObjectToNamespace("KeyPDown", KeyPDown);
 
 	Weapons.loadWeapons();
+	Traps.loadTraps();
 }
 
 function onPluginStart() {
@@ -95,26 +104,28 @@ function onPluginStart() {
 
 
 function dealTrapDamage(unit, damage, imageID, effect, cooldown) {
-	if (Unit.getGroundWeaponCooldown(unit) > 0) {
-		Unit.setGroundWeaponCooldown(unit, Unit.getGroundWeaponCooldown(unit) - 1);
-		return;
-	}
+	const trap = Traps.getTrap(Unit.getCustomValue(unit));
+	trap.fire(unit);
+	// if (Unit.getGroundWeaponCooldown(unit) > 0) {
+	// 	Unit.setGroundWeaponCooldown(unit, Unit.getGroundWeaponCooldown(unit) - 1);
+	// 	return;
+	// }
 
-	Utils.centerLocationOnUnit($L("Trap"), unit, 64, 64);
-	foreach(ptr, enemyUnit : EUDLoopPlayerUnit($P7)) {
-		if (Utils.CUnitInLocation(enemyUnit, $L("Trap"))) {
-			if (imageID != 0) {
-				Utils.createImageSpriteAtUnitPosition(imageID, unit);
-			}
-			if (damage != 0) {
-				Unit.damage(enemyUnit, damage);
-			}
-			if (effect != 0) {
-				Unit.setTopSpeed(enemyUnit, Unit.getOriginalTopSpeed(enemyUnit) / 4);
-			}
-		}
-	}
-	Unit.setGroundWeaponCooldown(unit, cooldown);
+	// Utils.centerLocationOnUnit($L("Trap"), unit, 64, 64);
+	// foreach(ptr, enemyUnit : EUDLoopPlayerUnit($P7)) {
+	// 	if (Utils.CUnitInLocation(enemyUnit, $L("Trap"))) {
+	// 		if (imageID != 0) {
+	// 			Utils.createImageSpriteAtUnitPosition(imageID, unit);
+	// 		}
+	// 		if (damage != 0) {
+	// 			Unit.damage(enemyUnit, damage);
+	// 		}
+	// 		if (effect != 0) {
+	// 			Unit.setTopSpeed(enemyUnit, Unit.getOriginalTopSpeed(enemyUnit) / 4);
+	// 		}
+	// 	}
+	// }
+	// Unit.setGroundWeaponCooldown(unit, cooldown);
 }
 
 function beforeTriggerExec() {
@@ -133,9 +144,12 @@ function beforeTriggerExec() {
 			SetSwitch((0), (6));
 		}
 
-		// REPLACING TRAPS
+		// TRAPS ACTIVE
 		foreach(ptr, unit : EUDLoopPlayerUnit(playerID)) {
 			if (Unit.getUnitType(unit) == Const.Unit_TerranBeacon) {
+				const trap = Traps.getTrap(Unit.getCustomValue(unit));
+				trap.fire(unit);
+				/*
 				switch(Unit.getCustomValue(unit)) {
 					case 0:
 						dealTrapDamage(unit, 0, Const.Image_Ensnare_Overlay_Medium, 1, 12);
@@ -147,6 +161,7 @@ function beforeTriggerExec() {
 						dealTrapDamage(unit, 12, Const.Image_Sunken_Colony_Tentacle, 0, 18);
 						break;
 				}
+				*/
 			}
 		}
 

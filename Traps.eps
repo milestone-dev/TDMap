@@ -1,0 +1,85 @@
+import ETK.ETKUnit as Unit;
+import ETK.ETKUtils as Utils;
+import ETK.ETKTimer as Timer;
+import ETK.ETKConstants as Const;
+
+const TRAP_OBJ = EUDArray(64);
+var TRAP_COUNT = 0;
+const pp = StringBuffer(256);
+
+object TrapType {
+    var id;
+    var spriteImageID;
+    var projectileImageID;
+    var fire: EUDFuncPtr (1, 0);
+    var baseDamage;
+    var radius;
+    var cooldown;
+};
+
+function getTrap(id): TrapType {
+    return TRAP_OBJ[id];
+}
+
+function isTrapValid(id) {
+    return getTrap(id) != 0 && id < TRAP_COUNT;
+}
+
+function addTrap(Trap : TrapType) {
+    Trap.id = TRAP_COUNT;
+    TRAP_OBJ[TRAP_COUNT] = Trap;
+    TRAP_COUNT++;
+}
+
+function loadTraps() {
+
+    const defaultFire = EUDFuncPtr (1, 0) (function(unit) {
+        const trap = getTrap(Unit.getCustomValue(unit));
+        if (Unit.getGroundWeaponCooldown(unit) > 0) {
+            Unit.setGroundWeaponCooldown(unit, Unit.getGroundWeaponCooldown(unit) - 1);
+            return;
+        }
+
+        Utils.centerLocationOnUnit($L("Trap"), unit, trap.radius, trap.radius);
+        foreach(ptr, enemyUnit : EUDLoopPlayerUnit($P7)) {
+            if (Utils.CUnitInLocation(enemyUnit, $L("Trap"))) {
+                if (trap.projectileImageID != 0) {
+                    Utils.createImageSpriteAtUnitPosition(trap.projectileImageID, unit);
+                }
+                if (trap.baseDamage != 0) {
+                    Unit.damage(enemyUnit, trap.baseDamage);
+                }
+                // if (effect != 0) {Unit.setTopSpeed(enemyUnit, Unit.getOriginalTopSpeed(enemyUnit) / 4); }
+            }
+        }
+        Unit.setGroundWeaponCooldown(unit, trap.cooldown);
+    });
+
+    const trap0 = TrapType.alloc();
+    trap0.spriteImageID = Const.Image_Stasis_Field_Hit;
+    trap0.projectileImageID = Const.Image_Hallucination_Death3;
+    trap0.baseDamage = 5;
+    trap0.radius = 64;
+    trap0.cooldown = 4;
+    trap0.fire = defaultFire;
+    addTrap(trap0);
+
+    const trap1 = TrapType.alloc();
+    trap1.spriteImageID = Const.Image_Maelstrom_Hit;
+    trap1.projectileImageID = Const.Image_Flames1_Type2_Large;
+    trap1.baseDamage = 24;
+    trap1.radius = 64;
+    trap1.cooldown = 8;
+    trap1.fire = defaultFire;
+    addTrap(trap1);
+
+    const trap2 = TrapType.alloc();
+    trap2.spriteImageID = Const.Image_Egg_Spawn;
+    trap2.projectileImageID = Const.Image_Sunken_Colony_Tentacle;
+    trap2.baseDamage = 34;
+    trap2.radius = 64;
+    trap2.cooldown = 18;
+    trap2.fire = defaultFire;
+    addTrap(trap2);
+
+}
