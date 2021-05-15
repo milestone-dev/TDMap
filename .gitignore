@@ -1,2 +1,4 @@
 References/
 *.tmp
+*.epmap
+*.epmap.prof
