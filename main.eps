@@ -65,11 +65,11 @@ function selectTrap(unit, trapID) {
 	const trapSpriteID = 212;
 	Utils.setSpriteImage(trapSpriteID, trap.spriteImageID);
 	const trapUnit = Utils.replaceUnit(unit, Const.Unit_TerranBeacon);
+	Unit.setOrder(trapUnit, Const.Order_Stop);
 	Unit.setCustomValue(trapUnit, trap.id);
+	Unit.setRankIncrease(trapUnit, trap.id);
 	Utils.setSpriteImage(trapSpriteID, Const.Image_Terran_Construction_Large);
 }
-
-const Screen = StringBuffer();
 
 function initMap() {
 	EUDRegisterObjectToNamespace("MouseLeftButtonPress", MouseLeftButtonPress);
@@ -110,11 +110,19 @@ function beforeTriggerExec() {
 		// TRAPS ACTIVE
 		foreach(ptr, unit : EUDLoopPlayerUnit(playerID)) {
 			if (Unit.getUnitType(unit) == Const.Unit_TerranBeacon) {
-				// Utils.centerLocationOnUnit($L("Trap"), unit, 64, 64);
-		        // if (Bring($P7, AtLeast, 1, Const.Unit_AnyUnit, $L("Trap"))) {
-					const trap = Traps.getTrap(Unit.getCustomValue(unit));
-					trap.fire(unit);
-		        // }
+
+		        const trapUnit = unit;
+				const trap = Traps.getTrap(Unit.getCustomValue(trapUnit));
+
+				if (Unit.getGroundWeaponCooldown(trapUnit) > trap.cooldown) {
+					Unit.setGroundWeaponCooldown(trapUnit, trap.cooldown);		
+				}
+
+				if (Unit.getGroundWeaponCooldown(trapUnit) == 0
+					&& Unit.getOrder(trapUnit) == Const.Order_Attack_Building
+					&& Unit.isOrderTargetUnitValid(trapUnit)) {
+						trap.fire(trapUnit);
+				}
 			}
 		}
 
@@ -142,6 +150,21 @@ function beforeTriggerExec() {
 			}
 		}
 
+		// DEBUGGING TRAPS
+		if (Unit.getUnitType(selectedUnit) == Const.Unit_TerranBeacon) {
+			/*
+			pp.printf(
+				"O = {},{} - x y {} {} u {} - c {}",
+				Unit.getOrder(selectedUnit),
+				Unit.getSecondaryOrder(selectedUnit),
+				Unit.getTargetX(selectedUnit),
+				Unit.getTargetY(selectedUnit),
+				Unit.getTargetUnit(selectedUnit),
+				Unit.getGroundWeaponCooldown(selectedUnit)
+			);
+			*/
+		}
+
 		// SWITCHING WEAPONS
 		var weaponID = PlayerWeaponIndex[playerID];
 
@@ -157,7 +180,6 @@ function beforeTriggerExec() {
 			PlayerWeaponIndex[playerID] = weaponID;
         	PlayWAV("sound\\bullet\\LaserHit.wav");
 		}
-
 
 		// PEW PEW
 		if (Unit.getUnitType(selectedUnit) != Const.Unit_TerranSCV) {

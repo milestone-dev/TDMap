@@ -43,38 +43,27 @@ function addTrapObj(id, spriteImageID, projectileImageID, fireFunction, baseDama
 
 function loadTraps() {
 
-    const defaultFire = EUDFuncPtr (1, 0) (function(unit) {
-        const trap = getTrap(Unit.getCustomValue(unit));
-        if (Unit.getGroundWeaponCooldown(unit) > 0) {
-            Unit.setGroundWeaponCooldown(unit, Unit.getGroundWeaponCooldown(unit) - 1);
-            return;
-        }
-
-        Utils.centerLocationOnUnit($L("Trap"), unit, trap.radius, trap.radius);
-        var hit = false;
-        foreach(ptr, enemyUnit : EUDLoopPlayerUnit($P7)) {
-            if (Utils.CUnitInLocation(enemyUnit, $L("Trap"))) {
-                hit = true;
-                if (trap.baseDamage != 0) {
-                    Unit.damage(enemyUnit, trap.baseDamage);
-                }
-                // if (effect != 0) {Unit.setTopSpeed(enemyUnit, Unit.getOriginalTopSpeed(enemyUnit) / 4); }
-            }
-        }
-        if (hit) {
-            Utils.createImageSpriteAtUnitPosition(trap.projectileImageID, unit);
-        }
-        Unit.setGroundWeaponCooldown(unit, trap.cooldown);
+    const defaultFire = EUDFuncPtr (1, 0) (function(trapUnit) {
+        const trap = getTrap(Unit.getCustomValue(trapUnit));
+        const targetUnit = Unit.getTargetUnit(trapUnit);
+        Utils.createImageSpriteAtUnitPosition(trap.projectileImageID, targetUnit);
+        Unit.damage(targetUnit, trap.baseDamage);
     });
 
     addTrapObj(
         0,
         Const.Image_Stasis_Field_Hit,
         Const.Image_Hallucination_Death3,
-        defaultFire,
-        34,
+        EUDFuncPtr (1, 0) (function(trapUnit) {
+            const trap = getTrap(Unit.getCustomValue(trapUnit));
+            const targetUnit = Unit.getTargetUnit(trapUnit);
+            Utils.createImageSpriteAtUnitPosition(trap.projectileImageID, targetUnit);
+            Unit.damage(targetUnit, trap.baseDamage);
+            Unit.setTopSpeed(targetUnit, Unit.getOriginalTopSpeed(targetUnit) / 4);
+        }),
+        5,
         64,
-        18
+        12
     );
 
     addTrapObj(
