@@ -47,7 +47,9 @@ function loadTraps() {
         const trap = getTrap(Unit.getCustomValue(trapUnit));
         const targetUnit = Unit.getTargetUnit(trapUnit);
         Utils.createImageSpriteAtUnitPosition(trap.projectileImageID, targetUnit);
-        Unit.damage(targetUnit, trap.baseDamage);
+         if (Unit.damage(targetUnit, trap.baseDamage)) {
+            SetResources(Unit.getPlayerID(trapUnit), (8), Utils.getUnitDestroyValue(Unit.getUnitType(targetUnit)), (0));
+        }
     });
 
     addTrapObj(

@@ -11,7 +11,7 @@ object WeaponType {
     var id;
     var imageID;
     var sfxID;
-    var fire: EUDFuncPtr (4, 0);
+    var fire: EUDFuncPtr (5, 0);
     var onUnitHit: EUDFuncPtr (1, 0);
     var baseDamage;
     var radius;
@@ -44,11 +44,13 @@ function playWeaponSfx(id) {
 
 function loadWeapons() {
 
-    const defaultFire = EUDFuncPtr (4, 0) (function(x, y, location, id) {
+    const defaultFire = EUDFuncPtr (5, 0) (function(playerID, x, y, location, id) {
         const weapon = getWeapon(id);
         foreach(ptr, enemyUnit : EUDLoopPlayerUnit($P7)) {
             if (Utils.CUnitInLocation(enemyUnit, location)) {
-                Unit.damage(enemyUnit, weapon.baseDamage);
+                if (Unit.damage(enemyUnit, weapon.baseDamage)) {
+                    SetResources(playerID, (8), Utils.getUnitDestroyValue(Unit.getUnitType(enemyUnit)), (0));
+                }
             }
         }
     });

@@ -152,17 +152,16 @@ function beforeTriggerExec() {
 
 		// DEBUGGING TRAPS
 		if (Unit.getUnitType(selectedUnit) == Const.Unit_TerranBeacon) {
-			/*
+			
 			pp.printf(
-				"O = {},{} - x y {} {} u {} - c {}",
+				"O = {}, u {} - c {} ?? {} {} {}",
 				Unit.getOrder(selectedUnit),
-				Unit.getSecondaryOrder(selectedUnit),
-				Unit.getTargetX(selectedUnit),
-				Unit.getTargetY(selectedUnit),
 				Unit.getTargetUnit(selectedUnit),
-				Unit.getGroundWeaponCooldown(selectedUnit)
+				Unit.getGroundWeaponCooldown(selectedUnit),
+				Unit.getUpgradeLevel(selectedUnit),
+				Unit.getUpgradeResearchTime(selectedUnit),
+				Unit.getUpgradeType(selectedUnit),
 			);
-			*/
 		}
 
 		// SWITCHING WEAPONS
@@ -196,7 +195,7 @@ function beforeTriggerExec() {
 		            Utils.createImageSpriteAtLocation(weapon.imageID, FireLocation);
 		        }
 		        if (Bring($P7, AtLeast, 1, Const.Unit_AnyUnit, FireLocation)) {
-					weapon.fire(x, y, FireLocation, weapon.id);
+					weapon.fire(playerID, x, y, FireLocation, weapon.id);
 					PlayerWeaponCooldown[playerID] = weapon.cooldown;
 		        }
 			}

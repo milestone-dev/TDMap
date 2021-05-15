@@ -27,6 +27,10 @@ function offsetPoint(x, xOffset, y, yOffset) {
 
 // DAT functions. TODO: Move to its own module later
 
+function getUnitDestroyValue(unitType) {
+	return wread(0x65FD00 + 16824 + unitType * 2);
+}
+
 function setUnitWeapon(unitType, weaponID) {
 	bwrite(0x65FD00 + 6624 + unitType * 1, weaponID);
 	bwrite(0x65FD00 + 14776 + unitType * 1, weaponID);
