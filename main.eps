@@ -110,11 +110,11 @@ function beforeTriggerExec() {
 		// TRAPS ACTIVE
 		foreach(ptr, unit : EUDLoopPlayerUnit(playerID)) {
 			if (Unit.getUnitType(unit) == Const.Unit_TerranBeacon) {
-				Utils.centerLocationOnUnit($L("Trap"), unit, 64, 64);
-		        if (Bring($P7, AtLeast, 1, Const.Unit_AnyUnit, $L("Trap"))) {
+				// Utils.centerLocationOnUnit($L("Trap"), unit, 64, 64);
+		        // if (Bring($P7, AtLeast, 1, Const.Unit_AnyUnit, $L("Trap"))) {
 					const trap = Traps.getTrap(Unit.getCustomValue(unit));
 					trap.fire(unit);
-		        }
+		        // }
 			}
 		}
 

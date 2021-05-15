@@ -51,52 +51,56 @@ function loadTraps() {
         }
 
         Utils.centerLocationOnUnit($L("Trap"), unit, trap.radius, trap.radius);
-
+        var hit = false;
         foreach(ptr, enemyUnit : EUDLoopPlayerUnit($P7)) {
             if (Utils.CUnitInLocation(enemyUnit, $L("Trap"))) {
-                if (trap.projectileImageID != 0) {
-                    Utils.createImageSpriteAtUnitPosition(trap.projectileImageID, unit);
-                }
+                hit = true;
                 if (trap.baseDamage != 0) {
                     Unit.damage(enemyUnit, trap.baseDamage);
                 }
                 // if (effect != 0) {Unit.setTopSpeed(enemyUnit, Unit.getOriginalTopSpeed(enemyUnit) / 4); }
             }
         }
+        if (hit) {
+            Utils.createImageSpriteAtUnitPosition(trap.projectileImageID, unit);
+        }
         Unit.setGroundWeaponCooldown(unit, trap.cooldown);
     });
 
-    const trap0 = TrapType.alloc();
-    trap0.spriteImageID = Const.Image_Stasis_Field_Hit;
-    trap0.projectileImageID = Const.Image_Hallucination_Death3;
-    trap0.baseDamage = 5;
-    trap0.radius = 64;
-    trap0.cooldown = 4;
-    trap0.fire = defaultFire;
-    addTrap(trap0, 0);
+    addTrapObj(
+        0,
+        Const.Image_Stasis_Field_Hit,
+        Const.Image_Hallucination_Death3,
+        defaultFire,
+        34,
+        64,
+        18
+    );
 
-    const trap1 = TrapType.alloc();
-    trap1.spriteImageID = Const.Image_Maelstrom_Hit;
-    trap1.projectileImageID = Const.Image_Flames1_Type2_Large;
-    trap1.baseDamage = 24;
-    trap1.radius = 64;
-    trap1.cooldown = 8;
-    trap1.fire = defaultFire;
-    addTrap(trap1, 1);
+    addTrapObj(
+        1,
+        Const.Image_Maelstrom_Hit,
+        Const.Image_Flames1_Type2_Large,
+        defaultFire,
+        24,
+        64,
+        8
+    );
 
-    const trap2 = TrapType.alloc();
-    trap2.spriteImageID = Const.Image_Egg_Spawn;
-    trap2.projectileImageID = Const.Image_Sunken_Colony_Tentacle;
-    trap2.baseDamage = 34;
-    trap2.radius = 64;
-    trap2.cooldown = 18;
-    trap2.fire = defaultFire;
-    addTrap(trap2, 2);
+    addTrapObj(
+        2,
+        Const.Image_Egg_Spawn,
+        Const.Image_Sunken_Colony_Tentacle,
+        defaultFire,
+        34,
+        64,
+        18
+    );
 
     addTrapObj(
         3,
-        Const.Image_Stasis_Field_Hit,
-        Const.Image_Hallucination_Death3,
+        Const.Image_Venom_Hit_Unused,
+        Const.Image_Infested_Terran_Explosion,
         defaultFire,
         34,
         64,
@@ -105,8 +109,8 @@ function loadTraps() {
 
     addTrapObj(
         5,
-        Const.Image_Stasis_Field_Hit,
-        Const.Image_Hallucination_Death3,
+        Const.Image_EMP_Shockwave_Hit_Part1,
+        Const.Image_Subterranean_Spines,
         defaultFire,
         34,
         64,
@@ -115,8 +119,8 @@ function loadTraps() {
 
     addTrapObj(
         7,
-        Const.Image_Stasis_Field_Hit,
-        Const.Image_Hallucination_Death3,
+        Const.Image_Hallucination_Hit,
+        Const.Image_Psionic_Shockwave_Hit,
         defaultFire,
         34,
         64,
@@ -125,8 +129,8 @@ function loadTraps() {
 
     addTrapObj(
         8,
-        Const.Image_Stasis_Field_Hit,
-        Const.Image_Hallucination_Death3,
+        Const.Image_Ensnare_Overlay_Large,
+        Const.Image_Ensnare_Overlay_Medium,
         defaultFire,
         34,
         64,
@@ -135,8 +139,8 @@ function loadTraps() {
 
     addTrapObj(
         9,
-        Const.Image_Stasis_Field_Hit,
-        Const.Image_Hallucination_Death3,
+        Const.Image_Explosion1_Small,
+        Const.Image_Unused_Heal_Medium,
         defaultFire,
         34,
         64,
