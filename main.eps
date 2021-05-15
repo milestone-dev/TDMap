@@ -44,15 +44,13 @@ const SelectedUnitID = EUDArray(6);
 
 function updateSelectedUnit(playerID) {
 	const address = SelectionAddresses[playerID];
-	if(Memory(address, Exactly, 0)) {
-		SelectedUnitID[playerID] = 0;
-		return;
-	}
-	const slot = 0;
-	const ptr = dwread(address + 48 * playerID + 4 * slot);
+	const ptr = dwread(address);
 	const epd = EPD(ptr);
-	SelectedUnitID[playerID] = epd;
-	// pp.printfAt(2, "Is PTR {} EPD {}", ptr, epd);
+	if (ptr != 0) {
+		SelectedUnitID[playerID] = epd;
+	} else {
+		SelectedUnitID[playerID] = 0;
+	}
 }
 
 function selectTrap(unit, trapID) {
@@ -100,8 +98,6 @@ function beforeTriggerExec() {
 		updateSelectedUnit(playerID);
 		const selectedUnit = SelectedUnitID[playerID];
 
-		// pp.printfAt(0, "Right = {} Q = {} P = {}", MouseRightButtonPress[playerID], KeyQDown[playerID], KeyPDown[playerID]);
-
 		// TOGGLING LEVEL TRAPS
 		if (KeyPDown[playerID]) {
 			SetSwitch((0), (6));
@@ -127,7 +123,7 @@ function beforeTriggerExec() {
 		}
 
 		// PLACING TRAPS
-		if (Unit.getUnitType(selectedUnit) == Const.Unit_KhaydarinCrystalFormation) {
+		if (selectedUnit != 0 && Unit.getUnitType(selectedUnit) == Const.Unit_KhaydarinCrystalFormation) {
 
 			if ( Unit.getOrder(selectedUnit) == Const.Order_Build_SCV) {
 				var x, y = Utils.getLocationPoint(MouseLoc[playerID]);
@@ -136,13 +132,20 @@ function beforeTriggerExec() {
 				Utils.centerLocationOnPoint(FireLocation, x, y, 64, 64);
 				Utils.offsetLocation(MouseLoc[playerID], 16, 16);
 
-				CreateUnit(1, Const.Unit_TerranFlagBeacon, FireLocation, playerID);
+				const trapUnit = Utils.createUnit(Const.Unit_TerranFlagBeacon, $L("SafeCreate"), $P8);
+				MoveUnit(1, Const.Unit_TerranFlagBeacon, $P8, $L("SafeCreate"), FireLocation);
+				if (Bring($P8, AtLeast, 1, Const.Unit_TerranFlagBeacon, $L("SafeCreate"))) {
+					RemoveUnitAt(1, Const.Unit_TerranFlagBeacon, $L("SafeCreate"), $P8);
+					pp.print("Cannot place there. Refunding");
+				} else {
+					GiveUnits(1, Const.Unit_TerranFlagBeacon, $P8, FireLocation, playerID);
+				}
 				Unit.setOrder(selectedUnit, Const.Order_Nothing2_Normal);
 			}
 		}
 
 		// UPGRADING TRAPS
-		if (Unit.getUnitType(selectedUnit) == Const.Unit_TerranFlagBeacon) {
+		if (selectedUnit != 0 && Unit.getUnitType(selectedUnit) == Const.Unit_TerranFlagBeacon) {
 			const queueUnitType = Unit.getBuildQueue1(selectedUnit);
 
 			if (queueUnitType != Const.Unit_None) {
@@ -151,7 +154,9 @@ function beforeTriggerExec() {
 		}
 
 		// DEBUGGING TRAPS
-		if (Unit.getUnitType(selectedUnit) == Const.Unit_TerranBeacon) {
+		if (selectedUnit != 0 && Unit.getUnitType(selectedUnit) == Const.Unit_TerranBeacon) {
+
+			Utils.setUnitWeapon(Const.Unit_TerranBeacon, Unit.getCustomValue(selectedUnit));
 			
 			pp.printf(
 				"O = {}, u {} - c {} ?? {} {} {}",
@@ -160,7 +165,7 @@ function beforeTriggerExec() {
 				Unit.getGroundWeaponCooldown(selectedUnit),
 				Unit.getUpgradeLevel(selectedUnit),
 				Unit.getUpgradeResearchTime(selectedUnit),
-				Unit.getUpgradeType(selectedUnit),
+				Unit.getUpgradeType(selectedUnit)
 			);
 		}
 
@@ -180,8 +185,9 @@ function beforeTriggerExec() {
         	PlayWAV("sound\\bullet\\LaserHit.wav");
 		}
 
-		// PEW PEW
-		if (Unit.getUnitType(selectedUnit) != Const.Unit_TerranSCV) {
+
+		// FIRING
+		if (true) {
 
 			// ct.chatAnnouncement("Right click to fire. [", weaponID,"]");
 
