@@ -71,8 +71,11 @@ function selectTrap(unit, trapID) {
 	const trapUnit = Utils.replaceUnit(unit, Const.Unit_TerranBeacon);
 	Unit.setOrder(trapUnit, Const.Order_Stop);
 	Unit.setCustomValue(trapUnit, trap.id);
-	Unit.setRankIncrease(trapUnit, trap.id);
+	Unit.setRankIncrease(trapUnit, 0);
 	Utils.setSpriteImage(trapSpriteID, Const.Image_Terran_Construction_Large);
+	Unit.setCommandCard(trapUnit, 100 + Unit.getPlayerID(trapUnit));
+	// const tmp = Utils.createUnit(Const.Unit_TerranMarine, $L("Anywhere"), $P1);
+	// Utils.removeUnit(tmp);
 }
 
 function initMap() {
@@ -113,7 +116,7 @@ function beforeTriggerExec() {
 
 		// UTILITY
 		if (KeyUDown[playerID]) {
-            SetResources(playerID, (8), 100, (0));
+            // SetResources(playerID, (8), 100, (0));
 			
 		}
 
@@ -124,7 +127,6 @@ function beforeTriggerExec() {
 				const trapUnit = unit;
 				const trap = Traps.getTrap(Unit.getCustomValue(trapUnit));
 
-
 				// Upgrading
 				const queueUnitType = Unit.getBuildQueue1(trapUnit);
 				if (Unit.getBuildQueueLength(trapUnit) > 0) {
@@ -134,14 +136,12 @@ function beforeTriggerExec() {
 				if (queueUnitType == 99) {
 					Utils.removeUnit(trapUnit);
 					refreshTrapSelection(playerID);
-				} else if (queueUnitType == 100) {
+				} else if (queueUnitType >= 100 && queueUnitType <= 105) {
 					Unit.setRankIncrease(trapUnit, Unit.getRankIncrease(trapUnit)+1);
 					refreshTrapSelection(playerID);
 				}
 
-
 				//Firing
-
 				if (Unit.getGroundWeaponCooldown(trapUnit) > trap.cooldown) {
 					Unit.setGroundWeaponCooldown(trapUnit, trap.cooldown);		
 				}
@@ -189,10 +189,17 @@ function beforeTriggerExec() {
 		// TRAPS DISPLAY
 		if (selectedUnit != 0 && Unit.getUnitType(selectedUnit) == Const.Unit_TerranBeacon) {
 
-			if (IsUserCP()) {
-				Utils.setUnitWeapon(Const.Unit_TerranBeacon, Unit.getCustomValue(selectedUnit));				
-			}
+
 			if (PlayerSelectedTrap[playerID] != selectedUnit) {
+
+
+				if (IsUserCP()) {
+					Utils.setUpgrade(7, Unit.getRankIncrease(selectedUnit), playerID);
+					Utils.setUnitWeapon(Const.Unit_TerranBeacon, Unit.getCustomValue(selectedUnit));
+				}
+
+				Utils.setUnitCost(100 + playerID, 10 + Unit.getRankIncrease(selectedUnit) * 10);
+
 				PlayerSelectedTrap[playerID] = selectedUnit;
 				Unit.setStatusFlags(selectedUnit, 0x04340008);
 				Timer.add(0, selectedUnit, EUDFuncPtr (2, 0) (function(callbackUnit, intervalCount) {
@@ -200,15 +207,13 @@ function beforeTriggerExec() {
 				}));
 			}
 			
-			pp.printfAt(0,
-				"O = {}, u {} - c {} ?? {} {} {} s= {}",
+			pp.printfAt(1,
+				"O = {}, TU {} CD {} BTN {} CMD {}",
 				Unit.getOrder(selectedUnit),
 				Unit.getTargetUnit(selectedUnit),
 				Unit.getGroundWeaponCooldown(selectedUnit),
-				Unit.getUpgradeLevel(selectedUnit),
-				Unit.getUpgradeResearchTime(selectedUnit),
-				Unit.getUpgradeType(selectedUnit),
-				Unit.getStatusFlags(selectedUnit)
+				Unit.getCurrentButtonSet(selectedUnit),
+				Unit.getCommandCard(selectedUnit)
 				);
 		}
 
@@ -238,6 +243,7 @@ function beforeTriggerExec() {
 
 			if (PlayerWeaponCooldown[playerID] == 0 && MouseRightButtonPress[playerID]) {
 				const x, y = Utils.getLocationPoint(mouseLocation);
+				// pp.printfAt(0, "x {} y {} ", x, y);
 				Utils.centerLocationOnPoint(FireLocation, x, y, weapon.radius, weapon.radius);
 				Weapons.playWeaponSfx(weapon.id);
 				if (weapon.imageID) {
