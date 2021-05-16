@@ -29,7 +29,7 @@ const MouseLoc = [
 	$L("MouseLoc3"),
 	$L("MouseLoc4"),
 	$L("MouseLoc5"),
-	$L("MouseLoc6"),
+	$L("MouseLoc6")
 ];
 
 const SelectionAddresses = [
@@ -38,7 +38,7 @@ const SelectionAddresses = [
 	0x628548,
 	0x628578,
 	0x6285A8,
-	0x6285D8,
+	0x6285D8
 ];
 
 const SelectedUnitID = EUDArray(6);
@@ -109,7 +109,7 @@ function beforeTriggerExec() {
 		foreach(ptr, unit : EUDLoopPlayerUnit(playerID)) {
 			if (Unit.getUnitType(unit) == Const.Unit_TerranBeacon) {
 
-		        const trapUnit = unit;
+				const trapUnit = unit;
 				const trap = Traps.getTrap(Unit.getCustomValue(trapUnit));
 
 				if (Unit.getGroundWeaponCooldown(trapUnit) > trap.cooldown) {
@@ -119,10 +119,10 @@ function beforeTriggerExec() {
 				if (Unit.getGroundWeaponCooldown(trapUnit) == 0
 					&& Unit.getOrder(trapUnit) == Const.Order_Attack_Building
 					&& Unit.isOrderTargetUnitValid(trapUnit)) {
-						trap.fire(trapUnit);
-				}
+					trap.fire(trapUnit);
 			}
 		}
+	}
 
 		// PLACING TRAPS
 		if (selectedUnit != 0 && Unit.getUnitType(selectedUnit) == Const.Unit_KhaydarinCrystalFormation) {
@@ -178,7 +178,7 @@ function beforeTriggerExec() {
 				Unit.getUpgradeResearchTime(selectedUnit),
 				Unit.getUpgradeType(selectedUnit),
 				Unit.getStatusFlags(selectedUnit)
-			);
+				);
 		}
 
 		// SWITCHING WEAPONS
@@ -194,7 +194,7 @@ function beforeTriggerExec() {
 				weaponID = 0;
 			}
 			PlayerWeaponIndex[playerID] = weaponID;
-        	PlayWAV("sound\\bullet\\LaserHit.wav");
+			PlayWAV("sound\\bullet\\LaserHit.wav");
 		}
 
 
@@ -208,14 +208,14 @@ function beforeTriggerExec() {
 			if (PlayerWeaponCooldown[playerID] == 0 && MouseRightButtonPress[playerID]) {
 				const x, y = Utils.getLocationPoint(mouseLocation);
 				Utils.centerLocationOnPoint(FireLocation, x, y, weapon.radius, weapon.radius);
-		        Weapons.playWeaponSfx(weapon.id);
-		        if (weapon.imageID) {
-		            Utils.createImageSpriteAtLocation(weapon.imageID, FireLocation);
-		        }
-		        if (Bring($P7, AtLeast, 1, Const.Unit_AnyUnit, FireLocation)) {
+				Weapons.playWeaponSfx(weapon.id);
+				if (weapon.imageID) {
+					Utils.createImageSpriteAtLocation(weapon.imageID, FireLocation);
+				}
+				if (Bring($P7, AtLeast, 1, Const.Unit_AnyUnit, FireLocation)) {
 					weapon.fire(playerID, x, y, FireLocation, weapon.id);
-					PlayerWeaponCooldown[playerID] = weapon.cooldown;
-		        }
+				}
+				PlayerWeaponCooldown[playerID] = weapon.cooldown;
 			}
 		}
 	}
