@@ -31,6 +31,14 @@ function getUnitDestroyValue(unitType) {
 	return wread(0x65FD00 + 16824 + unitType * 2);
 }
 
+function setUpgrade(upgrade, value, playerID) {
+	bwrite(0x58D2B0 + 0x207C * ((upgrade) / 46) + (playerID) * (46 - 31 * ((upgrade) / 46)) + ((upgrade) % 46), value);
+}
+
+function setUnitCost(unitType, value) {
+	wwrite(0x65FD00 + 15240 + unitType * 2, value);
+}
+
 function setUnitWeapon(unitType, weaponID) {
 	bwrite(0x65FD00 + 6624 + unitType * 1, weaponID);
 	bwrite(0x65FD00 + 14776 + unitType * 1, weaponID);

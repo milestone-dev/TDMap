@@ -1,5 +1,5 @@
 //ETKUnit.eps
-import ETK.ETKConstants as Constant;
+import ETK.ETKConstants as Const;
 import ETK.ETKCommon as Common;
 
 
@@ -1650,6 +1650,7 @@ function setBuildQueue5(unitPointer, value) {
  * @param.unitPointer.us-EN
  * The unit pointer
 ***/
+
 function getEnergy(unitPointer) {
     return wread_epd(unitPointer + 0x0A2 / 4,  0x0A2 % 4) / 256;
 }
@@ -4871,7 +4872,7 @@ function setCollision(unitPointer, enableCollision) {
 ***/
 function attackUnit(unitPointer, targetUnitPointer) {
     setTargetUnit(unitPointer, targetUnitPointer);
-    setOrder(unitPointer, Constant.Order_AttackUnit_Normal);
+    setOrder(unitPointer, Const.Order_AttackUnit_Normal);
 }
 
 /***
@@ -4887,13 +4888,13 @@ function attackUnit(unitPointer, targetUnitPointer) {
 function orderToPoint(unitPointer, x, y) {
     setOrderTargetX(unitPointer, x);
     setOrderTargetY(unitPointer, y);
-    setOrder(unitPointer, Constant.Order_Ignore_Normal);
+    setOrder(unitPointer, Const.Order_Ignore_Normal);
 }
 
 function orderToPoint2(unitPointer, x, y) {
     setMoveTargetX(unitPointer, x);
     setMoveTargetY(unitPointer, y);
-    setOrder(unitPointer, Constant.Order_Ignore_Normal);
+    setOrder(unitPointer, Const.Order_Ignore_Normal);
 }
 
 
@@ -4904,7 +4905,7 @@ function orderToPoint2(unitPointer, x, y) {
  * The unit pointer
 ***/
 function stop(unitPointer) {
-    setOrder(unitPointer, Constant.Order_Stop);
+    setOrder(unitPointer, Const.Order_Stop);
 }
 
 /***
@@ -4914,7 +4915,7 @@ function stop(unitPointer) {
  * The unit pointer
 ***/
 function destroy(unitPointer) {
-    setOrder(unitPointer, Constant.Order_Die);
+    setOrder(unitPointer, Const.Order_Die);
 }
 
 /***
@@ -4945,8 +4946,8 @@ function damage(unitPointer, damagePoints) {
     // }
 
     // // TODO Look up actual subunit status 
-    // if (getOrder(unitPointer, Constant.Order_Die)
-    //     || getOrder(unitPointer, Constant.Order_Fatal)
+    // if (getOrder(unitPointer, Const.Order_Die)
+    //     || getOrder(unitPointer, Const.Order_Fatal)
     //     || getHitpoints(unitPointer) == 0
     //     ) {
     //     return false;
@@ -4957,7 +4958,7 @@ function damage(unitPointer, damagePoints) {
     }
     const hp = getHitpoints(unitPointer);
     if (damagePoints >= hp) {
-        setOrder(unitPointer, Constant.Order_Die);
+        setOrder(unitPointer, Const.Order_Die);
         return true;
     } else {
         setHitpoints(unitPointer, hp - damagePoints);
@@ -5015,7 +5016,7 @@ function setDirection(unitPointer, value) {
  * The unit pointer
 ***/
 function junkYardDog(unitPointer) {
-    setOrder(unitPointer, Constant.Order_Move_JunkYardDog);
+    setOrder(unitPointer, Const.Order_Move_JunkYardDog);
 }
 
 /***
@@ -5048,4 +5049,48 @@ function removeStatusFlag(unitPointer, flags) {
 // TBC
 function addStatusFlags(unitPointer ,flags) {
     SetMemoryXEPD(unitPointer + 0xDC/4, SetTo, flags, flags);
+}
+
+
+/***
+ * @Summary.us-EN
+ * Clear the build queue for the unit
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function clearBuildQueue(unitPointer) {
+    setBuildQueue1(unitPointer, Const.Unit_None);
+    setBuildQueue2(unitPointer, Const.Unit_None);
+    setBuildQueue3(unitPointer, Const.Unit_None);
+    setBuildQueue4(unitPointer, Const.Unit_None);
+    setBuildQueue5(unitPointer, Const.Unit_None);
+    unitPointer += 0x098 / 4;
+    const oldcp = getcurpl();
+    setcurpl(unitPointer);
+    DoActions(list(
+    SetDeaths(CurrentPlayer, SetTo, 0xE400E4, 0),
+    SetMemory(0x6509B0, Add, 1),
+    SetDeaths(CurrentPlayer, SetTo, 0xE400E4, 0),
+    SetMemory(0x6509B0, Add, 1),
+    SetDeathsX(CurrentPlayer, SetTo, 228, 0, 0xFFFF),
+    SetMemory(0x6509B0, Add, 1),
+    SetDeathsX(CurrentPlayer, SetTo, 0x20000, 0, 0xFF0000),
+    ));
+    setcurpl(oldcp);
+}
+
+/***
+ * @Summary.us-EN
+ * Get the build queue length for the unit
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getBuildQueueLength(unitPointer) {
+    var length = 0;
+    if (getBuildQueue1(unitPointer) != Const.Unit_None) { length++; }
+    if (getBuildQueue2(unitPointer) != Const.Unit_None) { length++; }
+    if (getBuildQueue3(unitPointer) != Const.Unit_None) { length++; }
+    if (getBuildQueue4(unitPointer) != Const.Unit_None) { length++; }
+    if (getBuildQueue5(unitPointer) != Const.Unit_None) { length++; }
+    return length;
 }
