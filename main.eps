@@ -21,6 +21,7 @@ const FireLocation = $L("Splash");
 
 const PlayerWeaponIndex = EUDArray(6);
 const PlayerWeaponCooldown = EUDArray(6);
+const PlayerSelectedTrap = EUDArray(6);
 
 const MouseLoc = [
 	$L("MouseLoc1"),
@@ -97,6 +98,7 @@ function beforeTriggerExec() {
 		const playerID = getcurpl();
 		updateSelectedUnit(playerID);
 		const selectedUnit = SelectedUnitID[playerID];
+		const mouseLocation = MouseLoc[playerID];
 
 		// TOGGLING LEVEL TRAPS
 		if (KeyPDown[playerID]) {
@@ -157,15 +159,23 @@ function beforeTriggerExec() {
 		if (selectedUnit != 0 && Unit.getUnitType(selectedUnit) == Const.Unit_TerranBeacon) {
 
 			Utils.setUnitWeapon(Const.Unit_TerranBeacon, Unit.getCustomValue(selectedUnit));
+			if (PlayerSelectedTrap[playerID] != selectedUnit) {
+				PlayerSelectedTrap[playerID] = selectedUnit;
+				Unit.setStatusFlags(selectedUnit, 0x04340008);
+				Timer.add(0, selectedUnit, EUDFuncPtr (2, 0) (function(callbackUnit, intervalCount) {
+					Unit.setStatusFlags(callbackUnit, 0x04340003);
+				}));
+			}
 			
-			pp.printf(
-				"O = {}, u {} - c {} ?? {} {} {}",
+			pp.printfAt(0,
+				"O = {}, u {} - c {} ?? {} {} {} s= {}",
 				Unit.getOrder(selectedUnit),
 				Unit.getTargetUnit(selectedUnit),
 				Unit.getGroundWeaponCooldown(selectedUnit),
 				Unit.getUpgradeLevel(selectedUnit),
 				Unit.getUpgradeResearchTime(selectedUnit),
-				Unit.getUpgradeType(selectedUnit)
+				Unit.getUpgradeType(selectedUnit),
+				Unit.getStatusFlags(selectedUnit)
 			);
 		}
 
@@ -194,7 +204,7 @@ function beforeTriggerExec() {
 			const weapon = Weapons.getWeapon(weaponID);
 
 			if (PlayerWeaponCooldown[playerID] == 0 && MouseRightButtonPress[playerID]) {
-				const x, y = Utils.getLocationPoint(MouseLoc[playerID]);
+				const x, y = Utils.getLocationPoint(mouseLocation);
 				Utils.centerLocationOnPoint(FireLocation, x, y, weapon.radius, weapon.radius);
 		        Weapons.playWeaponSfx(weapon.id);
 		        if (weapon.imageID) {
