@@ -13,7 +13,6 @@ object TrapType {
     var projectileImageID;
     var fire: EUDFuncPtr (1, 0);
     var baseDamage;
-    var radius;
     var cooldown;
 };
 
@@ -30,13 +29,12 @@ function addTrap(Trap : TrapType, id) {
     TRAP_OBJ[id] = Trap;
 }
 
-function addTrapObj(id, spriteImageID, projectileImageID, fireFunction, baseDamage, radius, cooldown) {
+function addTrapObj(id, spriteImageID, projectileImageID, fireFunction, baseDamage, cooldown) {
     const trap = TrapType.alloc();
     trap.spriteImageID = spriteImageID;
     trap.projectileImageID = projectileImageID;
     trap.fire = fireFunction;
     trap.baseDamage = baseDamage;
-    trap.radius = radius;
     trap.cooldown = cooldown;
     addTrap(trap, id);
 }
@@ -47,7 +45,8 @@ function loadTraps() {
         const trap = getTrap(Unit.getCustomValue(trapUnit));
         const targetUnit = Unit.getTargetUnit(trapUnit);
         Utils.createImageSpriteAtUnitPosition(trap.projectileImageID, targetUnit);
-         if (Unit.damage(targetUnit, trap.baseDamage)) {
+        const damage = trap.baseDamage + trap.baseDamage * Unit.getRankIncrease(trapUnit);
+        if (Unit.damage(targetUnit, damage)) {
             SetResources(Unit.getPlayerID(trapUnit), (8), Utils.getUnitDestroyValue(Unit.getUnitType(targetUnit)), (0));
         }
     });
@@ -64,8 +63,7 @@ function loadTraps() {
             Unit.setTopSpeed(targetUnit, Unit.getOriginalTopSpeed(targetUnit) / 4);
         }),
         5,
-        64,
-        12
+        24
     );
 
     addTrapObj(
@@ -73,9 +71,8 @@ function loadTraps() {
         Const.Image_Maelstrom_Hit,
         Const.Image_Flames1_Type2_Large,
         defaultFire,
-        24,
-        64,
-        2
+        5,
+        12
     );
 
     addTrapObj(
@@ -84,7 +81,6 @@ function loadTraps() {
         Const.Image_Sunken_Colony_Tentacle,
         defaultFire,
         34,
-        64,
         18
     );
 
@@ -94,7 +90,6 @@ function loadTraps() {
         Const.Image_Infested_Terran_Explosion,
         defaultFire,
         34,
-        64,
         18
     );
 
@@ -104,7 +99,6 @@ function loadTraps() {
         Const.Image_Subterranean_Spines,
         defaultFire,
         34,
-        64,
         18
     );
 
@@ -114,7 +108,6 @@ function loadTraps() {
         Const.Image_Psionic_Shockwave_Hit,
         defaultFire,
         34,
-        64,
         18
     );
 
@@ -124,7 +117,6 @@ function loadTraps() {
         Const.Image_Ensnare_Overlay_Medium,
         defaultFire,
         34,
-        64,
         18
     );
 
@@ -134,7 +126,6 @@ function loadTraps() {
         Const.Image_Unused_Heal_Medium,
         defaultFire,
         34,
-        64,
         18
     );
 }
