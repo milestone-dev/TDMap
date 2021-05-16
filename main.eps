@@ -158,7 +158,9 @@ function beforeTriggerExec() {
 		// DEBUGGING TRAPS
 		if (selectedUnit != 0 && Unit.getUnitType(selectedUnit) == Const.Unit_TerranBeacon) {
 
-			Utils.setUnitWeapon(Const.Unit_TerranBeacon, Unit.getCustomValue(selectedUnit));
+			if (IsUserCP()) {
+				Utils.setUnitWeapon(Const.Unit_TerranBeacon, Unit.getCustomValue(selectedUnit));				
+			}
 			if (PlayerSelectedTrap[playerID] != selectedUnit) {
 				PlayerSelectedTrap[playerID] = selectedUnit;
 				Unit.setStatusFlags(selectedUnit, 0x04340008);
