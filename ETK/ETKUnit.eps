@@ -4243,23 +4243,23 @@ function setPadding132(unitPointer, value) {
 
 /***
  * @Summary.us-EN
- * Get the PAI of the unit.
+ * Get the AIData of the unit.
  * @param.unitPointer.us-EN
  * The unit pointer
 ***/
-function getPAI(unitPointer) {
+function getAIData(unitPointer) {
     return dwread_epd(unitPointer + 0x134 / 4);
 }
 
 /***
  * @Summary.us-EN
- * Set the PAI of the unit.
+ * Set the AIData of the unit.
  * @param.unitPointer.us-EN
  * The unit pointer
  * @param.value.us-EN
  * The new value
 ***/
-function setPAI(unitPointer, value) {
+function setAIData(unitPointer, value) {
     Common.dwwrite_epd(unitPointer, 0x134, value);
 }
 

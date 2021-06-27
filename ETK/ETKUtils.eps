@@ -12,6 +12,9 @@ const OVERLAY_SPRITE_UNIT_TYPE = $U("Protoss Observer");
 const MISSILE_LAUNCHER_UNIT_TYPE = $U("Protoss Corsair");
 const FLASH_UNIT_TYPE = $U("Protoss Shuttle");
 const TARGET_UNIT_TYPE = 161; // Unused Protoss Building 2
+const UTILITY_LOCATION = $L("ETKUtilityLocation");
+const UTILITY_LOCATION_2 = $L("ETKUtilityLocation2");
+const OFFSCREEN_LOCATION = $L("ETKUtilityOffscreenLocation");
 
 const ETKUtilsEffectsPlayerID = $P8;
 var pathableTestUnit32x32;
@@ -44,12 +47,46 @@ function setUnitWeapon(unitType, weaponID) {
 	bwrite(0x65FD00 + 14776 + unitType * 1, weaponID);
 }
 
+function getUnitElevation(unitType) {
+	return bread(0x65FD00 + 13392 + unitType * 1);
+}
+
+function setUnitElevation(unitType, elevation) {
+	bwrite(0x65FD00 + 13392 + unitType * 1, elevation);
+}
+
+function getUnitAdvancedFlags(unitType) {
+	return dwread(0x65FD00 + 17280 + unitType * 4);
+}
+
+function setUnitAdvancedFlags(unitType, flags) {
+	dwwrite(0x65FD00 + 17280 + unitType * 4, flags);
+}
+
 function setUnitInitialDirection(unitType, direction) {
 	bwrite(0x65FD00 + 2288 + unitType * 1, direction);
 }
 
+function getImageDrawFunction(image) {
+	return bread(0x666778 + 14000 + image * 1);
+}
+
 function setImageDrawFunction(image, drawFunctionID) {
 	bwrite(0x666778 + 14000 + image * 1, drawFunctionID);
+}
+
+function getImageDrawIfCloaked(image) {
+	return bread(0x666778 + 4000 + image * 1);
+}
+
+function setImageDrawIfCloaked(image, value) {
+	bwrite(0x666778 + 4000 + image * 1, value);
+}
+
+function getUnitImage(unitType) {
+	const flingyID = bread(0x65FD00 + 18424 + unitType * 1);
+	const spriteID = wread(0x6C9858 + 2752 + flingyID * 2);
+	return wread(0x665AC0 + 1696 + spriteID * 2);
 }
 
 function setUnitImage(unitType, imageID) {
@@ -58,10 +95,32 @@ function setUnitImage(unitType, imageID) {
 	wwrite(0x665AC0 + 1696 + spriteID * 2, imageID);
 }
 
-function getUnitImage(unitType) {
-	const flingyID = bread(0x65FD00 + 18424 + unitType * 1);
-	const spriteID = wread(0x6C9858 + 2752 + flingyID * 2);
-	return wread(0x665AC0 + 1696 + spriteID * 2);
+function getImageClickable(imageID) {
+	return bread(0x666778 + 23000 + imageID * 1);
+}
+
+function setImageClickable(imageID, clickable) {
+    bwrite(0x666778 + 23000 + imageID * 1, clickable);
+}
+
+function getUnitFlingy(unitType) {
+	return bread(0x65FD00 + 18424 + unitType * 1);
+}
+
+function setUnitFlingy(unitType, flingyID) {
+	bwrite(0x65FD00 + 18424 + unitType * 1, flingyID);
+}
+
+function setUnitMapString(unitType, mapStringID) {
+	wwrite(0x65FD00 + 1376 + unitType * 2, mapStringID);
+}
+
+function setUnitPortrait(unitType, portraitID) {
+	wwrite(0x65FD00 + 12936 + unitType * 2, portraitID);
+}
+
+function setUnitVisionRange(unitType, vision) {
+	bwrite(0x65FD00 + 13624 + unitType * 1, vision);
 }
 
 function setFlingyImage(flingyID, imageID) {
@@ -96,12 +155,12 @@ function BuildCheckEPD(unitEPD, unitType) {
 }
 
 function isLocationPathable(location) {
-	MoveUnit(1, ETKConstants.Unit_UnusedZergBuilding5, $P8, $L("Anywhere"), location);
- 	if (Bring($P8, Exactly, 1, ETKConstants.Unit_UnusedZergBuilding5, location)) {
-		MoveUnit(1, ETKConstants.Unit_UnusedZergBuilding5, $P8, $L("Anywhere"), $L("ETKUtilityStorageLocation"));
+	MoveUnit(1, ETKConstants.Unit_UnusedZergBuilding5, ETKUtilsEffectsPlayerID, $L("Anywhere"), location);
+ 	if (Bring(ETKUtilsEffectsPlayerID, Exactly, 1, ETKConstants.Unit_UnusedZergBuilding5, location)) {
+		MoveUnit(1, ETKConstants.Unit_UnusedZergBuilding5, ETKUtilsEffectsPlayerID, $L("Anywhere"), OFFSCREEN_LOCATION);
 		return true;
  	}
-	MoveUnit(1, ETKConstants.Unit_UnusedZergBuilding5, $P8, $L("Anywhere"), $L("ETKUtilityStorageLocation")); 	
+	MoveUnit(1, ETKConstants.Unit_UnusedZergBuilding5, ETKUtilsEffectsPlayerID, $L("Anywhere"), OFFSCREEN_LOCATION); 	
 	return false;
 }
 
@@ -349,6 +408,11 @@ function removeUnit(unit) {
 	RemoveUnitAt(1, ETKUnit.getUnitType(unit), $L("ETKUtilityLocation"), ETKUnit.getPlayerID(unit));
 }
 
+function giveUnit(unit, playerID) {
+	moveUtilLocationToUnit(unit);
+	GiveUnits(1, ETKUnit.getUnitType(unit), ETKUnit.getPlayerID(unit), $L("ETKUtilityLocation"), playerID);
+}
+
 function replaceUnit(unit, unitType) {
 	moveUtilLocationToUnit(unit);
 	const playerID = ETKUnit.getPlayerID(unit);
@@ -370,6 +434,11 @@ function createUnitsSafe(count, unitType, location, playerID) {
 	if (isLocationPathable(location)) {
 		CreateUnit(count,unitType, location, playerID);
 	}
+}
+
+function setUnitColor(epd, color) {
+	const sprite = ETKUnit.getSprite(epd);
+    bwrite(sprite + 0x0A, color);
 }
 
 function canExecuteCustomTargetAbility(unit, orderID, energy, targetingMode, playerTargetingMode) {
@@ -538,7 +607,24 @@ function knockbackUnit(unit, direction, distance) {
 	MoveUnit(1, ETKUnit.getUnitType(unit), ETKUnit.getPlayerID(unit), $L("ETKUtilityLocation"), $L("ETKUtilityLocation2"));
 }
 
+function refreshInterface() {
+	ETKUnit.destroy(createUnit(ETKConstants.Unit_ZergZergling, OFFSCREEN_LOCATION, ETKUtilsEffectsPlayerID));	
+}
+
+function setLight(val) {
+	if (IsUserCP()) {
+		SetMemoryEPD(EPD(0x657A9C), (7), val);
+	}
+}
+
+function getLight() {
+	if (IsUserCP()) {
+		return dwread_epd(EPD(0x657A9C));
+	}
+	return 0;
+}
+
 function setup() {
-	pathableTestUnit32x32 = createUnit(ETKConstants.Unit_UnusedProtossBuilding1, $L("ETKUtilityStorageLocation"), $P8);
-	pathableTestUnit16x16 = createUnit(ETKConstants.Unit_UnusedZergBuilding5, $L("ETKUtilityStorageLocation"), $P8);
+	pathableTestUnit32x32 = createUnit(ETKConstants.Unit_UnusedProtossBuilding1, OFFSCREEN_LOCATION, ETKUtilsEffectsPlayerID);
+	pathableTestUnit16x16 = createUnit(ETKConstants.Unit_UnusedZergBuilding5, OFFSCREEN_LOCATION, ETKUtilsEffectsPlayerID);
 }
