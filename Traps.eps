@@ -2,6 +2,7 @@ import ETK.ETKUnit as Unit;
 import ETK.ETKUtils as Utils;
 import ETK.ETKTimer as Timer;
 import ETK.ETKConstants as Const;
+import ETK.ETKCommon as Common;
 
 const TRAP_OBJ = EUDArray(64);
 var TRAP_COUNT = 0;
@@ -11,7 +12,9 @@ object TrapType {
     var id;
     var spriteImageID;
     var projectileImageID;
+    var hitImageID;
     var fire: EUDFuncPtr (1, 0);
+    var hit: EUDFuncPtr (1, 0);
     var baseDamage;
     var cooldown;
 };
@@ -29,6 +32,17 @@ function addTrap(Trap : TrapType, id) {
     TRAP_OBJ[id] = Trap;
 }
 
+function addTowerObj(id, spriteImageID, projectileImageID, hitImageID, fireFunction, baseDamage, cooldown) {
+    const trap = TrapType.alloc();
+    trap.spriteImageID = spriteImageID;
+    trap.projectileImageID = projectileImageID;
+    trap.hitImageID = hitImageID;
+    trap.fire = fireFunction;
+    trap.baseDamage = baseDamage;
+    trap.cooldown = cooldown;
+    addTrap(trap, id);
+}
+
 function addTrapObj(id, spriteImageID, projectileImageID, fireFunction, baseDamage, cooldown) {
     const trap = TrapType.alloc();
     trap.spriteImageID = spriteImageID;
@@ -37,6 +51,18 @@ function addTrapObj(id, spriteImageID, projectileImageID, fireFunction, baseDama
     trap.baseDamage = baseDamage;
     trap.cooldown = cooldown;
     addTrap(trap, id);
+}
+
+function missileHit(missileUnit) {
+    const targetUnit = Unit.getTargetUnit(missileUnit);
+    const trapUnit = Unit.getConnectedUnit(missileUnit);
+    const tower = getTrap(Unit.getCustomValue(trapUnit));
+    Utils.createImageSpriteAtUnitPosition(tower.hitImageID, targetUnit);
+    const damage = tower.baseDamage + tower.baseDamage * Unit.getRankIncrease(trapUnit);
+    if (Unit.damage(targetUnit, damage)) {
+        SetResources(Unit.getPlayerID(trapUnit), (8), Utils.getUnitDestroyValue(Unit.getUnitType(targetUnit)), (0));
+    }
+    Utils.removeUnit(missileUnit);
 }
 
 function loadTraps() {
@@ -49,6 +75,19 @@ function loadTraps() {
         if (Unit.damage(targetUnit, damage)) {
             SetResources(Unit.getPlayerID(trapUnit), (8), Utils.getUnitDestroyValue(Unit.getUnitType(targetUnit)), (0));
         }
+    });
+
+    const defaultMissileFire = EUDFuncPtr (1, 0) (function(trapUnit) {
+        const trap = getTrap(Unit.getCustomValue(trapUnit));
+        const targetUnit = Unit.getTargetUnit(trapUnit);
+        Utils.moveUtilLocationToUnit(trapUnit);
+        const missileUnit = Utils.createUnit(Const.Unit_ProtossObserver, Utils.UTILITY_LOCATION, Unit.getPlayerID(trapUnit));
+        Unit.setConnectedUnit(missileUnit, trapUnit);
+        Unit.setOrder(missileUnit, Const.Order_Ignore_Normal);
+        Unit.setTargetUnit(missileUnit, targetUnit);
+    });
+
+    const defaultMissileHit = EUDFuncPtr (1, 0) (function(missileUnit) {
     });
 
     addTrapObj(
@@ -66,14 +105,26 @@ function loadTraps() {
         24
     );
 
+    addTowerObj(
+        1,
+        Const.Image_Maelstrom_Hit,
+        Const.Image_Flames1_Type2_Large,
+        Const.Image_Corrosive_Acid_Hit,
+        defaultMissileFire,
+        5,
+        6
+    );
+
+    /*
     addTrapObj(
         1,
         Const.Image_Maelstrom_Hit,
         Const.Image_Flames1_Type2_Large,
         defaultFire,
         5,
-        12
+        6
     );
+    */
 
     addTrapObj(
         2,

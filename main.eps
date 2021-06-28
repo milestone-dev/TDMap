@@ -6,7 +6,7 @@ import Weapons;
 import Traps;
 import customText as ct;
 
-const pp = StringBuffer(256);
+const Screen = StringBuffer(256);
 const MouseLeftButtonPress = EUDArray(6);
 const MouseLeftButtonDown = EUDArray(6);
 const MouseRightButtonPress = EUDArray(6);
@@ -64,7 +64,7 @@ function selectTrap(unit, trapID) {
 		Utils.removeUnit(unit);
 		return;
 	} 
-	pp.printf("selectTrap {}", trapID);
+	Screen.printf("selectTrap {}", trapID);
 	const trap = Traps.getTrap(trapID);
 	const trapSpriteID = 212;
 	Utils.setSpriteImage(trapSpriteID, trap.spriteImageID);
@@ -150,9 +150,28 @@ function beforeTriggerExec() {
 					&& Unit.getOrder(trapUnit) == Const.Order_Attack_Building
 					&& Unit.isOrderTargetUnitValid(trapUnit)) {
 					trap.fire(trapUnit);
+					Unit.setGroundWeaponCooldown(trapUnit, trap.cooldown);	
 				}
 			}
-		}
+
+			if (Unit.getUnitType(unit) == Const.Unit_ProtossObserver) {
+
+				const targetUnit = Unit.getTargetUnit(unit);
+				if (Unit.isOrderTargetUnitValid(unit)) {
+					const uX, uY = Unit.getPosition(unit);
+					const tX, tY = Unit.getPosition(targetUnit);
+					Unit.setOrder(unit, Const.Order_Ignore_Normal);
+					Unit.setOrderTargetX(unit, tX);
+					Unit.setOrderTargetY(unit, tY);
+					Unit.setTargetUnit(unit, targetUnit);
+					if (Utils.abs(uX-tX) < 32 && Utils.abs(uY-tY) < 32) {
+						Traps.missileHit(unit);
+					}
+				} else {
+					Utils.removeUnit(unit);
+				}
+			}
+		}n 
 
 		// PLACING TRAPS
 		if (selectedUnit != 0 && Unit.getUnitType(selectedUnit) == Const.Unit_KhaydarinCrystalFormation) {
@@ -168,7 +187,7 @@ function beforeTriggerExec() {
 				MoveUnit(1, Const.Unit_TerranFlagBeacon, $P8, $L("SafeCreate"), FireLocation);
 				if (Bring($P8, AtLeast, 1, Const.Unit_TerranFlagBeacon, $L("SafeCreate"))) {
 					RemoveUnitAt(1, Const.Unit_TerranFlagBeacon, $L("SafeCreate"), $P8);
-					pp.print("Cannot place there. Refunding");
+					Screen.print("Cannot place there. Refunding");
 				} else {
 					GiveUnits(1, Const.Unit_TerranFlagBeacon, $P8, FireLocation, playerID);
 				}
@@ -207,13 +226,13 @@ function beforeTriggerExec() {
 				}));
 			}
 			
-			pp.printfAt(1,
-				"O = {}, TU {} CD {} BTN {} CMD {}",
+			Screen.printfAt(1,
+				"O = {}, TU {} CD {}",
 				Unit.getOrder(selectedUnit),
 				Unit.getTargetUnit(selectedUnit),
-				Unit.getGroundWeaponCooldown(selectedUnit),
-				Unit.getCurrentButtonSet(selectedUnit),
-				Unit.getCommandCard(selectedUnit)
+				Unit.getGroundWeaponCooldown(selectedUnit)
+				// Unit.getCurrentButtonSet(selectedUnit),
+				// Unit.getCommandCard(selectedUnit)
 				);
 		}
 
@@ -230,12 +249,12 @@ function beforeTriggerExec() {
 				weaponID = 0;
 			}
 			PlayerWeaponIndex[playerID] = weaponID;
-			PlayWAV("sound\\bullet\\LaserHit.wav");
+			// PlayWAV("sound\\bullet\\LaserHit.wav");
 		}
 
 
 		// FIRING
-		if (true) {
+		if (false) {
 
 			// ct.chatAnnouncement("Right click to fire. [", weaponID,"]");
 
@@ -243,7 +262,7 @@ function beforeTriggerExec() {
 
 			if (PlayerWeaponCooldown[playerID] == 0 && MouseRightButtonPress[playerID]) {
 				const x, y = Utils.getLocationPoint(mouseLocation);
-				// pp.printfAt(0, "x {} y {} ", x, y);
+				// Screen.printfAt(0, "x {} y {} ", x, y);
 				Utils.centerLocationOnPoint(FireLocation, x, y, weapon.radius, weapon.radius);
 				Weapons.playWeaponSfx(weapon.id);
 				if (weapon.imageID) {
