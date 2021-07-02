@@ -14,6 +14,7 @@ const FLASH_UNIT_TYPE = $U("Protoss Shuttle");
 const TARGET_UNIT_TYPE = 161; // Unused Protoss Building 2
 const UTILITY_LOCATION = $L("ETKUtilityLocation");
 const UTILITY_LOCATION_2 = $L("ETKUtilityLocation2");
+const LOCATION_ANYSIZE = $L("ETKUtilityLocationAnySize");
 const OFFSCREEN_LOCATION = $L("ETKUtilityOffscreenLocation");
 
 const ETKUtilsEffectsPlayerID = $P8;
@@ -45,6 +46,10 @@ function setUnitCost(unitType, value) {
 function setUnitWeapon(unitType, weaponID) {
 	bwrite(0x65FD00 + 6624 + unitType * 1, weaponID);
 	bwrite(0x65FD00 + 14776 + unitType * 1, weaponID);
+}
+
+function setUnitSubUnit(unitType, subUnitUnitType) {
+	wwrite(0x65FD00 + 2752 + unitType * 2, subUnitUnitType);
 }
 
 function getUnitElevation(unitType) {
@@ -210,11 +215,11 @@ function centerLocationOnUnit(location, unit, w, h) {
 }
 
 function moveUtilLocationToPoint(x, y) {
-    setLocationToPoint($L("ETKUtilityLocation"), x, y);
+    setLocationToPoint(UTILITY_LOCATION, x, y);
 }
 
 function moveUtilLocationToUnit(unit) {
-	SetLocationToUnitEPD($L("ETKUtilityLocation"), unit, 0x028, 0x02A);
+	SetLocationToUnitEPD(UTILITY_LOCATION, unit, 0x028, 0x02A);
 }
 
 function EUDTurbo() {
@@ -280,24 +285,24 @@ function createImageSpriteAtLocation(image, location) {
 
 function createImageSpriteAtPoint(image, x, y) {
 	moveUtilLocationToPoint(x,y);
-	createImageSpriteAtLocation(image, $L("ETKUtilityLocation"));
+	createImageSpriteAtLocation(image, UTILITY_LOCATION);
 }
 
 function createImageSpriteAtUnitPosition(image, unit) {
 	moveUtilLocationToUnit(unit);
-	createImageSpriteAtLocation(image, $L("ETKUtilityLocation"));
+	createImageSpriteAtLocation(image, UTILITY_LOCATION);
 }
 
-function createImageSpriteAtUnitPositionDelayed(unit, image, time) {
+function createImageSpriteAtUnitPositionDelayed(image, unit, time) {
 	ETKTimer.add(time, unit, EUDFuncPtr (2, 0) (function(callbackUnit, intervalCount) {
 		createImageSpriteAtUnitPosition(callbackUnit, image);
 	}));
 }
 
-function createImageSpriteAtUnitPositionWithOffset(unit, image, xOffset, yOffset) {
+function createImageSpriteAtUnitPositionWithOffset(image, unit, xOffset, yOffset) {
 	moveUtilLocationToUnit(unit);
-	offsetLocation($L("ETKUtilityLocation"), xOffset, yOffset);
-	createImageSpriteAtLocation(image, $L("ETKUtilityLocation"));
+	offsetLocation(UTILITY_LOCATION, xOffset, yOffset);
+	createImageSpriteAtLocation(image, UTILITY_LOCATION);
 }
 
 function dealDamageToPlayerUnitsAtLocation(damage, location, playerIndexStart, playerIndexEnd) {
@@ -342,6 +347,32 @@ function applyFunctionToPlayerUnitsInRectangleAroundUnit(func: EUDFuncPtr (1, 0)
 function displayNotEnoughEnergyMessage(playerID) {
 	//Not implemented
 	
+}
+
+function findUnitInLocation(location, playerID) {
+	foreach(ptr, unit : EUDLoopPlayerUnit(playerID)) {
+		if (CUnitInLocation(unit, location)) {
+			return unit;
+		}
+		
+		// const locTable = EPD(0x58DC4C);
+		// const lx1 = dwread_epd(locTable + location * 5);
+		// const lx2 = dwread_epd(locTable + location * 5 + 2);
+		// const ly1 = dwread_epd(locTable + location * 5 + 1);
+		// const ly2 = dwread_epd(locTable + location * 5 + 3);
+		
+		// const ux = ETKUnit.getPositionX(unit);
+		// const uy = ETKUnit.getPositionY(unit);
+		
+		// const inLoc = ux >= lx1 && ux <= lx2 && uy >= ly1 && uy <= ly2;
+		// StringBuffer(256).printf("il? {} u={} ({},{}) L({},{}),({},{})", inLoc, unit, ux, uy, lx1, lx2, ly1, ly2);
+
+		// if (inLoc) {
+		// 	return unit;
+		// }
+
+	}
+	return 0;
 }
 
 function findUnitOfType(unitType, playerID) {
@@ -397,27 +428,51 @@ function findUnitInLocationWithCustomFlag(location, customFlag, playerID) {
 	return 0;
 }
 
+function getUnitDistance(unit1, unit2) {
+	const u1X, u1Y = ETKUnit.getPosition(unit1);
+	const u2X, u2Y = ETKUnit.getPosition(unit2);
+	const x = abs(u1X-u2X);
+	const y = abs(u1Y-u2Y); 
+	return x + y;
+}
+
 function createUnit(unitType, location, playerID) {
 	const epd = getNextUnitEPD();
 	CreateUnit(1,unitType, location, playerID);
 	return epd;
 }
 
+function createUnitAtLocationWithOffset(unitType, location, playerID, xOffset, yOffset) {
+	setLocationToLocation(UTILITY_LOCATION, location);
+	offsetLocation(UTILITY_LOCATION, xOffset, yOffset);
+	const epd = getNextUnitEPD();
+	CreateUnit(1,unitType, location, playerID);
+	return epd;
+}
+
 function removeUnit(unit) {
+	ETKUnit.setUnitType(unit, ETKConstants.Unit_Cave);
+	RemoveUnit(ETKConstants.Unit_Cave, ETKUnit.getPlayerID(unit));
+	// moveUtilLocationToUnit(unit);
+	// RemoveUnitAt(1, ETKUnit.getUnitType(unit), UTILITY_LOCATION, ETKUnit.getPlayerID(unit));
+}
+
+function removeUnitSafe(unit) {
 	moveUtilLocationToUnit(unit);
-	RemoveUnitAt(1, ETKUnit.getUnitType(unit), $L("ETKUtilityLocation"), ETKUnit.getPlayerID(unit));
+	RemoveUnitAt(1, ETKUnit.getUnitType(unit), UTILITY_LOCATION, ETKUnit.getPlayerID(unit));
 }
 
 function giveUnit(unit, playerID) {
 	moveUtilLocationToUnit(unit);
-	GiveUnits(1, ETKUnit.getUnitType(unit), ETKUnit.getPlayerID(unit), $L("ETKUtilityLocation"), playerID);
+	GiveUnits(1, ETKUnit.getUnitType(unit), ETKUnit.getPlayerID(unit), UTILITY_LOCATION, playerID);
 }
 
 function replaceUnit(unit, unitType) {
 	moveUtilLocationToUnit(unit);
 	const playerID = ETKUnit.getPlayerID(unit);
-	RemoveUnitAt(1, ETKUnit.getUnitType(unit), $L("ETKUtilityLocation"), playerID);
-	return createUnit(unitType, $L("ETKUtilityLocation"), playerID);
+	removeUnit(unit);
+	// RemoveUnitAt(1, ETKUnit.getUnitType(unit), UTILITY_LOCATION, playerID);
+	return createUnit(unitType, UTILITY_LOCATION, playerID);
 }
 
 function createUnitSafe(unitType, location, playerID) {
@@ -544,6 +599,11 @@ function getDirectionFromPosition(originUnit, x, y) {
 	return direction;
 }
 
+function getDirectionFromPosition32(originUnit, x, y) {
+	const dir = getDirectionFromPosition(originUnit, x, y);
+	return (((dir * 1000)/255)*31)/1000;
+}
+
 function isMultiplayer() {
 	if (dwread(0x0057F0B4) == 1) {
 		return true;
@@ -554,10 +614,10 @@ function isMultiplayer() {
 
 function fireMissile(weaponID, originX, originY, targetX, targetY) {
 	moveUtilLocationToPoint(originX, originY);
-	var cannon = createUnit(MISSILE_LAUNCHER_UNIT_TYPE, $L("ETKUtilityLocation"), ETKUtilsEffectsPlayerID);
+	var cannon = createUnit(MISSILE_LAUNCHER_UNIT_TYPE, UTILITY_LOCATION, ETKUtilsEffectsPlayerID);
 	ETKUnit.removeCollision(cannon);
 	moveUtilLocationToPoint(targetX, targetY);
-	var target = createUnit(TARGET_UNIT_TYPE, $L("ETKUtilityLocation"), ETKUtilsEffectsPlayerID);
+	var target = createUnit(TARGET_UNIT_TYPE, UTILITY_LOCATION, ETKUtilsEffectsPlayerID);
 	ETKUnit.removeCollision(target);
 	ETKUnit.setConnectedUnit(cannon, target);
 	ETKUnit.setConnectedUnit(target, cannon);
@@ -589,7 +649,7 @@ function createFlashCopyOfUnit(unit, location) {
 	const unitImageID = getUnitImage(ETKUnit.getUnitType(unit));
 	setUnitImage(FLASH_UNIT_TYPE, unitImageID);
 	setImageDrawFunction(unitImageID, 17); // Set to Warp Flash
-	const flashUnit = createUnit(FLASH_UNIT_TYPE, $L("ETKUtilityLocation"), ETKUtilsEffectsPlayerID);
+	const flashUnit = createUnit(FLASH_UNIT_TYPE, UTILITY_LOCATION, ETKUtilsEffectsPlayerID);
 	ETKUnit.removeCollision(flashUnit);
 	setImageDrawFunction(unitImageID, 0); // Reset for later use
 	ETKTimer.add(2, flashUnit, EUDFuncPtr (2, 0) (function(unit, intervalCount) {
@@ -600,11 +660,11 @@ function createFlashCopyOfUnit(unit, location) {
 
 function knockbackUnit(unit, direction, distance) {
 	moveUtilLocationToUnit(unit);
-	createFlashCopyOfUnit(unit, $L("ETKUtilityLocation"));
+	createFlashCopyOfUnit(unit, UTILITY_LOCATION);
 	const knockbackX, knockbackY = getPositionFromDirection(unit, direction, distance);
 	moveUtilLocationToUnit(unit);
 	setLocationToPoint($L("ETKUtilityLocation2"), knockbackX, knockbackY);
-	MoveUnit(1, ETKUnit.getUnitType(unit), ETKUnit.getPlayerID(unit), $L("ETKUtilityLocation"), $L("ETKUtilityLocation2"));
+	MoveUnit(1, ETKUnit.getUnitType(unit), ETKUnit.getPlayerID(unit), UTILITY_LOCATION, $L("ETKUtilityLocation2"));
 }
 
 function refreshInterface() {

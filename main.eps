@@ -2,6 +2,7 @@ import ETK.ETKUnit as Unit;
 import ETK.ETKUtils as Utils;
 import ETK.ETKTimer as Timer;
 import ETK.ETKConstants as Const;
+import ETK.ETKCommon as Common;
 import Weapons;
 import Traps;
 import customText as ct;
@@ -59,20 +60,21 @@ function refreshTrapSelection(playerID) {
 	PlayerSelectedTrap[playerID] = 0;
 }
 
+// OLD UNIT
 function selectTrap(unit, trapID) {
 	if (trapID == 99) {
 		Utils.removeUnit(unit);
 		return;
 	} 
 	Screen.printf("selectTrap {}", trapID);
-	const trap = Traps.getTrap(trapID);
+	const trap = Traps.getTowerType(trapID);
 	const trapSpriteID = 212;
 	Utils.setSpriteImage(trapSpriteID, trap.spriteImageID);
 	const trapUnit = Utils.replaceUnit(unit, Const.Unit_TerranBeacon);
-	Unit.setOrder(trapUnit, Const.Order_Stop);
+	// Unit.setOrder(trapUnit, Const.Order_Stop);
 	Unit.setCustomValue(trapUnit, trap.id);
 	Unit.setRankIncrease(trapUnit, 0);
-	Utils.setSpriteImage(trapSpriteID, Const.Image_Terran_Construction_Large);
+	// Utils.setSpriteImage(trapSpriteID, Const.Image_Terran_Construction_Large);
 	Unit.setCommandCard(trapUnit, 100 + Unit.getPlayerID(trapUnit));
 	// const tmp = Utils.createUnit(Const.Unit_TerranMarine, $L("Anywhere"), $P1);
 	// Utils.removeUnit(tmp);
@@ -88,8 +90,6 @@ function initMap() {
 	EUDRegisterObjectToNamespace("KeyQDown", KeyQDown);
 	EUDRegisterObjectToNamespace("KeyPDown", KeyPDown);
 	EUDRegisterObjectToNamespace("KeyUDown", KeyUDown);
-
-	Weapons.loadWeapons();
 	Traps.loadTraps();
 }
 
@@ -114,18 +114,14 @@ function beforeTriggerExec() {
 			SetSwitch((0), (6));
 		}
 
-		// UTILITY
-		if (KeyUDown[playerID]) {
-            // SetResources(playerID, (8), 100, (0));
-			
-		}
-
 		// TRAPS ACTIVE
 		foreach(ptr, unit : EUDLoopPlayerUnit(playerID)) {
 			if (Unit.getUnitType(unit) == Const.Unit_TerranBeacon) {
 
+				Traps.updateTower(unit);
+
 				const trapUnit = unit;
-				const trap = Traps.getTrap(Unit.getCustomValue(trapUnit));
+				const trap = Traps.getTowerType(Unit.getCustomValue(trapUnit));
 
 				// Upgrading
 				const queueUnitType = Unit.getBuildQueue1(trapUnit);
@@ -134,7 +130,9 @@ function beforeTriggerExec() {
 				}
 
 				if (queueUnitType == 99) {
+					const cannonUnit = Unit.getConnectedUnit(trapUnit);
 					Utils.removeUnit(trapUnit);
+					Utils.removeUnitSafe(cannonUnit);
 					refreshTrapSelection(playerID);
 				} else if (queueUnitType >= 100 && queueUnitType <= 105) {
 					Unit.setRankIncrease(trapUnit, Unit.getRankIncrease(trapUnit)+1);
@@ -142,65 +140,40 @@ function beforeTriggerExec() {
 				}
 
 				//Firing
-				if (Unit.getGroundWeaponCooldown(trapUnit) > trap.cooldown) {
-					Unit.setGroundWeaponCooldown(trapUnit, trap.cooldown);		
+				if (Unit.getGroundWeaponCooldown(trapUnit) > trap.data.cooldown) {
+					Unit.setGroundWeaponCooldown(trapUnit, trap.data.cooldown);		
 				}
 
 				if (Unit.getGroundWeaponCooldown(trapUnit) == 0
 					&& Unit.getOrder(trapUnit) == Const.Order_Attack_Building
 					&& Unit.isOrderTargetUnitValid(trapUnit)) {
 					trap.fire(trapUnit);
-					Unit.setGroundWeaponCooldown(trapUnit, trap.cooldown);	
+					Unit.setGroundWeaponCooldown(trapUnit, trap.data.cooldown);	
 				}
 			}
-
-			if (Unit.getUnitType(unit) == Const.Unit_ProtossObserver) {
-
-				const targetUnit = Unit.getTargetUnit(unit);
-				if (Unit.isOrderTargetUnitValid(unit)) {
-					const uX, uY = Unit.getPosition(unit);
-					const tX, tY = Unit.getPosition(targetUnit);
-					Unit.setOrder(unit, Const.Order_Ignore_Normal);
-					Unit.setOrderTargetX(unit, tX);
-					Unit.setOrderTargetY(unit, tY);
-					Unit.setTargetUnit(unit, targetUnit);
-					if (Utils.abs(uX-tX) < 32 && Utils.abs(uY-tY) < 32) {
-						Traps.missileHit(unit);
-					}
-				} else {
-					Utils.removeUnit(unit);
-				}
-			}
-		}n 
+		}
 
 		// PLACING TRAPS
 		if (selectedUnit != 0 && Unit.getUnitType(selectedUnit) == Const.Unit_KhaydarinCrystalFormation) {
 
 			if ( Unit.getOrder(selectedUnit) == Const.Order_Build_SCV) {
 				var x, y = Utils.getLocationPoint(MouseLoc[playerID]);
-				x = ((x / 32) * 32) + 32;
-				y = ((y / 32) * 32) + 32;
-				Utils.centerLocationOnPoint(FireLocation, x, y, 64, 64);
-				Utils.offsetLocation(MouseLoc[playerID], 16, 16);
-
-				const trapUnit = Utils.createUnit(Const.Unit_TerranFlagBeacon, $L("SafeCreate"), $P8);
-				MoveUnit(1, Const.Unit_TerranFlagBeacon, $P8, $L("SafeCreate"), FireLocation);
-				if (Bring($P8, AtLeast, 1, Const.Unit_TerranFlagBeacon, $L("SafeCreate"))) {
-					RemoveUnitAt(1, Const.Unit_TerranFlagBeacon, $L("SafeCreate"), $P8);
-					Screen.print("Cannot place there. Refunding");
-				} else {
-					GiveUnits(1, Const.Unit_TerranFlagBeacon, $P8, FireLocation, playerID);
-				}
-				Unit.setOrder(selectedUnit, Const.Order_Nothing2_Normal);
+			    x = ((x / 32) * 32) + 32;
+			    y = ((y / 32) * 32) + 32;
+			    Utils.centerLocationOnPoint(FireLocation, x, y, 64, 64);
+			    Utils.offsetLocation(MouseLoc[playerID], 16, 16);
+				Traps.createBaseTower(MouseLoc[playerID], playerID);
+    			Unit.setOrder(selectedUnit, Const.Order_Nothing2_Normal);
 			}
 		}
 
 		// SELECTING TRAPS
 		if (selectedUnit != 0 && Unit.getUnitType(selectedUnit) == Const.Unit_TerranFlagBeacon) {
 			const queueUnitType = Unit.getBuildQueue1(selectedUnit);
-
 			if (queueUnitType != Const.Unit_None) {
-				selectTrap(selectedUnit, queueUnitType);
+				Screen.print("SelectingTrap");
+				Traps.setTowerType(selectedUnit, queueUnitType);
+				Unit.clearBuildQueue(selectedUnit);
 			}
 		}
 
@@ -227,14 +200,16 @@ function beforeTriggerExec() {
 			}
 			
 			Screen.printfAt(1,
-				"O = {}, TU {} CD {}",
+				"O = {}, V? TU {}",
 				Unit.getOrder(selectedUnit),
-				Unit.getTargetUnit(selectedUnit),
-				Unit.getGroundWeaponCooldown(selectedUnit)
+				Unit.isOrderTargetUnitValid(selectedUnit),
+				Common.PTR(Unit.getOrderTargetUnit(selectedUnit))
 				// Unit.getCurrentButtonSet(selectedUnit),
 				// Unit.getCommandCard(selectedUnit)
 				);
 		}
+
+		/*
 
 		// SWITCHING WEAPONS
 		var weaponID = PlayerWeaponIndex[playerID];
@@ -249,7 +224,7 @@ function beforeTriggerExec() {
 				weaponID = 0;
 			}
 			PlayerWeaponIndex[playerID] = weaponID;
-			// PlayWAV("sound\\bullet\\LaserHit.wav");
+				PlayWAV("sound\\bullet\\LaserHit.wav");
 		}
 
 
@@ -274,6 +249,28 @@ function beforeTriggerExec() {
 				PlayerWeaponCooldown[playerID] = weapon.cooldown;
 			}
 		}
+		*/
 	}
 	EUDEndPlayerLoop();
+
+	// Missiles
+	foreach(ptr, unit : EUDLoopPlayerUnit(P8)) {
+		if (Unit.getUnitType(unit) == Const.Unit_ProtossObserver) {
+
+			const targetUnit = Unit.getTargetUnit(unit);
+			if (Unit.isOrderTargetUnitValid(unit)) {
+				const uX, uY = Unit.getPosition(unit);
+				const tX, tY = Unit.getPosition(targetUnit);
+				Unit.setOrder(unit, Const.Order_Ignore_Normal);
+				Unit.setOrderTargetX(unit, tX);
+				Unit.setOrderTargetY(unit, tY);
+				// Unit.setTargetUnit(unit, targetUnit);
+				if (Utils.abs(uX-tX) < 48 && Utils.abs(uY-tY) < 48) {
+					Traps.missileHit(unit);
+				}
+			} else {
+				Utils.removeUnit(unit);
+			}
+		}
+	}
 }

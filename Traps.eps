@@ -4,61 +4,167 @@ import ETK.ETKTimer as Timer;
 import ETK.ETKConstants as Const;
 import ETK.ETKCommon as Common;
 
-const TRAP_OBJ = EUDArray(64);
+const TOWERS = EUDArray(1024);
 var TRAP_COUNT = 0;
-const pp = StringBuffer(256);
+const Screen = StringBuffer(256);
 
-object TrapType {
-    var id;
+object TowerData {
+    var spriteImageYOffset;
     var spriteImageID;
-    var projectileImageID;
+    var missileSpawnImageID;
+    var missileImageID;
+    var missileImageIDYOffset;
     var hitImageID;
-    var fire: EUDFuncPtr (1, 0);
-    var hit: EUDFuncPtr (1, 0);
     var baseDamage;
     var cooldown;
 };
 
-function getTrap(id): TrapType {
-    return TRAP_OBJ[id];
+const TOWER_TYPES = EUDArray(64);
+
+object TowerType {
+    var id;
+    var data : TowerData;
+    var fire: EUDFuncPtr (1, 0);
+    var hit: EUDFuncPtr (1, 0);
+};
+
+function addTowerType(id,
+        spriteImageID,
+        spriteImageYOffset,
+        missileSpawnImageID,
+        missileImageID,
+        missileImageIDYOffset,
+        hitImageID,
+        fireFunction,
+        baseDamage,
+        cooldown) {
+    const towerType = TowerType.alloc();
+    const data = TowerData.alloc();
+    data.spriteImageID = spriteImageID;
+    data.spriteImageYOffset = spriteImageYOffset;
+    data.missileSpawnImageID = missileSpawnImageID;
+    data.missileImageID = missileImageID;
+    data.missileImageIDYOffset = missileImageIDYOffset;
+    data.hitImageID = hitImageID;
+    data.baseDamage = baseDamage;
+    data.cooldown = cooldown;
+    towerType.data = data;
+    towerType.fire = fireFunction;
+    towerType.id = id;
+    TOWER_TYPES[id] = towerType;
+    Screen.printf("towerType {}", id);
 }
 
-function isTrapValid(id) {
-    return getTrap(id) != 0 && id < TRAP_COUNT;
+
+object TowerUnit {
+    var unit;
+    var type: TowerType;
+    var targetUnit;
+};
+
+function getTowerType(id): TowerType {
+    return TOWER_TYPES[id];
 }
 
-function addTrap(Trap : TrapType, id) {
-    Trap.id = id;
-    TRAP_OBJ[id] = Trap;
+function getTowerTypeFromUnit(towerUnit): TowerType {
+    return TOWER_TYPES[Unit.getCustomValue(towerUnit)];
 }
 
-function addTowerObj(id, spriteImageID, projectileImageID, hitImageID, fireFunction, baseDamage, cooldown) {
-    const trap = TrapType.alloc();
-    trap.spriteImageID = spriteImageID;
-    trap.projectileImageID = projectileImageID;
-    trap.hitImageID = hitImageID;
-    trap.fire = fireFunction;
-    trap.baseDamage = baseDamage;
-    trap.cooldown = cooldown;
-    addTrap(trap, id);
+function isTowerValid(id) {
+    return getTowerType(id) != 0 && id < TRAP_COUNT;
 }
 
-function addTrapObj(id, spriteImageID, projectileImageID, fireFunction, baseDamage, cooldown) {
-    const trap = TrapType.alloc();
-    trap.spriteImageID = spriteImageID;
-    trap.projectileImageID = projectileImageID;
-    trap.fire = fireFunction;
-    trap.baseDamage = baseDamage;
-    trap.cooldown = cooldown;
-    addTrap(trap, id);
+
+function createBaseTower(location, playerID) {
+    // const unitType = Const.Unit_TerranBeacon;
+    const unitType = Const.Unit_TerranFlagBeacon;
+    const towerUnit = Utils.createUnit(unitType, $L("SafeCreate"), $P8);
+    MoveUnit(1, unitType, $P8, $L("SafeCreate"), location);
+    if (Bring($P8, AtLeast, 1, unitType, $L("SafeCreate"))) {
+        RemoveUnitAt(1, unitType, $L("SafeCreate"), $P8);
+        Screen.print("Cannot place there. Refunding");
+    } else {
+        GiveUnits(1, unitType, $P8, location, playerID);
+    }
 }
+
+function setTowerType(towerBaseUnit, towerID) {
+    if (towerID == 99) {
+        Utils.removeUnit(towerBaseUnit);
+        return;
+    }
+    const towerUnit = Utils.replaceUnit(towerBaseUnit, Const.Unit_TerranBeacon);
+    Screen.printf("selectTrap {}", towerID);
+    const towerType = getTowerType(towerID);
+    Screen.printf("-> {}", towerType.id);
+
+    const playerID = Unit.getPlayerID(towerUnit);
+
+
+    Utils.moveUtilLocationToUnit(towerUnit);
+    const cannonSpriteID = 487;
+    const cannonImageID = towerType.data.spriteImageID;
+    Utils.setImageDrawFunction(cannonImageID, 1);
+    Utils.setImageClickable(cannonImageID, 0);
+    Utils.setSpriteImage(cannonSpriteID, cannonImageID);
+    const cannonUnit = Utils.createUnitAtLocationWithOffset(Const.Unit_ProtossCorsair, Utils.UTILITY_LOCATION, $P8, 0, towerType.data.spriteImageYOffset);
+    Utils.setUnitColor(cannonUnit, playerID);
+    Unit.setStatusFlags(cannonUnit, 0x04240201);
+    Unit.setConnectedUnit(towerUnit, cannonUnit);
+
+    Unit.setCustomValue(towerUnit, towerType.id);
+    Unit.setRankIncrease(towerUnit, 0);
+    Unit.setCommandCard(towerUnit, 100 + Unit.getPlayerID(towerUnit));
+
+    // Unit.setOrder(towerUnit, Const.Order_Guard_Building);
+
+
+    // Unit.setOrder(trapUnit, Const.Order_Stop);
+
+    // Utils.setSpriteImage(trapSpriteID, Const.Image_Terran_Construction_Large);
+    // const tmp = Utils.createUnit(Const.Unit_TerranMarine, $L("Anywhere"), $P1);
+    // Utils.removeUnit(tmp);
+}
+
+function updateTower(towerUnit) {
+    const towerData = getTowerTypeFromUnit(towerUnit);
+    const enemyPlayerID = $P7;
+    const towerRange = 32*8; //TODO: towerData.calculateRange();
+    // const isEnemyUnitInRange = Bring(enemyPlayerID, AtLeast, 1, Const.Unit_AnyUnit, Utils.LOCATION_ANYSIZE);
+
+    // Check if target is still within range, otherwise clear it and target a new unit
+    if (Unit.isOrderTargetUnitValid(towerUnit)) {
+        // Screen.printf("dist {} {}", towerRange, Utils.getUnitDistance(towerUnit, Unit.getTargetUnit(towerUnit)));
+        if (Utils.getUnitDistance(towerUnit, Unit.getTargetUnit(towerUnit)) > towerRange) {
+            // Screen.print("clearTargetUnit");
+            Unit.clearTargetUnit(towerUnit);
+            Unit.setOrder(towerUnit, Const.Order_Guard_Building);         
+        }
+    } 
+
+    if (!Unit.isOrderTargetUnitValid(towerUnit)) {
+        // Check if there are enemy units nearby and target a new unit
+        Utils.centerLocationOnUnit(Utils.LOCATION_ANYSIZE, towerUnit, towerRange * 2, towerRange * 2);
+        if (Bring(enemyPlayerID, AtLeast, 1, Const.Unit_AnyUnit, Utils.LOCATION_ANYSIZE)) {
+            const enemyUnit = Utils.findUnitInLocation(Utils.LOCATION_ANYSIZE, enemyPlayerID);
+            // Screen.printf("Bring {}", enemyUnit);
+            MinimapPing(Utils.LOCATION_ANYSIZE);
+            if (enemyUnit != 0) {
+                // Screen.print("setTargetUnit");
+                Unit.setTargetUnit(towerUnit, enemyUnit);
+                Unit.setOrder(towerUnit, Const.Order_Attack_Building);
+            }
+        }
+    }
+}
+
 
 function missileHit(missileUnit) {
     const targetUnit = Unit.getTargetUnit(missileUnit);
     const trapUnit = Unit.getConnectedUnit(missileUnit);
-    const tower = getTrap(Unit.getCustomValue(trapUnit));
-    Utils.createImageSpriteAtUnitPosition(tower.hitImageID, targetUnit);
-    const damage = tower.baseDamage + tower.baseDamage * Unit.getRankIncrease(trapUnit);
+    const tower = getTowerTypeFromUnit(trapUnit);
+    Utils.createImageSpriteAtUnitPosition(tower.data.hitImageID, targetUnit);
+    const damage = tower.data.baseDamage + tower.data.baseDamage * Unit.getRankIncrease(trapUnit);
     if (Unit.damage(targetUnit, damage)) {
         SetResources(Unit.getPlayerID(trapUnit), (8), Utils.getUnitDestroyValue(Unit.getUnitType(targetUnit)), (0));
     }
@@ -67,22 +173,25 @@ function missileHit(missileUnit) {
 
 function loadTraps() {
 
-    const defaultFire = EUDFuncPtr (1, 0) (function(trapUnit) {
-        const trap = getTrap(Unit.getCustomValue(trapUnit));
-        const targetUnit = Unit.getTargetUnit(trapUnit);
-        Utils.createImageSpriteAtUnitPosition(trap.projectileImageID, targetUnit);
-        const damage = trap.baseDamage + trap.baseDamage * Unit.getRankIncrease(trapUnit);
-        if (Unit.damage(targetUnit, damage)) {
-            SetResources(Unit.getPlayerID(trapUnit), (8), Utils.getUnitDestroyValue(Unit.getUnitType(targetUnit)), (0));
-        }
-    });
+    const defaultMissileFire = EUDFuncPtr (1, 0) (function(towerUnit) {
+        const cannonUnit = Unit.getConnectedUnit(towerUnit);
+        const towerType = getTowerType(Unit.getCustomValue(towerUnit));
+        const targetUnit = Unit.getTargetUnit(towerUnit);
 
-    const defaultMissileFire = EUDFuncPtr (1, 0) (function(trapUnit) {
-        const trap = getTrap(Unit.getCustomValue(trapUnit));
-        const targetUnit = Unit.getTargetUnit(trapUnit);
-        Utils.moveUtilLocationToUnit(trapUnit);
-        const missileUnit = Utils.createUnit(Const.Unit_ProtossObserver, Utils.UTILITY_LOCATION, Unit.getPlayerID(trapUnit));
-        Unit.setConnectedUnit(missileUnit, trapUnit);
+
+        Utils.setImageDrawFunction(towerType.data.missileImageID, 1);
+        Utils.setSpriteImage(202, towerType.data.missileImageID);
+        const direction = Utils.getDirectionFromPosition32(towerUnit, Unit.getPositionX(targetUnit), Unit.getPositionY(targetUnit));
+        Utils.moveUtilLocationToUnit(towerUnit);
+
+        Utils.setUnitInitialDirection(Const.Unit_ProtossObserver, direction);
+        const missileUnit = Utils.createUnitAtLocationWithOffset(Const.Unit_ProtossObserver, Utils.UTILITY_LOCATION, $P8, 0, towerType.data.missileImageIDYOffset);
+        Utils.setUnitColor(missileUnit, Unit.getPlayerID(towerUnit));
+
+        if (towerType.data.missileSpawnImageID != Const.Image_None) {
+            Utils.createImageSpriteAtUnitPosition(towerType.data.missileSpawnImageID, cannonUnit);
+        }
+        Unit.setConnectedUnit(missileUnit, towerUnit);
         Unit.setOrder(missileUnit, Const.Order_Ignore_Normal);
         Unit.setTargetUnit(missileUnit, targetUnit);
     });
@@ -90,14 +199,144 @@ function loadTraps() {
     const defaultMissileHit = EUDFuncPtr (1, 0) (function(missileUnit) {
     });
 
+    addTowerType(
+        0,
+        Const.Image_Science_Vessel_Turret,
+        12,
+        Const.Image_None,
+        Const.Image_Burst_Lasers,
+        -30,
+        Const.Image_Yamato_Gun_Hit,
+        defaultMissileFire,
+        5,
+        3
+    );
+
+    addTowerType(
+        1,
+        Const.Image_Maelstrom_Overlay_Small,
+        -16,
+        Const.Image_Building_Landing_Dust_Type4,
+        Const.Image_Anti_Matter_Missile,
+        0,
+        Const.Image_Anti_Matter_Missile_Hit,
+        defaultMissileFire,
+        5,
+        12
+    );
+
+    addTowerType(
+        2,
+        Const.Image_Doodad_12_1_Platform,
+        0,
+        Const.Image_Egg_Remnants,
+        Const.Image_Scourge,
+        0,
+        Const.Image_Scourge_Explosion,
+        defaultMissileFire,
+        5,
+        12
+    );
+
+    /*
+
+    addTowerType(
+        2,
+        Const.Image_Egg,
+        0,
+        Const.Image_Egg_Remnants,
+        Const.Image_Scourge,
+        Const.Image_Scourge_Explosion,
+        defaultMissileFire,
+        5,
+        12
+    );
+
+    addTowerType(
+        3,
+        Const.Image_Khalis,
+        0,
+        Const.Image_Building_Landing_Dust_Type4,
+        Const.Image_Burst_Lasers,
+        Const.Image_Yamato_Gun_Hit,
+        defaultMissileFire,
+        5,
+        12
+    );
+
+    addTowerType(
+        5,
+        Const.Image_Data_Disc,
+        0,
+        Const.Image_Building_Landing_Dust_Type4,
+        Const.Image_Anti_Matter_Missile,
+        Const.Image_Yamato_Gun_Hit,
+        defaultMissileFire,
+        5,
+        12
+    );
+
+    addTowerType(
+        7,
+        Const.Image_Young_Chrysalis,
+        0,
+        Const.Image_Building_Landing_Dust_Type4,
+        Const.Image_Anti_Matter_Missile,
+        Const.Image_Yamato_Gun_Hit,
+        defaultMissileFire,
+        5,
+        12
+    );
+
+    addTowerType(
+        8,
+        Const.Image_Zerg_Gas_Sac_Type1,
+        0,
+        Const.Image_Building_Landing_Dust_Type4,
+        Const.Image_Anti_Matter_Missile,
+        Const.Image_Yamato_Gun_Hit,
+        defaultMissileFire,
+        5,
+        12
+    );
+
+    addTowerType(
+        9,
+        Const.Image_Science_Vessel_Turret,
+        0,
+        Const.Image_Building_Landing_Dust_Type4,
+        Const.Image_Anti_Matter_Missile,
+        Const.Image_Yamato_Gun_Hit,
+        defaultMissileFire,
+        5,
+        12
+    );
+    */
+
+    /*
+
+
+    const defaultTrapFire = EUDFuncPtr (1, 0) (function(trapUnit) {
+        const trap = getTowerType(Unit.getCustomValue(trapUnit));
+        const targetUnit = Unit.getTargetUnit(trapUnit);
+        if (towerType.data.missileImageID != Const.Image_None) {
+            Utils.createImageSpriteAtUnitPosition(trap.data.missileImageID, targetUnit);
+        }
+        const damage = trap.data.baseDamage + trap.data.baseDamage * Unit.getRankIncrease(trapUnit);
+        if (Unit.damage(targetUnit, damage)) {
+            SetResources(Unit.getPlayerID(trapUnit), (8), Utils.getUnitDestroyValue(Unit.getUnitType(targetUnit)), (0));
+        }
+    });
+
+
     addTrapObj(
         0,
         Const.Image_Stasis_Field_Hit,
         Const.Image_Hallucination_Death3,
         EUDFuncPtr (1, 0) (function(trapUnit) {
-            const trap = getTrap(Unit.getCustomValue(trapUnit));
+            const trap = getTowerType(Unit.getCustomValue(trapUnit));
             const targetUnit = Unit.getTargetUnit(trapUnit);
-            Utils.createImageSpriteAtUnitPosition(trap.projectileImageID, targetUnit);
+            Utils.createImageSpriteAtUnitPosition(trap.missileImageID, targetUnit);
             Unit.damage(targetUnit, trap.baseDamage);
             Unit.setTopSpeed(targetUnit, Unit.getOriginalTopSpeed(targetUnit) / 4);
         }),
@@ -105,32 +344,22 @@ function loadTraps() {
         24
     );
 
-    addTowerObj(
-        1,
-        Const.Image_Maelstrom_Hit,
-        Const.Image_Flames1_Type2_Large,
-        Const.Image_Corrosive_Acid_Hit,
-        defaultMissileFire,
-        5,
-        6
-    );
-
-    /*
+    
     addTrapObj(
         1,
         Const.Image_Maelstrom_Hit,
         Const.Image_Flames1_Type2_Large,
-        defaultFire,
+        defaultTrapFire,
         5,
         6
     );
-    */
+    
 
     addTrapObj(
         2,
         Const.Image_Egg_Spawn,
         Const.Image_Sunken_Colony_Tentacle,
-        defaultFire,
+        defaultTrapFire,
         34,
         18
     );
@@ -139,7 +368,7 @@ function loadTraps() {
         3,
         Const.Image_Venom_Hit_Unused,
         Const.Image_Infested_Terran_Explosion,
-        defaultFire,
+        defaultTrapFire,
         34,
         18
     );
@@ -148,7 +377,7 @@ function loadTraps() {
         5,
         Const.Image_EMP_Shockwave_Hit_Part1,
         Const.Image_Subterranean_Spines,
-        defaultFire,
+        defaultTrapFire,
         34,
         18
     );
@@ -157,7 +386,7 @@ function loadTraps() {
         7,
         Const.Image_Hallucination_Hit,
         Const.Image_Psionic_Shockwave_Hit,
-        defaultFire,
+        defaultTrapFire,
         34,
         18
     );
@@ -166,7 +395,7 @@ function loadTraps() {
         8,
         Const.Image_Ensnare_Overlay_Large,
         Const.Image_Ensnare_Overlay_Medium,
-        defaultFire,
+        defaultTrapFire,
         34,
         18
     );
@@ -175,8 +404,9 @@ function loadTraps() {
         9,
         Const.Image_Explosion1_Small,
         Const.Image_Unused_Heal_Medium,
-        defaultFire,
+        defaultTrapFire,
         34,
         18
     );
+    */
 }
