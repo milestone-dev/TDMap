@@ -8,12 +8,24 @@ const TOWERS = EUDArray(1024);
 var TRAP_COUNT = 0;
 const Screen = StringBuffer(256);
 
+object Offset {
+    var x;
+    var y;
+};
+
+function MakeOffset(x, y) : Offset {
+    const offset = Offset.alloc();
+    offset.x = x; 
+    offset.y = y; 
+    return offset;
+}
+
 object TowerData {
-    var spriteImageYOffset;
+    var spriteImageOffset : Offset;
     var spriteImageID;
     var missileSpawnImageID;
     var missileImageID;
-    var missileImageIDYOffset;
+    var missileImageOffset : Offset;
     var hitImageID;
     var baseDamage;
     var cooldown;
@@ -30,10 +42,10 @@ object TowerType {
 
 function addTowerType(id,
         spriteImageID,
-        spriteImageYOffset,
+        spriteImageOffset,
         missileSpawnImageID,
         missileImageID,
-        missileImageIDYOffset,
+        missileImageOffset,
         hitImageID,
         fireFunction,
         baseDamage,
@@ -41,10 +53,10 @@ function addTowerType(id,
     const towerType = TowerType.alloc();
     const data = TowerData.alloc();
     data.spriteImageID = spriteImageID;
-    data.spriteImageYOffset = spriteImageYOffset;
+    data.spriteImageOffset = spriteImageOffset;
     data.missileSpawnImageID = missileSpawnImageID;
     data.missileImageID = missileImageID;
-    data.missileImageIDYOffset = missileImageIDYOffset;
+    data.missileImageOffset = missileImageOffset;
     data.hitImageID = hitImageID;
     data.baseDamage = baseDamage;
     data.cooldown = cooldown;
@@ -107,7 +119,7 @@ function setTowerType(towerBaseUnit, towerID) {
     Utils.setImageDrawFunction(cannonImageID, 1);
     Utils.setImageClickable(cannonImageID, 0);
     Utils.setSpriteImage(cannonSpriteID, cannonImageID);
-    const cannonUnit = Utils.createUnitAtLocationWithOffset(Const.Unit_ProtossCorsair, Utils.UTILITY_LOCATION, $P8, 0, towerType.data.spriteImageYOffset);
+    const cannonUnit = Utils.createUnitAtLocationWithOffset(Const.Unit_ProtossCorsair, Utils.UTILITY_LOCATION, $P8, towerType.data.spriteImageOffset.x, towerType.data.spriteImageOffset.y);
     Utils.setUnitColor(cannonUnit, playerID);
     Unit.setStatusFlags(cannonUnit, 0x04240201);
     Unit.setConnectedUnit(towerUnit, cannonUnit);
@@ -129,7 +141,7 @@ function setTowerType(towerBaseUnit, towerID) {
 function updateTower(towerUnit) {
     const towerData = getTowerTypeFromUnit(towerUnit);
     const enemyPlayerID = $P7;
-    const towerRange = 32*8; //TODO: towerData.calculateRange();
+    const towerRange = 32*5; //TODO: towerData.calculateRange();
     // const isEnemyUnitInRange = Bring(enemyPlayerID, AtLeast, 1, Const.Unit_AnyUnit, Utils.LOCATION_ANYSIZE);
 
     // Check if target is still within range, otherwise clear it and target a new unit
@@ -148,7 +160,6 @@ function updateTower(towerUnit) {
         if (Bring(enemyPlayerID, AtLeast, 1, Const.Unit_AnyUnit, Utils.LOCATION_ANYSIZE)) {
             const enemyUnit = Utils.findUnitInLocation(Utils.LOCATION_ANYSIZE, enemyPlayerID);
             // Screen.printf("Bring {}", enemyUnit);
-            MinimapPing(Utils.LOCATION_ANYSIZE);
             if (enemyUnit != 0) {
                 // Screen.print("setTargetUnit");
                 Unit.setTargetUnit(towerUnit, enemyUnit);
@@ -162,11 +173,12 @@ function updateTower(towerUnit) {
 function missileHit(missileUnit) {
     const targetUnit = Unit.getTargetUnit(missileUnit);
     const trapUnit = Unit.getConnectedUnit(missileUnit);
+    const targetUnitType = Unit.getUnitType(targetUnit);
     const tower = getTowerTypeFromUnit(trapUnit);
     Utils.createImageSpriteAtUnitPosition(tower.data.hitImageID, targetUnit);
     const damage = tower.data.baseDamage + tower.data.baseDamage * Unit.getRankIncrease(trapUnit);
     if (Unit.damage(targetUnit, damage)) {
-        SetResources(Unit.getPlayerID(trapUnit), (8), Utils.getUnitDestroyValue(Unit.getUnitType(targetUnit)), (0));
+        SetResources(Unit.getPlayerID(trapUnit), 8, Utils.getUnitDestroyValue(targetUnitType), 0);
     }
     Utils.removeUnit(missileUnit);
 }
@@ -178,14 +190,13 @@ function loadTraps() {
         const towerType = getTowerType(Unit.getCustomValue(towerUnit));
         const targetUnit = Unit.getTargetUnit(towerUnit);
 
-
         Utils.setImageDrawFunction(towerType.data.missileImageID, 1);
         Utils.setSpriteImage(202, towerType.data.missileImageID);
         const direction = Utils.getDirectionFromPosition32(towerUnit, Unit.getPositionX(targetUnit), Unit.getPositionY(targetUnit));
         Utils.moveUtilLocationToUnit(towerUnit);
 
         Utils.setUnitInitialDirection(Const.Unit_ProtossObserver, direction);
-        const missileUnit = Utils.createUnitAtLocationWithOffset(Const.Unit_ProtossObserver, Utils.UTILITY_LOCATION, $P8, 0, towerType.data.missileImageIDYOffset);
+        const missileUnit = Utils.createUnitAtLocationWithOffset(Const.Unit_ProtossObserver, Utils.UTILITY_LOCATION, $P8, towerType.data.missileImageOffset.x, towerType.data.missileImageOffset.y);
         Utils.setUnitColor(missileUnit, Unit.getPlayerID(towerUnit));
 
         if (towerType.data.missileSpawnImageID != Const.Image_None) {
@@ -201,31 +212,47 @@ function loadTraps() {
 
     addTowerType(
         0,
-        Const.Image_Science_Vessel_Turret,
-        12,
+        Const.Image_STA_STS_Photon_Cannon_Overlay,
+        MakeOffset(6, -12),
         Const.Image_None,
-        Const.Image_Burst_Lasers,
-        -30,
-        Const.Image_Yamato_Gun_Hit,
+        Const.Image_Phase_Disruptor,
+        MakeOffset(0, -15),
+        Const.Image_Phase_Disruptor_Hit,
         defaultMissileFire,
         5,
-        3
+        12
     );
+
 
     addTowerType(
         1,
         Const.Image_Maelstrom_Overlay_Small,
-        -16,
-        Const.Image_Building_Landing_Dust_Type4,
-        Const.Image_Anti_Matter_Missile,
-        0,
-        Const.Image_Anti_Matter_Missile_Hit,
+        MakeOffset(0, -16),
+        Const.Image_Burst_Lasers_Hit,
+        Const.Image_Yamato_Gun,
+        MakeOffset(0, 0),
+        Const.Image_Yamato_Gun_Hit,
         defaultMissileFire,
         5,
         12
     );
 
     addTowerType(
+        2,
+        Const.Image_Psi_Emitter,
+        MakeOffset(0, 0),
+        Const.Image_None,
+        Const.Image_Burst_Lasers,
+        MakeOffset(0, -30),
+        Const.Image_Yamato_Gun_Hit,
+        defaultMissileFire,
+        5,
+        3
+    );
+
+
+    /*
+        addTowerType(
         2,
         Const.Image_Doodad_12_1_Platform,
         0,
@@ -237,6 +264,7 @@ function loadTraps() {
         5,
         12
     );
+    */
 
     /*
 

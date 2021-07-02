@@ -265,7 +265,7 @@ function beforeTriggerExec() {
 				Unit.setOrderTargetX(unit, tX);
 				Unit.setOrderTargetY(unit, tY);
 				// Unit.setTargetUnit(unit, targetUnit);
-				if (Utils.abs(uX-tX) < 48 && Utils.abs(uY-tY) < 48) {
+				if (Utils.abs(uX-tX) < 24 && Utils.abs(uY-tY) < 24) {
 					Traps.missileHit(unit);
 				}
 			} else {
