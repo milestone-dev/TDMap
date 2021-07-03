@@ -3,9 +3,8 @@ import ETK.ETKUtils as Utils;
 import ETK.ETKTimer as Timer;
 import ETK.ETKConstants as Const;
 import ETK.ETKCommon as Common;
-import Weapons;
-import Traps;
-import customText as ct;
+import Towers;
+// import customText as ct;
 
 const Screen = StringBuffer(256);
 const MouseLeftButtonPress = EUDArray(6);
@@ -23,7 +22,7 @@ const FireLocation = $L("Splash");
 
 const PlayerWeaponIndex = EUDArray(6);
 const PlayerWeaponCooldown = EUDArray(6);
-const PlayerSelectedTrap = EUDArray(6);
+const PlayerSelectedUnit = EUDArray(6);
 
 const MouseLoc = [
 	$L("MouseLoc1"),
@@ -56,28 +55,8 @@ function updateSelectedUnit(playerID) {
 	}
 }
 
-function refreshTrapSelection(playerID) {
-	PlayerSelectedTrap[playerID] = 0;
-}
-
-// OLD UNIT
-function selectTrap(unit, trapID) {
-	if (trapID == 99) {
-		Utils.removeUnit(unit);
-		return;
-	} 
-	Screen.printf("selectTrap {}", trapID);
-	const trap = Traps.getTowerType(trapID);
-	const trapSpriteID = 212;
-	Utils.setSpriteImage(trapSpriteID, trap.spriteImageID);
-	const trapUnit = Utils.replaceUnit(unit, Const.Unit_TerranBeacon);
-	// Unit.setOrder(trapUnit, Const.Order_Stop);
-	Unit.setCustomValue(trapUnit, trap.id);
-	Unit.setRankIncrease(trapUnit, 0);
-	// Utils.setSpriteImage(trapSpriteID, Const.Image_Terran_Construction_Large);
-	Unit.setCommandCard(trapUnit, 100 + Unit.getPlayerID(trapUnit));
-	// const tmp = Utils.createUnit(Const.Unit_TerranMarine, $L("Anywhere"), $P1);
-	// Utils.removeUnit(tmp);
+function refreshSelection(playerID) {
+	PlayerSelectedUnit[playerID] = 0;
 }
 
 function initMap() {
@@ -90,7 +69,7 @@ function initMap() {
 	EUDRegisterObjectToNamespace("KeyQDown", KeyQDown);
 	EUDRegisterObjectToNamespace("KeyPDown", KeyPDown);
 	EUDRegisterObjectToNamespace("KeyUDown", KeyUDown);
-	Traps.loadTraps();
+	Towers.load();
 }
 
 function onPluginStart() {
@@ -109,46 +88,46 @@ function beforeTriggerExec() {
 		const selectedUnit = SelectedUnitID[playerID];
 		const mouseLocation = MouseLoc[playerID];
 
-		// TOGGLING LEVEL TRAPS
+		// TOGGLING MOBS
 		if (KeyPDown[playerID]) {
 			SetSwitch((0), (6));
 		}
 
-		// TRAPS ACTIVE
+		// TOWERS ACTIVE
 		foreach(ptr, unit : EUDLoopPlayerUnit(playerID)) {
 			if (Unit.getUnitType(unit) == Const.Unit_TerranBeacon) {
 
-				Traps.updateTower(unit);
+				Towers.updateTower(unit);
 
-				const trapUnit = unit;
-				const trap = Traps.getTowerType(Unit.getCustomValue(trapUnit));
+				const towerUnit = unit;
+				const towerType = Towers.getTowerType(Unit.getCustomValue(towerUnit));
 
 				// Upgrading
-				const queueUnitType = Unit.getBuildQueue1(trapUnit);
-				if (Unit.getBuildQueueLength(trapUnit) > 0) {
-					Unit.clearBuildQueue(trapUnit);
+				const queueUnitType = Unit.getBuildQueue1(towerUnit);
+				if (Unit.getBuildQueueLength(towerUnit) > 0) {
+					Unit.clearBuildQueue(towerUnit);
 				}
 
 				if (queueUnitType == 99) {
-					const cannonUnit = Unit.getConnectedUnit(trapUnit);
-					Utils.removeUnit(trapUnit);
+					const cannonUnit = Unit.getConnectedUnit(towerUnit);
+					Utils.removeUnit(towerUnit);
 					Utils.removeUnitSafe(cannonUnit);
-					refreshTrapSelection(playerID);
+					refreshSelection(playerID);
 				} else if (queueUnitType >= 100 && queueUnitType <= 105) {
-					Unit.setRankIncrease(trapUnit, Unit.getRankIncrease(trapUnit)+1);
-					refreshTrapSelection(playerID);
+					Unit.setRankIncrease(towerUnit, Unit.getRankIncrease(towerUnit)+1);
+					refreshSelection(playerID);
 				}
 
 				//Firing
-				if (Unit.getGroundWeaponCooldown(trapUnit) > trap.data.cooldown) {
-					Unit.setGroundWeaponCooldown(trapUnit, trap.data.cooldown);		
+				if (Unit.getGroundWeaponCooldown(towerUnit) > towerType.data.baseCooldown) {
+					Unit.setGroundWeaponCooldown(towerUnit, towerType.data.baseCooldown);		
 				}
 
-				if (Unit.getGroundWeaponCooldown(trapUnit) == 0
-					&& Unit.getOrder(trapUnit) == Const.Order_Attack_Building
-					&& Unit.isOrderTargetUnitValid(trapUnit)) {
-					trap.fire(trapUnit);
-					Unit.setGroundWeaponCooldown(trapUnit, trap.data.cooldown);	
+				if (Unit.getGroundWeaponCooldown(towerUnit) == 0
+					&& Unit.getOrder(towerUnit) == Const.Order_Attack_Building
+					&& Unit.isOrderTargetUnitValid(towerUnit)) {
+					towerType.fire(towerUnit);
+					Unit.setGroundWeaponCooldown(towerUnit, towerType.data.baseCooldown);	
 				}
 			}
 		}
@@ -162,7 +141,7 @@ function beforeTriggerExec() {
 			    y = ((y / 32) * 32) + 32;
 			    Utils.centerLocationOnPoint(FireLocation, x, y, 64, 64);
 			    Utils.offsetLocation(MouseLoc[playerID], 16, 16);
-				Traps.createBaseTower(MouseLoc[playerID], playerID);
+				Towers.createBaseTower(MouseLoc[playerID], playerID);
     			Unit.setOrder(selectedUnit, Const.Order_Nothing2_Normal);
 			}
 		}
@@ -172,7 +151,7 @@ function beforeTriggerExec() {
 			const queueUnitType = Unit.getBuildQueue1(selectedUnit);
 			if (queueUnitType != Const.Unit_None) {
 				Screen.print("SelectingTrap");
-				Traps.setTowerType(selectedUnit, queueUnitType);
+				Towers.setTowerType(selectedUnit, queueUnitType);
 				Unit.clearBuildQueue(selectedUnit);
 			}
 		}
@@ -182,7 +161,7 @@ function beforeTriggerExec() {
 		if (selectedUnit != 0 && Unit.getUnitType(selectedUnit) == Const.Unit_TerranBeacon) {
 
 
-			if (PlayerSelectedTrap[playerID] != selectedUnit) {
+			if (PlayerSelectedUnit[playerID] != selectedUnit) {
 
 
 				if (IsUserCP()) {
@@ -192,7 +171,7 @@ function beforeTriggerExec() {
 
 				Utils.setUnitCost(100 + playerID, 10 + Unit.getRankIncrease(selectedUnit) * 10);
 
-				PlayerSelectedTrap[playerID] = selectedUnit;
+				PlayerSelectedUnit[playerID] = selectedUnit;
 				Unit.setStatusFlags(selectedUnit, 0x04340008);
 				Timer.add(0, selectedUnit, EUDFuncPtr (2, 0) (function(callbackUnit, intervalCount) {
 					Unit.setStatusFlags(callbackUnit, 0x04340003);
@@ -266,7 +245,7 @@ function beforeTriggerExec() {
 				Unit.setOrderTargetY(unit, tY);
 				// Unit.setTargetUnit(unit, targetUnit);
 				if (Utils.abs(uX-tX) < 24 && Utils.abs(uY-tY) < 24) {
-					Traps.missileHit(unit);
+					Towers.missileHit(unit);
 				}
 			} else {
 				Utils.removeUnit(unit);
