@@ -8,6 +8,29 @@ const TOWERS = EUDArray(1024);
 var TOWER_COUNT = 0;
 const Screen = StringBuffer(256);
 
+// UTILS; MOVE
+
+function findNewTargetInLocation(location, playerID) {
+    var targetUnit = 0;
+    var lowestHP = 0;
+    var longestTimeOnMap = 0;
+    foreach(ptr, unit : EUDLoopPlayerUnit(playerID)) {
+        if (Utils.CUnitInLocation(unit, location)) {
+            const unitAge = Unit.getKillCount(unit);
+            if (targetUnit == 0 || unitAge > longestTimeOnMap) {
+                longestTimeOnMap = unitAge;
+                targetUnit = unit;
+                const hp = Unit.getHitpoints(unit);
+                if (targetUnit == 0 || hp < lowestHP) {
+                    lowestHP = hp;
+                    targetUnit = unit;
+                }
+            }
+        }
+    }
+    return targetUnit;
+}
+
 object Offset {
     var x;
     var y;
@@ -157,7 +180,7 @@ function updateTower(towerUnit) {
         if (Utils.getUnitDistance(towerUnit, Unit.getTargetUnit(towerUnit)) > towerRange) {
             // Screen.print("clearTargetUnit");
             Unit.clearTargetUnit(towerUnit);
-            Unit.setOrder(towerUnit, Const.Order_Guard_Building);         
+            Unit.setOrder(towerUnit, Const.Order_Nothing1_Unused);         
         }
     } 
 
@@ -165,7 +188,7 @@ function updateTower(towerUnit) {
         // Check if there are enemy units nearby and target a new unit
         Utils.centerLocationOnUnit(Utils.LOCATION_ANYSIZE, towerUnit, towerRange * 2, towerRange * 2);
         if (Bring(enemyPlayerID, AtLeast, 1, Const.Unit_AnyUnit, Utils.LOCATION_ANYSIZE)) {
-            const enemyUnit = Utils.findUnitInLocation(Utils.LOCATION_ANYSIZE, enemyPlayerID);
+            const enemyUnit = findNewTargetInLocation(Utils.LOCATION_ANYSIZE, enemyPlayerID );
             // Screen.printf("Bring {}", enemyUnit);
             if (enemyUnit != 0) {
                 // Screen.print("setTargetUnit");
@@ -231,33 +254,6 @@ function missileHit(missileUnit) {
     Utils.removeUnit(missileUnit);
 }
 
-
-function findNewTargetInLocation(location, playerID) {
-    foreach(ptr, unit : EUDLoopPlayerUnit(playerID)) {
-        if (Utils.CUnitInLocation(unit, location)) {
-            return unit;
-        }
-        
-        // const locTable = EPD(0x58DC4C);
-        // const lx1 = dwread_epd(locTable + location * 5);
-        // const lx2 = dwread_epd(locTable + location * 5 + 2);
-        // const ly1 = dwread_epd(locTable + location * 5 + 1);
-        // const ly2 = dwread_epd(locTable + location * 5 + 3);
-        
-        // const ux = ETKUnit.getPositionX(unit);
-        // const uy = ETKUnit.getPositionY(unit);
-        
-        // const inLoc = ux >= lx1 && ux <= lx2 && uy >= ly1 && uy <= ly2;
-        // StringBuffer(256).printf("il? {} u={} ({},{}) L({},{}),({},{})", inLoc, unit, ux, uy, lx1, lx2, ly1, ly2);
-
-        // if (inLoc) {
-        //  return unit;
-        // }
-
-    }
-    return 0;
-}
-
 function load() {
 
     const defaultMissileFire = EUDFuncPtr (1, 0) (function(towerUnit) {
@@ -268,7 +264,7 @@ function load() {
     });
 
     const t0 = createTowerType(0,
-        MakeTowerData(5, 32*6, 12*1),
+        MakeTowerData(6, 32*24, 6*1),
         MakeTowerImageData(
             MakeImage(Const.Image_STA_STS_Photon_Cannon_Overlay, 6, -12),
             MakeImage(Const.Image_None, 0, 0),
@@ -279,7 +275,6 @@ function load() {
     t0.fire = EUDFuncPtr (1, 0) (function(towerUnit) {
         Utils.createImageSpriteAtUnitPosition(Const.Image_Restoration_Hit_Small, towerUnit);
     });
-
 
     const t1 = createTowerType(1,
         MakeTowerData(5, 32*6, 12*1),
@@ -296,7 +291,7 @@ function load() {
     });
 
     const t2 = createTowerType(2,
-        MakeTowerData(1, 32*6, 12*1),
+        MakeTowerData(1, 32*2, 12*1),
         MakeTowerImageData(
             MakeImage(Const.Image_Khalis, 0, -16),
             MakeImage(Const.Image_None, 0, 0),

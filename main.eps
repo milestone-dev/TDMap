@@ -176,12 +176,15 @@ function beforeTriggerExec() {
 					Unit.setStatusFlags(callbackUnit, 0x04340003);
 				}));
 			}
-			// Screen.printfAt(1,
-			// 	"O = {}, V? TU {}",
-			// 	Unit.getOrder(selectedUnit),
-			// 	Unit.isOrderTargetUnitValid(selectedUnit),
-			// 	Common.PTR(Unit.getOrderTargetUnit(selectedUnit))
-			// );
+
+			if (false) {
+				Screen.printfAt(1,
+					"O = {}, V? TU {}",
+					Unit.getOrder(selectedUnit),
+					Unit.isOrderTargetUnitValid(selectedUnit),
+					Common.PTR(Unit.getOrderTargetUnit(selectedUnit))
+				);
+			}
 		}
 
 		/*
@@ -240,7 +243,7 @@ function beforeTriggerExec() {
 				Unit.setOrderTargetX(unit, tX);
 				Unit.setOrderTargetY(unit, tY);
 				// Unit.setTargetUnit(unit, targetUnit);
-				if (Utils.abs(uX-tX) < 24 && Utils.abs(uY-tY) < 24) {
+				if (Utils.abs(uX-tX) < 32 && Utils.abs(uY-tY) < 32) {
 					Towers.missileHit(unit);
 				}
 			} else {
@@ -254,6 +257,14 @@ function beforeTriggerExec() {
 
 	foreach(ptr, unit : EUDLoopPlayerUnit(P7)) {
 		if (Unit.getUnitType(unit) == Const.Unit_ZergDrone) {
+
+			// Hack for now, implement with timer later
+			Unit.set106Flag(unit, Unit.get106Flag(unit) + 1);
+			if (Unit.get106Flag(unit) > 12) {
+				Unit.set106Flag(unit, 0);
+				Unit.setKillCount(unit, Unit.getKillCount(unit) + 1);				
+			}
+
 			const maxHP = Unit.getMaxHitpoints(unit);
 			const hp = Unit.getHitpoints(unit);
 			const fraction = maxHP / 4;
