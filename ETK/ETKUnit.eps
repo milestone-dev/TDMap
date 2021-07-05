@@ -4550,6 +4550,16 @@ function getOriginalTopSpeed(unitPointer) {
 
 /***
  * @Summary.us-EN
+ * Retore the OriginalTopSpeed of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function restoreOriginalTopSpeed(unitPointer) {
+    setTopSpeed(unitPointer, (getOriginalTopSpeed(unitPointer) * 100) / 266);
+}
+
+/***
+ * @Summary.us-EN
  * Get the Acceleration of the unit.
  * @param.unitPointer.us-EN
  * The unit pointer
@@ -4823,43 +4833,8 @@ function isTargetResourceUnitValid(unitPointer) {
  * The unit pointer
 ***/
 function removeCollision(unitPointer) {
-    SetMemoryEPD(unitPointer + 0x0DC / 4, SetTo, 0x00130001);
-}
-
-/***
- * @Summary.us-EN
- * Sets whether the unit should have collision or not
- * @param.unitPointer.us-EN
- * The unit pointer
- * @param.enableCollision.us-EN
- * Whether the unit should have collision
-***/
-
-function setCollision(unitPointer, enableCollision) {
-
-    // TODO: Function not yet finished. Figure out what flags are 
-    // correct to set, and then set them without modifying other
-    // flags.
-    /*
-    function setBit(number, position, bitValue) {
-        const mask = 1 << position;
-        return (number & ~mask) | ((bitValue << position) & mask);
-    }
-
-    */
-    //0x00040000 - Ignore Tile Collision
-    //0x00200000 - No Collide
-    // 0x001... normal, 0x002... nocollide
-    // 0x0001... isUnit 0x0001, 0x0004 ignore tile collision    
-    var flag = getStatusFlags(unitPointer);
-    if (enableCollision) {
-        flag = 0x00110001;
-        flag = 0x00000001;
-    } else {
-        flag = 0x00240001;
-        flag = 0x00240001;
-    }
-    setStatusFlags(unitPointer, flag);
+    SetMemoryEPD(unitPointer + 0x0DC / 4, SetTo, 0x04250205);
+//  SetMemoryEPD(unitPointer + 0x0DC / 4, SetTo, 0x04240003);
 }
 
 /***
