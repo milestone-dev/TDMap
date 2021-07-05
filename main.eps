@@ -126,7 +126,7 @@ function beforeTriggerExec() {
 				if (Unit.getGroundWeaponCooldown(towerUnit) == 0
 					&& Unit.getOrder(towerUnit) == Const.Order_Attack_Building
 					&& Unit.isOrderTargetUnitValid(towerUnit)) {
-					towerType.fire(towerUnit);
+					Towers.towerFire(towerUnit);
 					Unit.setGroundWeaponCooldown(towerUnit, towerType.data.baseCooldown);	
 				}
 			}
@@ -250,6 +250,9 @@ function beforeTriggerExec() {
 			} else {
 				Utils.removeUnit(unit);
 			}
+		}
+		if (Unit.getUnitType(unit) == Utils.OVERLAY_SPRITE_UNIT_TYPE) {
+			Utils.updateOverlay(unit);
 		}
 	}
 }

@@ -43,20 +43,19 @@ object TowerType {
     var data : TowerData;
     var imageData : TowerImageData;
     var fire: EUDFuncPtr (1, 0);
-    var hit: EUDFuncPtr (1, 0);
+    var hit: EUDFuncPtr (3, 0);
 };
 
-function addTowerType(id,
+function createTowerType(id,
         spriteImageID,
         spriteImageOffset,
         missileSpawnImageID,
         missileImageID,
         missileImageOffset,
         hitImageID,
-        fireFunction,
         baseDamage,
         baseCooldown,
-        baseRange) {
+        baseRange) : TowerType {
     const towerType = TowerType.alloc();
     const towerData = TowerData.alloc();
     towerData.baseDamage = baseDamage;
@@ -73,10 +72,12 @@ function addTowerType(id,
 
     towerType.data = towerData;
     towerType.imageData = imageData;
-    towerType.fire = fireFunction;
     towerType.id = id;
+    towerType.fire = 0;
+    towerType.hit = 0;
     TOWER_TYPES[id] = towerType;
-    Screen.printf("towerType {}", id);
+    // Screen.printf("towerType {}", id);
+    return towerType;
 }
 
 
@@ -182,57 +183,101 @@ function updateTower(towerUnit) {
 }
 
 
+function towerFire(towerUnit) {
+    const cannonUnit = Unit.getConnectedUnit(towerUnit);
+    const towerType = getTowerType(Unit.getCustomValue(towerUnit));
+    const targetUnit = Unit.getTargetUnit(towerUnit);
+
+    if (towerType.imageData.missileImageID != Const.Image_None) {
+        Utils.setSpriteImage(202, towerType.imageData.missileImageID);
+        Utils.setImageDrawFunction(towerType.imageData.missileImageID, 1);
+        Utils.setImageDrawIfCloaked(towerType.imageData.missileImageID, 1);
+    } else {
+        Utils.setSpriteImage(202, Const.Image_Observer);
+        Utils.setImageDrawFunction(towerType.imageData.missileImageID, 0);
+        Utils.setImageDrawIfCloaked(Const.Image_Observer, 0);
+    }
+
+    if (towerType.fire != 0) {
+        towerType.fire(towerUnit);
+    }
+
+    const direction = Utils.getDirectionFromPosition32(towerUnit, Unit.getPositionX(targetUnit), Unit.getPositionY(targetUnit));
+    Utils.moveUtilLocationToUnit(towerUnit);
+    Utils.setUnitInitialDirection(Const.Unit_ProtossObserver, direction);
+    const missileUnit = Utils.createUnitAtLocationWithOffset(Const.Unit_ProtossObserver, Utils.UTILITY_LOCATION, $P8, towerType.imageData.missileImageOffset.x, towerType.imageData.missileImageOffset.y);
+    // Unit.setStatusFlags(missileUnit, 0x04250205);
+    Utils.setUnitColor(missileUnit, Unit.getPlayerID(towerUnit));
+
+    if (towerType.imageData.missileSpawnImageID != Const.Image_None) {
+        Utils.createImageSpriteAtUnitPosition(towerType.imageData.missileSpawnImageID, cannonUnit);
+    }
+    Unit.setConnectedUnit(missileUnit, towerUnit);
+    Unit.setOrder(missileUnit, Const.Order_Ignore_Normal);
+    Unit.setTargetUnit(missileUnit, targetUnit);
+}
+
+
 function missileHit(missileUnit) {
     const targetUnit = Unit.getTargetUnit(missileUnit);
-    const trapUnit = Unit.getConnectedUnit(missileUnit);
+    const towerUnit = Unit.getConnectedUnit(missileUnit);
     const targetUnitType = Unit.getUnitType(targetUnit);
-    const towerType = getTowerTypeFromUnit(trapUnit);
+    const towerType = getTowerTypeFromUnit(towerUnit);
     if (towerType.imageData.hitImageID != Const.Image_None) {
         Utils.createImageSpriteAtUnitPosition(towerType.imageData.hitImageID, targetUnit);
     }
-    const damage = towerType.data.baseDamage + towerType.data.baseDamage * Unit.getRankIncrease(trapUnit);
+    const damage = towerType.data.baseDamage + towerType.data.baseDamage * Unit.getRankIncrease(towerUnit);
+
+    if (towerType.hit != 0) {
+        towerType.hit(towerType, missileUnit, targetUnit);
+    }
     if (Unit.damage(targetUnit, damage)) {
-        SetResources(Unit.getPlayerID(trapUnit), 8, Utils.getUnitDestroyValue(targetUnitType), 0);
+        SetResources(Unit.getPlayerID(towerUnit), 8, Utils.getUnitDestroyValue(targetUnitType), 0);
     }
     Utils.removeUnit(missileUnit);
+}
+
+
+function findNewTargetInLocation(location, playerID) {
+    /*
+    I'm using `EUDLoopPlayerUnit(P8)` and check whether `CUnit position` is within `top right bottom left` of `location X`. I store the first unit in a `lowestHPUnit` var (default value 0), then check every remaining loop if the next unit has lower hp, and if so store it in `lowerHPUnit` var. At the end of the loop I return the `lowerHPUnit` variable.
+    This is a lot of code for every loop for every unit of P8. There might be ~400 P8 units in the map at the same time. Do you know of any ways to make this more performant?
+    */
+    foreach(ptr, unit : EUDLoopPlayerUnit(playerID)) {
+        if (Utils.CUnitInLocation(unit, location)) {
+            return unit;
+        }
+        
+        // const locTable = EPD(0x58DC4C);
+        // const lx1 = dwread_epd(locTable + location * 5);
+        // const lx2 = dwread_epd(locTable + location * 5 + 2);
+        // const ly1 = dwread_epd(locTable + location * 5 + 1);
+        // const ly2 = dwread_epd(locTable + location * 5 + 3);
+        
+        // const ux = ETKUnit.getPositionX(unit);
+        // const uy = ETKUnit.getPositionY(unit);
+        
+        // const inLoc = ux >= lx1 && ux <= lx2 && uy >= ly1 && uy <= ly2;
+        // StringBuffer(256).printf("il? {} u={} ({},{}) L({},{}),({},{})", inLoc, unit, ux, uy, lx1, lx2, ly1, ly2);
+
+        // if (inLoc) {
+        //  return unit;
+        // }
+
+    }
+    return 0;
 }
 
 function load() {
 
     const defaultMissileFire = EUDFuncPtr (1, 0) (function(towerUnit) {
-        const cannonUnit = Unit.getConnectedUnit(towerUnit);
-        const towerType = getTowerType(Unit.getCustomValue(towerUnit));
-        const targetUnit = Unit.getTargetUnit(towerUnit);
-
-        if (towerType.imageData.missileImageID != Const.Image_None) {
-            Utils.setSpriteImage(202, towerType.imageData.missileImageID);
-            Utils.setImageDrawFunction(towerType.imageData.missileImageID, 1);
-            Utils.setImageDrawIfCloaked(towerType.imageData.missileImageID, 1);
-        } else {
-            Utils.setSpriteImage(202, Const.Image_Observer);
-            Utils.setImageDrawFunction(towerType.imageData.missileImageID, 0);
-            Utils.setImageDrawIfCloaked(Const.Image_Observer, 0);
-        }
-
-        const direction = Utils.getDirectionFromPosition32(towerUnit, Unit.getPositionX(targetUnit), Unit.getPositionY(targetUnit));
-        Utils.moveUtilLocationToUnit(towerUnit);
-
-        Utils.setUnitInitialDirection(Const.Unit_ProtossObserver, direction);
-        const missileUnit = Utils.createUnitAtLocationWithOffset(Const.Unit_ProtossObserver, Utils.UTILITY_LOCATION, $P8, towerType.imageData.missileImageOffset.x, towerType.imageData.missileImageOffset.y);
-        Utils.setUnitColor(missileUnit, Unit.getPlayerID(towerUnit));
-
-        if (towerType.imageData.missileSpawnImageID != Const.Image_None) {
-            Utils.createImageSpriteAtUnitPosition(towerType.imageData.missileSpawnImageID, cannonUnit);
-        }
-        Unit.setConnectedUnit(missileUnit, towerUnit);
-        Unit.setOrder(missileUnit, Const.Order_Ignore_Normal);
-        Unit.setTargetUnit(missileUnit, targetUnit);
+        
     });
 
     const defaultMissileHit = EUDFuncPtr (1, 0) (function(missileUnit) {
     });
 
-    addTowerType(
+    const t0 = createTowerType(
         0,
         Const.Image_STA_STS_Photon_Cannon_Overlay,
         MakeOffset(6, -12),
@@ -240,44 +285,63 @@ function load() {
         Const.Image_Phase_Disruptor,
         MakeOffset(0, -15),
         Const.Image_Phase_Disruptor_Hit,
-        defaultMissileFire,
         5,
-        12,
+        12*1,
         32*6
     );
+    t0.fire = EUDFuncPtr (1, 0) (function(towerUnit) {
+        Utils.createImageSpriteAtUnitPosition(Const.Image_Restoration_Hit_Small, towerUnit);
+    });
 
-
-    addTowerType(
+    const t1 = createTowerType(
         1,
         Const.Image_Maelstrom_Overlay_Small,
         MakeOffset(0, -16),
+        Const.Image_None,
         Const.Image_Burst_Lasers_Hit,
-        Const.Image_Yamato_Gun,
-        MakeOffset(0, 0),
+        MakeOffset(0, -16),
         Const.Image_Yamato_Gun_Hit,
-        defaultMissileFire,
         5,
-        12,
+        12*1,
         32*4
     );
+    t1.hit = EUDFuncPtr (3, 0) (function(towerType, missileUnit, targetUnit) {
+        // if (!Utils.unitHasOverlay(targetUnit)) {
+        Utils.createOverlayForUnit(targetUnit, Const.Image_Flames2_Type3_Small, 64);
+        Unit.setPlagueTimer(targetUnit, 64);
+        // }
+    });
 
-    addTowerType(
+    const t2 = createTowerType(
         2,
         Const.Image_Khalis,
         MakeOffset(0, -16),
         Const.Image_None,
-        Const.Image_None,
+        Const.Image_Hallucination_Death3,
         MakeOffset(0, 0),
-        Const.Image_Hallucination_Death1,
-        defaultMissileFire,
+        Const.Image_None,
         1,
-        3,
+        12*1,
         32*2
     );
+    t2.hit = EUDFuncPtr (3, 0) (function(towerType, missileUnit, targetUnit) {
+        // if (Unit.getTopSpeed(targetUnit) == 500) {
+            // return;
+        // }
+        // setcurpl(P1); StringBuffer(128).printf("s={} o={}", Unit.getTopSpeed(targetUnit), Unit.getOriginalTopSpeed(targetUnit));
+
+        const duration = 64;
+        const slowSpeed = 100;//Unit.getOriginalTopSpeed(targetUnit) / 10;
+        Unit.setTopSpeed(targetUnit, slowSpeed);
+        Utils.createOverlayForUnit(targetUnit, Const.Image_Acid_Spores_6_9_Overlay_Small, duration);
+        Timer.add(duration, targetUnit, EUDFuncPtr (2, 0) (function(callbackUnit, intervalCount) {
+            Unit.restoreOriginalTopSpeed(callbackUnit);
+        }));
+    });
 
 
     /*
-        addTowerType(
+        createTowerType(
         2,
         Const.Image_Doodad_12_1_Platform,
         0,
@@ -293,7 +357,7 @@ function load() {
 
     /*
 
-    addTowerType(
+    createTowerType(
         2,
         Const.Image_Egg,
         0,
@@ -305,7 +369,7 @@ function load() {
         12
     );
 
-    addTowerType(
+    createTowerType(
         3,
         Const.Image_Khalis,
         0,
@@ -317,7 +381,7 @@ function load() {
         12
     );
 
-    addTowerType(
+    createTowerType(
         5,
         Const.Image_Data_Disc,
         0,
@@ -329,7 +393,7 @@ function load() {
         12
     );
 
-    addTowerType(
+    createTowerType(
         7,
         Const.Image_Young_Chrysalis,
         0,
@@ -341,7 +405,7 @@ function load() {
         12
     );
 
-    addTowerType(
+    createTowerType(
         8,
         Const.Image_Zerg_Gas_Sac_Type1,
         0,
@@ -353,7 +417,7 @@ function load() {
         12
     );
 
-    addTowerType(
+    createTowerType(
         9,
         Const.Image_Science_Vessel_Turret,
         0,
