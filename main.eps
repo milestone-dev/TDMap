@@ -150,7 +150,6 @@ function beforeTriggerExec() {
 		if (selectedUnit != 0 && Unit.getUnitType(selectedUnit) == Const.Unit_TerranFlagBeacon) {
 			const queueUnitType = Unit.getBuildQueue1(selectedUnit);
 			if (queueUnitType != Const.Unit_None) {
-				Screen.print("SelectingTrap");
 				Towers.setTowerType(selectedUnit, queueUnitType);
 				Unit.clearBuildQueue(selectedUnit);
 			}
@@ -177,15 +176,12 @@ function beforeTriggerExec() {
 					Unit.setStatusFlags(callbackUnit, 0x04340003);
 				}));
 			}
-			
-			Screen.printfAt(1,
-				"O = {}, V? TU {}",
-				Unit.getOrder(selectedUnit),
-				Unit.isOrderTargetUnitValid(selectedUnit),
-				Common.PTR(Unit.getOrderTargetUnit(selectedUnit))
-				// Unit.getCurrentButtonSet(selectedUnit),
-				// Unit.getCommandCard(selectedUnit)
-				);
+			// Screen.printfAt(1,
+			// 	"O = {}, V? TU {}",
+			// 	Unit.getOrder(selectedUnit),
+			// 	Unit.isOrderTargetUnitValid(selectedUnit),
+			// 	Common.PTR(Unit.getOrderTargetUnit(selectedUnit))
+			// );
 		}
 
 		/*
@@ -253,6 +249,23 @@ function beforeTriggerExec() {
 		}
 		if (Unit.getUnitType(unit) == Utils.OVERLAY_SPRITE_UNIT_TYPE) {
 			Utils.updateOverlay(unit);
+		}
+	}
+
+	foreach(ptr, unit : EUDLoopPlayerUnit(P7)) {
+		if (Unit.getUnitType(unit) == Const.Unit_ZergDrone) {
+			const maxHP = Unit.getMaxHitpoints(unit);
+			const hp = Unit.getHitpoints(unit);
+			const fraction = maxHP / 4;
+			if (hp == maxHP) {
+				Utils.setUnitColor(unit, 8);
+			} else if (hp > fraction*3) {
+				Utils.setUnitColor(unit, $P8);
+			} else if (hp > fraction*2) {
+				Utils.setUnitColor(unit, $P5);
+			} else {
+				Utils.setUnitColor(unit, $P1);
+			}
 		}
 	}
 }
