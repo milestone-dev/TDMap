@@ -458,6 +458,14 @@ function removeUnit(unit) {
 	// RemoveUnitAt(1, ETKUnit.getUnitType(unit), UTILITY_LOCATION, ETKUnit.getPlayerID(unit));
 }
 
+function moveUnit(unit, location) {
+	const playerID = ETKUnit.getPlayerID(unit);
+	const unitType = ETKUnit.getUnitType(unit);
+	ETKUnit.setUnitType(unit, TEMP_UNIT_TYPE);
+	MoveUnit(1, TEMP_UNIT_TYPE, playerID, $L("Anywhere"), location);
+	ETKUnit.setUnitType(unit, unitType);
+}
+
 function removeUnitSafe(unit) {
 	moveUtilLocationToUnit(unit);
 	RemoveUnitAt(1, ETKUnit.getUnitType(unit), UTILITY_LOCATION, ETKUnit.getPlayerID(unit));
