@@ -8,9 +8,10 @@ import customText as ct;
 
 // TODO: Make these runtime configurable for other projects in the future
 const IMAGE_SPRITE_UNIT_TYPE = $U("Scanner Sweep");
-const OVERLAY_SPRITE_UNIT_TYPE = $U("Protoss Observer");
+const OVERLAY_SPRITE_UNIT_TYPE = $U("Protoss Shuttle");
 const MISSILE_LAUNCHER_UNIT_TYPE = $U("Protoss Corsair");
 const FLASH_UNIT_TYPE = $U("Protoss Shuttle");
+const TEMP_UNIT_TYPE = ETKConstants.Unit_Kakaru_TwilightCritter;
 const TARGET_UNIT_TYPE = 161; // Unused Protoss Building 2
 const UTILITY_LOCATION = $L("ETKUtilityLocation");
 const UTILITY_LOCATION_2 = $L("ETKUtilityLocation2");
@@ -515,15 +516,7 @@ function canExecuteCustomTargetAbility(unit, orderID, energy, targetingMode, pla
 	return true;
 }
 
-function updateOverlay(unit) {
-	const connectedUnit = ETKUnit.getConnectedUnit(unit);
-	if (connectedUnit != 0) {					
-		if (ETKUnit.getOrder(connectedUnit) == ETKConstants.Order_Die) {
-			ETKUnit.setOrder(unit, ETKConstants.Order_Die);
-		}
-		ETKUnit.setPosition(unit, ETKUnit.getPositionX(connectedUnit), ETKUnit.getPositionY(connectedUnit));
-	}
-}
+
 
 function unitHasOverlay(unit) {
 	foreach(overlayUnitRaw, overlayUnit : EUDLoopPlayerUnit(ETKUtilsEffectsPlayerID)) {
@@ -532,6 +525,20 @@ function unitHasOverlay(unit) {
 		}
 	}
 	return false;
+}
+
+function updateOverlay(unit) {
+	const connectedUnit = ETKUnit.getConnectedUnit(unit);
+	if (connectedUnit != 0) {
+
+		if (ETKUnit.getOrder(connectedUnit) == ETKConstants.Order_Die) {
+			ETKUnit.setRemoveTimer(unit, 1); 
+		}
+		ETKUnit.setUnitType(unit, TEMP_UNIT_TYPE);
+		moveUtilLocationToUnit(connectedUnit);
+		MoveUnit(1, TEMP_UNIT_TYPE, ETKUtilsEffectsPlayerID, $L("Anywhere"), UTILITY_LOCATION);
+		ETKUnit.setUnitType(unit, OVERLAY_SPRITE_UNIT_TYPE);
+	}
 }
 
 function getOverlayForUnit(unit) {
@@ -549,15 +556,14 @@ function destroyOverlayForUnit(unit) {
 }
 
 function createOverlayForUnit(unit, imageID, removeTimer) {
-	if (unitHasOverlay(unit)) {
-		destroyOverlayForUnit(unit);
-	}
+	// if (unitHasOverlay(unit)) {
+	// 	destroyOverlayForUnit(unit);
+	// }
 	moveUtilLocationToUnit(unit);
 	setUnitImage(OVERLAY_SPRITE_UNIT_TYPE, imageID);
-	const overlayUnit = createUnit(OVERLAY_SPRITE_UNIT_TYPE, $L("Anywhere"), ETKUtilsEffectsPlayerID);
+	const overlayUnit = createUnit(OVERLAY_SPRITE_UNIT_TYPE, OFFSCREEN_LOCATION, ETKUtilsEffectsPlayerID);
 	ETKUnit.removeCollision(overlayUnit);
 	ETKUnit.setConnectedUnit(overlayUnit, unit);
-	ETKUnit.setConnectedUnit(unit, overlayUnit);
 	if (removeTimer > 0) {
 		ETKUnit.setRemoveTimer(overlayUnit, removeTimer);
 	}
