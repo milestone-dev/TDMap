@@ -1,0 +1,27 @@
+// https://docs.google.com/spreadsheets/d/1tQpoyDmUKzHFPRX1ta3gA76gXCKoZPZBhjQbcVU-Av0/edit#gid=1673362602
+
+const DifficultyTable = EUDArray(10); 
+DifficultyTable[1] = 100;
+DifficultyTable[2] = 376;
+DifficultyTable[3] = 1132;
+DifficultyTable[4] = 3224;
+DifficultyTable[5] = 9178;
+DifficultyTable[6] = 26756;
+
+function CalculateTargetDifficulty(wave) {
+	return 15 * (wave^2) + (1500*wave);
+}
+
+function CalculateTierSpawnCountDifficulty(wave, tier) {
+	const waveTargetDifficulty = CalculateTargetDifficulty(wave);
+
+	var tierMultiplier;
+	if (tier > 1) { tierMultiplier = 95 - (tier * 10);}
+	else { tierMultiplier = 1; }
+
+	var tierDifficulty = DifficultyTable[tier];
+	var tierSpawnCount = ((targetDifficulty * tierMultiplier) / 10) / tierDifficulty;
+	var tierTargetDifficulty = wveTargetDifficulty - (tierSpawnCount * tierDifficulty);
+	return tierSpawnCount, tierTargetDifficulty;
+}
+
