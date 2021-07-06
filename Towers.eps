@@ -236,16 +236,14 @@ function towerFire(towerUnit) {
 
 function getNextUnitType(unitType) {
     switch(unitType) {
-        case Const.Unit_ZergUltralisk: return Const.Unit_ZergLurker;
-        case Const.Unit_ZergLurker: return Const.Unit_ZergDefiler;
-        case Const.Unit_ZergDefiler: return Const.Unit_ZergDrone;
-        case Const.Unit_ZergDrone: return Const.Unit_ZergBroodling;
-        case Const.Unit_ZergBroodling: return Const.Unit_ZergLarva;
+        case Const.Unit_ZergUltralisk: return Const.Unit_ZergLurker; break;
+        case Const.Unit_ZergLurker: return Const.Unit_ZergDefiler; break;
+        case Const.Unit_ZergDefiler: return Const.Unit_ZergDrone; break;
+        case Const.Unit_ZergDrone: return Const.Unit_ZergBroodling; break;
+        // case Const.Unit_ZergBroodling: return Const.Unit_ZergLarva; break;
     }
     return Const.Unit_None;
 }
-
-
 
 function missileHit(missileUnit) {
     const targetUnit = Unit.getTargetUnit(missileUnit);
@@ -265,11 +263,13 @@ function missileHit(missileUnit) {
     const targetUnitPriority = Unit.getKillCount(targetUnit);
     if (Unit.damage(targetUnit, damage)) {
         SetResources(Unit.getPlayerID(towerUnit), 8, Utils.getUnitDestroyValue(targetUnitType), 0);
-        if (targetUnitType == Const.Unit_ZergDrone) {
-            const u = Utils.replaceUnit(targetUnit, Const.Unit_ZergBroodling);
-            Unit.setStatusFlags(u, 0x00230005); // 5xxxx does not move
-            Unit.setKillCount(u, targetUnitPriority);
-            Unit.orderToPoint(u, targetUnitX, targetUnitY);
+        const unitType = getNextUnitType(targetUnitType);
+        setcurpl($P1); StringBuffer(32).print(unitType);
+        if (unitType != Const.Unit_None) {
+            const unit = Utils.replaceUnit(targetUnit, unitType);
+            Unit.setStatusFlags(unit, 0x00230005); // 5xxxx does not move
+            Unit.setKillCount(unit, targetUnitPriority);
+            Unit.orderToPoint(unit, targetUnitX, targetUnitY);
         }
     }
     Utils.removeUnit(missileUnit);
