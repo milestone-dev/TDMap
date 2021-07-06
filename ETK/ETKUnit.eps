@@ -4861,17 +4861,15 @@ function attackUnit(unitPointer, targetUnitPointer) {
  * The target Y coordinate
 ***/
 function orderToPoint(unitPointer, x, y) {
-    setOrderTargetX(unitPointer, x);
-    setOrderTargetY(unitPointer, y);
     setOrder(unitPointer, Const.Order_Ignore_Normal);
-}
-
-function orderToPoint2(unitPointer, x, y) {
     setMoveTargetX(unitPointer, x);
-    setMoveTargetY(unitPointer, y);
+    setMoveTargetY(unitPointer, y + y * 65536);
+    setNextMovementWaypointX(unitPointer, x);
+    setNextMovementWaypointY(unitPointer, y + y * 65536);
+    setOrderTargetX(unitPointer, x);
+    setOrderTargetY(unitPointer, y + y * 65536);
     setOrder(unitPointer, Const.Order_Ignore_Normal);
 }
-
 
 /***
  * @Summary.us-EN
