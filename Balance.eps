@@ -20,7 +20,7 @@ function CalculateTierSpawnCountDifficulty(wave, tier) {
 	else { tierMultiplier = 1; }
 
 	var tierDifficulty = DifficultyTable[tier];
-	var tierSpawnCount = ((targetDifficulty * tierMultiplier) / 10) / tierDifficulty;
+	var tierSpawnCount = ((targetDifficulty * tierMultiplier) / 100) / tierDifficulty;
 	var tierTargetDifficulty = wveTargetDifficulty - (tierSpawnCount * tierDifficulty);
 	return tierSpawnCount, tierTargetDifficulty;
 }
