@@ -10,6 +10,18 @@ const DifficultyTable = [
 	26756
 ]; 
 
+/*
+15*100^2+1500*100 = 300000
+
+Floor(300000*35/100/26756) = 3
+300000-(3*26756) = 219732
+
+Floor(219732*45/100/9178) = 10
+219732-(10*9178) = 127952
+
+Floor(127952*55/100/3224) = 21
+127952-(21*3224) = 60248
+*/
 
 function CalculateTargetDifficulty(wave) {
 	return (15*(wave*wave))+(1500*wave);
@@ -17,6 +29,7 @@ function CalculateTargetDifficulty(wave) {
 
 function CalculateTierSpawnCount(wave, tier) {
 	const waveTargetDifficulty = CalculateTargetDifficulty(wave);
+	tier = 6;
 
 	var tierMultiplier;
 	if (tier > 1) { tierMultiplier = 95 - (tier * 10);}
@@ -27,8 +40,34 @@ function CalculateTierSpawnCount(wave, tier) {
 }
 
 function CalculateTierTargetDifficulty(wave, tier) {
+	tier = 6;
 	const waveTargetDifficulty = CalculateTargetDifficulty(wave);
 	var tierDifficulty = DifficultyTable[tier];
 	var tierSpawnCount = CalculateTierSpawnCount(wave, tier);
 	return waveTargetDifficulty - (tierSpawnCount * tierDifficulty);
+}
+
+
+function calc(wave) {
+	var difficulty = 15*wave*wave+1500*wave;// = 300000
+
+	var tier6Count = difficulty*35/100/DifficultyTable[6]; // = 3
+	difficulty = difficulty-(tier6Count*DifficultyTable[6]); // = 219732
+
+	var tier5Count = difficulty*45/100/DifficultyTable[5]; //= 10
+	difficulty = difficulty-(tier5Count*DifficultyTable[5]); // = 127952
+
+	var tier4Count = difficulty*55/100/DifficultyTable[4]; //= 21
+	difficulty = difficulty-(tier4Count*DifficultyTable[4]); // = 6024
+
+	var tier3Count = difficulty*65/100/DifficultyTable[3]; 
+	difficulty = difficulty-(tier3Count*DifficultyTable[3]); 
+
+	var tier2Count = difficulty*75/100/DifficultyTable[2]; 
+	difficulty = difficulty-(tier2Count*DifficultyTable[2]); 
+
+	var tier1Count = difficulty/DifficultyTable[1]; 
+	difficulty = difficulty-(tier1Count*DifficultyTable[1]); 
+
+	return [difficulty, tier1Count, tier2Count, tier3Count, tier4Count, tier5Count, tier6Count];
 }

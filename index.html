@@ -48,27 +48,21 @@
 <body>
 
 <label for="wave">Wave</label>
-<input type="number" min="1" max="10000" id="waveInput" value="1"> 
+<input type="number" min="1" max="10000" id="waveInput" value="100"> 
 
 <table>
 <tr><th>Difficulty</th><td><span id="TargetDifficultyOutput"></span></td></tr>
 <tr><th>Tier 1 Spawn Count:</th><td><span id="CalculateTier1SpawnCountOutput"></span></td></tr>
-<tr><th>Tier 1 Target Difficulty:</th><td><span id="CalculateTier1TargetDifficultyOutput"></span></td></tr>
 
 <tr><th>Tier 2 Spawn Count:</th><td><span id="CalculateTier2SpawnCountOutput"></span></td></tr>
-<tr><th>Tier 2 Target Difficulty:</th><td><span id="CalculateTier2TargetDifficultyOutput"></span></td></tr>
 
 <tr><th>Tier 3 Spawn Count:</th><td><span id="CalculateTier3SpawnCountOutput"></span></td></tr>
-<tr><th>Tier 3 Target Difficulty:</th><td><span id="CalculateTier3TargetDifficultyOutput"></span></td></tr>
 
 <tr><th>Tier 4 Spawn Count:</th><td><span id="CalculateTier4SpawnCountOutput"></span></td></tr>
-<tr><th>Tier 4 Target Difficulty:</th><td><span id="CalculateTier4TargetDifficultyOutput"></span></td></tr>
 
 <tr><th>Tier 5 Spawn Count:</th><td><span id="CalculateTier5SpawnCountOutput"></span></td></tr>
-<tr><th>Tier 5 Target Difficulty:</th><td><span id="CalculateTier5TargetDifficultyOutput"></span></td></tr>
 
 <tr><th>Tier 6 Spawn Count:</th><td><span id="CalculateTier6SpawnCountOutput"></span></td></tr>
-<tr><th>Tier 6 Target Difficulty:</th><td><span id="CalculateTier6TargetDifficultyOutput"></span></td></tr>
 </table>
 
 
@@ -76,12 +70,12 @@
 <script type="text/javascript">
 	function calculate() {
 		const wave = parseInt(document.getElementById("waveInput").value);
+		const data = calc(wave);
 
-		document.getElementById("TargetDifficultyOutput").innerText = CalculateTargetDifficulty(wave);
+		// document.getElementById("TargetDifficultyOutput").innerText = CalculateTargetDifficulty(wave);
 
 		for (var tier=1; tier<7; tier++) {
-			document.getElementById("CalculateTier"+tier+"SpawnCountOutput").innerText = parseInt(Math.floor(CalculateTierSpawnCount(wave, tier)));
-			document.getElementById("CalculateTier"+tier+"TargetDifficultyOutput").innerText = parseInt(Math.floor(CalculateTierTargetDifficulty(wave, tier)));		
+			document.getElementById("CalculateTier"+tier+"SpawnCountOutput").innerText = parseInt(Math.floor(data[tier]));
 		}
 	}
 	document.getElementById("waveInput").addEventListener("change", calculate);
