@@ -7,13 +7,28 @@
 </head>
 <body>
 
-<label for="wave">Wave</label><input id="waveInput" value="1"> 
-<label for="tier">Tier</label><input id="tierIput" value="1"> 
+<label for="wave">Wave</label>
+<input type="number" min="1" max="10000" id="waveInput" value="1"> 
 
 <table>
 <tr><th>TargetDifficultyOutput</th><td><span id="TargetDifficultyOutput"></span></td></tr>
-<tr><th>CalculateTierSpawnCount:</th><td><span id="CalculateTierSpawnCountOutput"></span></td></tr>
-<tr><th>CalculateTierTargetDifficulty:</th><td><span id="CalculateTierTargetDifficultyOutput"></span></td></tr>
+<tr><th>Tier 1 Spawn Count:</th><td><span id="CalculateTier1SpawnCountOutput"></span></td></tr>
+<tr><th>Tier 1 Target Difficulty:</th><td><span id="CalculateTier1TargetDifficultyOutput"></span></td></tr>
+
+<tr><th>Tier 2 Spawn Count:</th><td><span id="CalculateTier2SpawnCountOutput"></span></td></tr>
+<tr><th>Tier 2 Target Difficulty:</th><td><span id="CalculateTier2TargetDifficultyOutput"></span></td></tr>
+
+<tr><th>Tier 3 Spawn Count:</th><td><span id="CalculateTier3SpawnCountOutput"></span></td></tr>
+<tr><th>Tier 3 Target Difficulty:</th><td><span id="CalculateTier3TargetDifficultyOutput"></span></td></tr>
+
+<tr><th>Tier 4 Spawn Count:</th><td><span id="CalculateTier4SpawnCountOutput"></span></td></tr>
+<tr><th>Tier 4 Target Difficulty:</th><td><span id="CalculateTier4TargetDifficultyOutput"></span></td></tr>
+
+<tr><th>Tier 5 Spawn Count:</th><td><span id="CalculateTier5SpawnCountOutput"></span></td></tr>
+<tr><th>Tier 5 Target Difficulty:</th><td><span id="CalculateTier5TargetDifficultyOutput"></span></td></tr>
+
+<tr><th>Tier 6 Spawn Count:</th><td><span id="CalculateTier6SpawnCountOutput"></span></td></tr>
+<tr><th>Tier 6 Target Difficulty:</th><td><span id="CalculateTier6TargetDifficultyOutput"></span></td></tr>
 </table>
 
 
@@ -21,14 +36,16 @@
 <script type="text/javascript">
 	function calculate() {
 		const wave = parseInt(document.getElementById("waveInput").value);
-		const tier = parseInt(document.getElementById("tierIput").value);
 
 		document.getElementById("TargetDifficultyOutput").innerText = parseInt(Math.floor(CalculateTargetDifficulty(wave)));
-		document.getElementById("CalculateTierSpawnCountOutput").innerText = parseInt(Math.floor(CalculateTierSpawnCount(wave, tier)));
-		document.getElementById("CalculateTierTargetDifficultyOutput").innerText = parseInt(Math.floor(CalculateTierTargetDifficulty(wave, tier)));
+
+		for (var tier=1; tier<7; tier++) {
+			document.getElementById("CalculateTier"+tier+"SpawnCountOutput").innerText = parseInt(Math.floor(CalculateTierSpawnCount(wave, tier)));
+			document.getElementById("CalculateTier"+tier+"TargetDifficultyOutput").innerText = parseInt(Math.floor(CalculateTierTargetDifficulty(wave, tier)));		
+		}
 	}
+	document.getElementById("waveInput").addEventListener("change", calculate);
 	document.getElementById("waveInput").addEventListener("keyup", calculate);
-	document.getElementById("tierIput").addEventListener("keyup", calculate);
 	calculate();
 
 </script>
