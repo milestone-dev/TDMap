@@ -51,7 +51,7 @@
 <input type="number" min="1" max="10000" id="waveInput" value="1"> 
 
 <table>
-<tr><th>TargetDifficultyOutput</th><td><span id="TargetDifficultyOutput"></span></td></tr>
+<tr><th>Difficulty</th><td><span id="TargetDifficultyOutput"></span></td></tr>
 <tr><th>Tier 1 Spawn Count:</th><td><span id="CalculateTier1SpawnCountOutput"></span></td></tr>
 <tr><th>Tier 1 Target Difficulty:</th><td><span id="CalculateTier1TargetDifficultyOutput"></span></td></tr>
 
@@ -77,7 +77,7 @@
 	function calculate() {
 		const wave = parseInt(document.getElementById("waveInput").value);
 
-		document.getElementById("TargetDifficultyOutput").innerText = parseInt(Math.floor(CalculateTargetDifficulty(wave)));
+		document.getElementById("TargetDifficultyOutput").innerText = CalculateTargetDifficulty(wave);
 
 		for (var tier=1; tier<7; tier++) {
 			document.getElementById("CalculateTier"+tier+"SpawnCountOutput").innerText = parseInt(Math.floor(CalculateTierSpawnCount(wave, tier)));
