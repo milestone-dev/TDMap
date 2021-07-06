@@ -16,7 +16,7 @@ const KeyQDown = EUDArray(6);
 const KeyPDown = EUDArray(6);
 const KeyUDown = EUDArray(6);
 
-const FireLocation = $L("Splash");
+const PlacementLocation = $L("Placement");
 
 // TODO replace with objects
 
@@ -132,21 +132,19 @@ function beforeTriggerExec() {
 			}
 		}
 
-		// PLACING TRAPS
+		// PLACING TOWERS
 		if (selectedUnit != 0 && Unit.getUnitType(selectedUnit) == Const.Unit_KhaydarinCrystalFormation) {
-
-			if ( Unit.getOrder(selectedUnit) == Const.Order_Build_SCV) {
+			if (Unit.getOrder(selectedUnit) == Const.Order_Build_SCV) {
 				var x, y = Utils.getLocationPoint(MouseLoc[playerID]);
-			    x = ((x / 32) * 32) + 32;
-			    y = ((y / 32) * 32) + 32;
-			    Utils.centerLocationOnPoint(FireLocation, x, y, 64, 64);
-			    Utils.offsetLocation(MouseLoc[playerID], 16, 16);
-				Towers.createBaseTower(MouseLoc[playerID], playerID);
+				var roundedX = ((x / 32) * 32) + 32;
+				var roundedY = ((y / 32) * 32) + 32;
+			    Utils.centerLocationOnPoint(PlacementLocation, roundedX, roundedY, 64, 64);
+				Towers.createBaseTower(PlacementLocation, playerID);
     			Unit.setOrder(selectedUnit, Const.Order_Nothing2_Normal);
 			}
 		}
 
-		// SELECTING TRAPS
+		// SELECTING TOWERS
 		if (selectedUnit != 0 && Unit.getUnitType(selectedUnit) == Const.Unit_TerranFlagBeacon) {
 			const queueUnitType = Unit.getBuildQueue1(selectedUnit);
 			if (queueUnitType != Const.Unit_None) {
@@ -156,12 +154,9 @@ function beforeTriggerExec() {
 		}
 
 
-		// TRAPS DISPLAY
+		// TOWERS DISPLAY
 		if (selectedUnit != 0 && Unit.getUnitType(selectedUnit) == Const.Unit_TerranBeacon) {
-
-
 			if (PlayerSelectedUnit[playerID] != selectedUnit) {
-
 
 				if (IsUserCP()) {
 					Utils.setUpgrade(7, Unit.getRankIncrease(selectedUnit), playerID);
@@ -186,48 +181,6 @@ function beforeTriggerExec() {
 				);
 			}
 		}
-
-		/*
-
-		// SWITCHING WEAPONS
-		var weaponID = PlayerWeaponIndex[playerID];
-
-		if (PlayerWeaponCooldown[playerID] > 0) {
-			PlayerWeaponCooldown[playerID]--;
-		}
-
-		if (KeyQDown[playerID] != 0) {
-			weaponID++;
-			if (!Weapons.isWeaponValid(weaponID)) {
-				weaponID = 0;
-			}
-			PlayerWeaponIndex[playerID] = weaponID;
-				PlayWAV("sound\\bullet\\LaserHit.wav");
-		}
-
-
-		// FIRING
-		if (false) {
-
-			// ct.chatAnnouncement("Right click to fire. [", weaponID,"]");
-
-			const weapon = Weapons.getWeapon(weaponID);
-
-			if (PlayerWeaponCooldown[playerID] == 0 && MouseRightButtonPress[playerID]) {
-				const x, y = Utils.getLocationPoint(mouseLocation);
-				// Screen.printfAt(0, "x {} y {} ", x, y);
-				Utils.centerLocationOnPoint(FireLocation, x, y, weapon.radius, weapon.radius);
-				Weapons.playWeaponSfx(weapon.id);
-				if (weapon.imageID) {
-					Utils.createImageSpriteAtLocation(weapon.imageID, FireLocation);
-				}
-				if (Bring($P7, AtLeast, 1, Const.Unit_AnyUnit, FireLocation)) {
-					weapon.fire(playerID, x, y, FireLocation, weapon.id);
-				}
-				PlayerWeaponCooldown[playerID] = weapon.cooldown;
-			}
-		}
-		*/
 	}
 	EUDEndPlayerLoop();
 

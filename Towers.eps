@@ -137,7 +137,7 @@ function createBaseTower(location, playerID) {
     MoveUnit(1, unitType, $P8, $L("SafeCreate"), location);
     if (Bring($P8, AtLeast, 1, unitType, $L("SafeCreate"))) {
         RemoveUnitAt(1, unitType, $L("SafeCreate"), $P8);
-        Screen.print("Cannot place there. Refunding");
+        eprintln("You can't build there.");
     } else {
         GiveUnits(1, unitType, $P8, location, playerID);
     }
