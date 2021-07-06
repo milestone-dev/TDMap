@@ -15,7 +15,7 @@ function CalculateTargetDifficulty(wave) {
 	return 15 * (wave^2) + (1500*wave);
 }
 
-function CalculateTierSpawnCountDifficulty(wave, tier) {
+function CalculateTierSpawnCount(wave, tier) {
 	const waveTargetDifficulty = CalculateTargetDifficulty(wave);
 
 	var tierMultiplier;
@@ -23,8 +23,12 @@ function CalculateTierSpawnCountDifficulty(wave, tier) {
 	else { tierMultiplier = 1; }
 
 	var tierDifficulty = DifficultyTable[tier];
-	var tierSpawnCount = ((waveTargetDifficulty * tierMultiplier) / 100) / tierDifficulty;
-	var tierTargetDifficulty = waveTargetDifficulty - (tierSpawnCount * tierDifficulty);
-	return tierSpawnCount, tierTargetDifficulty;
+	return ((waveTargetDifficulty * tierMultiplier) / 100) / tierDifficulty;
 }
 
+function CalculateTierTargetDifficulty(wave, tier) {
+	const waveTargetDifficulty = CalculateTargetDifficulty(wave);
+	var tierDifficulty = DifficultyTable[tier];
+	var tierSpawnCount = CalculateTierSpawnCount(wave, tier);
+	return waveTargetDifficulty - (tierSpawnCount * tierDifficulty);
+}

@@ -7,5 +7,30 @@
 </head>
 <body>
 
+<label for="wave">Wave</label><input id="waveInput" value="1"> 
+<label for="tier">Tier</label><input id="tierIput" value="1"> 
+
+<table>
+<tr><th>TargetDifficultyOutput</th><td><span id="TargetDifficultyOutput"></span></td></tr>
+<tr><th>CalculateTierSpawnCount:</th><td><span id="CalculateTierSpawnCountOutput"></span></td></tr>
+<tr><th>CalculateTierTargetDifficulty:</th><td><span id="CalculateTierTargetDifficultyOutput"></span></td></tr>
+</table>
+
+
+
+<script type="text/javascript">
+	function calculate() {
+		const wave = parseInt(document.getElementById("waveInput").value);
+		const tier = parseInt(document.getElementById("tierIput").value);
+
+		document.getElementById("TargetDifficultyOutput").innerText = parseInt(Math.floor(CalculateTargetDifficulty(wave)));
+		document.getElementById("CalculateTierSpawnCountOutput").innerText = parseInt(Math.floor(CalculateTierSpawnCount(wave, tier)));
+		document.getElementById("CalculateTierTargetDifficultyOutput").innerText = parseInt(Math.floor(CalculateTierTargetDifficulty(wave, tier)));
+	}
+	document.getElementById("waveInput").addEventListener("keyup", calculate);
+	document.getElementById("tierIput").addEventListener("keyup", calculate);
+	calculate();
+
+</script>
 </body>
 </html>
