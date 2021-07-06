@@ -234,6 +234,18 @@ function towerFire(towerUnit) {
     Unit.setTargetUnit(missileUnit, targetUnit);
 }
 
+function getNextUnitType(unitType) {
+    switch(unitType) {
+        case Const.Unit_ZergUltralisk: return Const.Unit_ZergLurker;
+        case Const.Unit_ZergLurker: return Const.Unit_ZergDefiler;
+        case Const.Unit_ZergDefiler: return Const.Unit_ZergDrone;
+        case Const.Unit_ZergDrone: return Const.Unit_ZergBroodling;
+        case Const.Unit_ZergBroodling: return Const.Unit_ZergLarva;
+    }
+    return Const.Unit_None;
+}
+
+
 
 function missileHit(missileUnit) {
     const targetUnit = Unit.getTargetUnit(missileUnit);
@@ -248,8 +260,17 @@ function missileHit(missileUnit) {
     if (towerType.hit != 0) {
         towerType.hit(towerType, missileUnit, targetUnit);
     }
+    const targetUnitX = Unit.getOrderTargetX(targetUnit);
+    const targetUnitY = Unit.getOrderTargetY(targetUnit);
+    const targetUnitPriority = Unit.getKillCount(targetUnit);
     if (Unit.damage(targetUnit, damage)) {
         SetResources(Unit.getPlayerID(towerUnit), 8, Utils.getUnitDestroyValue(targetUnitType), 0);
+        if (targetUnitType == Const.Unit_ZergDrone) {
+            const u = Utils.replaceUnit(targetUnit, Const.Unit_ZergBroodling);
+            Unit.setStatusFlags(u, 0x00230005); // 5xxxx does not move
+            Unit.setKillCount(u, targetUnitPriority);
+            Unit.orderToPoint(u, targetUnitX, targetUnitY);
+        }
     }
     Utils.removeUnit(missileUnit);
 }
@@ -264,7 +285,7 @@ function load() {
     });
 
     const t0 = createTowerType(0,
-        MakeTowerData(15, 32*6, 8*1),
+        MakeTowerData(250, 32*6, 8*1),
         MakeTowerImageData(
             MakeImage(Const.Image_STA_STS_Photon_Cannon_Overlay, 6, -12),
             MakeImage(Const.Image_None, 0, 0),

@@ -210,7 +210,9 @@ function beforeTriggerExec() {
 	}
 
 	foreach(ptr, unit : EUDLoopPlayerUnit(P7)) {
-		if (Unit.getUnitType(unit) == Const.Unit_ZergDrone) {
+		if (true) {
+            Unit.setStatusFlags(unit, 0x00230005); // 5xxxx does not move, 3xxxx crashes
+
 
 			// Hack for now, implement with timer later
 			Unit.set106Flag(unit, Unit.get106Flag(unit) + 1);
