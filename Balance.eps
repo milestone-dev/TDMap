@@ -47,26 +47,25 @@ function CalculateTierTargetDifficulty(wave, tier) {
 	return waveTargetDifficulty - (tierSpawnCount * tierDifficulty);
 }
 
-
 function calc(wave) {
 	var difficulty = 15*wave*wave+1500*wave;// = 300000
 
-	var tier6Count = difficulty*35/100/DifficultyTable[6]; // = 3
+	var tier6Count = Math.floor(difficulty*35/100/DifficultyTable[6]); // = 3
 	difficulty = difficulty-(tier6Count*DifficultyTable[6]); // = 219732
 
-	var tier5Count = difficulty*45/100/DifficultyTable[5]; //= 10
+	var tier5Count = Math.floor(difficulty*45/100/DifficultyTable[5]); //= 10
 	difficulty = difficulty-(tier5Count*DifficultyTable[5]); // = 127952
 
-	var tier4Count = difficulty*55/100/DifficultyTable[4]; //= 21
+	var tier4Count = Math.floor(difficulty*55/100/DifficultyTable[4]); //= 21
 	difficulty = difficulty-(tier4Count*DifficultyTable[4]); // = 6024
 
-	var tier3Count = difficulty*65/100/DifficultyTable[3]; 
+	var tier3Count = Math.floor(difficulty*65/100/DifficultyTable[3]); 
 	difficulty = difficulty-(tier3Count*DifficultyTable[3]); 
 
-	var tier2Count = difficulty*75/100/DifficultyTable[2]; 
+	var tier2Count = Math.floor(difficulty*75/100/DifficultyTable[2]); 
 	difficulty = difficulty-(tier2Count*DifficultyTable[2]); 
 
-	var tier1Count = difficulty/DifficultyTable[1]; 
+	var tier1Count = Math.floor(difficulty/DifficultyTable[1]); 
 	difficulty = difficulty-(tier1Count*DifficultyTable[1]); 
 
 	return [difficulty, tier1Count, tier2Count, tier3Count, tier4Count, tier5Count, tier6Count];
