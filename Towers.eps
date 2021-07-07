@@ -3,6 +3,8 @@ import ETK.ETKUtils as Utils;
 import ETK.ETKTimer as Timer;
 import ETK.ETKConstants as Const;
 import ETK.ETKCommon as Common;
+import Balance;
+import Waves;
 
 const TOWERS = EUDArray(1024);
 var TOWER_COUNT = 0;
@@ -234,16 +236,6 @@ function towerFire(towerUnit) {
     Unit.setTargetUnit(missileUnit, targetUnit);
 }
 
-function getNextUnitType(unitType) {
-    switch(unitType) {
-        case Const.Unit_ZergUltralisk: return Const.Unit_ZergLurker; break;
-        case Const.Unit_ZergLurker: return Const.Unit_ZergDefiler; break;
-        case Const.Unit_ZergDefiler: return Const.Unit_ZergDrone; break;
-        case Const.Unit_ZergDrone: return Const.Unit_ZergBroodling; break;
-        // case Const.Unit_ZergBroodling: return Const.Unit_ZergLarva; break;
-    }
-    return Const.Unit_None;
-}
 
 function missileHit(missileUnit) {
     const targetUnit = Unit.getTargetUnit(missileUnit);
@@ -258,19 +250,34 @@ function missileHit(missileUnit) {
     if (towerType.hit != 0) {
         towerType.hit(towerType, missileUnit, targetUnit);
     }
+    const createLocationX = Unit.getPositionX(targetUnit);
+    const createLocationY = Unit.getPositionY(targetUnit);
     const targetUnitX = Unit.getOrderTargetX(targetUnit);
     const targetUnitY = Unit.getOrderTargetY(targetUnit);
     const targetUnitPriority = Unit.getKillCount(targetUnit);
     if (Unit.damage(targetUnit, damage)) {
         SetResources(Unit.getPlayerID(towerUnit), 8, Utils.getUnitDestroyValue(targetUnitType), 0);
-        const unitType = getNextUnitType(targetUnitType);
-        setcurpl($P1); StringBuffer(32).print(unitType);
-        if (unitType != Const.Unit_None) {
-            const unit = Utils.replaceUnit(targetUnit, unitType);
-            Unit.setStatusFlags(unit, 0x00230005); // 5xxxx does not move
-            Unit.setKillCount(unit, targetUnitPriority);
-            Unit.orderToPoint(unit, targetUnitX, targetUnitY);
-        }
+        const data = [targetUnitType, targetUnitX, targetUnitY, targetUnitPriority, targetUnit, createLocationX, createLocationY];
+        Timer.add(6, data, EUDFuncPtr (2, 0) (function(data, intervalCount) {
+            const unitType = Waves.GetNextUnitType(targetUnitType);
+            if (unitType != Const.Unit_None) {
+                const unitData = EUDArray.cast(data);
+                const targetUnitType = unitData[0];
+                const targetUnitX = unitData[1];
+                const targetUnitY = unitData[2];
+                const targetUnitPriority = unitData[3];
+                const targetUnit = unitData[4];
+                const createLocationX = unitData[5];
+                const createLocationY = unitData[6];
+                // Create unit offscreen
+                const unit = Utils.createUnit(unitType, Utils.OFFSCREEN_LOCATION, $P7);
+                Unit.setStatusFlags(unit, 0x00230005); // 5xxxx does not move
+                Utils.moveUnit(unit, Utils.moveUtilLocationToPoint(createLocationX, createLocationY));
+                Unit.setKillCount(unit, targetUnitPriority);
+                Unit.orderToPoint(unit, targetUnitX, targetUnitY);
+            }
+        }));
+        
     }
     Utils.removeUnit(missileUnit);
 }
