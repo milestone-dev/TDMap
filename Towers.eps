@@ -292,7 +292,7 @@ function load() {
     });
 
     const t0 = createTowerType(0,
-        MakeTowerData(250, 32*6, 8*1),
+        MakeTowerData(50, 32*6, 6*1),
         MakeTowerImageData(
             MakeImage(Const.Image_STA_STS_Photon_Cannon_Overlay, 6, -12),
             MakeImage(Const.Image_None, 0, 0),
@@ -300,9 +300,6 @@ function load() {
             MakeImage(Const.Image_Phase_Disruptor_Hit, 0, 0)
         )
     );
-    t0.fire = EUDFuncPtr (1, 0) (function(towerUnit) {
-        Utils.createImageSpriteAtUnitPosition(Const.Image_Restoration_Hit_Small, towerUnit);
-    });
 
     const t1 = createTowerType(1,
         MakeTowerData(5, 32*6, 12*1),

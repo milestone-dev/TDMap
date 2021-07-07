@@ -1,16 +1,6 @@
 import ETK.ETKConstants as Const;
 
-const TestWave = [
-	0,
-	0,
-	0,
-	34,
-	21,
-	10,
-	3
-];
-
-/*
+const Wave100 = [
 	0,
 	55,
 	43,
@@ -18,19 +8,9 @@ const TestWave = [
 	21,
 	10,
 	3
-*/
+];
 
 const SpawnCooldown = EUDArray(8);
-
-// const TestWave = [
-// 	0,
-// 	0,
-// 	0,
-// 	0,
-// 	0,
-// 	0,
-// 	3
-// ];
 
 function GetUnitTypeForTier(tier) {
 	switch(tier) {
@@ -59,8 +39,7 @@ function GetNextSpawnUnitForWave(wave:EUDArray) {
 	const index = 0;
 	for (var i = 0; i < 7; i++) {
 		if (wave[i] > 0) {
-        	setcurpl($P1); StringBuffer(32).print(wave[i]);
-			wave[i] = wave[i] - 1;
+			wave[i]--;
 			return GetUnitTypeForTier(i);
 		} 
 	}
