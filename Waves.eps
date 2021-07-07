@@ -1,0 +1,68 @@
+import ETK.ETKConstants as Const;
+
+const TestWave = [
+	0,
+	0,
+	0,
+	34,
+	21,
+	10,
+	3
+];
+
+/*
+	0,
+	55,
+	43,
+	34,
+	21,
+	10,
+	3
+*/
+
+const SpawnCooldown = EUDArray(8);
+
+// const TestWave = [
+// 	0,
+// 	0,
+// 	0,
+// 	0,
+// 	0,
+// 	0,
+// 	3
+// ];
+
+function GetUnitTypeForTier(tier) {
+	switch(tier) {
+	    case 1: return Const.Unit_ZergZergling; break;
+	    case 2: return Const.Unit_ZergBroodling; break;
+	    case 3: return Const.Unit_ZergDrone; break;
+	    case 4: return Const.Unit_ZergDefiler; break;
+	    case 5: return Const.Unit_ZergLurker; break;
+	    case 6: return Const.Unit_ZergUltralisk; break;
+	}
+    return Const.Unit_None;
+}
+
+function GetNextUnitType(unitType) {
+    switch(unitType) {
+        case Const.Unit_ZergUltralisk: return Const.Unit_ZergLurker; break;
+        case Const.Unit_ZergLurker: return Const.Unit_ZergDefiler; break;
+        case Const.Unit_ZergDefiler: return Const.Unit_ZergDrone; break;
+        case Const.Unit_ZergDrone: return Const.Unit_ZergBroodling; break;
+        case Const.Unit_ZergBroodling: return Const.Unit_ZergZergling; break;
+    }
+    return Const.Unit_None;
+}
+
+function GetNextSpawnUnitForWave(wave:EUDArray) {
+	const index = 0;
+	for (var i = 0; i < 7; i++) {
+		if (wave[i] > 0) {
+        	setcurpl($P1); StringBuffer(32).print(wave[i]);
+			wave[i] = wave[i] - 1;
+			return GetUnitTypeForTier(i);
+		} 
+	}
+	return Const.Unit_None;
+}
