@@ -4,8 +4,8 @@ import ETK.ETKTimer as Timer;
 import ETK.ETKConstants as Const;
 import ETK.ETKCommon as Common;
 import Balance;
+import Waves;
 import Towers;
-// import customText as ct;
 
 const Screen = StringBuffer(256);
 const MouseLeftButtonPress = EUDArray(6);
@@ -42,6 +42,7 @@ const SelectionAddresses = [
 	0x6285A8,
 	0x6285D8
 ];
+
 
 const SelectedUnitID = EUDArray(6);
 
@@ -233,6 +234,19 @@ function beforeTriggerExec() {
 			} else {
 				Utils.setUnitColor(unit, $P1);
 			}
+		}
+	}
+
+	if (Switch(0, 2) && Bring($P7, Exactly, 0, Const.Unit_AnyUnit, $L("P1Track1"))) {
+		if (Waves.SpawnCooldown[$P1] == 0) {
+			Waves.SpawnCooldown[$P1] = 4;
+			const nextUnitType = Waves.GetNextSpawnUnitForWave(Waves.TestWave);
+			if (nextUnitType != Const.Unit_None) {
+				const u = Utils.createUnit(nextUnitType, $L("P1Track1"), $P7);
+				Unit.setStatusFlags(u, 0x00230005); // 5xxxx does not move, 3xxxx crashes	
+			}
+		} else {
+			Waves.SpawnCooldown[$P1]--;
 		}
 	}
 }
