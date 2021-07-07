@@ -439,6 +439,9 @@ function getUnitDistance(unit1, unit2) {
 }
 
 function createUnit(unitType, location, playerID) {
+	if (unitType == ETKConstants.Unit_None) {
+		return 0;
+	}
 	const epd = getNextUnitEPD();
 	CreateUnit(1,unitType, location, playerID);
 	return epd;
