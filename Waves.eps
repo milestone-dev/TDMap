@@ -1,16 +1,27 @@
+import ETK.ETKUnit as Unit;
+import ETK.ETKUtils as Utils;
+import ETK.ETKTimer as Timer;
 import ETK.ETKConstants as Const;
+import ETK.ETKCommon as Common;
+import Balance;
+const Screen = StringBuffer(64);
 
-const Wave100 = [
-	0,
-	55,
-	43,
-	34,
-	21,
-	10,
-	3
+// const Wave100 = [0, 55, 43, 34, 21, 10, 3 ];
+
+var CurrentWaveID;
+var CurrentWave = EUDArray(7);
+var SpawnCooldown;
+
+const SpawnLocations = [
+	$L("P1Track1")
 ];
 
-const SpawnCooldown = EUDArray(8);
+function StartWave(waveID) {
+	KillUnit(Const.Unit_AnyUnit, P7);
+	CurrentWaveID = waveID;
+	setcurpl(P1); Screen.printf("Starting Wave {}", waveID);
+	CurrentWave = Balance.CalculateMobsForWave(CurrentWaveID);
+}
 
 function GetUnitTypeForTier(tier) {
 	switch(tier) {
@@ -35,13 +46,49 @@ function GetNextUnitType(unitType) {
     return Const.Unit_None;
 }
 
-function GetNextSpawnUnitForWave(wave:EUDArray) {
+function CalculateCurrentWaveRemainingMobs() {
+	var num = 0;
+	const fields = Balance.TIER_COUNT + 1;
+	const waves = EUDArray.cast(CurrentWave);
+	for (var i = 0; i < fields; i++) {
+		num += waves[i];
+	}
+	return num;
+}
+
+function ExtractNextMobFromCurrentWave() {
 	const index = 0;
-	for (var i = 0; i < 7; i++) {
-		if (wave[i] > 0) {
-			wave[i]--;
+	const fields = Balance.TIER_COUNT + 1;
+	const waves = EUDArray.cast(CurrentWave);
+	for (var i = 0; i < fields; i++) {
+		if (waves[i] > 0) {
+			waves[i]--;
 			return GetUnitTypeForTier(i);
 		} 
 	}
 	return Const.Unit_None;
+}
+
+function Update() {
+	if (CurrentWaveID == 0) {
+		return;
+	}
+	if (SpawnCooldown == 0) {
+		SpawnCooldown = 6; // TODO replace with calculated cooldown
+		const playerCount = 1; // TODO support multiple players and spawn locations
+		const nextUnitType = ExtractNextMobFromCurrentWave();
+		if (nextUnitType != Const.Unit_None) {
+			for (var i = 0; i < playerCount; i++) {
+				const unit = Utils.createUnit(nextUnitType, SpawnLocations[i], $P7);
+				Unit.setStatusFlags(unit, 0x00230005); // 5xxxx does not move, 3xxxx crashes	
+			}
+		} else {
+			// Wave ended, spawn next
+			if (Command(P7, Exactly, 0, Const.Unit_AnyUnit)) {
+				StartWave(CurrentWaveID+1);
+			}
+		}
+	} else {
+		SpawnCooldown--;
+	}
 }

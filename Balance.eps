@@ -9,19 +9,21 @@ const DifficultyTable = [
 	26756
 ];
 
+const TIER_COUNT = 6;
+
 function floor(v) {
 	return v;
 }
 
-function calc(wave) {
+function CalculateMobsForWave(wave) {
 	var difficulty = 15*wave*wave+1500*wave;
-	var data = [0,0,0,0,0,0,0];
+	const data = [0,0,0,0,0,0,0];
 	for (var tier=6; tier>0; tier--) {
 		var tierMultiplier = 100;
 		if (tier > 1) {
 			tierMultiplier = 95 - (tier * 10);
 		}
-		const tierCount = floor(difficulty*tierMultiplier/100/DifficultyTable[tier]);
+		const tierCount = floor(difficulty * tierMultiplier / 100 / DifficultyTable[tier]);
 		data[tier] = tierCount;
 		difficulty = difficulty-(tierCount*DifficultyTable[tier]);
 	}

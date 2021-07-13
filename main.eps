@@ -83,6 +83,15 @@ function onPluginStart() {
 function beforeTriggerExec() {
 	Utils.EUDTurbo();
 	Timer.tick();
+
+
+	if (Switch(0, 2) && Waves.CurrentWaveID == 0) {
+		Waves.StartWave(1);
+	}
+
+	Waves.Update();
+
+
 	EUDPlayerLoop()();
 	if (getcurpl() < $P7) {
 		const playerID = getcurpl();
@@ -234,19 +243,6 @@ function beforeTriggerExec() {
 			} else {
 				Utils.setUnitColor(unit, $P1);
 			}
-		}
-	}
-
-	if (Switch(0, 2) && Bring($P7, Exactly, 0, Const.Unit_AnyUnit, $L("P1Track1"))) {
-		if (Waves.SpawnCooldown[$P1] == 0) {
-			Waves.SpawnCooldown[$P1] = 6;
-			const nextUnitType = Waves.GetNextSpawnUnitForWave(Waves.Wave100);
-			if (nextUnitType != Const.Unit_None) {
-				const u = Utils.createUnit(nextUnitType, $L("P1Track1"), $P7);
-				Unit.setStatusFlags(u, 0x00230005); // 5xxxx does not move, 3xxxx crashes	
-			}
-		} else {
-			Waves.SpawnCooldown[$P1]--;
 		}
 	}
 }
