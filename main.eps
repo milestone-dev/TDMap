@@ -12,10 +12,23 @@ const MouseLeftButtonPress = EUDArray(6);
 const MouseLeftButtonDown = EUDArray(6);
 const MouseRightButtonPress = EUDArray(6);
 const MouseRightButtonDown = EUDArray(6);
-const MouseMiddleButtonPress = EUDArray(6);
 const KeyQDown = EUDArray(6);
 const KeyPDown = EUDArray(6);
 const KeyUDown = EUDArray(6);
+
+
+// Debug console
+const ConsoleOpen = EUDArray(6);
+const KeyNumberDown = EUDArray(6);
+const ConsoleCommandInput = EUDArray(6);
+const ConsoleNumberInput = EUDArray(6);
+const KeyENTERDown = EUDArray(6);
+const KeyESCDown = EUDArray(6);
+const CommandKeyDown = EUDArray(6);
+
+const Command_Wave = 1; // W
+const Command_Kill = 2; // K
+const Command_Minerals = 3; // M
 
 const PlacementLocation = $L("Placement");
 
@@ -67,10 +80,15 @@ function initMap() {
 	EUDRegisterObjectToNamespace("MouseRightButtonPress", MouseRightButtonPress);
 	EUDRegisterObjectToNamespace("MouseRightButtonDown", MouseRightButtonDown);
 
-	EUDRegisterObjectToNamespace("MouseMiddleButtonPress", MouseMiddleButtonPress);
 	EUDRegisterObjectToNamespace("KeyQDown", KeyQDown);
 	EUDRegisterObjectToNamespace("KeyPDown", KeyPDown);
 	EUDRegisterObjectToNamespace("KeyUDown", KeyUDown);
+	
+
+	EUDRegisterObjectToNamespace("KeyNumberDown", KeyNumberDown);
+	EUDRegisterObjectToNamespace("KeyENTERDown", KeyENTERDown);
+	EUDRegisterObjectToNamespace("KeyESCDown", KeyESCDown);
+	EUDRegisterObjectToNamespace("CommandKeyDown", CommandKeyDown);
 	Towers.load();
 }
 
@@ -79,6 +97,56 @@ function onPluginStart() {
 	initMap();
 	Utils.setup();
 }
+
+
+function handleConsoleCommand(command, value, playerID) {
+	switch(command) {
+		case Command_Wave:
+			Waves.StartWave(value);
+		break;
+		case Command_Kill:
+			Screen.print("Killing all mobs");
+			Waves.KillAllMobs();
+		break;
+		case Command_Minerals:
+			Screen.printf("Adding {} minerals", value);
+        	SetResources(playerID, 8, value, 0);
+		break;
+	}
+}
+
+function handleConsoleInput(playerID) {
+	if (ConsoleOpen[playerID]) {
+		if (CommandKeyDown[playerID] > 0) {
+			ConsoleCommandInput[playerID] = CommandKeyDown[playerID];
+			ConsoleNumberInput[playerID] = 0;
+			// Screen.printf("ConsoleCommandInput {}", CommandKeyDown[playerID]);
+		}
+		if (KeyNumberDown[playerID] > 0) {
+			if (KeyNumberDown[playerID] == 10) {
+				KeyNumberDown[playerID] = 0;
+			}
+			ConsoleNumberInput[playerID] = Utils.concatenateIntegers(ConsoleNumberInput[playerID], KeyNumberDown[playerID]);
+			// Screen.printf("AddN {}", KeyNumberDown[playerID]);
+		}
+		if (KeyENTERDown[playerID] || KeyESCDown[playerID]) {
+			if (KeyENTERDown[playerID] && ConsoleCommandInput[playerID]) {
+				// Screen.printf("Value {}", ConsoleNumberInput[playerID]);
+				handleConsoleCommand(ConsoleCommandInput[playerID], ConsoleNumberInput[playerID], playerID);
+			}
+			ConsoleCommandInput[playerID] = 0;
+			ConsoleNumberInput[playerID] = 0;
+			ConsoleOpen[playerID] = false;
+			// Screen.print("Close console");
+		}
+	} else {
+		if (KeyENTERDown[playerID]) {
+			ConsoleOpen[playerID] = true;
+			// Screen.print("Open console");
+		}
+	}
+}
+
 
 function beforeTriggerExec() {
 	Utils.EUDTurbo();
@@ -98,6 +166,9 @@ function beforeTriggerExec() {
 		updateSelectedUnit(playerID);
 		const selectedUnit = SelectedUnitID[playerID];
 		const mouseLocation = MouseLoc[playerID];
+
+
+		handleConsoleInput(playerID);
 
 		// TOGGLING MOBS
 		if (KeyPDown[playerID]) {

@@ -6,21 +6,30 @@ import ETK.ETKCommon as Common;
 import Balance;
 const Screen = StringBuffer(64);
 
-// const Wave100 = [0, 55, 43, 34, 21, 10, 3 ];
-
 var CurrentWaveID;
 var CurrentWave = EUDArray(7);
 var SpawnCooldown;
 
+// TODO Extend to all players, move to a point system.
 const SpawnLocations = [
 	$L("P1Track1")
 ];
 
-function StartWave(waveID) {
+function KillAllMobs() {
 	KillUnit(Const.Unit_AnyUnit, P7);
+}
+
+function StartWave(waveID) {
 	CurrentWaveID = waveID;
-	setcurpl(P1); Screen.printf("Starting Wave {}", waveID);
-	CurrentWave = Balance.CalculateMobsForWave(CurrentWaveID);
+	KillAllMobs();
+	if (waveID > 0) {
+		setcurpl(P1); Screen.printf("Starting Wave {}", waveID);
+		CurrentWave = Balance.CalculateMobsForWave(CurrentWaveID);
+	}
+}
+
+function GoToNextWave() {
+	StartWave(CurrentWaveID+1);
 }
 
 function GetUnitTypeForTier(tier) {
@@ -85,7 +94,7 @@ function Update() {
 		} else {
 			// Wave ended, spawn next
 			if (Command(P7, Exactly, 0, Const.Unit_AnyUnit)) {
-				StartWave(CurrentWaveID+1);
+				GoToNextWave();
 			}
 		}
 	} else {
