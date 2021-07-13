@@ -83,7 +83,7 @@ function Update() {
 		return;
 	}
 	if (SpawnCooldown == 0) {
-		SpawnCooldown = 6; // TODO replace with calculated cooldown
+		SpawnCooldown = 2; // TODO replace with calculated cooldown
 		const playerCount = 1; // TODO support multiple players and spawn locations
 		const nextUnitType = ExtractNextMobFromCurrentWave();
 		if (nextUnitType != Const.Unit_None) {
