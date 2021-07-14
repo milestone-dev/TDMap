@@ -697,6 +697,10 @@ function refreshInterface() {
 	ETKUnit.destroy(createUnit(ETKConstants.Unit_ZergZergling, OFFSCREEN_LOCATION, ETKUtilsEffectsPlayerID));	
 }
 
+function refreshLocations() {
+	createImageSpriteAtLocation(ETKConstants.Image_Vespene_Geyser_Smoke1, OFFSCREEN_LOCATION);
+}
+
 function setLight(val) {
 	if (IsUserCP()) {
 		SetMemoryEPD(EPD(0x657A9C), (7), val);

@@ -227,6 +227,7 @@ function updateTower(towerUnit) {
     if (!Unit.isOrderTargetUnitValid(towerUnit)) {
         // Check if there are enemy units nearby and target a new unit
         Utils.centerLocationOnUnit(Utils.LOCATION_ANYSIZE, towerUnit, towerRange * 2, towerRange * 2);
+        Utils.refreshLocations();
         if (Bring(enemyPlayerID, AtLeast, 1, Const.Unit_AnyUnit, Utils.LOCATION_ANYSIZE)) {
             const enemyUnit = findNewTargetInLocation(Utils.LOCATION_ANYSIZE, enemyPlayerID );
             // Screen.printf("Bring {}", enemyUnit);
@@ -235,7 +236,7 @@ function updateTower(towerUnit) {
                 Unit.setTargetUnit(towerUnit, enemyUnit);
                 Unit.setOrder(towerUnit, Const.Order_Attack_Building);
             } else {
-                Screen.print("Bring but no target");
+                Screen.printf("{} Bring but no target", towerUnit);
             }
         }
     }
