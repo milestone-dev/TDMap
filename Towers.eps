@@ -210,10 +210,6 @@ function updateTower(towerUnit) {
     const towerType = getTowerTypeFromUnit(towerUnit);
     const enemyPlayerID = $P7;
     const towerRange = towerType.data.baseRange; //TODO: towerData.calculateRange();
-    // const isEnemyUnitInRange = Bring(enemyPlayerID, AtLeast, 1, Const.Unit_AnyUnit, Utils.LOCATION_ANYSIZE);
-
-
-
     // Check if target is still within range, otherwise clear it and target a new unit
     if (Unit.isOrderTargetUnitValid(towerUnit)) {
         // Screen.printf("dist {} {}", towerRange, Utils.getUnitDistance(towerUnit, Unit.getTargetUnit(towerUnit)));
@@ -235,8 +231,6 @@ function updateTower(towerUnit) {
                 // Screen.print("setTargetUnit");
                 Unit.setTargetUnit(towerUnit, enemyUnit);
                 Unit.setOrder(towerUnit, Const.Order_Attack_Building);
-            } else {
-                Screen.printf("{} Bring but no target", towerUnit);
             }
         }
     }
@@ -255,7 +249,6 @@ function updateTower(towerUnit) {
     }
 
     if (Unit.getOrder(towerUnit) == Const.Order_Nothing2_Normal) {
-        Screen.print("Order_Nothing2_Normal");
         Unit.setOrder(towerUnit, Const.Order_Nothing1_Unused);         
     }
 }
