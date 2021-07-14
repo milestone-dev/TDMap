@@ -57,9 +57,8 @@ function GetNextUnitType(unitType) {
 
 function CalculateCurrentWaveRemainingMobs() {
 	var num = 0;
-	const fields = Balance.TIER_COUNT + 1;
 	const waves = EUDArray.cast(CurrentWave);
-	for (var i = 0; i < fields; i++) {
+	for (var i = Balance.TIER_COUNT; i > 0; i--) {
 		num += waves[i];
 	}
 	return num;
@@ -67,9 +66,8 @@ function CalculateCurrentWaveRemainingMobs() {
 
 function ExtractNextMobFromCurrentWave() {
 	const index = 0;
-	const fields = Balance.TIER_COUNT + 1;
 	const waves = EUDArray.cast(CurrentWave);
-	for (var i = 0; i < fields; i++) {
+	for (var i = Balance.TIER_COUNT; i > 0; i--) {
 		if (waves[i] > 0) {
 			waves[i]--;
 			return GetUnitTypeForTier(i);
