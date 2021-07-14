@@ -168,39 +168,8 @@ function setTowerType(towerBaseUnit, towerID) {
     Unit.setCustomValue(towerUnit, towerType.id);
     Unit.setRankIncrease(towerUnit, 0);
     Unit.setCommandCard(towerUnit, 100 + Unit.getPlayerID(towerUnit));
+    Unit.setOrder(towerUnit, Const.Order_Nothing1_Unused);
 }
-
-function updateTower(towerUnit) {
-    const towerType = getTowerTypeFromUnit(towerUnit);
-    const enemyPlayerID = $P7;
-    const towerRange = towerType.data.baseRange; //TODO: towerData.calculateRange();
-    // const isEnemyUnitInRange = Bring(enemyPlayerID, AtLeast, 1, Const.Unit_AnyUnit, Utils.LOCATION_ANYSIZE);
-
-    // Check if target is still within range, otherwise clear it and target a new unit
-    if (Unit.isOrderTargetUnitValid(towerUnit)) {
-        // Screen.printf("dist {} {}", towerRange, Utils.getUnitDistance(towerUnit, Unit.getTargetUnit(towerUnit)));
-        if (Utils.getUnitDistance(towerUnit, Unit.getTargetUnit(towerUnit)) > towerRange) {
-            // Screen.print("clearTargetUnit");
-            Unit.clearTargetUnit(towerUnit);
-            Unit.setOrder(towerUnit, Const.Order_Nothing1_Unused);         
-        }
-    } 
-
-    if (!Unit.isOrderTargetUnitValid(towerUnit)) {
-        // Check if there are enemy units nearby and target a new unit
-        Utils.centerLocationOnUnit(Utils.LOCATION_ANYSIZE, towerUnit, towerRange * 2, towerRange * 2);
-        if (Bring(enemyPlayerID, AtLeast, 1, Const.Unit_AnyUnit, Utils.LOCATION_ANYSIZE)) {
-            const enemyUnit = findNewTargetInLocation(Utils.LOCATION_ANYSIZE, enemyPlayerID );
-            // Screen.printf("Bring {}", enemyUnit);
-            if (enemyUnit != 0) {
-                // Screen.print("setTargetUnit");
-                Unit.setTargetUnit(towerUnit, enemyUnit);
-                Unit.setOrder(towerUnit, Const.Order_Attack_Building);
-            }
-        }
-    }
-}
-
 
 function towerFire(towerUnit) {
     const cannonUnit = Unit.getConnectedUnit(towerUnit);
@@ -235,6 +204,62 @@ function towerFire(towerUnit) {
     Unit.setOrder(missileUnit, Const.Order_Ignore_Normal);
     Unit.setTargetUnit(missileUnit, targetUnit);
 }
+
+
+function updateTower(towerUnit) {
+    const towerType = getTowerTypeFromUnit(towerUnit);
+    const enemyPlayerID = $P7;
+    const towerRange = towerType.data.baseRange; //TODO: towerData.calculateRange();
+    // const isEnemyUnitInRange = Bring(enemyPlayerID, AtLeast, 1, Const.Unit_AnyUnit, Utils.LOCATION_ANYSIZE);
+
+
+
+    // Check if target is still within range, otherwise clear it and target a new unit
+    if (Unit.isOrderTargetUnitValid(towerUnit)) {
+        // Screen.printf("dist {} {}", towerRange, Utils.getUnitDistance(towerUnit, Unit.getTargetUnit(towerUnit)));
+        if (Utils.getUnitDistance(towerUnit, Unit.getTargetUnit(towerUnit)) > towerRange) {
+            // Screen.print("clearTargetUnit");
+            Unit.clearTargetUnit(towerUnit);
+            Unit.setOrder(towerUnit, Const.Order_Nothing1_Unused);         
+        }
+    } 
+
+    if (!Unit.isOrderTargetUnitValid(towerUnit)) {
+        // Check if there are enemy units nearby and target a new unit
+        Utils.centerLocationOnUnit(Utils.LOCATION_ANYSIZE, towerUnit, towerRange * 2, towerRange * 2);
+        if (Bring(enemyPlayerID, AtLeast, 1, Const.Unit_AnyUnit, Utils.LOCATION_ANYSIZE)) {
+            const enemyUnit = findNewTargetInLocation(Utils.LOCATION_ANYSIZE, enemyPlayerID );
+            // Screen.printf("Bring {}", enemyUnit);
+            if (enemyUnit != 0) {
+                // Screen.print("setTargetUnit");
+                Unit.setTargetUnit(towerUnit, enemyUnit);
+                Unit.setOrder(towerUnit, Const.Order_Attack_Building);
+            } else {
+                Screen.print("Bring but no target");
+            }
+        }
+    }
+
+
+    //Firing
+    if (Unit.getGroundWeaponCooldown(towerUnit) > towerType.data.baseCooldown) {
+        Unit.setGroundWeaponCooldown(towerUnit, towerType.data.baseCooldown);       
+    }
+
+    if (Unit.getGroundWeaponCooldown(towerUnit) == 0
+        && Unit.getOrder(towerUnit) == Const.Order_Attack_Building
+        && Unit.isOrderTargetUnitValid(towerUnit)) {
+        towerFire(towerUnit);
+        Unit.setGroundWeaponCooldown(towerUnit, towerType.data.baseCooldown);   
+    }
+
+    if (Unit.getOrder(towerUnit) == Const.Order_Nothing2_Normal) {
+        Screen.print("Order_Nothing2_Normal");
+        Unit.setOrder(towerUnit, Const.Order_Nothing1_Unused);         
+    }
+}
+
+
 
 
 function missileHit(missileUnit) {
