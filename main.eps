@@ -298,9 +298,7 @@ function beforeTriggerExec() {
 
 	foreach(ptr, unit : EUDLoopPlayerUnit(P7)) {
 		if (true) {
-            Unit.setStatusFlags(unit, 0x00230005); // 5xxxx does not move, 3xxxx crashes
-
-
+			// TODO: Move into UpdateMob function later.
 			// Hack for now, implement with timer later
 			Unit.set106Flag(unit, Unit.get106Flag(unit) + 1);
 			if (Unit.get106Flag(unit) > 12) {
@@ -311,14 +309,14 @@ function beforeTriggerExec() {
 			const maxHP = Unit.getMaxHitpoints(unit);
 			const hp = Unit.getHitpoints(unit);
 			const fraction = maxHP / 4;
-			if (hp == maxHP) {
-				Utils.setUnitColor(unit, 8);
-			} else if (hp > fraction*3) {
-				Utils.setUnitColor(unit, $P8);
-			} else if (hp > fraction*2) {
-				Utils.setUnitColor(unit, $P5);
-			} else {
+			if (hp <= fraction) {
 				Utils.setUnitColor(unit, $P1);
+			} else if (hp <= fraction*2) {
+				Utils.setUnitColor(unit, $P5);
+			} else if (hp <= fraction*3) {
+				Utils.setUnitColor(unit, $P8);
+			} else {
+				Utils.setUnitColor(unit, 8);
 			}
 		}
 	}
