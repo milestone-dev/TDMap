@@ -81,6 +81,11 @@
 	}
 	document.getElementById("waveInput").addEventListener("change", calculate);
 	document.getElementById("waveInput").addEventListener("keyup", calculate);
+
+	const params = new URLSearchParams(window.location.search);
+	if (params.has("wave")) {
+		document.getElementById("waveInput").value = params.get("wave");
+	}
 	calculate();
 
 </script>
