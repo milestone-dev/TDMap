@@ -278,22 +278,24 @@ function missileHit(missileUnit) {
         SetResources(Unit.getPlayerID(towerUnit), 8, Utils.getUnitDestroyValue(targetUnitType), 0);
         const data = [targetUnitType, targetUnitX, targetUnitY, targetUnitPriority, targetUnit, createLocationX, createLocationY];
         Timer.add(6, data, EUDFuncPtr (2, 0) (function(data, intervalCount) {
-            const unitType = Waves.GetNextUnitType(targetUnitType);
-            if (unitType != Const.Unit_None) {
-                const unitData = EUDArray.cast(data);
-                const targetUnitType = unitData[0];
-                const targetUnitX = unitData[1];
-                const targetUnitY = unitData[2];
-                const targetUnitPriority = unitData[3];
-                const targetUnit = unitData[4];
-                const createLocationX = unitData[5];
-                const createLocationY = unitData[6];
-                // Create unit offscreen
-                const unit = Utils.createUnit(unitType, Utils.OFFSCREEN_LOCATION, $P7);
-                Unit.setStatusFlags(unit, 0x00230005); // 5xxxx does not move
-                Utils.moveUnit(unit, Utils.moveUtilLocationToPoint(createLocationX, createLocationY));
-                Unit.setKillCount(unit, targetUnitPriority);
-                Unit.orderToPoint(unit, targetUnitX, targetUnitY);
+            for (var i = 0; i < 2; i++) {
+                const unitType = Waves.GetNextUnitType(targetUnitType);
+                if (unitType != Const.Unit_None) {
+                    const unitData = EUDArray.cast(data);
+                    const targetUnitType = unitData[0];
+                    const targetUnitX = unitData[1];
+                    const targetUnitY = unitData[2];
+                    const targetUnitPriority = unitData[3];
+                    const targetUnit = unitData[4];
+                    const createLocationX = unitData[5];
+                    const createLocationY = unitData[6];
+                    // Create unit offscreen
+                    const unit = Utils.createUnit(unitType, Utils.OFFSCREEN_LOCATION, $P7);
+                    Unit.setStatusFlags(unit, 0x00230005); // 5xxxx does not move
+                    Utils.moveUnit(unit, Utils.moveUtilLocationToPoint(createLocationX, createLocationY));
+                    Unit.setKillCount(unit, targetUnitPriority);
+                    Unit.orderToPoint(unit, targetUnitX, targetUnitY);
+                }
             }
         }));
         

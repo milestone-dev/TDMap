@@ -10,6 +10,8 @@ var CurrentWaveID;
 var CurrentWave = EUDArray(7);
 var SpawnCooldown;
 
+const TestWave = [0,0,0,0,0,0,1];
+
 // TODO Extend to all players, move to a point system.
 const SpawnLocations = [
 	$L("P1Track1")
@@ -24,6 +26,7 @@ function StartWave(waveID) {
 	KillAllMobs();
 	if (waveID > 0) {
 		setcurpl(P1); Screen.printf("Starting Wave {}", waveID);
+		// CurrentWave = TestWave;
 		CurrentWave = Balance.CalculateMobsForWave(CurrentWaveID);
 	}
 }
