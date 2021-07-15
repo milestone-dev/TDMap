@@ -43,7 +43,7 @@ function StartWave(waveID) {
 		setcurpl(P1); Screen.printf("Starting Wave {}", waveID);
 		// CurrentWave = TestWave;
 		CurrentWave = Balance.CalculateMobsForWave(CurrentWaveID);
-		CurrentWaveSpawnTimer = 0;
+		CurrentWaveSpawnTimer = MobCountMultiplierConstant;
 		CurrentWaveSpawnTimerIncrement = CalculateCurrentWaveRemainingMobs() * MobCountMultiplierConstant / SpawnDurationConstant;
 	}
 }
