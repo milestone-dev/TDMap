@@ -64,6 +64,7 @@
 <tr><th>Tier 5 Spawn Count:</th><td><span id="CalculateTier5SpawnCountOutput"></span></td></tr>
 
 <tr><th>Tier 6 Spawn Count:</th><td><span id="CalculateTier6SpawnCountOutput"></span></td></tr>
+<tr><th>Total:</th><td><span id="TotalCount"></span></td></tr>
 </table>
 
 
@@ -75,9 +76,13 @@
 
 		// document.getElementById("TargetDifficultyOutput").innerText = CalculateTargetDifficulty(wave);
 
+		var totalCount = 0;
 		for (var tier=1; tier<7; tier++) {
-			document.getElementById("CalculateTier"+tier+"SpawnCountOutput").innerText = parseInt(Math.floor(data[tier]));
+			const count = parseInt(Math.floor(data[tier]));
+			document.getElementById("CalculateTier"+tier+"SpawnCountOutput").innerText = count;
+			totalCount += count;
 		}
+		document.getElementById("TotalCount").innerText = totalCount;
 	}
 	document.getElementById("waveInput").addEventListener("change", calculate);
 	document.getElementById("waveInput").addEventListener("keyup", calculate);
