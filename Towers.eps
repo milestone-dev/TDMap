@@ -21,7 +21,7 @@ function findNewTargetInLocation(location, playerID) {
     var lowestHP = 0;
     var longestTimeOnMap = 0;
     foreach(ptr, unit : EUDLoopPlayerUnit(playerID)) {
-        if (Utils.CUnitInLocation(unit, location)) {
+        if (Utils.CUnitInLocationPadded(unit, location, 128)) {
             const unitAge = Unit.getKillCount(unit);
             if (targetUnit == 0 || unitAge > longestTimeOnMap) {
                 longestTimeOnMap = unitAge;
@@ -135,6 +135,18 @@ function getTowerTypeFromUnit(towerUnit): TowerType {
 
 function isTowerValid(id) {
     return getTowerType(id) != 0 && id < TOWER_COUNT;
+}
+
+function getTowerTarget(towerUnit) {
+    return Unit.getUnknown04(towerUnit);
+}
+
+function setTowerTarget(towerUnit, targetUnit) {
+    Unit.setUnknown04(towerUnit, targetUnit);
+}
+
+function resetTowerTarget(towerUnit) {
+    setTowerTarget(towerUnit, 0);
 }
 
 function createBaseTower(location, playerID) {
