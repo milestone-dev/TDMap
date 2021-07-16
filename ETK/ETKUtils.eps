@@ -247,17 +247,21 @@ function getLocationPosition(location) {
 	return lx1+w, ly1+h; // TODO: This seems to return the bottom right position?
 }
 
-function CUnitInLocation(unit, location) {
+function CUnitInLocationPadded(unit, location, padding) {
 	const locTable = EPD(0x58DC4C);
-	const lx1 = dwread_epd(locTable + location * 5);
-	const lx2 = dwread_epd(locTable + location * 5 + 2);
-	const ly1 = dwread_epd(locTable + location * 5 + 1);
-	const ly2 = dwread_epd(locTable + location * 5 + 3);
+	const left = dwread_epd(locTable + location * 5) - padding;
+	const right = dwread_epd(locTable + location * 5 + 2) + padding;
+	const top = dwread_epd(locTable + location * 5 + 1) - padding;
+	const bottom = dwread_epd(locTable + location * 5 + 3) + padding;
 	
 	const ux = ETKUnit.getPositionX(unit);
 	const uy = ETKUnit.getPositionY(unit);
 	
-	return ux >= lx1 && ux <= lx2 && uy >= ly1 && uy <= ly2;
+	return ux >= left && ux <= right && uy >= top && uy <= bottom;
+}
+
+function CUnitInLocation(unit, location) {
+	return CUnitInLocationPadded(unit, location, 0);
 }
 
 function decrementTimers(timerVar) {
