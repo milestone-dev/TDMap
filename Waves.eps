@@ -16,6 +16,7 @@ var CurrentWaveSpawnTimerIncrement = 0;
 var CurrentWave = EUDArray(7);
 var SpawnCooldown;
 
+const UseTestWave = false;
 const TestWave = [0,0,0,0,0,0,1];
 
 // TODO Extend to all players, move to a point system.
@@ -41,10 +42,21 @@ function StartWave(waveID) {
 	KillAllMobs();
 	if (waveID > 0) {
 		setcurpl(P1); Screen.printf("Starting Wave {}", waveID);
-		// CurrentWave = TestWave;
-		CurrentWave = Balance.CalculateMobsForWave(CurrentWaveID);
+		// TODO Make sure array is copied, otherwise you can't replay the same wave twice
+		CurrentWave = Balance.CalculateMobsForWave(CurrentWaveID); 
+		if (UseTestWave) {
+			CurrentWave = TestWave;
+			// CurrentWave = EUDArray.cast(CurrentWave);
+			const CurrentWaveArr = EUDArray.cast(CurrentWave);
+			CurrentWaveArr[6] = 1;
+		}
 		CurrentWaveSpawnTimer = MobCountMultiplierConstant;
-		CurrentWaveSpawnTimerIncrement = CalculateCurrentWaveRemainingMobs() * MobCountMultiplierConstant / SpawnDurationConstant;
+		const remainingMobs = CalculateCurrentWaveRemainingMobs();
+		CurrentWaveSpawnTimerIncrement = remainingMobs * MobCountMultiplierConstant / SpawnDurationConstant;
+		if (remainingMobs == 0) {
+			setcurpl(P1); Screen.printf("Error: Wave is empty: {}", waveID);
+			CurrentWaveID = 0;
+		}
 	}
 }
 
@@ -93,10 +105,10 @@ function Update() {
 		return;
 	}
 	CurrentWaveSpawnTimer += CurrentWaveSpawnTimerIncrement;
-	setcurpl(P1); Screen.printfAt(1, "CurrentWaveSpawnTimer: {} / {}", CurrentWaveSpawnTimer, MobCountMultiplierConstant);
-	setcurpl(P1); Screen.printAt(2, "...");	
+	// setcurpl(P1); Screen.printfAt(1, "CurrentWaveSpawnTimer: {} / {}", CurrentWaveSpawnTimer, MobCountMultiplierConstant);
+	// setcurpl(P1); Screen.printAt(2, "...");	
 	while (CurrentWaveSpawnTimer >= MobCountMultiplierConstant) {
-		setcurpl(P1); Screen.printAt(2,"Spawn!");
+		// setcurpl(P1); Screen.printAt(2,"Spawn!");
 		CurrentWaveSpawnTimer -= MobCountMultiplierConstant;
 		const playerCount = 1; // TODO support multiple players and spawn locations
 		const nextUnitType = ExtractNextMobFromCurrentWave();
