@@ -170,14 +170,10 @@ function beforeTriggerExec() {
 
 		handleConsoleInput(playerID);
 
-		// TOGGLING MOBS
-		if (KeyPDown[playerID]) {
-			SetSwitch((0), (6));
-		}
 
 		// TOWERS ACTIVE
 		foreach(ptr, unit : EUDLoopPlayerUnit(playerID)) {
-			if (Unit.getUnitType(unit) == Const.Unit_TerranMissileTurret) {
+			if (Unit.getUnitType(unit) == Const.Unit_TerranBeacon) {
 
 				Towers.updateTower(unit);
 
@@ -227,12 +223,11 @@ function beforeTriggerExec() {
 
 		// TOWERS DISPLAY
 		if (selectedUnit != 0 && Unit.getUnitType(selectedUnit) == Const.Unit_TerranBeacon) {
-		if (selectedUnit != 0 && Unit.getUnitType(selectedUnit) == Const.Unit_TerranMissileTurret) {
 			if (PlayerSelectedUnit[playerID] != selectedUnit) {
 
 				if (IsUserCP()) {
 					Utils.setUpgrade(7, Unit.getRankIncrease(selectedUnit), playerID);
-					Utils.setUnitWeapon(Const.Unit_TerranMissileTurret, Unit.getCustomValue(selectedUnit));
+					Utils.setUnitWeapon(Const.Unit_TerranBeacon, Unit.getCustomValue(selectedUnit));
 				}
 
 				Utils.setUnitCost(100 + playerID, 10 + Unit.getRankIncrease(selectedUnit) * 10);
@@ -262,9 +257,8 @@ function beforeTriggerExec() {
 
 
 				Screen.printfAt(0,
-					"O: {} TU? {}, CD {} / {}",
-					Unit.getOrder(selectedUnit),
-					Unit.isOrderTargetUnitValid(selectedUnit),
+					"O: Target: {}, Cooldown {} / {}",
+					Towers.getTowerTarget(selectedUnit),
 					Unit.getGroundWeaponCooldown(selectedUnit),
 					towerType.data.baseCooldown
 				);
