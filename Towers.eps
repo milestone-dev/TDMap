@@ -150,7 +150,7 @@ function setTowerType(towerBaseUnit, towerID) {
         Utils.removeUnit(towerBaseUnit);
         return;
     }
-    const towerUnit = Utils.replaceUnit(towerBaseUnit, Const.Unit_TerranBeacon);
+    const towerUnit = Utils.replaceUnit(towerBaseUnit, Const.Unit_TerranMissileTurret);
     const towerType = getTowerType(towerID);
 
     const playerID = Unit.getPlayerID(towerUnit);

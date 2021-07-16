@@ -177,7 +177,7 @@ function beforeTriggerExec() {
 
 		// TOWERS ACTIVE
 		foreach(ptr, unit : EUDLoopPlayerUnit(playerID)) {
-			if (Unit.getUnitType(unit) == Const.Unit_TerranBeacon) {
+			if (Unit.getUnitType(unit) == Const.Unit_TerranMissileTurret) {
 
 				Towers.updateTower(unit);
 
@@ -227,11 +227,12 @@ function beforeTriggerExec() {
 
 		// TOWERS DISPLAY
 		if (selectedUnit != 0 && Unit.getUnitType(selectedUnit) == Const.Unit_TerranBeacon) {
+		if (selectedUnit != 0 && Unit.getUnitType(selectedUnit) == Const.Unit_TerranMissileTurret) {
 			if (PlayerSelectedUnit[playerID] != selectedUnit) {
 
 				if (IsUserCP()) {
 					Utils.setUpgrade(7, Unit.getRankIncrease(selectedUnit), playerID);
-					Utils.setUnitWeapon(Const.Unit_TerranBeacon, Unit.getCustomValue(selectedUnit));
+					Utils.setUnitWeapon(Const.Unit_TerranMissileTurret, Unit.getCustomValue(selectedUnit));
 				}
 
 				Utils.setUnitCost(100 + playerID, 10 + Unit.getRankIncrease(selectedUnit) * 10);
