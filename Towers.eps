@@ -9,10 +9,14 @@ import Waves;
 const TOWERS = EUDArray(1024);
 var TOWER_COUNT = 0;
 const Screen = StringBuffer(256);
+var fntil = 0;
 
 // UTILS; MOVE
 
 function findNewTargetInLocation(location, playerID) {
+    fntil++;
+    setcurpl(P1); Screen.printfAt(4, "findNewTargetInLocation {}", fntil);
+
     var targetUnit = 0;
     var lowestHP = 0;
     var longestTimeOnMap = 0;
