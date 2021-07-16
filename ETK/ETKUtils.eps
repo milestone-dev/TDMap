@@ -474,6 +474,18 @@ function moveUnit(unit, location) {
 	ETKUnit.setUnitType(unit, unitType);
 }
 
+function bringUnit(unit, location) {
+	const playerID = ETKUnit.getPlayerID(unit);
+	const unitType = ETKUnit.getUnitType(unit);
+	ETKUnit.setUnitType(unit, TEMP_UNIT_TYPE);
+	var bring = false;
+	if (Bring(playerID, AtLeast, 1, TEMP_UNIT_TYPE, location)) {
+		bring = true;
+	}
+	ETKUnit.setUnitType(unit, unitType);
+	return bring;
+}
+
 function orderUnit(unit, location) {
 	const playerID = ETKUnit.getPlayerID(unit);
 	const unitType = ETKUnit.getUnitType(unit);
