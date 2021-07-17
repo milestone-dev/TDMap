@@ -1,0 +1,101 @@
+import ETK.ETKUnit as Unit;
+import ETK.ETKConstants as Const;
+
+const DYNAMIC_BUTTON_SET = 249;
+const BUTTON_TOOLTIP_STRING_FIRST = 1539;
+const BUTTON_FIRST_UNIT_TYPE = Const.Unit_DarkTemplar_Hero;
+
+function setupUnit(unit) {
+    Unit.setCommandCard(unit, DYNAMIC_BUTTON_SET);
+}
+
+function getButtonIndexFromBuildQueue(unit) {
+	return Unit.getBuildQueue1(unit) - BUTTON_FIRST_UNIT_TYPE;
+}
+
+function setButtonIconWithState(position, iconID, title, enabled, actionType) {
+	// Must be executed for localCP
+	if (IsUserCP()) {
+	    const stringID = BUTTON_TOOLTIP_STRING_FIRST + position;
+	    const buttonStringValue = stringID + (65536 * stringID);
+	    settblf(stringID, 0, "{:s}", title);
+
+	    var conditionValue;
+	    if (enabled) {
+	    	conditionValue = 4358864;  //Always display
+	    } else {
+	    	conditionValue = 4359904; //Has interceptors
+	    }
+
+	    var action;
+	    var actionPrefix;
+
+	    if (actionType == 1) { // create unit
+		 	// 3 is Create Unit
+		    action = 3 + (BUTTON_FIRST_UNIT_TYPE + position) * 65536;
+		    actionPrefix = 4338864; //Unknown but write anyway
+	    } else if (actionType == 2) { // cancel
+	    	action = Const.Unit_None * 65536;
+		    actionPrefix = 4561648; //Unknown but write anyway
+	    }
+
+
+		iconID = (iconID * 65536) + position + 1;
+	    const btnPtr = EPD(0x5187EC) + DYNAMIC_BUTTON_SET * 3;
+	    var btnPos = 5 * position;
+	    dwadd_epd(btnPtr, 0);
+	    btnPos += epdread_epd(btnPtr);
+	    const oldCP = getcurpl();
+
+	    DoActions(list(
+		    SetMemory(0x6509B0, SetTo, btnPos),
+		    SetDeaths(CurrentPlayer, SetTo, iconID, 0),
+		    SetMemory(0x6509B0, Add, 1),
+	    	SetDeaths(CurrentPlayer, SetTo, conditionValue, 0),
+		    SetMemory(0x6509B0, Add, 1),
+		    SetDeaths(CurrentPlayer, SetTo, actionPrefix, 0), 
+		    SetMemory(0x6509B0, Add, 1),
+		    SetDeaths(CurrentPlayer, SetTo, action, 0),
+		    SetMemory(0x6509B0, Add, 1),
+		    SetDeaths(CurrentPlayer, SetTo, buttonStringValue, 0),
+		    SetMemory(0x6509B0, SetTo, oldCP)
+	    ));
+	}
+}
+
+function setButtonIcon(position, iconID, title) {
+	setButtonIconWithState(position, iconID, title, true, 1);
+}
+
+function setDisabledButtonIcon(position, iconID, title) {
+	setButtonIconWithState(position, iconID, title, false, 1);
+}
+
+function setButtonIconCancel(position, iconID, title) {
+	setButtonIconWithState(position, iconID, title, true, 2);
+}
+
+function hideButtonIcon(position) {
+	if (IsUserCP()) {
+		const btnPtr = EPD(0x5187EC) + DYNAMIC_BUTTON_SET * 3;
+	    var btnPos = 5 * position;
+	    dwadd_epd(btnPtr, 0);
+	    btnPos += epdread_epd(btnPtr);
+	    const oldCP = getcurpl();
+	    DoActions(list(
+		    SetMemory(0x6509B0, SetTo, btnPos),
+		    SetMemory(0x6509B0, Add, 1),
+			SetDeaths(CurrentPlayer, SetTo, 5106496, 0),
+		    SetMemory(0x6509B0, Add, 1),
+		    SetMemory(0x6509B0, Add, 1),
+		    SetMemory(0x6509B0, Add, 1),
+		    SetMemory(0x6509B0, SetTo, oldCP)
+	    ));
+	}
+}
+
+function hideAllButtonIcons() {
+	for (var position = 0; position < 9; position++) {
+		hideButtonIcon(position);
+	}
+}
