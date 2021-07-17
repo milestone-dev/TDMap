@@ -204,7 +204,20 @@ function createBaseTower(location, playerID) {
         GiveUnits(1, TowerUnitType, $P8, location, playerID);
     }
     Unit.setCommandCard(towerUnit, Const.Unit_TerranFlagBeacon);
+}
 
+function drawTowerRange(x, y, range) {
+    Utils.moveUtilLocationToPoint(x, y);
+
+    const lx1 = x - range;
+    const lx2 = x + range;
+    const ly1 = y - range;
+    const ly2 = y + range;
+
+    Utils.createImageSpriteAtPoint(Const.Image_Nuke_Target_Dot, lx1, ly1);
+    Utils.createImageSpriteAtPoint(Const.Image_Nuke_Target_Dot, lx2, ly1);
+    Utils.createImageSpriteAtPoint(Const.Image_Nuke_Target_Dot, lx1, ly2);
+    Utils.createImageSpriteAtPoint(Const.Image_Nuke_Target_Dot, lx2, ly2);
 }
 
 function setTowerType(towerUnit, towerID) {
