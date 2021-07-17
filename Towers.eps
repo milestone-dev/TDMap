@@ -6,6 +6,7 @@ import ETK.ETKCommon as Common;
 import Balance;
 import Waves;
 
+const TowerUnitType = Const.Unit_TerranBeacon;
 const TOWERS = EUDArray(1024);
 var TOWER_COUNT = 0;
 const Screen = StringBuffer(256);
@@ -125,16 +126,54 @@ object TowerUnit {
     var targetUnit;
 };
 
-function getTowerType(id): TowerType {
+function getTowerTypeByID(id): TowerType {
     return TOWER_TYPES[id];
+}
+
+function getUnitTowerTypeID(towerUnit) {
+    return Unit.getCustomValue(towerUnit);
+}
+
+function setUnitTowerTypeID(towerUnit, value) {
+    Unit.setCustomValue(towerUnit, value);
+}
+
+function isUnitTower(unit) {
+    if (unit == 0) {
+        return false;
+    }
+    if (Unit.getUnitType(unit) == TowerUnitType) {
+        return true;
+    }
+    return false;
+}
+
+function isUnitBaseTower(towerUnit) {
+    if (!isUnitTower(towerUnit)) {
+        return false;
+    }
+    if (getUnitTowerTypeID(towerUnit) == 0) {
+        return true;
+    }
+    return false;
+}
+
+function isUnitUpgradedTower(towerUnit) {
+    if (!isUnitTower(towerUnit)) {
+        return false;
+    }
+    if (getUnitTowerTypeID(towerUnit) > 0) {
+        return true;
+    }
+    return false;
 }
 
 function getTowerTypeFromUnit(towerUnit): TowerType {
     return TOWER_TYPES[Unit.getCustomValue(towerUnit)];
 }
 
-function isTowerValid(id) {
-    return getTowerType(id) != 0 && id < TOWER_COUNT;
+function isTowerTypeValid(id) {
+    return getTowerTypeByID(id) != 0 && id < TOWER_COUNT;
 }
 
 function getTowerTarget(towerUnit) {
@@ -149,25 +188,30 @@ function resetTowerTarget(towerUnit) {
     setTowerTarget(towerUnit, 0);
 }
 
-function createBaseTower(location, playerID) {
-    const unitType = Const.Unit_TerranFlagBeacon;
-    const towerUnit = Utils.createUnit(unitType, $L("SafeCreate"), $P8);
-    MoveUnit(1, unitType, $P8, $L("SafeCreate"), location);
-    if (Bring($P8, AtLeast, 1, unitType, $L("SafeCreate"))) {
-        RemoveUnitAt(1, unitType, $L("SafeCreate"), $P8);
-        eprintln("You can't build there.");
-    } else {
-        GiveUnits(1, unitType, $P8, location, playerID);
-    }
+function sellTower(towerUnit) {
+    const cannonUnit = Unit.getConnectedUnit(towerUnit);
+    Utils.removeUnit(towerUnit);
+    Utils.removeUnitSafe(cannonUnit);
 }
 
-function setTowerType(towerBaseUnit, towerID) {
-    if (towerID == 99) {
-        Utils.removeUnit(towerBaseUnit);
-        return;
+function createBaseTower(location, playerID) {
+    const towerUnit = Utils.createUnit(TowerUnitType, $L("SafeCreate"), $P8);
+    MoveUnit(1, TowerUnitType, $P8, $L("SafeCreate"), location);
+    if (Bring($P8, AtLeast, 1, TowerUnitType, $L("SafeCreate"))) {
+        RemoveUnitAt(1, TowerUnitType, $L("SafeCreate"), $P8);
+        eprintln("You can't build there.");
+    } else {
+        GiveUnits(1, TowerUnitType, $P8, location, playerID);
     }
-    const towerUnit = Utils.replaceUnit(towerBaseUnit, Const.Unit_TerranBeacon);
-    const towerType = getTowerType(towerID);
+    Unit.setCommandCard(towerUnit, Const.Unit_TerranFlagBeacon);
+
+}
+
+function setTowerType(towerUnit, towerID) {
+    // Make sure to clear any previous cannon unit if available
+    Utils.removeUnit(Unit.getConnectedUnit(towerUnit));
+    const towerType = getTowerTypeByID(towerID);
+    setUnitTowerTypeID(towerUnit, towerID);
 
     const playerID = Unit.getPlayerID(towerUnit);
     Utils.moveUtilLocationToUnit(towerUnit);
@@ -183,13 +227,14 @@ function setTowerType(towerBaseUnit, towerID) {
 
     Unit.setCustomValue(towerUnit, towerType.id);
     Unit.setRankIncrease(towerUnit, 0);
-    Unit.setCommandCard(towerUnit, 100 + Unit.getPlayerID(towerUnit));
+    Unit.setCommandCard(towerUnit, TowerUnitType);
+    Utils.refreshInterface();
     resetTowerTarget(towerUnit);
 }
 
 function towerFire(towerUnit) {
     const cannonUnit = Unit.getConnectedUnit(towerUnit);
-    const towerType = getTowerType(Unit.getCustomValue(towerUnit));
+    const towerType = getTowerTypeByID(Unit.getCustomValue(towerUnit));
     const targetUnit = getTowerTarget(towerUnit);
 
     if (towerType.imageData.missileImage.id != Const.Image_None) {
@@ -222,6 +267,10 @@ function towerFire(towerUnit) {
 }
 
 function updateTower(towerUnit) {
+    if (isUnitBaseTower(towerUnit)) {
+        return;
+    }
+
     const towerType = getTowerTypeFromUnit(towerUnit);
     const enemyPlayerID = $P7;
     const towerRange = towerType.data.baseRange; //TODO: towerData.calculateRange();
@@ -328,7 +377,7 @@ function load() {
     const defaultMissileHit = EUDFuncPtr (1, 0) (function(missileUnit) {
     });
 
-    const t0 = createTowerType(0,
+    const t1 = createTowerType(1,
         MakeTowerData(50, 32*3, 6*1),
         MakeTowerImageData(
             MakeImage(Const.Image_STA_STS_Photon_Cannon_Overlay, 6, -12),
@@ -338,7 +387,7 @@ function load() {
         )
     );
 
-    const t1 = createTowerType(1,
+    const t2 = createTowerType(2,
         MakeTowerData(5, 32*6, 12*1),
         MakeTowerImageData(
             MakeImage(Const.Image_Maelstrom_Overlay_Small, 0, -16),
@@ -347,12 +396,12 @@ function load() {
             MakeImage(Const.Image_Yamato_Gun_Hit, 0, 0)
         )
     );
-    t1.hit = EUDFuncPtr (3, 0) (function(towerType, missileUnit, targetUnit) {
+    t2.hit = EUDFuncPtr (3, 0) (function(towerType, missileUnit, targetUnit) {
         Utils.createOverlayForUnit(targetUnit, Const.Image_Flames2_Type3_Small, 64);
         Unit.setPlagueTimer(targetUnit, 64);
     });
 
-    const t2 = createTowerType(2,
+    const t3 = createTowerType(3,
         MakeTowerData(1, 32*2, 12*1),
         MakeTowerImageData(
             MakeImage(Const.Image_Khalis, 0, -16),
@@ -361,7 +410,7 @@ function load() {
             MakeImage(Const.Image_None, 0, 0)
         )
     );
-    t2.hit = EUDFuncPtr (3, 0) (function(towerType, missileUnit, targetUnit) {
+    t3.hit = EUDFuncPtr (3, 0) (function(towerType, missileUnit, targetUnit) {
         const slowSpeed = 100;//Unit.getOriginalTopSpeed(targetUnit) / 10;
         if ( Unit.getTopSpeed(targetUnit) == slowSpeed) {
             return;

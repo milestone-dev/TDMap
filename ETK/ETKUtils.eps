@@ -460,10 +460,11 @@ function createUnitAtLocationWithOffset(unitType, location, playerID, xOffset, y
 }
 
 function removeUnit(unit) {
+	if (unit == 0) {
+		return;
+	}
 	ETKUnit.setUnitType(unit, ETKConstants.Unit_Cave);
 	RemoveUnit(ETKConstants.Unit_Cave, ETKUnit.getPlayerID(unit));
-	// moveUtilLocationToUnit(unit);
-	// RemoveUnitAt(1, ETKUnit.getUnitType(unit), UTILITY_LOCATION, ETKUnit.getPlayerID(unit));
 }
 
 function moveUnit(unit, location) {

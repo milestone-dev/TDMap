@@ -173,29 +173,38 @@ function beforeTriggerExec() {
 
 		// TOWERS ACTIVE
 		foreach(ptr, unit : EUDLoopPlayerUnit(playerID)) {
-			if (Unit.getUnitType(unit) == Const.Unit_TerranBeacon) {
-
-				Towers.updateTower(unit);
-
+			if (Towers.isUnitTower(unit)) {
 				const towerUnit = unit;
-				const towerType = Towers.getTowerType(Unit.getCustomValue(towerUnit));
 
-				// Upgrading
-				const queueUnitType = Unit.getBuildQueue1(towerUnit);
-				if (Unit.getBuildQueueLength(towerUnit) > 0) {
-					Unit.clearBuildQueue(towerUnit);
+				// SELECTING TOWERS FROM BASE TOWER
+				if (Towers.isUnitBaseTower(towerUnit)) {
+					const queueUnitType = Unit.getBuildQueue1(towerUnit);
+					if (queueUnitType != Const.Unit_None) {
+						if (queueUnitType == 99) {
+							Towers.sellTower(towerUnit);
+							refreshSelection(playerID);
+						} else {
+							Towers.setTowerType(towerUnit, queueUnitType);
+							Unit.clearBuildQueue(towerUnit);
+						}
+					}
+				} else if (Towers.isUnitUpgradedTower(towerUnit)) {
+					Towers.updateTower(towerUnit);
+
+					const queueUnitType = Unit.getBuildQueue1(towerUnit);
+					if (queueUnitType != Const.Unit_None) {
+						if (queueUnitType == 99) {
+							Towers.sellTower(towerUnit);
+							refreshSelection(playerID);
+						} else {
+							Unit.setRankIncrease(towerUnit, Unit.getRankIncrease(towerUnit)+1);
+						}
+					}
+
+					if (Unit.getBuildQueueLength(towerUnit) > 0) {
+						Unit.clearBuildQueue(towerUnit);
+					}
 				}
-
-				if (queueUnitType == 99) {
-					const cannonUnit = Unit.getConnectedUnit(towerUnit);
-					Utils.removeUnit(towerUnit);
-					Utils.removeUnitSafe(cannonUnit);
-					refreshSelection(playerID);
-				} else if (queueUnitType >= 100 && queueUnitType <= 105) {
-					Unit.setRankIncrease(towerUnit, Unit.getRankIncrease(towerUnit)+1);
-					refreshSelection(playerID);
-				}
-
 			}
 		}
 
@@ -211,23 +220,13 @@ function beforeTriggerExec() {
 			}
 		}
 
-		// SELECTING TOWERS
-		if (selectedUnit != 0 && Unit.getUnitType(selectedUnit) == Const.Unit_TerranFlagBeacon) {
-			const queueUnitType = Unit.getBuildQueue1(selectedUnit);
-			if (queueUnitType != Const.Unit_None) {
-				Towers.setTowerType(selectedUnit, queueUnitType);
-				Unit.clearBuildQueue(selectedUnit);
-			}
-		}
-
-
 		// TOWERS DISPLAY
-		if (selectedUnit != 0 && Unit.getUnitType(selectedUnit) == Const.Unit_TerranBeacon) {
+		if (Towers.isUnitUpgradedTower(selectedUnit)) {
 			if (PlayerSelectedUnit[playerID] != selectedUnit) {
 
 				if (IsUserCP()) {
 					Utils.setUpgrade(7, Unit.getRankIncrease(selectedUnit), playerID);
-					Utils.setUnitWeapon(Const.Unit_TerranBeacon, Unit.getCustomValue(selectedUnit));
+					Utils.setUnitWeapon(Towers.TowerUnitType, Unit.getCustomValue(selectedUnit));
 				}
 
 				Utils.setUnitCost(100 + playerID, 10 + Unit.getRankIncrease(selectedUnit) * 10);
@@ -240,7 +239,7 @@ function beforeTriggerExec() {
 			}
 
 			if (true) {
-				const towerType = Towers.getTowerType(Unit.getCustomValue(selectedUnit));
+				const towerType = Towers.getTowerTypeByID(Unit.getCustomValue(selectedUnit));
         		Utils.centerLocationOnUnit(Utils.LOCATION_ANYSIZE, selectedUnit, towerType.data.baseRange * 2, towerType.data.baseRange * 2);
 
 				const locTable = EPD(0x58DC4C);
