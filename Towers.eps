@@ -13,15 +13,16 @@ var TOWER_COUNT = 0;
 const Screen = StringBuffer(256);
 var fntil = 0;
 
-
-
 // Upgrades
 
+const Upgrade_Damage = 0;
+const Upgrade_Speed = 1;
+const Upgrade_Range = 2;
 object TowerUpgrade {
     var icon;
     var tooltip;
     var nextSet; // pointer to TowerUpgradeOptionSet
-    var attributes : EUDArray(10); // See CreateTowerUpgrade for reference
+    var attributes : EUDArray(10); // See CreateTowerUpgrade for reference, make constants
 };
 
 function CreateTowerUpgrade(icon, tooltip, nextSet, damage, speed, range) : TowerUpgrade {
@@ -30,9 +31,9 @@ function CreateTowerUpgrade(icon, tooltip, nextSet, damage, speed, range) : Towe
     upg.tooltip = tooltip;
     upg.nextSet = nextSet;
     upg.attributes = EUDArray(10);
-    upg.attributes[0] = damage;
-    upg.attributes[1] = speed;
-    upg.attributes[2] = range;
+    upg.attributes[Upgrade_Damage] = damage;
+    upg.attributes[Upgrade_Speed] = speed;
+    upg.attributes[Upgrade_Range] = range;
     return upg;
 }
 
@@ -184,15 +185,16 @@ function CreateTowerType(id, data: TowerData, imageData: TowerImageData) : Tower
 
 object Tower {
     var type : TowerType;
+    var currentUpgradeOptionSet : TowerUpgradeOptionSet;
     var damage;
     var range;
     var speed;
     var fireTimer;
 
-    function applyUpgrade(damage, speed, range) {
-        this.damage += damage;
-        this.range += range;
-        this.speed += speed;
+    function applyUpgrade(upgrade : TowerUpgrade) {
+        this.damage += upgrade[Upgrade_Damage];
+        this.speed += upgrade[Upgrade_Speed];
+        this.range += upgrade[Upgrade_Range];
     }
 
     function update() {
