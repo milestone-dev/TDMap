@@ -152,23 +152,26 @@ object Tower {
         this.fireTimer++;
     }
 
+    function sell() {
+        const cannonUnit = Unit.getConnectedUnit(this.unit);
+        Utils.removeUnit(this.unit);
+        Utils.removeUnitSafe(cannonUnit);
+    }
+
     function handleButtonClick(unitID) {
         const button = CommandCard.getButtonIndexFromBuildQueue(this.unit);
         // setcurpl(P1); Screen.printf("handleButtonClick {}", button);
-        var upgrade = 0;
-        if (button == 0) {
-            upgrade = this.currentUpgradeOptionSet.optionA;
-        } else if (button == 1) {
-            upgrade = this.currentUpgradeOptionSet.optionB;
-        } else if (button == 2) {
-            upgrade = this.currentUpgradeOptionSet.optionC;
+        switch(button) {
+            case 0: this.applyUpgrade(this.currentUpgradeOptionSet.optionA); break;
+            case 1: this.applyUpgrade(this.currentUpgradeOptionSet.optionB); break;
+            case 2: this.applyUpgrade(this.currentUpgradeOptionSet.optionC); break;
+            case 8: this.sell(); break;
         }
-
-        this.applyUpgrade(upgrade);
     }
 
     function updateInterface(playerID) {
         if (IsUserCP()) {
+
             const weaponID = 229 + playerID;
             settblf(weaponID, 0, "Speed: {}\nRange: {}", this.speed, this.range);
             Utils.setWeaponDamage(playerID, this.damage);
@@ -178,11 +181,12 @@ object Tower {
             if (this.currentUpgradeOptionSet == 0) {
                 CommandCard.hideAllButtonIcons();
             } else {
+                CommandCard.hideAllButtonIcons();
                 CommandCard.setButtonIcon(0, this.currentUpgradeOptionSet.optionA.icon, this.currentUpgradeOptionSet.optionA.tooltip);
                 CommandCard.setButtonIcon(1, this.currentUpgradeOptionSet.optionB.icon, this.currentUpgradeOptionSet.optionB.tooltip);
                 CommandCard.setButtonIcon(2, this.currentUpgradeOptionSet.optionC.icon, this.currentUpgradeOptionSet.optionC.tooltip);
+                CommandCard.setButtonIcon(8, Const.Icon_ReturnResources, Common.EmptyString);
             }
-
         }
     }
 };
