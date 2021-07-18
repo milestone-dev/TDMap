@@ -3,6 +3,7 @@ import ETK.ETKUtils as Utils;
 import ETK.ETKTimer as Timer;
 import ETK.ETKConstants as Const;
 import ETK.ETKCommon as Common;
+import Strings;
 import Balance;
 import Waves;
 import Upgrades;
@@ -204,7 +205,7 @@ object Tower {
                 CommandCard.setButtonIcon(0, this.currentUpgradeOptionSet.optionA.icon, this.currentUpgradeOptionSet.optionA.tooltip);
                 CommandCard.setButtonIcon(1, this.currentUpgradeOptionSet.optionB.icon, this.currentUpgradeOptionSet.optionB.tooltip);
                 CommandCard.setButtonIcon(2, this.currentUpgradeOptionSet.optionC.icon, this.currentUpgradeOptionSet.optionC.tooltip);
-                CommandCard.setButtonIcon(8, Const.Icon_ReturnResources, Common.EmptyString);
+                CommandCard.setButtonIcon(8, Const.Icon_ReturnResources, Strings.SellTower);
             }
         }
     }
