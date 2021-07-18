@@ -47,8 +47,32 @@ function CreateUpgradeSet(optionA, optionB, optionC) : TowerUpgradeOptionSet {
     towerUpgradeSet.optionA = optionA;
     towerUpgradeSet.optionB = optionB;
     towerUpgradeSet.optionC = optionC;
+    setcurpl(P1); Screen.printf("CreateUpgradeSet [{:s}, {:s}, {:s}]",
+        towerUpgradeSet.optionA.tooltip,
+        towerUpgradeSet.optionB.tooltip,
+        towerUpgradeSet.optionC.tooltip
+    );
+
     return towerUpgradeSet;
 }
+
+const tos3 = CreateUpgradeSet(
+    CreateTowerUpgrade(Const.Icon_SpeedUp_Replay, Db("Damage upgrade 3"), Common.Nil, 10, 0, 0),
+    CreateTowerUpgrade(Const.Icon_SpeedUp_Replay, Db("Speed upgrade 3"), Common.Nil, 0, 10, 0),
+    CreateTowerUpgrade(Const.Icon_SpeedUp_Replay, Db("Range upgrade 3"), Common.Nil, 0, 0, 32)
+);
+
+const tos2 = CreateUpgradeSet(
+    CreateTowerUpgrade(Const.Icon_SpeedUp_Replay, Db("Damage upgrade 2"), tos3, 10, 0, 0),
+    CreateTowerUpgrade(Const.Icon_SpeedUp_Replay, Db("Speed upgrade 2"), tos3, 0, 10, 0),
+    CreateTowerUpgrade(Const.Icon_SpeedUp_Replay, Db("Range upgrade 2"), tos3, 0, 0, 32)
+);
+
+const tos1 = CreateUpgradeSet(
+    CreateTowerUpgrade(Const.Icon_SpeedUp_Replay, Db("Damage upgrade 1"), tos2, 10, 0, 0),
+    CreateTowerUpgrade(Const.Icon_SpeedUp_Replay, Db("Speed upgrade 1"), tos2, 0, 10, 0),
+    CreateTowerUpgrade(Const.Icon_SpeedUp_Replay, Db("Range upgrade 1"), tos2, 0, 0, 32)
+);
 
 // UTILS; MOVE
 
