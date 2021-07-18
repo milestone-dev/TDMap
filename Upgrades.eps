@@ -18,15 +18,13 @@ object TowerUpgrade {
     var attributes : EUDArray(10); // See CreateTowerUpgrade for reference, make constants
 };
 
-function CreateTowerUpgrade(icon, tooltip, nextSet, damage, speed, range) : TowerUpgrade {
+function CreateTowerUpgrade(icon, tooltip, nextSet, attributes:EUDArray) : TowerUpgrade {
     const upg = TowerUpgrade.alloc();
     upg.icon = icon;
     upg.tooltip = tooltip;
     upg.nextSet = nextSet;
     upg.attributes = EUDArray(10);
-    upg.attributes[Damage] = damage;
-    upg.attributes[Speed] = speed;
-    upg.attributes[Range] = range;
+    upg.attributes = attributes;
     return upg;
 }
 
@@ -41,29 +39,40 @@ function CreateUpgradeSet(optionA, optionB, optionC) : TowerUpgradeOptionSet {
     towerUpgradeSet.optionA = optionA;
     towerUpgradeSet.optionB = optionB;
     towerUpgradeSet.optionC = optionC;
-    setcurpl(P1); Screen.printf("CreateUpgradeSet [{:s}, {:s}, {:s}]",
-        towerUpgradeSet.optionA.tooltip,
-        towerUpgradeSet.optionB.tooltip,
-        towerUpgradeSet.optionC.tooltip
-    );
-
+    // setcurpl(P1); Screen.printf("CreateUpgradeSet [{:s}, {:s}, {:s}]",
+    //     towerUpgradeSet.optionA.tooltip,
+    //     towerUpgradeSet.optionB.tooltip,
+    //     towerUpgradeSet.optionC.tooltip
+    // );
     return towerUpgradeSet;
 }
 
+const Set5 = CreateUpgradeSet(
+    CreateTowerUpgrade(Const.Icon_ScarabDamage, Db("x\x01Damage upgrade 5"), Common.Nil, [10, 0, 0]),
+    CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db("x\x01Speed upgrade 5"), Common.Nil, [0, 10, 0]),
+    CreateTowerUpgrade(Const.Icon_U238Shells, Db("x\x01Range upgrade 5"), Common.Nil, [0, 0, 32])
+);
+
+const Set4 = CreateUpgradeSet(
+    CreateTowerUpgrade(Const.Icon_ScarabDamage, Db("x\x01Damage upgrade 4"), Set5, [10, 0, 0]),
+    CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db("x\x01Speed upgrade 4"), Set5, [0, 10, 0]),
+    CreateTowerUpgrade(Const.Icon_U238Shells, Db("x\x01Range upgrade 4"), Set5, [0, 0, 32])
+);
+
 const Set3 = CreateUpgradeSet(
-    CreateTowerUpgrade(Const.Icon_SpeedUp_Replay, Db("Damage upgrade 3"), Common.Nil, 10, 0, 0),
-    CreateTowerUpgrade(Const.Icon_SpeedUp_Replay, Db("Speed upgrade 3"), Common.Nil, 0, 10, 0),
-    CreateTowerUpgrade(Const.Icon_SpeedUp_Replay, Db("Range upgrade 3"), Common.Nil, 0, 0, 32)
+    CreateTowerUpgrade(Const.Icon_ScarabDamage, Db("x\x01Damage upgrade 3"), Set4, [10, 0, 0]),
+    CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db("x\x01Speed upgrade 3"), Set4, [0, 10, 0]),
+    CreateTowerUpgrade(Const.Icon_U238Shells, Db("x\x01Range upgrade 3"), Set4, [0, 0, 32])
 );
 
 const Set2 = CreateUpgradeSet(
-    CreateTowerUpgrade(Const.Icon_SpeedUp_Replay, Db("Damage upgrade 2"), Set3, 10, 0, 0),
-    CreateTowerUpgrade(Const.Icon_SpeedUp_Replay, Db("Speed upgrade 2"), Set3, 0, 10, 0),
-    CreateTowerUpgrade(Const.Icon_SpeedUp_Replay, Db("Range upgrade 2"), Set3, 0, 0, 32)
+    CreateTowerUpgrade(Const.Icon_ScarabDamage, Db("x\x01Damage upgrade 2"), Set3, [10, 0, 0]),
+    CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db("x\x01Speed upgrade 2"), Set3, [0, 10, 0]),
+    CreateTowerUpgrade(Const.Icon_U238Shells, Db("x\x01Range upgrade 2"), Set3, [0, 0, 32])
 );
 
 const Set1 = CreateUpgradeSet(
-    CreateTowerUpgrade(Const.Icon_SpeedUp_Replay, Db("Damage upgrade 1"), Set2, 10, 0, 0),
-    CreateTowerUpgrade(Const.Icon_SpeedUp_Replay, Db("Speed upgrade 1"), Set2, 0, 10, 0),
-    CreateTowerUpgrade(Const.Icon_SpeedUp_Replay, Db("Range upgrade 1"), Set2, 0, 0, 32)
+    CreateTowerUpgrade(Const.Icon_ScarabDamage, Db("x\x01Damage upgrade 1"), Set2, [10, 0, 0]),
+    CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db("x\x01Speed upgrade 1"), Set2, [0, 10, 0]),
+    CreateTowerUpgrade(Const.Icon_U238Shells, Db("x\x01Range upgrade 1"), Set2, [0, 0, 32])
 );

@@ -203,11 +203,7 @@ function beforeTriggerExec() {
 							refreshSelection(playerID);
 						} else {
 							const tower = Towers.getTowerForUnit(towerUnit);
-							// switch(queueUnitType) {
-							// 	case 0: tower.applyUpgrade(10, 0, 0); break;
-							// 	case 1: tower.applyUpgrade(0, 10, 0); break;
-							// 	case 2: tower.applyUpgrade(0, 0, 32); break;
-							// }
+							tower.handleButtonClick(queueUnitType);
 							refreshSelection(playerID);
 						}
 					}
@@ -241,11 +237,7 @@ function beforeTriggerExec() {
 				if (Towers.isUnitUpgradedTower(selectedUnit)) {	
 					// TODO: Set up weapon per player to avoid desync
 					if (IsUserCP()) {
-						const weaponID = 229 + playerID;
-		    			settblf(weaponID, 0, "Speed: {}\nRange: {}", tower.speed, tower.range);
-						Utils.setWeaponDamage(playerID, tower.damage);
-						// Utils.setWeaponIcon(weaponID, ...);
-						Utils.setUnitWeapon(Towers.TowerUnitType, playerID);
+						tower.updateInterface(playerID);
 					}
 					// Have a unit for every player that is just there to represent the mineral cost for next upgrade
 					Utils.setUnitCost(100 + playerID, 10 + Unit.getRankIncrease(selectedUnit) * 10);

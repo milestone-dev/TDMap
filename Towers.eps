@@ -123,6 +123,7 @@ function CreateTowerType(id, data: TowerData, imageData: TowerImageData) : Tower
 }
 
 object Tower {
+    var unit;
     var type : TowerType;
     var currentUpgradeOptionSet : Upgrades.TowerUpgradeOptionSet;
     var damage;
@@ -130,19 +131,65 @@ object Tower {
     var speed;
     var fireTimer;
 
-    function applyUpgrade(upgrade : Upgrades.TowerUpgrade) {
-        this.damage += upgrade[Upgrades.Damage];
-        this.speed += upgrade[Upgrades.Speed];
-        this.range += upgrade[Upgrades.Range];
+    function applyUpgrade(upgrade) {
+        if (upgrade == 0) {
+            return;
+        }
+        const upgradeObject = Upgrades.TowerUpgrade.cast(upgrade);
+        // setcurpl(P1); Screen.printf("applyUpgrade {:s} DSR: {} {} {}",
+        //     upgradeObject.tooltip,
+        //     upgradeObject.attributes[Upgrades.Damage],
+        //     upgradeObject.attributes[Upgrades.Speed],
+        //     upgradeObject.attributes[Upgrades.Range]
+        // );
+        this.damage += upgradeObject.attributes[Upgrades.Damage];
+        this.speed += upgradeObject.attributes[Upgrades.Speed];
+        this.range += upgradeObject.attributes[Upgrades.Range];
+        this.currentUpgradeOptionSet = upgradeObject.nextSet;
     }
 
     function update() {
         this.fireTimer++;
     }
+
+    function handleButtonClick(unitID) {
+        const button = CommandCard.getButtonIndexFromBuildQueue(this.unit);
+        // setcurpl(P1); Screen.printf("handleButtonClick {}", button);
+        var upgrade = 0;
+        if (button == 0) {
+            upgrade = this.currentUpgradeOptionSet.optionA;
+        } else if (button == 1) {
+            upgrade = this.currentUpgradeOptionSet.optionB;
+        } else if (button == 2) {
+            upgrade = this.currentUpgradeOptionSet.optionC;
+        }
+
+        this.applyUpgrade(upgrade);
+    }
+
+    function updateInterface(playerID) {
+        if (IsUserCP()) {
+            const weaponID = 229 + playerID;
+            settblf(weaponID, 0, "Speed: {}\nRange: {}", this.speed, this.range);
+            Utils.setWeaponDamage(playerID, this.damage);
+            // Utils.setWeaponIcon(weaponID, ...);
+            Utils.setUnitWeapon(TowerUnitType, playerID);
+
+            if (this.currentUpgradeOptionSet == 0) {
+                CommandCard.hideAllButtonIcons();
+            } else {
+                CommandCard.setButtonIcon(0, this.currentUpgradeOptionSet.optionA.icon, this.currentUpgradeOptionSet.optionA.tooltip);
+                CommandCard.setButtonIcon(1, this.currentUpgradeOptionSet.optionB.icon, this.currentUpgradeOptionSet.optionB.tooltip);
+                CommandCard.setButtonIcon(2, this.currentUpgradeOptionSet.optionC.icon, this.currentUpgradeOptionSet.optionC.tooltip);
+            }
+
+        }
+    }
 };
 
 function CreateTower(type : TowerType, towerUnit) : Tower {
     const tower = Tower.alloc();
+    tower.unit = towerUnit;
     tower.type = type;
     tower.damage += type.data.baseDamage;
     tower.speed += type.data.baseSpeed;
@@ -415,13 +462,6 @@ function missileHit(missileUnit) {
 
 function load() {
 
-    const defaultMissileFire = EUDFuncPtr (1, 0) (function(towerUnit) {
-        
-    });
-
-    const defaultMissileHit = EUDFuncPtr (1, 0) (function(missileUnit) {
-    });
-
     const t1 = CreateTowerType(1,
         CreateTowerData(100, 32*3, 100),
         CreateTowerImageData(
@@ -467,4 +507,15 @@ function load() {
             Unit.restoreOriginalTopSpeed(callbackUnit);
         }));
     });
+
+    const t4 = CreateTowerType(5,
+        CreateTowerData(1, 32*2, 12*1),
+        CreateTowerImageData(
+            MakeImage(Const.Image_Doodad_9_5_Jungle, -12, 0),
+            MakeImage(Const.Image_None, 0, 0),
+            MakeImage(Const.Image_None, 0, 0),
+            MakeImage(Const.Image_None, 0, 0)
+        )
+    );
+
 }
