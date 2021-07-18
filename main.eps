@@ -195,6 +195,8 @@ function beforeTriggerExec() {
 						}
 					}
 				} else if (Towers.isUnitUpgradedTower(towerUnit)) {
+					const queueUnitType = Unit.getBuildQueue1(towerUnit);
+					if (queueUnitType != Const.Unit_None) {
 						if (queueUnitType == 99) {
 							Towers.sellTower(towerUnit);
 							refreshSelection(playerID);
