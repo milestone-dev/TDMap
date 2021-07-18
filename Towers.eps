@@ -44,38 +44,6 @@ function findNewTargetInLocation(location, playerID) {
     return targetUnit;
 }
 
-object Offset {
-    var x;
-    var y;
-};
-
-function MakeOffset(x, y) : Offset {
-    const offset = Offset.alloc();
-    offset.x = x; 
-    offset.y = y; 
-    return offset;
-}
-
-object Image {
-    var id;
-    var x;
-    var y;
-    // var drawFunction
-    // var drawWhenCloaked
-    // var iscriptHeader
-    // function drawAtPoint(x, y);
-    // function drawAtUnit(x, y);
-    // function drawAtLocaton(x, y);
-};
-
-function MakeImage(imageID, x, y) : Image {
-    const image = Image.alloc();
-    image.id = imageID;
-    image.x = x; 
-    image.y = y; 
-    return image;
-}
-
 const TOWER_TYPES = EUDArray(64);
 
 object TowerData {
@@ -93,10 +61,10 @@ function CreateTowerData(baseDamage, baseRange, baseSpeed) : TowerData {
 }
 
 object TowerImageData {
-    var spriteImage : Image;
-    var missileSpawnImage : Image;
-    var missileImage : Image;
-    var hitImage : Image;
+    var spriteImage : Common.Image;
+    var missileSpawnImage : Common.Image;
+    var missileImage : Common.Image;
+    var hitImage : Common.Image;
 };
 
 function CreateTowerImageData(spriteImage, missileSpawnImage, missileImage, hitImage) : TowerImageData {
@@ -110,14 +78,16 @@ function CreateTowerImageData(spriteImage, missileSpawnImage, missileImage, hitI
 
 object TowerType {
     var id;
+    var firstUpgradeOptionSet;
     var data : TowerData;
     var imageData : TowerImageData;
     var fire: EUDFuncPtr (1, 0);
     var hit: EUDFuncPtr (3, 0);
 };
 
-function CreateTowerType(id, data: TowerData, imageData: TowerImageData) : TowerType {
+function CreateTowerType(id, firstUpgradeOptionSet, data: TowerData, imageData: TowerImageData) : TowerType {
     const towerType = TowerType.alloc();
+    towerType.firstUpgradeOptionSet = firstUpgradeOptionSet;
     towerType.data = data;
     towerType.imageData = imageData;
     towerType.id = id;
@@ -375,7 +345,7 @@ function setTowerType(towerUnit, towerID) {
     Unit.setCustomValue(towerUnit, towerType.id);
     Unit.setRankIncrease(towerUnit, 0);
     // Unit.setCommandCard(towerUnit, TowerUnitType);
-    tower.currentUpgradeOptionSet = Upgrades.Set1;
+    tower.currentUpgradeOptionSet = towerType.firstUpgradeOptionSet;
     CommandCard.setupUnit(towerUnit);
 
     Utils.refreshInterface();
@@ -467,22 +437,24 @@ function missileHit(missileUnit) {
 function load() {
 
     const t1 = CreateTowerType(1,
+        0,
         CreateTowerData(100, 32*3, 100),
         CreateTowerImageData(
-            MakeImage(Const.Image_STA_STS_Photon_Cannon_Overlay, 6, -12),
-            MakeImage(Const.Image_None, 0, 0),
-            MakeImage(Const.Image_Phase_Disruptor, 0, -16),
-            MakeImage(Const.Image_Phase_Disruptor_Hit, 0, 0)
+            Common.MakeImage(Const.Image_STA_STS_Photon_Cannon_Overlay, 6, -12),
+            Common.MakeImage(Const.Image_None, 0, 0),
+            Common.MakeImage(Const.Image_Phase_Disruptor, 0, -16),
+            Common.MakeImage(Const.Image_Phase_Disruptor_Hit, 0, 0)
         )
     );
 
     const t2 = CreateTowerType(2,
+        0,
         CreateTowerData(5, 32*6, 12*1),
         CreateTowerImageData(
-            MakeImage(Const.Image_Maelstrom_Overlay_Small, 0, -16),
-            MakeImage(Const.Image_None, 0, 0),
-            MakeImage(Const.Image_Burst_Lasers_Hit, 0, -16),
-            MakeImage(Const.Image_Yamato_Gun_Hit, 0, 0)
+            Common.MakeImage(Const.Image_Maelstrom_Overlay_Small, 0, -16),
+            Common.MakeImage(Const.Image_None, 0, 0),
+            Common.MakeImage(Const.Image_Burst_Lasers_Hit, 0, -16),
+            Common.MakeImage(Const.Image_Yamato_Gun_Hit, 0, 0)
         )
     );
     t2.hit = EUDFuncPtr (3, 0) (function(towerType, missileUnit, targetUnit) {
@@ -491,12 +463,13 @@ function load() {
     });
 
     const t3 = CreateTowerType(3,
+        0,
         CreateTowerData(1, 32*2, 12*1),
         CreateTowerImageData(
-            MakeImage(Const.Image_Khalis, 0, -16),
-            MakeImage(Const.Image_None, 0, 0),
-            MakeImage(Const.Image_Hallucination_Death3, 0, 0),
-            MakeImage(Const.Image_None, 0, 0)
+            Common.MakeImage(Const.Image_Khalis, 0, -16),
+            Common.MakeImage(Const.Image_None, 0, 0),
+            Common.MakeImage(Const.Image_Hallucination_Death3, 0, 0),
+            Common.MakeImage(Const.Image_None, 0, 0)
         )
     );
     t3.hit = EUDFuncPtr (3, 0) (function(towerType, missileUnit, targetUnit) {
@@ -513,12 +486,13 @@ function load() {
     });
 
     const t4 = CreateTowerType(5,
+        0,
         CreateTowerData(1, 32*2, 12*1),
         CreateTowerImageData(
-            MakeImage(Const.Image_Doodad_9_5_Jungle, -12, 0),
-            MakeImage(Const.Image_None, 0, 0),
-            MakeImage(Const.Image_None, 0, 0),
-            MakeImage(Const.Image_None, 0, 0)
+            Common.MakeImage(Const.Image_Doodad_9_5_Jungle, -12, 0),
+            Common.MakeImage(Const.Image_None, 0, 0),
+            Common.MakeImage(Const.Image_None, 0, 0),
+            Common.MakeImage(Const.Image_None, 0, 0)
         )
     );
 

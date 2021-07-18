@@ -6,6 +6,7 @@ import ETK.ETKCommon as Common;
 import Balance;
 import Waves;
 import Towers;
+import Content;
 
 const Screen = StringBuffer(256);
 const MouseLeftButtonPress = EUDArray(6);
@@ -89,7 +90,8 @@ function initMap() {
 	EUDRegisterObjectToNamespace("KeyENTERDown", KeyENTERDown);
 	EUDRegisterObjectToNamespace("KeyESCDown", KeyESCDown);
 	EUDRegisterObjectToNamespace("CommandKeyDown", CommandKeyDown);
-	Towers.load();
+
+	Content.loadData();
 }
 
 function onPluginStart() {

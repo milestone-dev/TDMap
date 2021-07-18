@@ -1,6 +1,6 @@
 //ETKCommon.eps
 const EmptyString = Db("");
-const Nil = 0;
+const Null = 0;
 
 function dwwrite_epd(epd, addr, value) {
     SetMemoryEPD(epd + addr / 4, SetTo, value);
@@ -12,4 +12,36 @@ function PTR(epd) {
 
 function makeUnitStackable(epd) {
     dwwrite_epd(epd + (0xDC / 4), dwread_epd(epd + (0xDC / 4)) | 0x200000);
+}
+
+object Offset {
+    var x;
+    var y;
+};
+
+function MakeOffset(x, y) : Offset {
+    const offset = Offset.alloc();
+    offset.x = x; 
+    offset.y = y; 
+    return offset;
+}
+
+object Image {
+    var id;
+    var x;
+    var y;
+    // var drawFunction
+    // var drawWhenCloaked
+    // var iscriptHeader
+    // function drawAtPoint(x, y);
+    // function drawAtUnit(x, y);
+    // function drawAtLocaton(x, y);
+};
+
+function MakeImage(imageID, x, y) : Image {
+    const image = Image.alloc();
+    image.id = imageID;
+    image.x = x; 
+    image.y = y; 
+    return image;
 }

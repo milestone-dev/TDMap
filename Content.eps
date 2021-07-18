@@ -1,0 +1,114 @@
+import ETK.ETKUnit as Unit;
+import ETK.ETKUtils as Utils;
+import ETK.ETKTimer as Timer;
+import ETK.ETKConstants as Const;
+import ETK.ETKCommon as Common;
+import Upgrades;
+import Towers;
+
+const String_WelcomeText = Db("Welcome to the map");
+
+function loadData() {
+
+    // UPGRADES
+
+    const AirUpgradeSet5 = Upgrades.CreateUpgradeSet(
+        Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db("x\x01Damage upgrade 5"), Common.Null, [10, 0, 0]),
+        Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db("x\x01Speed upgrade 5"), Common.Null, [0, 10, 0]),
+        Upgrades.CreateTowerUpgrade(Const.Icon_U238Shells, Db("x\x01Range upgrade 5"), Common.Null, [0, 0, 32])
+    );
+
+    const AirUpgradeSet4 = Upgrades.CreateUpgradeSet(
+        Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db("x\x01Damage upgrade 4"), AirUpgradeSet5, [10, 0, 0]),
+        Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db("x\x01Speed upgrade 4"), AirUpgradeSet5, [0, 10, 0]),
+        Upgrades.CreateTowerUpgrade(Const.Icon_U238Shells, Db("x\x01Range upgrade 4"), AirUpgradeSet5, [0, 0, 32])
+    );
+
+    const AirUpgradeSet3 = Upgrades.CreateUpgradeSet(
+        Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db("x\x01Damage upgrade 3"), AirUpgradeSet4, [10, 0, 0]),
+        Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db("x\x01Speed upgrade 3"), AirUpgradeSet4, [0, 10, 0]),
+        Upgrades.CreateTowerUpgrade(Const.Icon_U238Shells, Db("x\x01Range upgrade 3"), AirUpgradeSet4, [0, 0, 32])
+    );
+
+    const AirUpgradeSet2 = Upgrades.CreateUpgradeSet(
+        Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db("x\x01Damage upgrade 2"), AirUpgradeSet3, [10, 0, 0]),
+        Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db("x\x01Speed upgrade 2"), AirUpgradeSet3, [0, 10, 0]),
+        Upgrades.CreateTowerUpgrade(Const.Icon_U238Shells, Db("x\x01Range upgrade 2"), AirUpgradeSet3, [0, 0, 32])
+    );
+
+    const AirUpgradeSet1 = Upgrades.CreateUpgradeSet(
+        Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db("x\x01Damage upgrade 1"), AirUpgradeSet2, [10, 0, 0]),
+        Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db("x\x01Speed upgrade 1"), AirUpgradeSet2, [0, 10, 0]),
+        Upgrades.CreateTowerUpgrade(Const.Icon_U238Shells, Db("x\x01Range upgrade 1"), AirUpgradeSet2, [0, 0, 32])
+    );
+
+
+    const PlaceholderUpgradeSet1 = Upgrades.CreateUpgradeSet(
+        Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db("x\x01Damage upgrade 1"), Common.Null, [10, 0, 0]),
+        Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db("x\x01Speed upgrade 1"), Common.Null, [0, 10, 0]),
+        Upgrades.CreateTowerUpgrade(Const.Icon_U238Shells, Db("x\x01Range upgrade 1"), Common.Null, [0, 0, 32])
+    );
+
+    // TOWERS
+
+    const AirTower = Towers.CreateTowerType(1,
+        AirUpgradeSet1,
+        Towers.CreateTowerData(100, 32*3, 100),
+        Towers.CreateTowerImageData(
+            Common.MakeImage(Const.Image_STA_STS_Photon_Cannon_Overlay, 6, -12),
+            Common.MakeImage(Const.Image_None, 0, 0),
+            Common.MakeImage(Const.Image_Phase_Disruptor, 0, -16),
+            Common.MakeImage(Const.Image_Phase_Disruptor_Hit, 0, 0)
+        )
+    );
+
+    const FireTower = Towers.CreateTowerType(2,
+        PlaceholderUpgradeSet1,
+        Towers.CreateTowerData(5, 32*6, 12*1),
+        Towers.CreateTowerImageData(
+            Common.MakeImage(Const.Image_Maelstrom_Overlay_Small, 0, -16),
+            Common.MakeImage(Const.Image_None, 0, 0),
+            Common.MakeImage(Const.Image_Burst_Lasers_Hit, 0, -16),
+            Common.MakeImage(Const.Image_Yamato_Gun_Hit, 0, 0)
+        )
+    );
+    FireTower.hit = EUDFuncPtr (3, 0) (function(towerType, missileUnit, targetUnit) {
+        Utils.createOverlayForUnit(targetUnit, Const.Image_Flames2_Type3_Small, 64);
+        Unit.setPlagueTimer(targetUnit, 64);
+    });
+
+    const WaterTower = Towers.CreateTowerType(3,
+        PlaceholderUpgradeSet1,
+        Towers.CreateTowerData(1, 32*2, 12*1),
+        Towers.CreateTowerImageData(
+            Common.MakeImage(Const.Image_Khalis, 0, -16),
+            Common.MakeImage(Const.Image_None, 0, 0),
+            Common.MakeImage(Const.Image_Hallucination_Death3, 0, 0),
+            Common.MakeImage(Const.Image_None, 0, 0)
+        )
+    );
+    WaterTower.hit = EUDFuncPtr (3, 0) (function(towerType, missileUnit, targetUnit) {
+        const slowSpeed = 100;//Unit.getOriginalTopSpeed(targetUnit) / 10;
+        if ( Unit.getTopSpeed(targetUnit) == slowSpeed) {
+            return;
+        }
+        const duration = 64;
+        Unit.setTopSpeed(targetUnit, slowSpeed);
+        Utils.createOverlayForUnit(targetUnit, Const.Image_Acid_Spores_6_9_Overlay_Small, duration);
+        Timer.add(duration, targetUnit, EUDFuncPtr (2, 0) (function(callbackUnit, intervalCount) {
+            Unit.restoreOriginalTopSpeed(callbackUnit);
+        }));
+    });
+
+    const EarthTower = Towers.CreateTowerType(5,
+        PlaceholderUpgradeSet1,
+        Towers.CreateTowerData(1, 32*2, 12*1),
+        Towers.CreateTowerImageData(
+            Common.MakeImage(Const.Image_Doodad_9_5_Jungle, -12, 0),
+            Common.MakeImage(Const.Image_None, 0, 0),
+            Common.MakeImage(Const.Image_None, 0, 0),
+            Common.MakeImage(Const.Image_None, 0, 0)
+        )
+    );
+
+}
