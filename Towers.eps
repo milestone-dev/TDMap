@@ -126,23 +126,25 @@ object Tower {
     var damage;
     var range;
     var speed;
-    var effectDuration;
-    var effectDamage;
-    var effectBehavior;
+    var fireTimer;
 
-    function applyUpgrade(damage, range, speed) {
+    function applyUpgrade(damage, speed, range) {
         this.damage += damage;
         this.range += range;
         this.speed += speed;
+    }
+
+    function update() {
+        this.fireTimer++;
     }
 };
 
 function CreateTower(type : TowerType, towerUnit) : Tower {
     const tower = Tower.alloc();
     tower.type = type;
-    tower.damage = type.data.baseDamage;
-    tower.speed = type.data.baseSpeed;
-    tower.range = type.data.baseRange; 
+    tower.damage += type.data.baseDamage;
+    tower.speed += type.data.baseSpeed;
+    tower.range += type.data.baseRange; 
     Unit.setUnknown00(towerUnit, tower);
     return tower;
 }
@@ -315,8 +317,9 @@ function updateTower(towerUnit) {
     }
 
     const towerType = getTowerTypeFromUnit(towerUnit);
+    const tower = getTowerForUnit(towerUnit);
     const enemyPlayerID = $P7;
-    const towerRange = towerType.data.baseRange; //TODO: towerData.calculateRange();
+    const towerRange = tower.range; //TODO: towerData.calculateRange();
     const targetUnit = getTowerTarget(towerUnit);
 
     if (targetUnit == 0 && Unit.getGroundWeaponCooldown(towerUnit) == 0) {
@@ -355,10 +358,6 @@ function updateTower(towerUnit) {
         towerFire(towerUnit);
         Unit.setGroundWeaponCooldown(towerUnit, towerType.data.baseSpeed);   
     }
-
-    // if (Unit.getOrder(towerUnit) == Const.Order_Nothing2_Normal) {
-    //     Unit.setOrder(towerUnit, Const.Order_Nothing1_Unused);         
-    // }
 }
 
 function missileHit(missileUnit) {
@@ -419,7 +418,7 @@ function load() {
     });
 
     const t1 = CreateTowerType(1,
-        CreateTowerData(50, 32*3, 6*1),
+        CreateTowerData(100, 32*3, 100),
         CreateTowerImageData(
             MakeImage(Const.Image_STA_STS_Photon_Cannon_Overlay, 6, -12),
             MakeImage(Const.Image_None, 0, 0),

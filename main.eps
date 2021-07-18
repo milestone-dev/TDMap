@@ -203,7 +203,11 @@ function beforeTriggerExec() {
 							refreshSelection(playerID);
 						} else {
 							const tower = Towers.getTowerForUnit(towerUnit);
-							tower.applyUpgrade(3, 2, 1);
+							switch(queueUnitType) {
+								case 0: tower.applyUpgrade(10, 0, 0); break;
+								case 1: tower.applyUpgrade(0, 10, 0); break;
+								case 2: tower.applyUpgrade(0, 0, 32); break;
+							}
 							refreshSelection(playerID);
 						}
 					}
@@ -262,7 +266,7 @@ function beforeTriggerExec() {
 			if (Towers.isUnitUpgradedTower(selectedUnit)) {
 				const towerType = Towers.getTowerTypeByID(Unit.getCustomValue(selectedUnit));
 				const tower = Towers.getTowerForUnit(selectedUnit);
-				Towers.drawTowerRange(Unit.getPositionX(selectedUnit), Unit.getPositionY(selectedUnit), towerType.data.baseRange);
+				Towers.drawTowerRange(Unit.getPositionX(selectedUnit), Unit.getPositionY(selectedUnit), tower.range);
 				Screen.printfAt(0,
 					"O: Target: {}, Cooldown {} / {} -- {}",
 					Towers.getTowerTarget(selectedUnit),
