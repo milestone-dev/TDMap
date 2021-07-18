@@ -158,7 +158,10 @@ object Tower {
         Utils.removeUnitSafe(cannonUnit);
     }
 
-    function handleButtonClick(unitID) {
+    function handleButtonClick() {
+        if (this.unit == 0 || this.currentUpgradeOptionSet == 0) {
+            return;
+        }
         const button = CommandCard.getButtonIndexFromBuildQueue(this.unit);
         // setcurpl(P1); Screen.printf("handleButtonClick {}", button);
         switch(button) {
@@ -170,8 +173,10 @@ object Tower {
     }
 
     function updateInterface(playerID) {
+        if (this == 0) {
+            return;
+        }
         if (IsUserCP()) {
-
             const weaponID = 229 + playerID;
             settblf(weaponID, 0, "Speed: {}\nRange: {}", this.speed, this.range);
             Utils.setWeaponDamage(playerID, this.damage);
@@ -372,9 +377,12 @@ function updateTower(towerUnit) {
         return;
     }
 
-    const towerType = getTowerTypeFromUnit(towerUnit);
     const tower = getTowerForUnit(towerUnit);
+    if (tower == 0) {
+        return;
+    }
     const enemyPlayerID = $P7;
+    const towerType = getTowerTypeFromUnit(towerUnit);
     const towerRange = tower.range; //TODO: towerData.calculateRange();
     const targetUnit = getTowerTarget(towerUnit);
 

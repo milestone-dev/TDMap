@@ -203,7 +203,7 @@ function beforeTriggerExec() {
 							refreshSelection(playerID);
 						} else {
 							const tower = Towers.getTowerForUnit(towerUnit);
-							tower.handleButtonClick(queueUnitType);
+							tower.handleButtonClick();
 							refreshSelection(playerID);
 						}
 					}
@@ -232,40 +232,43 @@ function beforeTriggerExec() {
 			if (PlayerSelectedUnit[playerID] != selectedUnit) {
 
 				const tower = Towers.getTowerForUnit(selectedUnit);
+				if (tower != 0) {
+					// Update display
+					if (Towers.isUnitUpgradedTower(selectedUnit)) {	
+						// TODO: Set up weapon per player to avoid desync
+						if (IsUserCP()) {
+							tower.updateInterface(playerID);
+						}
+						// Have a unit for every player that is just there to represent the mineral cost for next upgrade
+						Utils.setUnitCost(100 + playerID, 10 + Unit.getRankIncrease(selectedUnit) * 10);
+					} else {
+						if (IsUserCP()) {
+							Utils.setUnitWeapon(Towers.TowerUnitType, 130);
+						}
+					}
 
-				// Update display
-				if (Towers.isUnitUpgradedTower(selectedUnit)) {	
-					// TODO: Set up weapon per player to avoid desync
-					if (IsUserCP()) {
-						tower.updateInterface(playerID);
-					}
-					// Have a unit for every player that is just there to represent the mineral cost for next upgrade
-					Utils.setUnitCost(100 + playerID, 10 + Unit.getRankIncrease(selectedUnit) * 10);
-				} else {
-					if (IsUserCP()) {
-						Utils.setUnitWeapon(Towers.TowerUnitType, 130);
-					}
+					PlayerSelectedUnit[playerID] = selectedUnit;
+					Unit.setStatusFlags(selectedUnit, 0x04340008);
+					Timer.add(0, selectedUnit, EUDFuncPtr (2, 0) (function(callbackUnit, intervalCount) {
+						Unit.setStatusFlags(callbackUnit, 0x04340003);
+					}));
 				}
-
-				PlayerSelectedUnit[playerID] = selectedUnit;
-				Unit.setStatusFlags(selectedUnit, 0x04340008);
-				Timer.add(0, selectedUnit, EUDFuncPtr (2, 0) (function(callbackUnit, intervalCount) {
-					Unit.setStatusFlags(callbackUnit, 0x04340003);
-				}));
 			}
 
 
 			if (Towers.isUnitUpgradedTower(selectedUnit)) {
 				const towerType = Towers.getTowerTypeByID(Unit.getCustomValue(selectedUnit));
 				const tower = Towers.getTowerForUnit(selectedUnit);
-				Towers.drawTowerRange(Unit.getPositionX(selectedUnit), Unit.getPositionY(selectedUnit), tower.range);
-				Screen.printfAt(0,
-					"O: Target: {}, Cooldown {} / {} -- {}",
-					Towers.getTowerTarget(selectedUnit),
-					Unit.getGroundWeaponCooldown(selectedUnit),
-					towerType.data.baseSpeed,
-					tower.damage
-				);
+				if (tower != 0) {
+					Towers.drawTowerRange(Unit.getPositionX(selectedUnit), Unit.getPositionY(selectedUnit), tower.range);
+					Screen.printfAt(0,
+						"O: Target: {}, Cooldown {} / {} -- {}",
+						Towers.getTowerTarget(selectedUnit),
+						Unit.getGroundWeaponCooldown(selectedUnit),
+						towerType.data.baseSpeed,
+						tower.damage
+					);
+				}
 				// Unit.setUnknown00(selectedUnit, Unit.getUnknown00(selectedUnit) + 1);
 			}
 		}
