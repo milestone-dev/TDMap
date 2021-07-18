@@ -5,6 +5,8 @@ import ETK.ETKConstants as Const;
 import ETK.ETKCommon as Common;
 import Balance;
 import Waves;
+import Upgrades;
+import CommandCard;
 
 const TowerUnitType = Const.Unit_TerranBeacon;
 const TOWERS = EUDArray(64);
@@ -12,68 +14,6 @@ const TOWER_UNITS = EUDArray(1024);
 var TOWER_COUNT = 0;
 const Screen = StringBuffer(256);
 var fntil = 0;
-
-// Upgrades
-
-const Upgrade_Damage = 0;
-const Upgrade_Speed = 1;
-const Upgrade_Range = 2;
-object TowerUpgrade {
-    var icon;
-    var tooltip;
-    var nextSet; // pointer to TowerUpgradeOptionSet
-    var attributes : EUDArray(10); // See CreateTowerUpgrade for reference, make constants
-};
-
-function CreateTowerUpgrade(icon, tooltip, nextSet, damage, speed, range) : TowerUpgrade {
-    const upg = TowerUpgrade.alloc();
-    upg.icon = icon;
-    upg.tooltip = tooltip;
-    upg.nextSet = nextSet;
-    upg.attributes = EUDArray(10);
-    upg.attributes[Upgrade_Damage] = damage;
-    upg.attributes[Upgrade_Speed] = speed;
-    upg.attributes[Upgrade_Range] = range;
-    return upg;
-}
-
-object TowerUpgradeOptionSet {
-    var optionA : TowerUpgrade;
-    var optionB : TowerUpgrade;
-    var optionC : TowerUpgrade;
-};
-
-function CreateUpgradeSet(optionA, optionB, optionC) : TowerUpgradeOptionSet {
-    const towerUpgradeSet = TowerUpgradeOptionSet.alloc();
-    towerUpgradeSet.optionA = optionA;
-    towerUpgradeSet.optionB = optionB;
-    towerUpgradeSet.optionC = optionC;
-    setcurpl(P1); Screen.printf("CreateUpgradeSet [{:s}, {:s}, {:s}]",
-        towerUpgradeSet.optionA.tooltip,
-        towerUpgradeSet.optionB.tooltip,
-        towerUpgradeSet.optionC.tooltip
-    );
-
-    return towerUpgradeSet;
-}
-
-const tos3 = CreateUpgradeSet(
-    CreateTowerUpgrade(Const.Icon_SpeedUp_Replay, Db("Damage upgrade 3"), Common.Nil, 10, 0, 0),
-    CreateTowerUpgrade(Const.Icon_SpeedUp_Replay, Db("Speed upgrade 3"), Common.Nil, 0, 10, 0),
-    CreateTowerUpgrade(Const.Icon_SpeedUp_Replay, Db("Range upgrade 3"), Common.Nil, 0, 0, 32)
-);
-
-const tos2 = CreateUpgradeSet(
-    CreateTowerUpgrade(Const.Icon_SpeedUp_Replay, Db("Damage upgrade 2"), tos3, 10, 0, 0),
-    CreateTowerUpgrade(Const.Icon_SpeedUp_Replay, Db("Speed upgrade 2"), tos3, 0, 10, 0),
-    CreateTowerUpgrade(Const.Icon_SpeedUp_Replay, Db("Range upgrade 2"), tos3, 0, 0, 32)
-);
-
-const tos1 = CreateUpgradeSet(
-    CreateTowerUpgrade(Const.Icon_SpeedUp_Replay, Db("Damage upgrade 1"), tos2, 10, 0, 0),
-    CreateTowerUpgrade(Const.Icon_SpeedUp_Replay, Db("Speed upgrade 1"), tos2, 0, 10, 0),
-    CreateTowerUpgrade(Const.Icon_SpeedUp_Replay, Db("Range upgrade 1"), tos2, 0, 0, 32)
-);
 
 // UTILS; MOVE
 
@@ -105,7 +45,6 @@ object Offset {
     var x;
     var y;
 };
-
 
 function MakeOffset(x, y) : Offset {
     const offset = Offset.alloc();
@@ -185,16 +124,16 @@ function CreateTowerType(id, data: TowerData, imageData: TowerImageData) : Tower
 
 object Tower {
     var type : TowerType;
-    var currentUpgradeOptionSet : TowerUpgradeOptionSet;
+    var currentUpgradeOptionSet : Upgrades.TowerUpgradeOptionSet;
     var damage;
     var range;
     var speed;
     var fireTimer;
 
-    function applyUpgrade(upgrade : TowerUpgrade) {
-        this.damage += upgrade[Upgrade_Damage];
-        this.speed += upgrade[Upgrade_Speed];
-        this.range += upgrade[Upgrade_Range];
+    function applyUpgrade(upgrade : Upgrades.TowerUpgrade) {
+        this.damage += upgrade[Upgrades.Damage];
+        this.speed += upgrade[Upgrades.Speed];
+        this.range += upgrade[Upgrades.Range];
     }
 
     function update() {
@@ -318,6 +257,7 @@ function setTowerType(towerUnit, towerID) {
     // Make sure to clear any previous cannon unit if available
     Utils.removeUnit(Unit.getConnectedUnit(towerUnit));
     const towerType = getTowerTypeByID(towerID);
+    const tower = CreateTower(towerType, towerUnit);
     setUnitTowerTypeID(towerUnit, towerID);
 
     const playerID = Unit.getPlayerID(towerUnit);
@@ -334,10 +274,12 @@ function setTowerType(towerUnit, towerID) {
 
     Unit.setCustomValue(towerUnit, towerType.id);
     Unit.setRankIncrease(towerUnit, 0);
-    Unit.setCommandCard(towerUnit, TowerUnitType);
+    // Unit.setCommandCard(towerUnit, TowerUnitType);
+    tower.currentUpgradeOptionSet = Upgrades.Set1;
+    CommandCard.setupUnit(towerUnit);
+
     Utils.refreshInterface();
     resetTowerTarget(towerUnit);
-    CreateTower(towerType, towerUnit);
 }
 
 function towerFire(towerUnit) {

@@ -1,0 +1,69 @@
+import ETK.ETKUnit as Unit;
+import ETK.ETKUtils as Utils;
+import ETK.ETKTimer as Timer;
+import ETK.ETKConstants as Const;
+import ETK.ETKCommon as Common;
+const Screen = StringBuffer(256);
+
+
+// Upgrades
+
+const Damage = 0;
+const Speed = 1;
+const Range = 2;
+object TowerUpgrade {
+    var icon;
+    var tooltip;
+    var nextSet; // pointer to TowerUpgradeOptionSet
+    var attributes : EUDArray(10); // See CreateTowerUpgrade for reference, make constants
+};
+
+function CreateTowerUpgrade(icon, tooltip, nextSet, damage, speed, range) : TowerUpgrade {
+    const upg = TowerUpgrade.alloc();
+    upg.icon = icon;
+    upg.tooltip = tooltip;
+    upg.nextSet = nextSet;
+    upg.attributes = EUDArray(10);
+    upg.attributes[Damage] = damage;
+    upg.attributes[Speed] = speed;
+    upg.attributes[Range] = range;
+    return upg;
+}
+
+object TowerUpgradeOptionSet {
+    var optionA : TowerUpgrade;
+    var optionB : TowerUpgrade;
+    var optionC : TowerUpgrade;
+};
+
+function CreateUpgradeSet(optionA, optionB, optionC) : TowerUpgradeOptionSet {
+    const towerUpgradeSet = TowerUpgradeOptionSet.alloc();
+    towerUpgradeSet.optionA = optionA;
+    towerUpgradeSet.optionB = optionB;
+    towerUpgradeSet.optionC = optionC;
+    setcurpl(P1); Screen.printf("CreateUpgradeSet [{:s}, {:s}, {:s}]",
+        towerUpgradeSet.optionA.tooltip,
+        towerUpgradeSet.optionB.tooltip,
+        towerUpgradeSet.optionC.tooltip
+    );
+
+    return towerUpgradeSet;
+}
+
+const Set3 = CreateUpgradeSet(
+    CreateTowerUpgrade(Const.Icon_SpeedUp_Replay, Db("Damage upgrade 3"), Common.Nil, 10, 0, 0),
+    CreateTowerUpgrade(Const.Icon_SpeedUp_Replay, Db("Speed upgrade 3"), Common.Nil, 0, 10, 0),
+    CreateTowerUpgrade(Const.Icon_SpeedUp_Replay, Db("Range upgrade 3"), Common.Nil, 0, 0, 32)
+);
+
+const Set2 = CreateUpgradeSet(
+    CreateTowerUpgrade(Const.Icon_SpeedUp_Replay, Db("Damage upgrade 2"), Set3, 10, 0, 0),
+    CreateTowerUpgrade(Const.Icon_SpeedUp_Replay, Db("Speed upgrade 2"), Set3, 0, 10, 0),
+    CreateTowerUpgrade(Const.Icon_SpeedUp_Replay, Db("Range upgrade 2"), Set3, 0, 0, 32)
+);
+
+const Set1 = CreateUpgradeSet(
+    CreateTowerUpgrade(Const.Icon_SpeedUp_Replay, Db("Damage upgrade 1"), Set2, 10, 0, 0),
+    CreateTowerUpgrade(Const.Icon_SpeedUp_Replay, Db("Speed upgrade 1"), Set2, 0, 10, 0),
+    CreateTowerUpgrade(Const.Icon_SpeedUp_Replay, Db("Range upgrade 1"), Set2, 0, 0, 32)
+);
