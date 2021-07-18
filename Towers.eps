@@ -7,7 +7,8 @@ import Balance;
 import Waves;
 
 const TowerUnitType = Const.Unit_TerranBeacon;
-const TOWERS = EUDArray(1024);
+const TOWERS = EUDArray(64);
+const TOWER_UNITS = EUDArray(1024);
 var TOWER_COUNT = 0;
 const Screen = StringBuffer(256);
 var fntil = 0;
@@ -75,14 +76,14 @@ const TOWER_TYPES = EUDArray(64);
 
 object TowerData {
     var baseDamage;
-    var baseCooldown;
+    var baseSpeed;
     var baseRange;
 };
 
-function MakeTowerData(baseDamage, baseRange, baseCooldown) : TowerData {
+function CreateTowerData(baseDamage, baseRange, baseSpeed) : TowerData {
     const data = TowerData.alloc();
     data.baseDamage = baseDamage;
-    data.baseCooldown = baseCooldown;
+    data.baseSpeed = baseSpeed;
     data.baseRange = baseRange;
     return data;
 }
@@ -94,7 +95,7 @@ object TowerImageData {
     var hitImage : Image;
 };
 
-function MakeTowerImageData(spriteImage, missileSpawnImage, missileImage, hitImage) : TowerImageData {
+function CreateTowerImageData(spriteImage, missileSpawnImage, missileImage, hitImage) : TowerImageData {
     const data = TowerImageData.alloc();
     data.spriteImage = spriteImage;
     data.missileSpawnImage = missileSpawnImage;
@@ -111,7 +112,7 @@ object TowerType {
     var hit: EUDFuncPtr (3, 0);
 };
 
-function createTowerType(id, data: TowerData, imageData: TowerImageData) : TowerType {
+function CreateTowerType(id, data: TowerData, imageData: TowerImageData) : TowerType {
     const towerType = TowerType.alloc();
     towerType.data = data;
     towerType.imageData = imageData;
@@ -120,11 +121,39 @@ function createTowerType(id, data: TowerData, imageData: TowerImageData) : Tower
     return towerType;
 }
 
-object TowerUnit {
-    var unit;
-    var type: TowerType;
-    var targetUnit;
+object Tower {
+    var type : TowerType;
+    var damage;
+    var range;
+    var speed;
+    var effectDuration;
+    var effectDamage;
+    var effectBehavior;
+
+    function applyUpgrade(damage, range, speed) {
+        this.damage += damage;
+        this.range += range;
+        this.speed += speed;
+    }
 };
+
+function CreateTower(type : TowerType, towerUnit) : Tower {
+    const tower = Tower.alloc();
+    tower.type = type;
+    tower.damage = type.data.baseDamage;
+    tower.speed = type.data.baseSpeed;
+    tower.range = type.data.baseRange; 
+    Unit.setUnknown00(towerUnit, tower);
+    return tower;
+}
+
+function getTowerForUnit(unitPointer) : Tower {
+    const towerObj = Unit.getUnknown00(unitPointer);
+    if (towerObj == 0) {
+        return 0;
+    }
+    return Tower.cast(towerObj);
+}
 
 function getTowerTypeByID(id): TowerType {
     return TOWER_TYPES[id];
@@ -243,6 +272,7 @@ function setTowerType(towerUnit, towerID) {
     Unit.setCommandCard(towerUnit, TowerUnitType);
     Utils.refreshInterface();
     resetTowerTarget(towerUnit);
+    CreateTower(towerType, towerUnit);
 }
 
 function towerFire(towerUnit) {
@@ -316,14 +346,14 @@ function updateTower(towerUnit) {
     }
 
     //Firing
-    if (Unit.getGroundWeaponCooldown(towerUnit) > towerType.data.baseCooldown) {
-        Unit.setGroundWeaponCooldown(towerUnit, towerType.data.baseCooldown);       
+    if (Unit.getGroundWeaponCooldown(towerUnit) > towerType.data.baseSpeed) {
+        Unit.setGroundWeaponCooldown(towerUnit, towerType.data.baseSpeed);       
     }
 
     if (Unit.getGroundWeaponCooldown(towerUnit) == 0
         && getTowerTarget(towerUnit) != 0) {
         towerFire(towerUnit);
-        Unit.setGroundWeaponCooldown(towerUnit, towerType.data.baseCooldown);   
+        Unit.setGroundWeaponCooldown(towerUnit, towerType.data.baseSpeed);   
     }
 
     // if (Unit.getOrder(towerUnit) == Const.Order_Nothing2_Normal) {
@@ -331,18 +361,16 @@ function updateTower(towerUnit) {
     // }
 }
 
-
-
-
 function missileHit(missileUnit) {
     const targetUnit = Unit.getTargetUnit(missileUnit);
     const towerUnit = Unit.getConnectedUnit(missileUnit);
+    const tower = getTowerForUnit(towerUnit);
     const targetUnitType = Unit.getUnitType(targetUnit);
     const towerType = getTowerTypeFromUnit(towerUnit);
     if (towerType.imageData.hitImage.id != Const.Image_None) {
         Utils.createImageSpriteAtUnitPosition(towerType.imageData.hitImage.id, targetUnit);
     }
-    const damage = towerType.data.baseDamage + towerType.data.baseDamage * Unit.getRankIncrease(towerUnit);
+    const damage = tower.damage;
 
     if (towerType.hit != 0) {
         towerType.hit(towerType, missileUnit, targetUnit);
@@ -390,9 +418,9 @@ function load() {
     const defaultMissileHit = EUDFuncPtr (1, 0) (function(missileUnit) {
     });
 
-    const t1 = createTowerType(1,
-        MakeTowerData(50, 32*3, 6*1),
-        MakeTowerImageData(
+    const t1 = CreateTowerType(1,
+        CreateTowerData(50, 32*3, 6*1),
+        CreateTowerImageData(
             MakeImage(Const.Image_STA_STS_Photon_Cannon_Overlay, 6, -12),
             MakeImage(Const.Image_None, 0, 0),
             MakeImage(Const.Image_Phase_Disruptor, 0, -16),
@@ -400,9 +428,9 @@ function load() {
         )
     );
 
-    const t2 = createTowerType(2,
-        MakeTowerData(5, 32*6, 12*1),
-        MakeTowerImageData(
+    const t2 = CreateTowerType(2,
+        CreateTowerData(5, 32*6, 12*1),
+        CreateTowerImageData(
             MakeImage(Const.Image_Maelstrom_Overlay_Small, 0, -16),
             MakeImage(Const.Image_None, 0, 0),
             MakeImage(Const.Image_Burst_Lasers_Hit, 0, -16),
@@ -414,9 +442,9 @@ function load() {
         Unit.setPlagueTimer(targetUnit, 64);
     });
 
-    const t3 = createTowerType(3,
-        MakeTowerData(1, 32*2, 12*1),
-        MakeTowerImageData(
+    const t3 = CreateTowerType(3,
+        CreateTowerData(1, 32*2, 12*1),
+        CreateTowerImageData(
             MakeImage(Const.Image_Khalis, 0, -16),
             MakeImage(Const.Image_None, 0, 0),
             MakeImage(Const.Image_Hallucination_Death3, 0, 0),

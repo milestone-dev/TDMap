@@ -176,6 +176,10 @@ function beforeTriggerExec() {
 			if (Towers.isUnitTower(unit)) {
 				const towerUnit = unit;
 
+				if (Towers.isUnitUpgradedTower(towerUnit)) {
+					Towers.updateTower(towerUnit);
+				}
+
 				// SELECTING TOWERS FROM BASE TOWER
 				if (Towers.isUnitBaseTower(towerUnit)) {
 					const queueUnitType = Unit.getBuildQueue1(towerUnit);
@@ -186,6 +190,7 @@ function beforeTriggerExec() {
 						} else {
 							Towers.setTowerType(towerUnit, queueUnitType);
 							Unit.clearBuildQueue(towerUnit);
+							refreshSelection(playerID);
 						}
 					}
 				} else if (Towers.isUnitUpgradedTower(towerUnit)) {
@@ -197,7 +202,9 @@ function beforeTriggerExec() {
 							Towers.sellTower(towerUnit);
 							refreshSelection(playerID);
 						} else {
-							Unit.setRankIncrease(towerUnit, Unit.getRankIncrease(towerUnit)+1);
+							const tower = Towers.getTowerForUnit(towerUnit);
+							tower.applyUpgrade(3, 2, 1);
+							refreshSelection(playerID);
 						}
 					}
 
@@ -221,15 +228,28 @@ function beforeTriggerExec() {
 		}
 
 		// TOWERS DISPLAY
-		if (Towers.isUnitUpgradedTower(selectedUnit)) {
+		if (Towers.isUnitTower(selectedUnit)) {
 			if (PlayerSelectedUnit[playerID] != selectedUnit) {
 
-				if (IsUserCP()) {
-					Utils.setUpgrade(7, Unit.getRankIncrease(selectedUnit), playerID);
-					Utils.setUnitWeapon(Towers.TowerUnitType, Unit.getCustomValue(selectedUnit));
-				}
+				const tower = Towers.getTowerForUnit(selectedUnit);
 
-				Utils.setUnitCost(100 + playerID, 10 + Unit.getRankIncrease(selectedUnit) * 10);
+				// Update display
+				if (Towers.isUnitUpgradedTower(selectedUnit)) {	
+					// TODO: Set up weapon per player to avoid desync
+					if (IsUserCP()) {
+						const weaponID = 229 + playerID;
+		    			settblf(weaponID, 0, "Speed: {}\nRange: {}", tower.speed, tower.range);
+						Utils.setWeaponDamage(playerID, tower.damage);
+						// Utils.setWeaponIcon(weaponID, ...);
+						Utils.setUnitWeapon(Towers.TowerUnitType, playerID);
+					}
+					// Have a unit for every player that is just there to represent the mineral cost for next upgrade
+					Utils.setUnitCost(100 + playerID, 10 + Unit.getRankIncrease(selectedUnit) * 10);
+				} else {
+					if (IsUserCP()) {
+						Utils.setUnitWeapon(Towers.TowerUnitType, 130);
+					}
+				}
 
 				PlayerSelectedUnit[playerID] = selectedUnit;
 				Unit.setStatusFlags(selectedUnit, 0x04340008);
@@ -238,15 +258,19 @@ function beforeTriggerExec() {
 				}));
 			}
 
-			if (true) {
+
+			if (Towers.isUnitUpgradedTower(selectedUnit)) {
 				const towerType = Towers.getTowerTypeByID(Unit.getCustomValue(selectedUnit));
+				const tower = Towers.getTowerForUnit(selectedUnit);
 				Towers.drawTowerRange(Unit.getPositionX(selectedUnit), Unit.getPositionY(selectedUnit), towerType.data.baseRange);
 				Screen.printfAt(0,
-					"O: Target: {}, Cooldown {} / {}",
+					"O: Target: {}, Cooldown {} / {} -- {}",
 					Towers.getTowerTarget(selectedUnit),
 					Unit.getGroundWeaponCooldown(selectedUnit),
-					towerType.data.baseCooldown
+					towerType.data.baseSpeed,
+					tower.damage
 				);
+				// Unit.setUnknown00(selectedUnit, Unit.getUnknown00(selectedUnit) + 1);
 			}
 		}
 	}

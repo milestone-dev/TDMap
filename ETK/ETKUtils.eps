@@ -49,6 +49,10 @@ function setUnitWeapon(unitType, weaponID) {
 	bwrite(0x65FD00 + 14776 + unitType * 1, weaponID);
 }
 
+function setWeaponDamage(weaponID, damage) {
+	wwrite(0x6564E0 + 2512 + weaponID * 2, damage);
+}
+
 function setUnitSubUnit(unitType, subUnitUnitType) {
 	wwrite(0x65FD00 + 2752 + unitType * 2, subUnitUnitType);
 }
