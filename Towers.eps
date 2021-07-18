@@ -13,6 +13,43 @@ var TOWER_COUNT = 0;
 const Screen = StringBuffer(256);
 var fntil = 0;
 
+
+
+// Upgrades
+
+object TowerUpgrade {
+    var icon;
+    var tooltip;
+    var nextSet; // pointer to TowerUpgradeOptionSet
+    var attributes : EUDArray(10); // See CreateTowerUpgrade for reference
+};
+
+function CreateTowerUpgrade(icon, tooltip, nextSet, damage, speed, range) : TowerUpgrade {
+    const upg = TowerUpgrade.alloc();
+    upg.icon = icon;
+    upg.tooltip = tooltip;
+    upg.nextSet = nextSet;
+    upg.attributes = EUDArray(10);
+    upg.attributes[0] = damage;
+    upg.attributes[1] = speed;
+    upg.attributes[2] = range;
+    return upg;
+}
+
+object TowerUpgradeOptionSet {
+    var optionA : TowerUpgrade;
+    var optionB : TowerUpgrade;
+    var optionC : TowerUpgrade;
+};
+
+function CreateUpgradeSet(optionA, optionB, optionC) : TowerUpgradeOptionSet {
+    const towerUpgradeSet = TowerUpgradeOptionSet.alloc();
+    towerUpgradeSet.optionA = optionA;
+    towerUpgradeSet.optionB = optionB;
+    towerUpgradeSet.optionC = optionC;
+    return towerUpgradeSet;
+}
+
 // UTILS; MOVE
 
 function findNewTargetInLocation(location, playerID) {
