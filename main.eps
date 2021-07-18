@@ -175,9 +175,10 @@ function beforeTriggerExec() {
 		foreach(ptr, unit : EUDLoopPlayerUnit(playerID)) {
 			if (Towers.isUnitTower(unit)) {
 				const towerUnit = unit;
+				const tower = Towers.getTowerForUnit(towerUnit);
 
 				if (Towers.isUnitUpgradedTower(towerUnit)) {
-					Towers.updateTower(towerUnit);
+					tower.update();
 				}
 
 				// SELECTING TOWERS FROM BASE TOWER
@@ -194,10 +195,6 @@ function beforeTriggerExec() {
 						}
 					}
 				} else if (Towers.isUnitUpgradedTower(towerUnit)) {
-					Towers.updateTower(towerUnit);
-
-					const queueUnitType = Unit.getBuildQueue1(towerUnit);
-					if (queueUnitType != Const.Unit_None) {
 						if (queueUnitType == 99) {
 							Towers.sellTower(towerUnit);
 							refreshSelection(playerID);
@@ -262,11 +259,12 @@ function beforeTriggerExec() {
 				if (tower != 0) {
 					Towers.drawTowerRange(Unit.getPositionX(selectedUnit), Unit.getPositionY(selectedUnit), tower.range);
 					Screen.printfAt(0,
-						"O: Target: {}, Cooldown {} / {} -- {}",
-						Towers.getTowerTarget(selectedUnit),
-						Unit.getGroundWeaponCooldown(selectedUnit),
-						towerType.data.baseSpeed,
-						tower.damage
+						"Damage: {} Speed: {} Range: {} HasTarget: {} Timer: {}",
+						tower.damage,
+						tower.speed,
+						tower.range,
+						tower.getTarget() != 0,
+						tower.fireTimer
 					);
 				}
 				// Unit.setUnknown00(selectedUnit, Unit.getUnknown00(selectedUnit) + 1);

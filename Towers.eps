@@ -15,6 +15,9 @@ var TOWER_COUNT = 0;
 const Screen = StringBuffer(256);
 var fntil = 0;
 
+// fwd declare
+function towerFire(towerUnit);
+
 // UTILS; MOVE
 
 function findNewTargetInLocation(location, playerID) {
@@ -148,8 +151,49 @@ object Tower {
         this.currentUpgradeOptionSet = upgradeObject.nextSet;
     }
 
+    function setTarget(targetUnit) {
+        Unit.setUnknown04(this.unit, targetUnit);
+    }
+
+    function getTarget() {
+        return Unit.getUnknown04(this.unit);
+    }
+
     function update() {
-        this.fireTimer++;
+        const enemyPlayerID = $P7;
+
+        const threshold = 2380;
+        if (this.fireTimer < threshold) {
+            this.fireTimer += this.speed;
+        }
+
+        if (this.getTarget() == 0 && this.fireTimer >= threshold) {
+            // Check if there are enemy units nearby and target a new unit
+            Utils.centerLocationOnUnit(Utils.LOCATION_ANYSIZE, this.unit, this.range * 2, this.range * 2);
+            Utils.refreshLocations();
+            if (Bring(enemyPlayerID, AtLeast, 1, Const.Unit_AnyUnit, Utils.LOCATION_ANYSIZE)) {
+                const enemyUnit = findNewTargetInLocation(Utils.LOCATION_ANYSIZE, enemyPlayerID);
+                if (enemyUnit != 0) {
+                    this.setTarget(enemyUnit);
+                }
+            }
+        } else {
+            // Check if target is still within range, otherwise clear it and target a new unit
+            Utils.centerLocationOnUnit(Utils.LOCATION_ANYSIZE, this.unit, this.range * 2, this.range * 2);
+            Utils.refreshLocations();
+            if (!Utils.bringUnit(this.getTarget(), Utils.LOCATION_ANYSIZE)) {
+                this.setTarget(0);
+                // Unit.setOrder(this.unit, Const.Order_Nothing1_Unused);
+                // setcurpl(P1); Screen.printAt(3, "No bring - clearTarget");
+            }
+        }
+
+        if (this.fireTimer >= threshold && this.getTarget() != 0) {
+            while(this.fireTimer >= threshold) {
+                this.fireTimer -= threshold;
+                towerFire(this.unit);
+            }
+        }
     }
 
     function sell() {
@@ -370,58 +414,6 @@ function towerFire(towerUnit) {
     Unit.setConnectedUnit(missileUnit, towerUnit);
     Unit.setOrder(missileUnit, Const.Order_Ignore_Normal);
     Unit.setTargetUnit(missileUnit, targetUnit);
-}
-
-function updateTower(towerUnit) {
-    if (isUnitBaseTower(towerUnit)) {
-        return;
-    }
-
-    const tower = getTowerForUnit(towerUnit);
-    if (tower == 0) {
-        return;
-    }
-    const enemyPlayerID = $P7;
-    const towerType = getTowerTypeFromUnit(towerUnit);
-    const towerRange = tower.range; //TODO: towerData.calculateRange();
-    const targetUnit = getTowerTarget(towerUnit);
-
-    if (targetUnit == 0 && Unit.getGroundWeaponCooldown(towerUnit) == 0) {
-        // Check if there are enemy units nearby and target a new unit
-        Utils.centerLocationOnUnit(Utils.LOCATION_ANYSIZE, towerUnit, towerRange * 2, towerRange * 2);
-        Utils.refreshLocations();
-        if (Bring(enemyPlayerID, AtLeast, 1, Const.Unit_AnyUnit, Utils.LOCATION_ANYSIZE)) {
-            const enemyUnit = findNewTargetInLocation(Utils.LOCATION_ANYSIZE, enemyPlayerID );
-            // setcurpl(P1); Screen.printAt(5, "Bring");
-            if (enemyUnit != 0) {
-                // setcurpl(P1); Screen.printAt(6, "setTargetUnit");
-                setTowerTarget(towerUnit, enemyUnit);
-                // Unit.setOrder(towerUnit, Const.Order_Attack_Building);
-            } else {
-                // setcurpl(P1); Screen.printAt(6, "Notfound");
-            }
-        }
-    } else {
-        // Check if target is still within range, otherwise clear it and target a new unit
-        Utils.centerLocationOnUnit(Utils.LOCATION_ANYSIZE, towerUnit, towerRange * 2, towerRange * 2);
-        Utils.refreshLocations();
-        if (!Utils.bringUnit(targetUnit, Utils.LOCATION_ANYSIZE)) {
-            resetTowerTarget(towerUnit);
-            // Unit.setOrder(towerUnit, Const.Order_Nothing1_Unused);
-            // setcurpl(P1); Screen.printAt(3, "No bring - clearTarget");
-        }
-    }
-
-    //Firing
-    if (Unit.getGroundWeaponCooldown(towerUnit) > towerType.data.baseSpeed) {
-        Unit.setGroundWeaponCooldown(towerUnit, towerType.data.baseSpeed);       
-    }
-
-    if (Unit.getGroundWeaponCooldown(towerUnit) == 0
-        && getTowerTarget(towerUnit) != 0) {
-        towerFire(towerUnit);
-        Unit.setGroundWeaponCooldown(towerUnit, towerType.data.baseSpeed);   
-    }
 }
 
 function missileHit(missileUnit) {
