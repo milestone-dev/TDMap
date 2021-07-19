@@ -368,7 +368,7 @@ function isTowerTypeValid(id) {
     return getTowerTypeByID(id) != 0 && id < TOWER_COUNT;
 }
 
-function createBaseTower(location, playerID) {
+function createBaseTower(location, playerID) : Tower {
     const towerUnit = Utils.createUnit(TowerUnitType, $L("SafeCreate"), $P8);
     MoveUnit(1, TowerUnitType, $P8, $L("SafeCreate"), location);
     if (Bring($P8, AtLeast, 1, TowerUnitType, $L("SafeCreate"))) {
@@ -379,6 +379,7 @@ function createBaseTower(location, playerID) {
     }
     const tower = CreateTower(towerUnit);
     tower.init();
+    return tower;
 }
 
 function drawTowerRange(x, y, range) {

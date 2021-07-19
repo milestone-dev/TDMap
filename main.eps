@@ -177,8 +177,9 @@ function beforeTriggerExec() {
 				var roundedX = ((x / 32) * 32) + 32;
 				var roundedY = ((y / 32) * 32) + 32;
 			    Utils.centerLocationOnPoint(PlacementLocation, roundedX, roundedY, 64, 64);
-				Towers.createBaseTower(PlacementLocation, playerID);
-    			Unit.setOrder(selectedUnit, Const.Order_Nothing2_Normal);
+				const tower = Towers.createBaseTower(PlacementLocation, playerID);
+				tower.updateInterface(playerID);
+				Unit.setOrder(selectedUnit, Const.Order_Nothing2_Normal);
 			}
 		}
 
