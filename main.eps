@@ -168,53 +168,7 @@ function beforeTriggerExec() {
 		updateSelectedUnit(playerID);
 		const selectedUnit = SelectedUnitID[playerID];
 		const mouseLocation = MouseLoc[playerID];
-
-
 		handleConsoleInput(playerID);
-
-
-		// TOWERS ACTIVE
-		foreach(ptr, unit : EUDLoopPlayerUnit(playerID)) {
-			if (Towers.isUnitTower(unit)) {
-				const towerUnit = unit;
-				const tower = Towers.getTowerForUnit(towerUnit);
-
-				if (Towers.isUnitUpgradedTower(towerUnit)) {
-					tower.update();
-				}
-
-				// SELECTING TOWERS FROM BASE TOWER
-				if (Towers.isUnitBaseTower(towerUnit)) {
-					const queueUnitType = Unit.getBuildQueue1(towerUnit);
-					if (queueUnitType != Const.Unit_None) {
-						if (queueUnitType == 99) {
-							Towers.sellTower(towerUnit);
-							refreshSelection(playerID);
-						} else {
-							Towers.setTowerType(towerUnit, queueUnitType);
-							Unit.clearBuildQueue(towerUnit);
-							refreshSelection(playerID);
-						}
-					}
-				} else if (Towers.isUnitUpgradedTower(towerUnit)) {
-					const queueUnitType = Unit.getBuildQueue1(towerUnit);
-					if (queueUnitType != Const.Unit_None) {
-						if (queueUnitType == 99) {
-							Towers.sellTower(towerUnit);
-							refreshSelection(playerID);
-						} else {
-							const tower = Towers.getTowerForUnit(towerUnit);
-							tower.handleButtonClick();
-							refreshSelection(playerID);
-						}
-					}
-
-					if (Unit.getBuildQueueLength(towerUnit) > 0) {
-						Unit.clearBuildQueue(towerUnit);
-					}
-				}
-			}
-		}
 
 		// PLACING TOWERS
 		if (selectedUnit != 0 && Unit.getUnitType(selectedUnit) == Const.Unit_KhaydarinCrystalFormation) {
@@ -228,50 +182,47 @@ function beforeTriggerExec() {
 			}
 		}
 
+		// TOWERS ACTIVE
+		foreach(ptr, unit : EUDLoopPlayerUnit(playerID)) {
+			if (Towers.isUnitTower(unit)) {
+				const towerUnit = unit;
+				const tower = Towers.getTowerForUnit(towerUnit);
+				if (tower != 0) {
+					tower.update();
+					if (Unit.getBuildQueueLength(towerUnit) > 0) {
+						tower.handleButtonClick();
+						Unit.clearBuildQueue(towerUnit);
+						refreshSelection(playerID);
+					}
+				}
+			}
+		}
+
 		// TOWERS DISPLAY
 		if (Towers.isUnitTower(selectedUnit)) {
-			if (PlayerSelectedUnit[playerID] != selectedUnit) {
-
-				const tower = Towers.getTowerForUnit(selectedUnit);
-				if (tower != 0) {
-					// Update display
-					if (Towers.isUnitUpgradedTower(selectedUnit)) {	
-						// TODO: Set up weapon per player to avoid desync
-						if (IsUserCP()) {
-							tower.updateInterface(playerID);
-						}
-						// Have a unit for every player that is just there to represent the mineral cost for next upgrade
-						Utils.setUnitCost(100 + playerID, 10 + Unit.getRankIncrease(selectedUnit) * 10);
-					} else {
-						if (IsUserCP()) {
-							Utils.setUnitWeapon(Towers.TowerUnitType, 130);
-						}
+			const tower = Towers.getTowerForUnit(selectedUnit);
+			if (tower != 0) {
+				if (PlayerSelectedUnit[playerID] != selectedUnit) {
+					if (IsUserCP()) {
+						tower.updateInterface(playerID);
 					}
-
 					PlayerSelectedUnit[playerID] = selectedUnit;
 					Unit.setStatusFlags(selectedUnit, 0x04340008);
 					Timer.add(0, selectedUnit, EUDFuncPtr (2, 0) (function(callbackUnit, intervalCount) {
 						Unit.setStatusFlags(callbackUnit, 0x04340003);
 					}));
 				}
-			}
 
-
-			if (Towers.isUnitUpgradedTower(selectedUnit)) {
-				const towerType = Towers.getTowerTypeByID(Unit.getCustomValue(selectedUnit));
-				const tower = Towers.getTowerForUnit(selectedUnit);
-				if (tower != 0) {
-					Towers.drawTowerRange(Unit.getPositionX(selectedUnit), Unit.getPositionY(selectedUnit), tower.range);
-					Screen.printfAt(0,
-						"Damage: {} Speed: {} Range: {} HasTarget: {} Timer: {}",
-						tower.damage,
-						tower.speed,
-						tower.range,
-						tower.getTarget() != 0,
-						tower.fireTimer
-					);
-				}
-				// Unit.setUnknown00(selectedUnit, Unit.getUnknown00(selectedUnit) + 1);
+				Towers.drawTowerRange(Unit.getPositionX(selectedUnit), Unit.getPositionY(selectedUnit), tower.range);
+				Screen.printfAt(0,
+					"Type: {} Damage: {} Speed: {} Range: {} HasTarget: {} Timer: {}",
+					tower.type,
+					tower.damage,
+					tower.speed,
+					tower.range,
+					tower.getTarget() != 0,
+					tower.fireTimer
+				);
 			}
 		}
 	}

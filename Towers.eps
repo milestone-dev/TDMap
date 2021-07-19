@@ -16,9 +16,6 @@ var TOWER_COUNT = 0;
 const Screen = StringBuffer(256);
 var fntil = 0;
 
-// fwd declare
-function towerFire(towerUnit);
-
 // UTILS; MOVE
 
 function findNewTargetInLocation(location, playerID) {
@@ -105,6 +102,41 @@ object Tower {
     var speed;
     var fireTimer;
 
+    function fire();
+
+    function init() {
+        CommandCard.setupUnit(this.unit);
+        this.setTarget(0);
+        Utils.refreshInterface();
+    }
+
+    function setType(towerTypeID) {
+        if (towerTypeID == 0) {
+            return;
+        }
+        this.type = TOWER_TYPES[towerTypeID];
+        this.damage += this.type.data.baseDamage;
+        this.speed += this.type.data.baseSpeed;
+        this.range += this.type.data.baseRange; 
+
+         // Make sure to clear any previous cannon unit if available
+        Utils.removeUnit(Unit.getConnectedUnit(this.unit));
+        Unit.setCustomValue(this.unit, towerTypeID); // Legacy - really needed anymore?s
+        const playerID = Unit.getPlayerID(this.unit);
+        Utils.moveUtilLocationToUnit(this.unit);
+        const cannonSpriteID = 487;
+        const cannonImageID = this.type.imageData.spriteImage.id;
+        Utils.setImageDrawFunction(cannonImageID, 1);
+        Utils.setImageClickable(cannonImageID, 0);
+        Utils.setSpriteImage(cannonSpriteID, cannonImageID);
+        const cannonUnit = Utils.createUnitAtLocationWithOffset(Const.Unit_ProtossCorsair, Utils.UTILITY_LOCATION, $P8, this.type.imageData.spriteImage.x, this.type.imageData.spriteImage.y);
+        Utils.setUnitColor(cannonUnit, playerID);
+        Unit.setStatusFlags(cannonUnit, 0x04240201);
+        Unit.setConnectedUnit(this.unit, cannonUnit);
+        this.currentUpgradeOptionSet = this.type.firstUpgradeOptionSet;
+        Utils.refreshInterface();
+    }
+
     function applyUpgrade(upgrade) {
         if (upgrade == 0) {
             return;
@@ -131,6 +163,9 @@ object Tower {
     }
 
     function update() {
+        if (this.type == 0) {
+            return;
+        }
         const enemyPlayerID = $P7;
 
         const threshold = 2380;
@@ -162,9 +197,46 @@ object Tower {
         if (this.fireTimer >= threshold && this.getTarget() != 0) {
             while(this.fireTimer >= threshold) {
                 this.fireTimer -= threshold;
-                towerFire(this.unit);
+                this.fire();
             }
         }
+    }
+
+    function fire() {
+        if (this.type == 0) {
+            return;
+        }
+        const cannonUnit = Unit.getConnectedUnit(this.unit);
+        const towerType = this.type;
+        const targetUnit = this.getTarget();
+
+        if (towerType.imageData.missileImage.id != Const.Image_None) {
+            Utils.setSpriteImage(202, towerType.imageData.missileImage.id);
+            Utils.setImageDrawFunction(towerType.imageData.missileImage.id, 1);
+            Utils.setImageDrawIfCloaked(towerType.imageData.missileImage.id, 1);
+        } else {
+            Utils.setSpriteImage(202, Const.Image_Observer);
+            Utils.setImageDrawFunction(towerType.imageData.missileImage.id, 0);
+            Utils.setImageDrawIfCloaked(Const.Image_Observer, 0);
+        }
+
+        if (towerType.fire != 0) {
+            towerType.fire(this.unit);
+        }
+
+        const direction = Utils.getDirectionFromPosition32(this.unit, Unit.getPositionX(targetUnit), Unit.getPositionY(targetUnit));
+        Utils.moveUtilLocationToUnit(this.unit);
+        Utils.setUnitInitialDirection(Const.Unit_ProtossObserver, direction);
+        const missileUnit = Utils.createUnitAtLocationWithOffset(Const.Unit_ProtossObserver, Utils.UTILITY_LOCATION, $P8, towerType.imageData.missileImage.x, towerType.imageData.missileImage.y);
+        // Unit.setStatusFlags(missileUnit, 0x04250205);
+        Utils.setUnitColor(missileUnit, Unit.getPlayerID(this.unit));
+
+        if (towerType.imageData.missileSpawnImage.id != Const.Image_None) {
+            Utils.createImageSpriteAtUnitPosition(towerType.imageData.missileSpawnImage.id, cannonUnit);
+        }
+        Unit.setConnectedUnit(missileUnit, this.unit);
+        Unit.setOrder(missileUnit, Const.Order_Ignore_Normal);
+        Unit.setTargetUnit(missileUnit, targetUnit);
     }
 
     function sell() {
@@ -174,16 +246,27 @@ object Tower {
     }
 
     function handleButtonClick() {
-        if (this.unit == 0 || this.currentUpgradeOptionSet == 0) {
+        if (this.unit == 0) {
             return;
         }
         const button = CommandCard.getButtonIndexFromBuildQueue(this.unit);
         // setcurpl(P1); Screen.printf("handleButtonClick {}", button);
-        switch(button) {
-            case 0: this.applyUpgrade(this.currentUpgradeOptionSet.optionA); break;
-            case 1: this.applyUpgrade(this.currentUpgradeOptionSet.optionB); break;
-            case 2: this.applyUpgrade(this.currentUpgradeOptionSet.optionC); break;
-            case 8: this.sell(); break;
+        if (this.type == 0) {
+            switch(button) {
+                case 0: this.setType(1); break;
+                case 1: this.setType(2); break;
+                case 2: this.setType(3); break;
+                case 3: this.setType(4); break;
+                case 8: this.sell(); break;
+            }
+        } else {
+            switch(button) {
+                case 0: this.applyUpgrade(this.currentUpgradeOptionSet.optionA); break;
+                case 1: this.applyUpgrade(this.currentUpgradeOptionSet.optionB); break;
+                case 2: this.applyUpgrade(this.currentUpgradeOptionSet.optionC); break;
+                case 8: this.sell(); break;
+            }
+
         }
     }
 
@@ -191,33 +274,50 @@ object Tower {
         if (this == 0) {
             return;
         }
-        if (IsUserCP()) {
-            const weaponID = 229 + playerID;
-            settblf(weaponID, 0, "Speed: {}\nRange: {}", this.speed, this.range);
-            Utils.setWeaponDamage(playerID, this.damage);
-            // Utils.setWeaponIcon(weaponID, ...);
-            Utils.setUnitWeapon(TowerUnitType, playerID);
-
-            if (this.currentUpgradeOptionSet == 0) {
+        if (this.type == 0) {
+            if (IsUserCP()) {
+                Utils.setUnitWeapon(TowerUnitType, Const.Weapon_None);
                 CommandCard.hideAllButtonIcons();
-            } else {
-                CommandCard.hideAllButtonIcons();
-                CommandCard.setButtonIcon(0, this.currentUpgradeOptionSet.optionA.icon, this.currentUpgradeOptionSet.optionA.tooltip);
-                CommandCard.setButtonIcon(1, this.currentUpgradeOptionSet.optionB.icon, this.currentUpgradeOptionSet.optionB.tooltip);
-                CommandCard.setButtonIcon(2, this.currentUpgradeOptionSet.optionC.icon, this.currentUpgradeOptionSet.optionC.tooltip);
+                CommandCard.setButtonIcon(0, Const.Icon_PsiAssault, Strings.SelectAirTower);
+                CommandCard.setButtonIcon(1, Const.Icon_FlameThrower, Strings.SelectFireTower);
+                CommandCard.setButtonIcon(2, Const.Icon_ArgusJewel, Strings.SelectWaterTower);
+                CommandCard.setButtonIcon(3, Const.Icon_Spines, Strings.SelectEarthTower);
                 CommandCard.setButtonIcon(8, Const.Icon_ReturnResources, Strings.SellTower);
             }
+        } else {
+             if (IsUserCP()) {
+                // Have a unit for every player that is just there to represent the mineral cost for next upgrade        
+                // Utils.setUnitCost(100 + playerID, 10 + Unit.getRankIncrease(selectedUnit) * 10);
+                const weaponID = 229 + playerID;
+                settblf(weaponID, 0, "Speed: {}\nRange: {}", this.speed, this.range);
+                Utils.setWeaponDamage(playerID, this.damage);
+                // Utils.setWeaponIcon(weaponID, ...);
+                Utils.setUnitWeapon(TowerUnitType, playerID);
+
+                if (this.currentUpgradeOptionSet == 0) {
+                    CommandCard.hideAllButtonIcons();
+                    CommandCard.setButtonIcon(8, Const.Icon_ReturnResources, Strings.SellTower);
+                } else {
+                    CommandCard.hideAllButtonIcons();
+                    CommandCard.setButtonIcon(0, this.currentUpgradeOptionSet.optionA.icon, this.currentUpgradeOptionSet.optionA.tooltip);
+                    CommandCard.setButtonIcon(1, this.currentUpgradeOptionSet.optionB.icon, this.currentUpgradeOptionSet.optionB.tooltip);
+                    CommandCard.setButtonIcon(2, this.currentUpgradeOptionSet.optionC.icon, this.currentUpgradeOptionSet.optionC.tooltip);
+                    CommandCard.setButtonIcon(8, Const.Icon_ReturnResources, Strings.SellTower);
+                }
+            }
         }
+       
     }
 };
 
-function CreateTower(type : TowerType, towerUnit) : Tower {
+// function CreateTower(type : TowerType, towerUnit) : Tower {
+function CreateTower(towerUnit) : Tower {
     const tower = Tower.alloc();
     tower.unit = towerUnit;
-    tower.type = type;
-    tower.damage += type.data.baseDamage;
-    tower.speed += type.data.baseSpeed;
-    tower.range += type.data.baseRange; 
+    // tower.type = type;
+    // tower.damage += type.data.baseDamage;
+    // tower.speed += type.data.baseSpeed;
+    // tower.range += type.data.baseRange; 
     Unit.setUnknown00(towerUnit, tower);
     return tower;
 }
@@ -234,39 +334,11 @@ function getTowerTypeByID(id): TowerType {
     return TOWER_TYPES[id];
 }
 
-function getUnitTowerTypeID(towerUnit) {
-    return Unit.getCustomValue(towerUnit);
-}
-
-function setUnitTowerTypeID(towerUnit, value) {
-    Unit.setCustomValue(towerUnit, value);
-}
-
 function isUnitTower(unit) {
-    if (unit == 0) {
+    if (unit == 0 || Unit.getUnitType(unit) != TowerUnitType) {
         return false;
     }
-    if (Unit.getUnitType(unit) == TowerUnitType) {
-        return true;
-    }
-    return false;
-}
-
-function isUnitBaseTower(towerUnit) {
-    if (!isUnitTower(towerUnit)) {
-        return false;
-    }
-    if (getUnitTowerTypeID(towerUnit) == 0) {
-        return true;
-    }
-    return false;
-}
-
-function isUnitUpgradedTower(towerUnit) {
-    if (!isUnitTower(towerUnit)) {
-        return false;
-    }
-    if (getUnitTowerTypeID(towerUnit) > 0) {
+    if (getTowerForUnit(unit) != 0) {
         return true;
     }
     return false;
@@ -280,24 +352,6 @@ function isTowerTypeValid(id) {
     return getTowerTypeByID(id) != 0 && id < TOWER_COUNT;
 }
 
-function getTowerTarget(towerUnit) {
-    return Unit.getUnknown04(towerUnit);
-}
-
-function setTowerTarget(towerUnit, targetUnit) {
-    Unit.setUnknown04(towerUnit, targetUnit);
-}
-
-function resetTowerTarget(towerUnit) {
-    setTowerTarget(towerUnit, 0);
-}
-
-function sellTower(towerUnit) {
-    const cannonUnit = Unit.getConnectedUnit(towerUnit);
-    Utils.removeUnit(towerUnit);
-    Utils.removeUnitSafe(cannonUnit);
-}
-
 function createBaseTower(location, playerID) {
     const towerUnit = Utils.createUnit(TowerUnitType, $L("SafeCreate"), $P8);
     MoveUnit(1, TowerUnitType, $P8, $L("SafeCreate"), location);
@@ -307,7 +361,8 @@ function createBaseTower(location, playerID) {
     } else {
         GiveUnits(1, TowerUnitType, $P8, location, playerID);
     }
-    Unit.setCommandCard(towerUnit, Const.Unit_TerranFlagBeacon);
+    const tower = CreateTower(towerUnit);
+    tower.init();
 }
 
 function drawTowerRange(x, y, range) {
@@ -324,89 +379,26 @@ function drawTowerRange(x, y, range) {
     Utils.createImageSpriteAtPoint(Const.Image_Nuke_Target_Dot, lx2, ly2);
 }
 
-function setTowerType(towerUnit, towerID) {
-    // Make sure to clear any previous cannon unit if available
-    Utils.removeUnit(Unit.getConnectedUnit(towerUnit));
-    const towerType = getTowerTypeByID(towerID);
-    const tower = CreateTower(towerType, towerUnit);
-    setUnitTowerTypeID(towerUnit, towerID);
-
-    const playerID = Unit.getPlayerID(towerUnit);
-    Utils.moveUtilLocationToUnit(towerUnit);
-    const cannonSpriteID = 487;
-    const cannonImageID = towerType.imageData.spriteImage.id;
-    Utils.setImageDrawFunction(cannonImageID, 1);
-    Utils.setImageClickable(cannonImageID, 0);
-    Utils.setSpriteImage(cannonSpriteID, cannonImageID);
-    const cannonUnit = Utils.createUnitAtLocationWithOffset(Const.Unit_ProtossCorsair, Utils.UTILITY_LOCATION, $P8, towerType.imageData.spriteImage.x, towerType.imageData.spriteImage.y);
-    Utils.setUnitColor(cannonUnit, playerID);
-    Unit.setStatusFlags(cannonUnit, 0x04240201);
-    Unit.setConnectedUnit(towerUnit, cannonUnit);
-
-    Unit.setCustomValue(towerUnit, towerType.id);
-    Unit.setRankIncrease(towerUnit, 0);
-    // Unit.setCommandCard(towerUnit, TowerUnitType);
-    tower.currentUpgradeOptionSet = towerType.firstUpgradeOptionSet;
-    CommandCard.setupUnit(towerUnit);
-
-    Utils.refreshInterface();
-    resetTowerTarget(towerUnit);
-}
-
-function towerFire(towerUnit) {
-    const cannonUnit = Unit.getConnectedUnit(towerUnit);
-    const towerType = getTowerTypeByID(Unit.getCustomValue(towerUnit));
-    const targetUnit = getTowerTarget(towerUnit);
-
-    if (towerType.imageData.missileImage.id != Const.Image_None) {
-        Utils.setSpriteImage(202, towerType.imageData.missileImage.id);
-        Utils.setImageDrawFunction(towerType.imageData.missileImage.id, 1);
-        Utils.setImageDrawIfCloaked(towerType.imageData.missileImage.id, 1);
-    } else {
-        Utils.setSpriteImage(202, Const.Image_Observer);
-        Utils.setImageDrawFunction(towerType.imageData.missileImage.id, 0);
-        Utils.setImageDrawIfCloaked(Const.Image_Observer, 0);
-    }
-
-    if (towerType.fire != 0) {
-        towerType.fire(towerUnit);
-    }
-
-    const direction = Utils.getDirectionFromPosition32(towerUnit, Unit.getPositionX(targetUnit), Unit.getPositionY(targetUnit));
-    Utils.moveUtilLocationToUnit(towerUnit);
-    Utils.setUnitInitialDirection(Const.Unit_ProtossObserver, direction);
-    const missileUnit = Utils.createUnitAtLocationWithOffset(Const.Unit_ProtossObserver, Utils.UTILITY_LOCATION, $P8, towerType.imageData.missileImage.x, towerType.imageData.missileImage.y);
-    // Unit.setStatusFlags(missileUnit, 0x04250205);
-    Utils.setUnitColor(missileUnit, Unit.getPlayerID(towerUnit));
-
-    if (towerType.imageData.missileSpawnImage.id != Const.Image_None) {
-        Utils.createImageSpriteAtUnitPosition(towerType.imageData.missileSpawnImage.id, cannonUnit);
-    }
-    Unit.setConnectedUnit(missileUnit, towerUnit);
-    Unit.setOrder(missileUnit, Const.Order_Ignore_Normal);
-    Unit.setTargetUnit(missileUnit, targetUnit);
-}
-
 function missileHit(missileUnit) {
     const targetUnit = Unit.getTargetUnit(missileUnit);
     const towerUnit = Unit.getConnectedUnit(missileUnit);
     const tower = getTowerForUnit(towerUnit);
-    const targetUnitType = Unit.getUnitType(targetUnit);
-    const towerType = getTowerTypeFromUnit(towerUnit);
-    if (towerType.imageData.hitImage.id != Const.Image_None) {
-        Utils.createImageSpriteAtUnitPosition(towerType.imageData.hitImage.id, targetUnit);
+    if (tower == 0) {
+        return;
     }
-    const damage = tower.damage;
-
-    if (towerType.hit != 0) {
-        towerType.hit(towerType, missileUnit, targetUnit);
+    const targetUnitType = Unit.getUnitType(targetUnit);
+    if (tower.type.imageData.hitImage.id != Const.Image_None) {
+        Utils.createImageSpriteAtUnitPosition(tower.type.imageData.hitImage.id, targetUnit);
+    }
+    if (tower.type.hit != 0) {
+        tower.type.hit(tower.type, missileUnit, targetUnit);
     }
     const createLocationX = Unit.getPositionX(targetUnit);
     const createLocationY = Unit.getPositionY(targetUnit);
     const targetUnitX = Unit.getOrderTargetX(targetUnit);
     const targetUnitY = Unit.getOrderTargetY(targetUnit);
     const targetUnitPriority = Unit.getKillCount(targetUnit);
-    if (Unit.damage(targetUnit, damage)) {
+    if (Unit.damage(targetUnit, tower.damage)) {
         SetResources(Unit.getPlayerID(towerUnit), 8, Utils.getUnitDestroyValue(targetUnitType), 0);
         const data = [targetUnitType, targetUnitX, targetUnitY, targetUnitPriority, targetUnit, createLocationX, createLocationY];
         Timer.add(6, data, EUDFuncPtr (2, 0) (function(data, intervalCount) {
@@ -433,68 +425,4 @@ function missileHit(missileUnit) {
         
     }
     Utils.removeUnit(missileUnit);
-}
-
-function load() {
-
-    const t1 = CreateTowerType(1,
-        0,
-        CreateTowerData(100, 32*3, 100),
-        CreateTowerImageData(
-            Common.MakeImage(Const.Image_STA_STS_Photon_Cannon_Overlay, 6, -12),
-            Common.MakeImage(Const.Image_None, 0, 0),
-            Common.MakeImage(Const.Image_Phase_Disruptor, 0, -16),
-            Common.MakeImage(Const.Image_Phase_Disruptor_Hit, 0, 0)
-        )
-    );
-
-    const t2 = CreateTowerType(2,
-        0,
-        CreateTowerData(5, 32*6, 12*1),
-        CreateTowerImageData(
-            Common.MakeImage(Const.Image_Maelstrom_Overlay_Small, 0, -16),
-            Common.MakeImage(Const.Image_None, 0, 0),
-            Common.MakeImage(Const.Image_Burst_Lasers_Hit, 0, -16),
-            Common.MakeImage(Const.Image_Yamato_Gun_Hit, 0, 0)
-        )
-    );
-    t2.hit = EUDFuncPtr (3, 0) (function(towerType, missileUnit, targetUnit) {
-        Utils.createOverlayForUnit(targetUnit, Const.Image_Flames2_Type3_Small, 64);
-        Unit.setPlagueTimer(targetUnit, 64);
-    });
-
-    const t3 = CreateTowerType(3,
-        0,
-        CreateTowerData(1, 32*2, 12*1),
-        CreateTowerImageData(
-            Common.MakeImage(Const.Image_Khalis, 0, -16),
-            Common.MakeImage(Const.Image_None, 0, 0),
-            Common.MakeImage(Const.Image_Hallucination_Death3, 0, 0),
-            Common.MakeImage(Const.Image_None, 0, 0)
-        )
-    );
-    t3.hit = EUDFuncPtr (3, 0) (function(towerType, missileUnit, targetUnit) {
-        const slowSpeed = 100;//Unit.getOriginalTopSpeed(targetUnit) / 10;
-        if ( Unit.getTopSpeed(targetUnit) == slowSpeed) {
-            return;
-        }
-        const duration = 64;
-        Unit.setTopSpeed(targetUnit, slowSpeed);
-        Utils.createOverlayForUnit(targetUnit, Const.Image_Acid_Spores_6_9_Overlay_Small, duration);
-        Timer.add(duration, targetUnit, EUDFuncPtr (2, 0) (function(callbackUnit, intervalCount) {
-            Unit.restoreOriginalTopSpeed(callbackUnit);
-        }));
-    });
-
-    const t4 = CreateTowerType(5,
-        0,
-        CreateTowerData(1, 32*2, 12*1),
-        CreateTowerImageData(
-            Common.MakeImage(Const.Image_Doodad_9_5_Jungle, -12, 0),
-            Common.MakeImage(Const.Image_None, 0, 0),
-            Common.MakeImage(Const.Image_None, 0, 0),
-            Common.MakeImage(Const.Image_None, 0, 0)
-        )
-    );
-
 }
