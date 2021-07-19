@@ -133,8 +133,9 @@ object Tower {
         this.damage += this.type.data.baseDamage;
         this.speed += this.type.data.baseSpeed;
         this.range += this.type.data.baseRange; 
+        this.fireTimer = 0;
 
-         // Make sure to clear any previous cannon unit if available
+        // Make sure to clear any previous cannon unit if available
         Utils.removeUnit(Unit.getConnectedUnit(this.unit));
         Unit.setCustomValue(this.unit, towerTypeID); // Legacy - really needed anymore?s
         const playerID = Unit.getPlayerID(this.unit);
