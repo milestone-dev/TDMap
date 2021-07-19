@@ -12,35 +12,34 @@ function loadData() {
     // UPGRADES
 
     const AirUpgradeSet5 = Upgrades.CreateUpgradeSet(
-        Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db("x\x01Damage upgrade 5"), Common.Null, [10, 0, 0]),
-        Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db("x\x01Speed upgrade 5"), Common.Null, [0, 10, 0]),
-        Upgrades.CreateTowerUpgrade(Const.Icon_U238Shells, Db("x\x01Range upgrade 5"), Common.Null, [0, 0, 32])
+        Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db("x\x01Damage upgrade 5"), Common.Null, [50, 0, 0]),
+        Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db("x\x01Speed upgrade 5"), Common.Null, [0, 50, 0]),
+        Upgrades.CreateTowerUpgrade(Const.Icon_U238Shells, Db("x\x01Range upgrade 5"), Common.Null, [0, 0, 80])
     );
 
     const AirUpgradeSet4 = Upgrades.CreateUpgradeSet(
-        Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db("x\x01Damage upgrade 4"), AirUpgradeSet5, [10, 0, 0]),
-        Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db("x\x01Speed upgrade 4"), AirUpgradeSet5, [0, 10, 0]),
-        Upgrades.CreateTowerUpgrade(Const.Icon_U238Shells, Db("x\x01Range upgrade 4"), AirUpgradeSet5, [0, 0, 32])
+        Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db("x\x01Damage upgrade 4"), AirUpgradeSet5, [40, 0, 0]),
+        Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db("x\x01Speed upgrade 4"), AirUpgradeSet5, [0, 40, 0]),
+        Upgrades.CreateTowerUpgrade(Const.Icon_U238Shells, Db("x\x01Range upgrade 4"), AirUpgradeSet5, [0, 0, 64])
     );
 
     const AirUpgradeSet3 = Upgrades.CreateUpgradeSet(
-        Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db("x\x01Damage upgrade 3"), AirUpgradeSet4, [10, 0, 0]),
-        Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db("x\x01Speed upgrade 3"), AirUpgradeSet4, [0, 10, 0]),
-        Upgrades.CreateTowerUpgrade(Const.Icon_U238Shells, Db("x\x01Range upgrade 3"), AirUpgradeSet4, [0, 0, 32])
+        Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db("x\x01Damage upgrade 3"), AirUpgradeSet4, [30, 0, 0]),
+        Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db("x\x01Speed upgrade 3"), AirUpgradeSet4, [0, 30, 0]),
+        Upgrades.CreateTowerUpgrade(Const.Icon_U238Shells, Db("x\x01Range upgrade 3"), AirUpgradeSet4, [0, 0, 48])
     );
 
     const AirUpgradeSet2 = Upgrades.CreateUpgradeSet(
-        Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db("x\x01Damage upgrade 2"), AirUpgradeSet3, [10, 0, 0]),
-        Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db("x\x01Speed upgrade 2"), AirUpgradeSet3, [0, 10, 0]),
+        Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db("x\x01Damage upgrade 2"), AirUpgradeSet3, [20, 0, 0]),
+        Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db("x\x01Speed upgrade 2"), AirUpgradeSet3, [0, 20, 0]),
         Upgrades.CreateTowerUpgrade(Const.Icon_U238Shells, Db("x\x01Range upgrade 2"), AirUpgradeSet3, [0, 0, 32])
     );
 
     const AirUpgradeSet1 = Upgrades.CreateUpgradeSet(
         Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db("x\x01Damage upgrade 1"), AirUpgradeSet2, [10, 0, 0]),
         Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db("x\x01Speed upgrade 1"), AirUpgradeSet2, [0, 10, 0]),
-        Upgrades.CreateTowerUpgrade(Const.Icon_U238Shells, Db("x\x01Range upgrade 1"), AirUpgradeSet2, [0, 0, 32])
+        Upgrades.CreateTowerUpgrade(Const.Icon_U238Shells, Db("x\x01Range upgrade 1"), AirUpgradeSet2, [0, 0, 16])
     );
-
 
     const PlaceholderUpgradeSet1 = Upgrades.CreateUpgradeSet(
         Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db("x\x01Damage upgrade 1"), Common.Null, [10, 0, 0]),
