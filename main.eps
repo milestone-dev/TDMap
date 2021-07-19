@@ -201,6 +201,16 @@ function beforeTriggerExec() {
 			}
 		}
 
+		// MOB DISPLAY
+		if (Unit.getPlayerID(selectedUnit) == $P7) {
+			Screen.printfAt(0,
+				"U: {} Speed {} {}",
+				Unit.getUnitType(selectedUnit),
+				Unit.getFlingyTopSpeed(selectedUnit),
+				Unit.getAcceleration(selectedUnit)
+			);
+		}
+
 		// TOWERS DISPLAY
 		if (Towers.isUnitTower(selectedUnit)) {
 			const tower = Towers.getTowerForUnit(selectedUnit);
@@ -217,15 +227,17 @@ function beforeTriggerExec() {
 				if (tower.range > 0) {
 					Towers.drawTowerRange(Unit.getPositionX(selectedUnit), Unit.getPositionY(selectedUnit), tower.range);
 				}
-				// Screen.printfAt(0,
-				// 	"IsNotBase: {} Damage: {} Speed: {} Range: {} HasTarget: {} Timer: {}",
-				// 	tower.type != 0,
-				// 	tower.damage,
-				// 	tower.speed,
-				// 	tower.range,
-				// 	tower.getTarget() != 0,
-				// 	tower.fireTimer
-				// );
+				if (false) {
+					Screen.printfAt(0,
+						"IsNotBase: {} Damage: {} Speed: {} Range: {} HasTarget: {} Timer: {}",
+						tower.type != 0,
+						tower.damage,
+						tower.speed,
+						tower.range,
+						tower.getTarget() != 0,
+						tower.fireTimer
+					);
+				}
 			}
 		}
 	}
