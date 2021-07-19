@@ -19,8 +19,7 @@ var fntil = 0;
 // UTILS; MOVE
 
 function findNewTargetInLocation(location, playerID) {
-    fntil++;
-    setcurpl(P1); Screen.printfAt(4, "findNewTargetInLocation {}", fntil);
+    // fntil++; setcurpl(P1); Screen.printfAt(4, "findNewTargetInLocation {}", fntil);
 
     var targetUnit = 0;
     var lowestHP = 0;
@@ -123,6 +122,7 @@ object Tower {
     function init() {
         CommandCard.setupUnit(this.unit);
         this.setTarget(0);
+        this.type = 0;
         this.fireTimer = 0;
     }
 
@@ -276,11 +276,13 @@ object Tower {
                 case 8: this.sell(); break;
             }
         } else {
-            switch(button) {
-                case 0: this.applyUpgrade(this.currentUpgradeOptionSet.optionA); break;
-                case 1: this.applyUpgrade(this.currentUpgradeOptionSet.optionB); break;
-                case 2: this.applyUpgrade(this.currentUpgradeOptionSet.optionC); break;
-                case 8: this.sell(); break;
+            if (this.currentUpgradeOptionSet != 0) {
+                switch(button) {
+                    case 0: this.applyUpgrade(this.currentUpgradeOptionSet.optionA); break;
+                    case 1: this.applyUpgrade(this.currentUpgradeOptionSet.optionB); break;
+                    case 2: this.applyUpgrade(this.currentUpgradeOptionSet.optionC); break;
+                    case 8: this.sell(); break;
+                }
             }
         }
     }
@@ -298,9 +300,9 @@ object Tower {
                 CommandCard.setButtonIcon(3, Const.Icon_ArgusJewel, Strings.SelectWaterTower);
                 CommandCard.setButtonIcon(8, Const.Icon_ReturnResources, Strings.SellTower);
             } else {
-                // setcurpl(P1); Screen.printf("type > 0");
                 // Have a unit for every player that is just there to represent the mineral cost for next upgrade        
                 // Utils.setUnitCost(100 + playerID, 10 + Unit.getRankIncrease(selectedUnit) * 10);
+                // setcurpl(P1); Screen.printf("updateInterface t{} d{} s{} r{} ", this.type, this.damage, this.speed, this.range);
                 const weaponStringID = 229 + playerID;
                 settblf(weaponStringID, 0, "Speed: {}\nRange: {}", this.speed, this.range);
                 Utils.setWeaponDamage(playerID, this.damage);
@@ -326,10 +328,6 @@ object Tower {
 function CreateTower(towerUnit) : Tower {
     const tower = Tower.alloc();
     tower.unit = towerUnit;
-    // tower.type = type;
-    // tower.damage += type.data.baseDamage;
-    // tower.speed += type.data.baseSpeed;
-    // tower.range += type.data.baseRange; 
     Unit.setUnknown00(towerUnit, tower);
     return tower;
 }
@@ -360,8 +358,8 @@ function getTowerTypeFromUnit(towerUnit): TowerType {
     return TOWER_TYPES[Unit.getCustomValue(towerUnit)];
 }
 
-function isTowerTypeValid(id) {
-    return getTowerTypeByID(id) != 0 && id < TOWER_COUNT;
+function isTowerTypeValid(towerType) {
+    return towerType != 0;
 }
 
 function createBaseTower(location, playerID) : Tower {
