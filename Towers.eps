@@ -257,6 +257,7 @@ object Tower {
             return;
         }
         const button = CommandCard.getButtonIndexFromBuildQueue(this.unit);
+        Unit.clearBuildQueue(this.unit);
         // setcurpl(P1); Screen.printf("handleButtonClick {}", button);
         if (this.type == 0) {
             switch(button) {

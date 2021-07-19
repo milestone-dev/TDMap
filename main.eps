@@ -195,7 +195,6 @@ function beforeTriggerExec() {
 					tower.update();
 					if (Unit.getBuildQueueLength(towerUnit) > 0) {
 						tower.handleButtonClick();
-						Unit.clearBuildQueue(towerUnit);
 						refreshSelection(playerID);
 					}
 				}
