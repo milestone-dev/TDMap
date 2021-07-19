@@ -10,13 +10,14 @@ import Towers;
 function loadData() {
 
     // UPGRADES
+    const AirUpgradeSet6 = Common.Null;
 
     const AirUpgradeSet5 = Upgrades.CreateUpgradeSet(
-        Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db("x\x01Damage upgrade 5"), Common.Null, [50, 0, 0]),
-        Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db("x\x01Speed upgrade 5"), Common.Null, [0, 50, 0]),
-        Upgrades.CreateTowerUpgrade(Const.Icon_U238Shells, Db("x\x01Range upgrade 5"), Common.Null, [0, 0, 80])
+        Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db('x\x01Damage upgrade 5'), AirUpgradeSet6, [50, 0, 0]),
+        Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db('x\x01Speed upgrade 5'), AirUpgradeSet6, [0, 50, 0]),
+        Upgrades.CreateTowerUpgrade(Const.Icon_U238Shells, Db('x\x01Range upgrade 5'), AirUpgradeSet6, [0, 0, 80])
     );
-
+    
     const AirUpgradeSet4 = Upgrades.CreateUpgradeSet(
         Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db("x\x01Damage upgrade 4"), AirUpgradeSet5, [40, 0, 0]),
         Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db("x\x01Speed upgrade 4"), AirUpgradeSet5, [0, 40, 0]),
@@ -52,6 +53,7 @@ function loadData() {
     const AirTower = Towers.CreateTowerType(1,
         AirUpgradeSet1,
         Towers.CreateTowerData(100, 32*3, 100),
+        Towers.CreateTowerDisplayData(Const.Icon_PsiAssault, Strings.AirTowerTitle), 
         Towers.CreateTowerImageData(
             Common.MakeImage(Const.Image_STA_STS_Photon_Cannon_Overlay, 6, -12),
             Common.MakeImage(Const.Image_None, 0, 0),
@@ -63,6 +65,7 @@ function loadData() {
     const FireTower = Towers.CreateTowerType(2,
         PlaceholderUpgradeSet1,
         Towers.CreateTowerData(5, 32*6, 12*1),
+        Towers.CreateTowerDisplayData(Const.Icon_FlameThrower, Strings.FireTowerTitle), 
         Towers.CreateTowerImageData(
             Common.MakeImage(Const.Image_Maelstrom_Overlay_Small, 0, -16),
             Common.MakeImage(Const.Image_None, 0, 0),
@@ -78,6 +81,7 @@ function loadData() {
     const WaterTower = Towers.CreateTowerType(3,
         PlaceholderUpgradeSet1,
         Towers.CreateTowerData(1, 32*2, 12*1),
+        Towers.CreateTowerDisplayData(Const.Icon_ArgusJewel, Strings.WaterTowerTitle), 
         Towers.CreateTowerImageData(
             Common.MakeImage(Const.Image_Khalis, 0, -16),
             Common.MakeImage(Const.Image_None, 0, 0),
@@ -101,6 +105,7 @@ function loadData() {
     const EarthTower = Towers.CreateTowerType(4,
         PlaceholderUpgradeSet1,
         Towers.CreateTowerData(1, 32*2, 12*1),
+        Towers.CreateTowerDisplayData(Const.Icon_Spines, Strings.EarthTowerTitle), 
         Towers.CreateTowerImageData(
             Common.MakeImage(Const.Image_Doodad_9_5_Jungle, -12, 0),
             Common.MakeImage(Const.Image_None, 0, 0),

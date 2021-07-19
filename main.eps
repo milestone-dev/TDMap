@@ -213,10 +213,12 @@ function beforeTriggerExec() {
 					}));
 				}
 
-				Towers.drawTowerRange(Unit.getPositionX(selectedUnit), Unit.getPositionY(selectedUnit), tower.range);
+				if (tower.range > 0) {
+					Towers.drawTowerRange(Unit.getPositionX(selectedUnit), Unit.getPositionY(selectedUnit), tower.range);
+				}
 				Screen.printfAt(0,
-					"Type: {} Damage: {} Speed: {} Range: {} HasTarget: {} Timer: {}",
-					tower.type,
+					"IsNotBase: {} Damage: {} Speed: {} Range: {} HasTarget: {} Timer: {}",
+					tower.type != 0,
 					tower.damage,
 					tower.speed,
 					tower.range,

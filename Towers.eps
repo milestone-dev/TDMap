@@ -65,6 +65,11 @@ object TowerImageData {
     var hitImage : Common.Image;
 };
 
+object TowerDisplayData {
+    var title;
+    var icon;
+};
+
 function CreateTowerImageData(spriteImage, missileSpawnImage, missileImage, hitImage) : TowerImageData {
     const data = TowerImageData.alloc();
     data.spriteImage = spriteImage;
@@ -74,19 +79,29 @@ function CreateTowerImageData(spriteImage, missileSpawnImage, missileImage, hitI
     return data;
 }
 
+
+function CreateTowerDisplayData(icon, title) : TowerDisplayData {
+    const data = TowerDisplayData.alloc();
+    data.icon = icon;
+    data.title = title;
+    return data;
+}
+
 object TowerType {
     var id;
     var firstUpgradeOptionSet;
     var data : TowerData;
+    var displayData : TowerDisplayData;
     var imageData : TowerImageData;
     var fire: EUDFuncPtr (1, 0);
     var hit: EUDFuncPtr (3, 0);
 };
 
-function CreateTowerType(id, firstUpgradeOptionSet, data: TowerData, imageData: TowerImageData) : TowerType {
+function CreateTowerType(id, firstUpgradeOptionSet, data: TowerData, displayData: TowerDisplayData, imageData: TowerImageData) : TowerType {
     const towerType = TowerType.alloc();
     towerType.firstUpgradeOptionSet = firstUpgradeOptionSet;
     towerType.data = data;
+    towerType.displayData = displayData;
     towerType.imageData = imageData;
     towerType.id = id;
     TOWER_TYPES[id] = towerType;
@@ -288,10 +303,10 @@ object Tower {
              if (IsUserCP()) {
                 // Have a unit for every player that is just there to represent the mineral cost for next upgrade        
                 // Utils.setUnitCost(100 + playerID, 10 + Unit.getRankIncrease(selectedUnit) * 10);
-                const weaponID = 229 + playerID;
-                settblf(weaponID, 0, "Speed: {}\nRange: {}", this.speed, this.range);
+                const weaponStringID = 229 + playerID;
+                settblf(weaponStringID, 0, "Speed: {}\nRange: {}", this.speed, this.range);
                 Utils.setWeaponDamage(playerID, this.damage);
-                // Utils.setWeaponIcon(weaponID, ...);
+                Utils.setWeaponIcon(playerID, this.type.displayData.icon);
                 Utils.setUnitWeapon(TowerUnitType, playerID);
 
                 if (this.currentUpgradeOptionSet == 0) {
