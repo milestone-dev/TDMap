@@ -118,11 +118,12 @@ object Tower {
     var fireTimer;
 
     function fire();
+    function updateInterface();
 
     function init() {
         CommandCard.setupUnit(this.unit);
         this.setTarget(0);
-        Utils.refreshInterface();
+        this.fireTimer = 0;
     }
 
     function setType(towerTypeID) {
@@ -133,7 +134,6 @@ object Tower {
         this.damage += this.type.data.baseDamage;
         this.speed += this.type.data.baseSpeed;
         this.range += this.type.data.baseRange; 
-        this.fireTimer = 0;
 
         // Make sure to clear any previous cannon unit if available
         Utils.removeUnit(Unit.getConnectedUnit(this.unit));
@@ -282,26 +282,23 @@ object Tower {
                 case 2: this.applyUpgrade(this.currentUpgradeOptionSet.optionC); break;
                 case 8: this.sell(); break;
             }
-
         }
     }
 
     function updateInterface(playerID) {
-        if (this == 0) {
-            return;
-        }
-        if (this.type == 0) {
-            if (IsUserCP()) {
+        if (IsUserCP()) {
+            // setcurpl(P1); Screen.printf("updateInterface {}", playerID);
+            if (this.type == 0) {
+                // setcurpl(P1); Screen.printf("type = 0");
                 Utils.setUnitWeapon(TowerUnitType, Const.Weapon_None);
                 CommandCard.hideAllButtonIcons();
                 CommandCard.setButtonIcon(0, Const.Icon_PsiAssault, Strings.SelectAirTower);
                 CommandCard.setButtonIcon(1, Const.Icon_FlameThrower, Strings.SelectFireTower);
                 CommandCard.setButtonIcon(2, Const.Icon_ArgusJewel, Strings.SelectWaterTower);
-                CommandCard.setButtonIcon(3, Const.Icon_Spines, Strings.SelectEarthTower);
+                CommandCard.setButtonIcon(3, Const.Icon_Spines, Strings.SelectAirTower);
                 CommandCard.setButtonIcon(8, Const.Icon_ReturnResources, Strings.SellTower);
-            }
-        } else {
-             if (IsUserCP()) {
+            } else {
+                // setcurpl(P1); Screen.printf("type > 0");
                 // Have a unit for every player that is just there to represent the mineral cost for next upgrade        
                 // Utils.setUnitCost(100 + playerID, 10 + Unit.getRankIncrease(selectedUnit) * 10);
                 const weaponStringID = 229 + playerID;
@@ -309,12 +306,11 @@ object Tower {
                 Utils.setWeaponDamage(playerID, this.damage);
                 Utils.setWeaponIcon(playerID, this.type.displayData.icon);
                 Utils.setUnitWeapon(TowerUnitType, playerID);
-
+                CommandCard.hideAllButtonIcons();
                 if (this.currentUpgradeOptionSet == 0) {
-                    CommandCard.hideAllButtonIcons();
                     CommandCard.setButtonIcon(8, Const.Icon_ReturnResources, Strings.SellTower);
                 } else {
-                    CommandCard.hideAllButtonIcons();
+                    // setcurpl(P1); Screen.printf("icons = [{},{},{}]", this.currentUpgradeOptionSet.optionA.icon, this.currentUpgradeOptionSet.optionB.icon, this.currentUpgradeOptionSet.optionC.icon);
                     CommandCard.setButtonIcon(0, this.currentUpgradeOptionSet.optionA.icon, this.currentUpgradeOptionSet.optionA.tooltip);
                     CommandCard.setButtonIcon(1, this.currentUpgradeOptionSet.optionB.icon, this.currentUpgradeOptionSet.optionB.tooltip);
                     CommandCard.setButtonIcon(2, this.currentUpgradeOptionSet.optionC.icon, this.currentUpgradeOptionSet.optionC.tooltip);
@@ -322,7 +318,7 @@ object Tower {
                 }
             }
         }
-       
+        Utils.refreshInterface();
     }
 };
 
@@ -374,6 +370,7 @@ function createBaseTower(location, playerID) : Tower {
     if (Bring($P8, AtLeast, 1, TowerUnitType, $L("SafeCreate"))) {
         RemoveUnitAt(1, TowerUnitType, $L("SafeCreate"), $P8);
         eprintln("You can't build there.");
+        return 0;
     } else {
         GiveUnits(1, TowerUnitType, $P8, location, playerID);
     }

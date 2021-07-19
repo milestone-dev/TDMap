@@ -177,9 +177,9 @@ function beforeTriggerExec() {
 				var roundedX = ((x / 32) * 32) + 32;
 				var roundedY = ((y / 32) * 32) + 32;
 			    Utils.centerLocationOnPoint(PlacementLocation, roundedX, roundedY, 64, 64);
-				const tower = Towers.createBaseTower(PlacementLocation, playerID);
-				tower.updateInterface(playerID);
+				Towers.createBaseTower(PlacementLocation, playerID);
 				Unit.setOrder(selectedUnit, Const.Order_Nothing2_Normal);
+				refreshSelection(playerID);
 			}
 		}
 
@@ -204,9 +204,7 @@ function beforeTriggerExec() {
 			const tower = Towers.getTowerForUnit(selectedUnit);
 			if (tower != 0) {
 				if (PlayerSelectedUnit[playerID] != selectedUnit) {
-					if (IsUserCP()) {
-						tower.updateInterface(playerID);
-					}
+					tower.updateInterface(playerID);
 					PlayerSelectedUnit[playerID] = selectedUnit;
 					Unit.setStatusFlags(selectedUnit, 0x04340008);
 					Timer.add(0, selectedUnit, EUDFuncPtr (2, 0) (function(callbackUnit, intervalCount) {
