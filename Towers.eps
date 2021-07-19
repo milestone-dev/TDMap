@@ -136,7 +136,6 @@ object Tower {
         this.range += this.type.data.baseRange; 
 
         // Make sure to clear any previous cannon unit if available
-        Utils.removeUnit(Unit.getConnectedUnit(this.unit));
         Unit.setCustomValue(this.unit, towerTypeID); // Legacy - really needed anymore?s
         const playerID = Unit.getPlayerID(this.unit);
         Utils.moveUtilLocationToUnit(this.unit);
