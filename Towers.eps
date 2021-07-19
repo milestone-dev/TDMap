@@ -135,7 +135,6 @@ object Tower {
         this.speed += this.type.data.baseSpeed;
         this.range += this.type.data.baseRange; 
 
-        Unit.setCustomValue(this.unit, towerTypeID); // Legacy - really needed anymore?s
         const playerID = Unit.getPlayerID(this.unit);
         Utils.moveUtilLocationToUnit(this.unit);
         const cannonSpriteID = 487;
@@ -156,12 +155,6 @@ object Tower {
             return;
         }
         const upgradeObject = Upgrades.TowerUpgrade.cast(upgrade);
-        // setcurpl(P1); Screen.printf("applyUpgrade {:s} DSR: {} {} {}",
-        //     upgradeObject.tooltip,
-        //     upgradeObject.attributes[Upgrades.Damage],
-        //     upgradeObject.attributes[Upgrades.Speed],
-        //     upgradeObject.attributes[Upgrades.Range]
-        // );
         this.damage += upgradeObject.attributes[Upgrades.Damage];
         this.speed += upgradeObject.attributes[Upgrades.Speed];
         this.range += upgradeObject.attributes[Upgrades.Range];
@@ -354,10 +347,6 @@ function isUnitTower(unit) {
     return false;
 }
 
-function getTowerTypeFromUnit(towerUnit): TowerType {
-    return TOWER_TYPES[Unit.getCustomValue(towerUnit)];
-}
-
 function isTowerTypeValid(towerType) {
     return towerType != 0;
 }
@@ -412,29 +401,25 @@ function missileHit(missileUnit) {
     const targetUnitPriority = Unit.getKillCount(targetUnit);
     if (Unit.damage(targetUnit, tower.damage)) {
         SetResources(Unit.getPlayerID(towerUnit), 8, Utils.getUnitDestroyValue(targetUnitType), 0);
+        // TODO: just read data directly, remove this data array
         const data = [targetUnitType, targetUnitX, targetUnitY, targetUnitPriority, targetUnit, createLocationX, createLocationY];
-        Timer.add(6, data, EUDFuncPtr (2, 0) (function(data, intervalCount) {
-            for (var i = 0; i < 2; i++) {
-                const unitType = Waves.GetNextUnitType(targetUnitType);
-                if (unitType != Const.Unit_None) {
-                    const unitData = EUDArray.cast(data);
-                    const targetUnitType = unitData[0];
-                    const targetUnitX = unitData[1];
-                    const targetUnitY = unitData[2];
-                    const targetUnitPriority = unitData[3];
-                    const targetUnit = unitData[4];
-                    const createLocationX = unitData[5];
-                    const createLocationY = unitData[6];
-                    // Create unit offscreen
-                    const unit = Utils.createUnit(unitType, Utils.OFFSCREEN_LOCATION, $P7);
-                    Unit.setStatusFlags(unit, 0x00230005); // 5xxxx does not move
-                    Utils.moveUnit(unit, Utils.moveUtilLocationToPoint(createLocationX, createLocationY));
-                    Unit.setKillCount(unit, targetUnitPriority);
-                    Unit.orderToPoint(unit, targetUnitX, targetUnitY);
-                }
-            }
-        }));
-        
+        const unitType = Waves.GetNextUnitType(targetUnitType);
+        if (unitType != Const.Unit_None) {
+            const unitData = EUDArray.cast(data);
+            const targetUnitType = unitData[0];
+            const targetUnitX = unitData[1];
+            const targetUnitY = unitData[2];
+            const targetUnitPriority = unitData[3];
+            const targetUnit = unitData[4];
+            const createLocationX = unitData[5];
+            const createLocationY = unitData[6];
+            // Create unit offscreen
+            const unit = Utils.createUnit(unitType, Utils.OFFSCREEN_LOCATION, $P7);
+            Unit.setStatusFlags(unit, 0x00230005); // 5xxxx does not move
+            Utils.moveUnit(unit, Utils.moveUtilLocationToPoint(createLocationX, createLocationY));
+            Unit.setKillCount(unit, targetUnitPriority);
+            Unit.orderToPoint(unit, targetUnitX, targetUnitY);
+        }
     }
     Utils.removeUnit(missileUnit);
 }
