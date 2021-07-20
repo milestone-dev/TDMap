@@ -14,6 +14,7 @@ var CurrentWaveID;
 var CurrentWaveSpawnTimer = 0;
 var CurrentWaveSpawnTimerIncrement = 0;
 var CurrentWave = EUDArray(7);
+var CurrentWaveReward = 0;
 var SpawnCooldown;
 
 const UseTestWave = false;
@@ -41,10 +42,7 @@ function StartWave(waveID) {
 	CurrentWaveID = waveID;
 	KillAllMobs();
 	if (waveID > 0) {
-		setcurpl(P1); Screen.printf("Starting Wave {}", waveID);
-        SetResources(P1, SetTo, waveID, 1);
-        SetResources(P2, SetTo, waveID, 1);
-        SetResources(P3, SetTo, waveID, 1);
+        SetResources(AllPlayers, SetTo, waveID, 1);
 		// TODO Make sure array is copied, otherwise you can't replay the same wave twice
 		CurrentWave = Balance.CalculateMobsForWave(CurrentWaveID); 
 		if (UseTestWave) {
@@ -55,7 +53,9 @@ function StartWave(waveID) {
 		}
 		CurrentWaveSpawnTimer = MobCountMultiplierConstant;
 		const remainingMobs = CalculateCurrentWaveRemainingMobs();
+		CurrentWaveReward = remainingMobs;
 		CurrentWaveSpawnTimerIncrement = remainingMobs * MobCountMultiplierConstant / SpawnDurationConstant;
+		setcurpl(P1); Screen.printf("Starting Wave {} r: {} ", waveID, CurrentWaveReward);
 		if (remainingMobs == 0) {
 			setcurpl(P1); Screen.printf("Error: Wave is empty: {}", waveID);
 			CurrentWaveID = 0;
@@ -64,6 +64,9 @@ function StartWave(waveID) {
 }
 
 function GoToNextWave() {
+    SetResources(AllPlayers, Add, CurrentWaveReward, 0);
+	setcurpl(P1); Screen.printf("Wave completed! Adding {} minerals.", CurrentWaveReward);
+    CurrentWaveReward = 0;
 	StartWave(CurrentWaveID+1);
 }
 
