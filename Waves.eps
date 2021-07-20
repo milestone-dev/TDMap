@@ -67,10 +67,10 @@ function GoToNextWave() {
 function GetUnitTypeForTier(tier) {
 	switch(tier) {
 	    case 1: return Const.Unit_ZergZergling; break;
-	    case 2: return Const.Unit_ZergBroodling; break;
+	    case 2: return Const.Unit_ZergMutalisk; break; // Broodling
 	    case 3: return Const.Unit_ZergDrone; break;
 	    case 4: return Const.Unit_ZergDefiler; break;
-	    case 5: return Const.Unit_ZergGuardian; break;
+	    case 5: return Const.Unit_ZergGuardian; break; // Lurker
 	    case 6: return Const.Unit_ZergUltralisk; break;
 	}
     return Const.Unit_None;
@@ -81,8 +81,8 @@ function GetNextUnitType(unitType) {
         case Const.Unit_ZergUltralisk: return Const.Unit_ZergGuardian; break;
         case Const.Unit_ZergGuardian: return Const.Unit_ZergDefiler; break;
         case Const.Unit_ZergDefiler: return Const.Unit_ZergDrone; break;
-        case Const.Unit_ZergDrone: return Const.Unit_ZergBroodling; break;
-        case Const.Unit_ZergBroodling: return Const.Unit_ZergZergling; break;
+        case Const.Unit_ZergDrone: return Const.Unit_ZergMutalisk; break;
+        case Const.Unit_ZergMutalisk: return Const.Unit_ZergZergling; break;
     }
     return Const.Unit_None;
 }
