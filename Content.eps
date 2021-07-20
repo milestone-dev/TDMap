@@ -160,6 +160,9 @@ function loadData() {
             Common.MakeImage(Const.Image_Glave_Wurm_Seeker_Spores_Hit, 0, 0)
         )
     );
+    EarthTower.hit = EUDFuncPtr (3, 0) (function(towerType, missileUnit, targetUnit) {
+        PlayWAV("sound\\bullet\\zdrhit00.wav");
+    });
 
     const FireTower = Towers.CreateTowerType(3,
         FireUpgradeSet1,
@@ -190,7 +193,7 @@ function loadData() {
     );
     WaterTower.hit = EUDFuncPtr (3, 0) (function(towerType, missileUnit, targetUnit) {
         const slowSpeed = 100;//Unit.getOriginalTopSpeed(targetUnit) / 10;
-        if ( Unit.getTopSpeed(targetUnit) == slowSpeed) {
+        if (Unit.getTopSpeed(targetUnit) == slowSpeed) {
             return;
         }
         const duration = 64;

@@ -115,6 +115,7 @@ object Tower {
     var range;
     var speed;
     var fireTimer;
+    var upgradeValue;
 
     function fire();
     function updateInterface();
@@ -152,13 +153,23 @@ object Tower {
 
     function applyUpgrade(upgrade) {
         if (upgrade == 0) {
-            return;
+            return false;
         }
+        const playerID = Unit.getPlayerID(this.unit);
         const upgradeObject = Upgrades.TowerUpgrade.cast(upgrade);
-        this.damage += upgradeObject.attributes[Upgrades.Damage];
-        this.speed += upgradeObject.attributes[Upgrades.Speed];
-        this.range += upgradeObject.attributes[Upgrades.Range];
-        this.currentUpgradeOptionSet = upgradeObject.nextSet;
+        const cost = upgradeObject.getCost(this.upgradeValue);
+        if (Accumulate(playerID, AtLeast, cost, 0)) {
+            this.damage += upgradeObject.attributes[Upgrades.Damage];
+            this.speed += upgradeObject.attributes[Upgrades.Speed];
+            this.range += upgradeObject.attributes[Upgrades.Range];
+            this.currentUpgradeOptionSet = upgradeObject.nextSet;
+            this.upgradeValue++;
+            SetResources(playerID, Subtract, cost, 0);
+            return true;
+        } else {
+            eprintln("Not enough minerals. Kill more mobs.");
+            return false;
+        }
     }
 
     function setTarget(targetUnit) {
@@ -307,9 +318,9 @@ object Tower {
                     CommandCard.setButtonIcon(8, Const.Icon_ReturnResources, Strings.SellTower);
                 } else {
                     // setcurpl(P1); Screen.printf("icons = [{},{},{}]", this.currentUpgradeOptionSet.optionA.icon, this.currentUpgradeOptionSet.optionB.icon, this.currentUpgradeOptionSet.optionC.icon);
-                    CommandCard.setButtonIcon(0, this.currentUpgradeOptionSet.optionA.icon, this.currentUpgradeOptionSet.optionA.tooltip);
-                    CommandCard.setButtonIcon(1, this.currentUpgradeOptionSet.optionB.icon, this.currentUpgradeOptionSet.optionB.tooltip);
-                    CommandCard.setButtonIcon(2, this.currentUpgradeOptionSet.optionC.icon, this.currentUpgradeOptionSet.optionC.tooltip);
+                    CommandCard.setButtonIcon(0, this.currentUpgradeOptionSet.optionA.icon, this.currentUpgradeOptionSet.optionA.generateToltip(this.upgradeValue));
+                    CommandCard.setButtonIcon(1, this.currentUpgradeOptionSet.optionB.icon, this.currentUpgradeOptionSet.optionB.generateToltip(this.upgradeValue));
+                    CommandCard.setButtonIcon(2, this.currentUpgradeOptionSet.optionC.icon, this.currentUpgradeOptionSet.optionC.generateToltip(this.upgradeValue));
                     CommandCard.setButtonIcon(8, Const.Icon_ReturnResources, Strings.SellTower);
                 }
             }

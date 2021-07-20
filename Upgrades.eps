@@ -12,15 +12,25 @@ const Speed = 1;
 const Range = 2;
 object TowerUpgrade {
     var icon;
-    var tooltip;
+    var title;
     var nextSet; // pointer to TowerUpgradeOptionSet
     var attributes : EUDArray(10); // See CreateTowerUpgrade for reference, make constants
+
+    function getCost(upgradeValue) {
+        return (upgradeValue+1) * (this.attributes[Damage] + this.attributes[Speed] + this.attributes[Range]);
+    }
+
+    function generateToltip(upgradeValue) {
+        const t = Db(64);
+        sprintf(t, "{:s}\n(UpgradeValue: {})\nCost: \x1C{}\x01", this.title, upgradeValue, this.getCost(upgradeValue));
+        return t;
+    }
 };
 
-function CreateTowerUpgrade(icon, tooltip, nextSet, attributes:EUDArray) : TowerUpgrade {
+function CreateTowerUpgrade(icon, title, nextSet, attributes:EUDArray) : TowerUpgrade {
     const upg = TowerUpgrade.alloc();
     upg.icon = icon;
-    upg.tooltip = tooltip;
+    upg.title = title;
     upg.nextSet = nextSet;
     upg.attributes = EUDArray(10);
     upg.attributes = attributes;
@@ -38,6 +48,6 @@ function CreateUpgradeSet(optionA, optionB, optionC) : TowerUpgradeOptionSet {
     towerUpgradeSet.optionA = optionA;
     towerUpgradeSet.optionB = optionB;
     towerUpgradeSet.optionC = optionC;
-    // setcurpl(P1); Screen.printf("CreateUpgradeSet [{:s}, {:s}, {:s}]", towerUpgradeSet.optionA.tooltip, towerUpgradeSet.optionB.tooltip, towerUpgradeSet.optionC.tooltipca);
+    // setcurpl(P1); Screen.printf("CreateUpgradeSet [{:s}, {:s}, {:s}]", towerUpgradeSet.optionA.title, towerUpgradeSet.optionB.title, towerUpgradeSet.optionC.title);
     return towerUpgradeSet;
 }
