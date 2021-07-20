@@ -55,7 +55,7 @@ function StartWave(waveID) {
 		const remainingMobs = CalculateCurrentWaveRemainingMobs();
 		CurrentWaveReward = remainingMobs;
 		CurrentWaveSpawnTimerIncrement = remainingMobs * MobCountMultiplierConstant / SpawnDurationConstant;
-		setcurpl(P1); Screen.printf("Starting Wave {} r: {} ", waveID, CurrentWaveReward);
+		setcurpl(P1); Screen.printf("Starting Wave {}", waveID);
 		if (remainingMobs == 0) {
 			setcurpl(P1); Screen.printf("Error: Wave is empty: {}", waveID);
 			CurrentWaveID = 0;
