@@ -39,6 +39,7 @@ const PlacementLocation = $L("Placement");
 const PlayerWeaponIndex = EUDArray(6);
 const PlayerWeaponCooldown = EUDArray(6);
 const PlayerSelectedUnit = EUDArray(6);
+var MissileMisses = 0;
 
 const MouseLoc = [
 	$L("MouseLoc1"),
@@ -266,6 +267,7 @@ function beforeTriggerExec() {
 					Towers.missileHit(unit);
 				}
 			} else {
+   				MissileMisses++; setcurpl(P1); Screen.printfAt(3, "Missile misses {}", MissileMisses);
 				Utils.removeUnit(unit);
 			}
 		}
