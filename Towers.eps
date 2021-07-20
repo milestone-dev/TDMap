@@ -395,31 +395,15 @@ function missileHit(missileUnit) {
     if (tower.type.hit != 0) {
         tower.type.hit(tower.type, missileUnit, targetUnit);
     }
-    const createLocationX = Unit.getPositionX(targetUnit);
-    const createLocationY = Unit.getPositionY(targetUnit);
-    const targetUnitX = Unit.getOrderTargetX(targetUnit);
-    const targetUnitY = Unit.getOrderTargetY(targetUnit);
-    const targetUnitPriority = Unit.getRemoveTimer(targetUnit);
     if (Unit.damage(targetUnit, tower.damage)) {
         SetResources(Unit.getPlayerID(towerUnit), 8, Utils.getUnitDestroyValue(targetUnitType), 0);
-        // TODO: just read data directly, remove this data array
-        const data = [targetUnitType, targetUnitX, targetUnitY, targetUnitPriority, targetUnit, createLocationX, createLocationY];
         const unitType = Waves.GetNextUnitType(targetUnitType);
         if (unitType != Const.Unit_None) {
-            const unitData = EUDArray.cast(data);
-            const targetUnitType = unitData[0];
-            const targetUnitX = unitData[1];
-            const targetUnitY = unitData[2];
-            const targetUnitPriority = unitData[3];
-            const targetUnit = unitData[4];
-            const createLocationX = unitData[5];
-            const createLocationY = unitData[6];
-            // Create unit offscreen
             const unit = Utils.createUnit(unitType, Utils.OFFSCREEN_LOCATION, $P7);
             Unit.setStatusFlags(unit, 0x00230005); // 5xxxx does not move
-            Utils.moveUnit(unit, Utils.moveUtilLocationToPoint(createLocationX, createLocationY));
-            Unit.setKillCount(unit, targetUnitPriority);
-            Unit.orderToPoint(unit, targetUnitX, targetUnitY);
+            Utils.moveUnit(unit, Utils.moveUtilLocationToUnit(targetUnit));
+            Unit.setRemoveTimer(unit, Unit.getRemoveTimer(targetUnit));
+            Unit.orderToPoint(unit, Unit.getOrderTargetX(targetUnit), Unit.getOrderTargetY(targetUnit));
         }
     }
     Utils.removeUnit(missileUnit);

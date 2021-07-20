@@ -230,6 +230,7 @@ function moveUtilLocationToPoint(x, y) {
 
 function moveUtilLocationToUnit(unit) {
 	SetLocationToUnitEPD(UTILITY_LOCATION, unit, 0x028, 0x02A);
+    return UTILITY_LOCATION;
 }
 
 function EUDTurbo() {
