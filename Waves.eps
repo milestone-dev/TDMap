@@ -42,6 +42,9 @@ function StartWave(waveID) {
 	KillAllMobs();
 	if (waveID > 0) {
 		setcurpl(P1); Screen.printf("Starting Wave {}", waveID);
+        SetResources(P1, SetTo, waveID, 1);
+        SetResources(P2, SetTo, waveID, 1);
+        SetResources(P3, SetTo, waveID, 1);
 		// TODO Make sure array is copied, otherwise you can't replay the same wave twice
 		CurrentWave = Balance.CalculateMobsForWave(CurrentWaveID); 
 		if (UseTestWave) {
