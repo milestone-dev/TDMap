@@ -7,6 +7,7 @@ import Balance;
 import Waves;
 import Towers;
 import Content;
+import CommandCard;
 
 const Screen = StringBuffer(256);
 const MouseLeftButtonPress = EUDArray(6);
@@ -92,6 +93,12 @@ function initMap() {
 	EUDRegisterObjectToNamespace("CommandKeyDown", CommandKeyDown);
 
 	Content.loadData();
+
+	EUDPlayerLoop()();
+    if (IsUserCP()) {
+    	CommandCard.hideAllButtonIcons();
+	}
+	EUDEndPlayerLoop();
 }
 
 function onPluginStart() {
