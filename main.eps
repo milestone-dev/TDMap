@@ -204,10 +204,10 @@ function beforeTriggerExec() {
 		// MOB DISPLAY
 		if (Unit.getPlayerID(selectedUnit) == $P7) {
 			Screen.printfAt(0,
-				"U: {} Speed {} {}",
+				"Unit: {}, Speed {}, Priority {}",
 				Unit.getUnitType(selectedUnit),
 				Unit.getFlingyTopSpeed(selectedUnit),
-				Unit.getAcceleration(selectedUnit)
+				Unit.getRemoveTimer(selectedUnit)
 			);
 		}
 
@@ -271,12 +271,7 @@ function beforeTriggerExec() {
 		if (true) {
 			// TODO: Move into UpdateMob function later.
 			// Hack for now, implement with timer later
-			Unit.set106Flag(unit, Unit.get106Flag(unit) + 1);
-			if (Unit.get106Flag(unit) > 12) {
-				Unit.set106Flag(unit, 0);
-				Unit.setKillCount(unit, Unit.getKillCount(unit) + 1);				
-			}
-
+			Unit.setRemoveTimer(unit, Unit.getRemoveTimer(unit) + Unit.getFlingyTopSpeed(unit)/100);
 			const maxHP = Unit.getMaxHitpoints(unit);
 			const hp = Unit.getHitpoints(unit);
 			const fraction = maxHP / 4;

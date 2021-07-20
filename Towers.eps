@@ -23,12 +23,12 @@ function findNewTargetInLocation(location, playerID) {
 
     var targetUnit = 0;
     var lowestHP = 0;
-    var longestTimeOnMap = 0;
+    var longestDistanceOnPath = 0;
     foreach(ptr, unit : EUDLoopPlayerUnit(playerID)) {
         if (Utils.CUnitInLocationPadded(unit, location, 128)) {
-            const unitAge = Unit.getKillCount(unit);
-            if (targetUnit == 0 || unitAge > longestTimeOnMap) {
-                longestTimeOnMap = unitAge;
+            const distanceOnPath  = Unit.getRemoveTimer(unit);
+            if (targetUnit == 0 || distanceOnPath  > longestDistanceOnPath) {
+                longestDistanceOnPath = distanceOnPath ;
                 targetUnit = unit;
                 const hp = Unit.getHitpoints(unit);
                 if (targetUnit == 0 || hp < lowestHP) {
@@ -399,7 +399,7 @@ function missileHit(missileUnit) {
     const createLocationY = Unit.getPositionY(targetUnit);
     const targetUnitX = Unit.getOrderTargetX(targetUnit);
     const targetUnitY = Unit.getOrderTargetY(targetUnit);
-    const targetUnitPriority = Unit.getKillCount(targetUnit);
+    const targetUnitPriority = Unit.getRemoveTimer(targetUnit);
     if (Unit.damage(targetUnit, tower.damage)) {
         SetResources(Unit.getPlayerID(towerUnit), 8, Utils.getUnitDestroyValue(targetUnitType), 0);
         // TODO: just read data directly, remove this data array
