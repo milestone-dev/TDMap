@@ -364,10 +364,10 @@ function isTowerTypeValid(towerType) {
 }
 
 function createBaseTower(location, playerID) : Tower {
-    const towerUnit = Utils.createUnit(TowerUnitType, $L("SafeCreate"), $P8);
-    MoveUnit(1, TowerUnitType, $P8, $L("SafeCreate"), location);
-    if (Bring($P8, AtLeast, 1, TowerUnitType, $L("SafeCreate"))) {
-        RemoveUnitAt(1, TowerUnitType, $L("SafeCreate"), $P8);
+    const towerUnit = Utils.createUnit(TowerUnitType, Utils.OFFSCREEN_LOCATION, $P8);
+    MoveUnit(1, TowerUnitType, $P8, Utils.OFFSCREEN_LOCATION, location);
+    if (Bring($P8, AtLeast, 1, TowerUnitType, Utils.OFFSCREEN_LOCATION)) {
+        RemoveUnitAt(1, TowerUnitType, Utils.OFFSCREEN_LOCATION, $P8);
         eprintln("You can't build there.");
         return 0;
     } else {

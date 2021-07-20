@@ -32,14 +32,8 @@ const Command_Wave = 1; // W
 const Command_Kill = 2; // K
 const Command_Minerals = 3; // M
 
-const PlacementLocation = $L("Placement");
-
-// TODO replace with objects
-
-const PlayerWeaponIndex = EUDArray(6);
-const PlayerWeaponCooldown = EUDArray(6);
 const PlayerSelectedUnit = EUDArray(6);
-var MissileMisses = 0;
+var Debug_MissileMisses = 0;
 
 const MouseLoc = [
 	$L("MouseLoc1"),
@@ -94,7 +88,9 @@ function initMap() {
 	EUDRegisterObjectToNamespace("CommandKeyDown", CommandKeyDown);
 
 	Content.loadData();
+	Waves.SetLevel(1);
 
+    SetResources(AllPlayers, SetTo, 100, 1);
     SetResources(AllPlayers, Add, 16, 0);
 
 	EUDPlayerLoop()();
@@ -189,8 +185,8 @@ function beforeTriggerExec() {
 				var x, y = Utils.getLocationPoint(MouseLoc[playerID]);
 				var roundedX = ((x / 32) * 32) + 32;
 				var roundedY = ((y / 32) * 32) + 32;
-			    Utils.centerLocationOnPoint(PlacementLocation, roundedX, roundedY, 32, 32);
-				Towers.createBaseTower(PlacementLocation, playerID);
+			    Utils.centerLocationOnPoint(Utils.LOCATION_ANYSIZE, roundedX, roundedY, 32, 32);
+				Towers.createBaseTower(Utils.LOCATION_ANYSIZE, playerID);
 				Unit.setOrder(selectedUnit, Const.Order_Nothing2_Normal);
 				refreshSelection(playerID);
 			}
@@ -269,7 +265,7 @@ function beforeTriggerExec() {
 					Towers.missileHit(unit);
 				}
 			} else {
-   				MissileMisses++; setcurpl(P1); Screen.printfAt(3, "Missile misses {}", MissileMisses);
+   				Debug_MissileMisses++; setcurpl(P1); Screen.printfAt(3, "Missile misses {}", Debug_MissileMisses);
 				Utils.removeUnit(unit);
 			}
 		}

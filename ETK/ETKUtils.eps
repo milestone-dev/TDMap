@@ -199,6 +199,16 @@ function getLocationPoint(location) {
 	return lx1, ly1;
 }
 
+function getLocationRect(location) {
+   	const locTable = EPD(0x58DC4C);
+	const lx1 = dwread_epd(locTable + location * 5);
+	const ly1 = dwread_epd(locTable + location * 5 + 1);
+	const lx2 = dwread_epd(locTable + location * 5 + 2);
+	const ly2 = dwread_epd(locTable + location * 5 + 3);
+	return lx1, ly1, lx2, ly2;
+}
+
+
 function setLocationToRect(location, x, y, w, h) {
     setloc(location, x, y, x+w, y+h);
 }
@@ -206,8 +216,8 @@ function setLocationToRect(location, x, y, w, h) {
 function setLocationToLocation(location, sourceLocation) {
 	const locTable = EPD(0x58DC4C);
 	const lx1 = dwread_epd(locTable + sourceLocation * 5);
-	const lx2 = dwread_epd(locTable + sourceLocation * 5 + 2);
 	const ly1 = dwread_epd(locTable + sourceLocation * 5 + 1);
+	const lx2 = dwread_epd(locTable + sourceLocation * 5 + 2);
 	const ly2 = dwread_epd(locTable + sourceLocation * 5 + 3);
     setloc(location, lx1, ly1, lx2, ly2);
 }

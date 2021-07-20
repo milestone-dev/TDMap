@@ -9,6 +9,10 @@ const Screen = StringBuffer(64);
 const MobCountMultiplierConstant = 1000;
 const SpawnDurationConstant = 600;
 
+const MobPlayer = $P7;
+const LocationInset = 8;
+const LocationSize = 8;
+const TileSize = 32;
 
 var CurrentWaveID;
 var CurrentWaveSpawnTimer = 0;
@@ -20,10 +24,36 @@ var SpawnCooldown;
 const UseTestWave = false;
 const TestWave = [0,0,0,0,0,0,1];
 
-// TODO Extend to all players, move to a point system.
-const SpawnLocations = [
-	$L("P1Track1")
+
+// TODO Move to Levels.eps later
+const TrackLocationFrom = $L("TrackLocation1");
+const TrackLocationTo = $L("TrackLocation2");
+var LevelTrackCoordinates = EUDArray(1);
+const Level1TrackCoordinates = [
+	Common.CreatePoint(124, 29),
+	Common.CreatePoint(105, 29),
+	Common.CreatePoint(105, 35),
+	Common.CreatePoint(113, 35),
+	Common.CreatePoint(113, 32),
+	Common.CreatePoint(110, 32),
+	Common.CreatePoint(110, 41),
+	Common.CreatePoint(107, 41),
+	Common.CreatePoint(107, 38),
+	Common.CreatePoint(118, 38),
+	Common.CreatePoint(118, 32),
+	Common.CreatePoint(121, 32),
+	Common.CreatePoint(121, 41),
+	Common.CreatePoint(113, 41),
+	Common.CreatePoint(113, 44)
 ];
+
+function SetLevel(levelID) {
+	if (levelID == 1) {
+		LevelTrackCoordinates = Level1TrackCoordinates;
+	} else {
+		return;
+	}
+}
 
 function CalculateCurrentWaveRemainingMobs() {
 	var num = 0;
@@ -35,19 +65,17 @@ function CalculateCurrentWaveRemainingMobs() {
 }
 
 function KillAllMobs() {
-	RemoveUnit(Const.Unit_AnyUnit, P7);
+	RemoveUnit(Const.Unit_AnyUnit, MobPlayer);
 }
 
 function StartWave(waveID) {
 	CurrentWaveID = waveID;
 	KillAllMobs();
 	if (waveID > 0) {
-        SetResources(AllPlayers, SetTo, waveID, 1);
 		// TODO Make sure array is copied, otherwise you can't replay the same wave twice
 		CurrentWave = Balance.CalculateMobsForWave(CurrentWaveID); 
 		if (UseTestWave) {
 			CurrentWave = TestWave;
-			// CurrentWave = EUDArray.cast(CurrentWave);
 			const CurrentWaveArr = EUDArray.cast(CurrentWave);
 			CurrentWaveArr[6] = 1;
 		}
@@ -110,24 +138,49 @@ function Update() {
 	if (CurrentWaveID == 0) {
 		return;
 	}
+
+	if (LevelTrackCoordinates == 0) {
+		return;
+	}
+
+	// Ordering units
+	const LevelTrackCoordinatesArray = EUDArray.cast(LevelTrackCoordinates);
+	var endPoint;
+	for (var i = 0; i < 64; i++) {
+
+		if (LevelTrackCoordinatesArray[i] == 0 || LevelTrackCoordinatesArray[i+1] == 0) {
+			break;
+		}
+		const p1 = Common.Point.cast(LevelTrackCoordinatesArray[i]);
+		const p2 = Common.Point.cast(LevelTrackCoordinatesArray[i+1]);
+		Utils.setLocationToRect(TrackLocationFrom, p1.x * TileSize + LocationInset, p1.y * TileSize + LocationInset, LocationSize, LocationSize);
+		Utils.setLocationToRect(TrackLocationTo, p2.x * TileSize + LocationInset, p2.y * TileSize + LocationInset, LocationSize, LocationSize);
+		endPoint = TrackLocationTo;
+		Order(Const.Unit_AnyUnit, MobPlayer, TrackLocationFrom, 0, TrackLocationTo);
+		// const a,b,c,d = Utils.getLocationRect(TrackLocationTo); setcurpl(P1); Screen.printf("loc TL {}x{} BR {}x{}", a,b,c,d);
+	}
+
+	// Creating units
 	CurrentWaveSpawnTimer += CurrentWaveSpawnTimerIncrement;
 	// setcurpl(P1); Screen.printfAt(1, "CurrentWaveSpawnTimer: {} / {}", CurrentWaveSpawnTimer, MobCountMultiplierConstant);
-	// setcurpl(P1); Screen.printAt(2, "...");	
+	const startPoint = Common.Point.cast(LevelTrackCoordinatesArray[0]);
+	Utils.setLocationToRect(TrackLocationFrom, startPoint.x * TileSize + LocationInset, startPoint.y * TileSize + LocationInset, LocationSize, LocationSize);
 	while (CurrentWaveSpawnTimer >= MobCountMultiplierConstant) {
-		// setcurpl(P1); Screen.printAt(2,"Spawn!");
 		CurrentWaveSpawnTimer -= MobCountMultiplierConstant;
-		const playerCount = 1; // TODO support multiple players and spawn locations
 		const nextUnitType = ExtractNextMobFromCurrentWave();
 		if (nextUnitType != Const.Unit_None) {
-			for (var i = 0; i < playerCount; i++) {
-				const unit = Utils.createUnit(nextUnitType, SpawnLocations[i], $P7);
-				Unit.setStatusFlags(unit, 0x00230005); // 5xxxx does not move, 3xxxx crashes	
-			}
+			const unit = Utils.createUnit(nextUnitType, TrackLocationFrom, MobPlayer);
+			Unit.setStatusFlags(unit, 0x00230005); // 5xxxx does not move, 3xxxx crashes	
 		} else {
-			// Wave ended, spawn next
-			if (Command(P7, Exactly, 0, Const.Unit_AnyUnit)) {
+			if (Command(MobPlayer, Exactly, 0, Const.Unit_AnyUnit)) {
 				GoToNextWave();
 			}
 		}
+	}
+
+	// Removing units
+	if (Bring(MobPlayer, AtLeast, 1, Const.Unit_AnyUnit, endPoint)) {
+		RemoveUnitAt(1, Const.Unit_AnyUnit, endPoint, MobPlayer);
+        SetResources(AllPlayers, Subtract, 1, 1);
 	}
 }
