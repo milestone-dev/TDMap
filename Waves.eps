@@ -24,6 +24,9 @@ var SpawnCooldown;
 const UseTestWave = false;
 const TestWave = [0,0,0,0,0,0,1];
 
+// Foward declare
+function StartWave(waveID);
+
 
 // TODO Move to Levels.eps later
 const TrackLocationFrom = $L("TrackLocation1");
@@ -47,12 +50,50 @@ const Level1TrackCoordinates = [
 	Common.CreatePoint(113, 44)
 ];
 
+const Level2TrackCoordinates = [
+	Common.CreatePoint(113, 85),
+	Common.CreatePoint(113, 88),
+	Common.CreatePoint(109, 88),
+	Common.CreatePoint(109, 91),
+	Common.CreatePoint(105, 91),
+	Common.CreatePoint(105, 96),
+	Common.CreatePoint(109, 96),
+	Common.CreatePoint(109, 99),
+	Common.CreatePoint(109, 99),
+	Common.CreatePoint(113, 99),
+	Common.CreatePoint(113, 99),
+	Common.CreatePoint(113, 103),
+	Common.CreatePoint(118, 103),
+	Common.CreatePoint(118, 99),
+	Common.CreatePoint(122, 99),
+	Common.CreatePoint(122, 96),
+	Common.CreatePoint(122, 96),
+	Common.CreatePoint(126, 96),
+	Common.CreatePoint(126, 91),
+	Common.CreatePoint(122, 91),
+	Common.CreatePoint(122, 88),
+	Common.CreatePoint(118, 88),
+	Common.CreatePoint(118, 85)
+];
+
+const LEVEL_COUNT = 2;
+const Levels = [
+	Level1TrackCoordinates,
+	Level2TrackCoordinates
+];
+
 function SetLevel(levelID) {
-	if (levelID == 1) {
-		LevelTrackCoordinates = Level1TrackCoordinates;
-	} else {
+	if (levelID == 0) {
 		return;
 	}
+	// Levels are 1-based
+	levelID -= 1;
+	if (levelID <= LEVEL_COUNT) {
+		LevelTrackCoordinates = Levels[levelID];
+	} else {
+		LevelTrackCoordinates = 0;
+	}
+	StartWave(1);
 }
 
 function CalculateCurrentWaveRemainingMobs() {

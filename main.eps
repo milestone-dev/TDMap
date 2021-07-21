@@ -14,10 +14,6 @@ const MouseLeftButtonPress = EUDArray(6);
 const MouseLeftButtonDown = EUDArray(6);
 const MouseRightButtonPress = EUDArray(6);
 const MouseRightButtonDown = EUDArray(6);
-const KeyQDown = EUDArray(6);
-const KeyPDown = EUDArray(6);
-const KeyUDown = EUDArray(6);
-
 
 // Debug console
 const ConsoleOpen = EUDArray(6);
@@ -31,6 +27,7 @@ const CommandKeyDown = EUDArray(6);
 const Command_Wave = 1; // W
 const Command_Kill = 2; // K
 const Command_Minerals = 3; // M
+const Command_Level = 4; // L
 
 const PlayerSelectedUnit = EUDArray(6);
 var Debug_MissileMisses = 0;
@@ -77,18 +74,12 @@ function initMap() {
 	EUDRegisterObjectToNamespace("MouseRightButtonPress", MouseRightButtonPress);
 	EUDRegisterObjectToNamespace("MouseRightButtonDown", MouseRightButtonDown);
 
-	EUDRegisterObjectToNamespace("KeyQDown", KeyQDown);
-	EUDRegisterObjectToNamespace("KeyPDown", KeyPDown);
-	EUDRegisterObjectToNamespace("KeyUDown", KeyUDown);
-	
-
 	EUDRegisterObjectToNamespace("KeyNumberDown", KeyNumberDown);
 	EUDRegisterObjectToNamespace("KeyENTERDown", KeyENTERDown);
 	EUDRegisterObjectToNamespace("KeyESCDown", KeyESCDown);
 	EUDRegisterObjectToNamespace("CommandKeyDown", CommandKeyDown);
 
 	Content.loadData();
-	Waves.SetLevel(1);
 
 	SetResources(AllPlayers, SetTo, 100, 1);
 	SetResources(AllPlayers, Add, 16, 0);
@@ -98,6 +89,8 @@ function initMap() {
 		CommandCard.hideAllButtonIcons();
 	}
 	EUDEndPlayerLoop();
+
+	Screen.print("Welcome! Type L1 in chat to get started");
 }
 
 function onPluginStart() {
@@ -121,6 +114,12 @@ function handleConsoleCommand(command, value, playerID) {
 			if (value > 0) {
 				Screen.printf("Adding {} minerals", value);
 				SetResources(playerID, 8, value, 0);
+			}
+		break;
+		case Command_Level:
+			if (value > 0) {
+				Screen.printf("Starting Level {}", value);
+				Waves.SetLevel(value);
 			}
 		break;
 	}
@@ -162,14 +161,7 @@ function handleConsoleInput(playerID) {
 function beforeTriggerExec() {
 	Utils.EUDTurbo();
 	Timer.tick();
-
-
-	if (Switch(0, 2) && Waves.CurrentWaveID == 0) {
-		Waves.StartWave(1);
-	}
-
 	Waves.Update();
-
 
 	EUDPlayerLoop()();
 	if (getcurpl() < $P7) {
