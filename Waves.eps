@@ -32,9 +32,7 @@ const TrackLocationFrom = $L("TrackLocation1");
 const TrackLocationTo = $L("TrackLocation2");
 var LevelTrackCoordinates = 0;
 const Level1TrackCoordinates = [
-	Common.CreatePoint(124, 29),
-	Common.CreatePoint(105, 29),
-	Common.CreatePoint(105, 35),
+	Common.CreatePoint(106, 35),
 	Common.CreatePoint(113, 35),
 	Common.CreatePoint(113, 32),
 	Common.CreatePoint(110, 32),
@@ -75,10 +73,16 @@ const Level2TrackCoordinates = [
 	Common.CreatePoint(118, 85)
 ];
 
-const LEVEL_COUNT = 2;
+const Level3TrackCoordinates = [
+	Common.CreatePoint(55, 52),
+	Common.CreatePoint(73, 52)
+];
+
+const LEVEL_COUNT = 3;
 const Levels = [
 	Level1TrackCoordinates,
-	Level2TrackCoordinates
+	Level2TrackCoordinates,
+	Level3TrackCoordinates
 ];
 
 function SetLevel(levelID) {
