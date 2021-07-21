@@ -254,10 +254,10 @@ function beforeTriggerExec() {
 				Unit.setOrderTargetY(unit, tY);
 				if (Utils.abs(uX-tX) < 48 && Utils.abs(uY-tY) < 48) {
 					Towers.missileHit(unit);
-					Screen.printfAt(2, "Hit: {},{}, O: {} TU: {}", Unit.getOrderTargetX(unit), Unit.getOrderTargetY(unit), Unit.getOrder(unit), Unit.getAutoTargetUnit(unit));
+					// Screen.printfAt(2, "Hit: {},{}, O: {} TU: {}", Unit.getOrderTargetX(unit), Unit.getOrderTargetY(unit), Unit.getOrder(unit), Unit.getAutoTargetUnit(unit));
 				}
 			} else {
-				Screen.printfAt(2, "Miss: {},{}, O: {} TU: {}", Unit.getOrderTargetX(unit), Unit.getOrderTargetY(unit), Unit.getOrder(unit), Unit.getAutoTargetUnit(unit));
+				// Screen.printfAt(2, "Miss: {},{}, O: {} TU: {}", Unit.getOrderTargetX(unit), Unit.getOrderTargetY(unit), Unit.getOrder(unit), Unit.getAutoTargetUnit(unit));
 				Debug_MissileMisses++; setcurpl(P1); Screen.printfAt(3, "Missile misses {}", Debug_MissileMisses);
 				Utils.removeUnit(unit);
 			}
