@@ -18,7 +18,7 @@ var fntil = 0;
 
 // TODO: Move utils
 
-function findNewTargetInLocation(location, playerID) {
+function findNewTargetInLocationMethod1(location, playerID) {
 	var targetUnit = 0;
 	var highestPriority = 0;
 	foreach(ptr, unit : EUDLoopPlayerUnit(playerID)) {
@@ -30,6 +30,22 @@ function findNewTargetInLocation(location, playerID) {
 			}
 		}
 	}
+	return targetUnit;
+}
+
+function findNewTargetInLocationMethod2(location, playerID) {
+	const tempPlayerID = $P6;
+	GiveUnits(0, Const.Unit_AnyUnit, playerID, location, tempPlayerID);
+	var targetUnit = 0;
+	var highestPriority = 0;
+	foreach(ptr, unit : EUDLoopPlayerUnit(tempPlayerID)) {
+		const priority  = Unit.getRemoveTimer(unit);
+		if (targetUnit == 0 || priority  > highestPriority) {
+			highestPriority = priority;
+			targetUnit = unit;
+		}
+	}
+	GiveUnits(0, Const.Unit_AnyUnit, tempPlayerID, $L("Anywhere"), playerID);
 	return targetUnit;
 }
 
@@ -200,7 +216,7 @@ object Tower {
 			Utils.centerLocationOnUnit(Utils.LOCATION_ANYSIZE, this.unit, this.range * 2, this.range * 2);
 			Utils.refreshLocations();
 			if (Bring(enemyPlayerID, AtLeast, 1, Const.Unit_AnyUnit, Utils.LOCATION_ANYSIZE)) {
-				const enemyUnit = findNewTargetInLocation(Utils.LOCATION_ANYSIZE, enemyPlayerID);
+				const enemyUnit = findNewTargetInLocationMethod2(Utils.LOCATION_ANYSIZE, enemyPlayerID);
 				if (enemyUnit != 0) {
 					this.setTarget(enemyUnit);
 				}
@@ -259,6 +275,7 @@ object Tower {
 		Unit.setOrder(missileUnit, Const.Order_Ignore_Normal);
 		Unit.setConnectedUnit(missileUnit, this.unit);
 		Unit.setAutoTargetUnit(missileUnit, targetUnit);
+		Unit.setRemoveTimer(missileUnit, 24);
 	}
 
 	function sell() {
@@ -415,7 +432,7 @@ function missileHit(missileUnit) {
 				Unit.setStatusFlags(unit, 0x00230005); // 5xxxx does not move
 				Utils.moveUnit(unit, Utils.moveUtilLocationToUnit(targetUnit));
 				Unit.setRemoveTimer(unit, Unit.getRemoveTimer(targetUnit));
-				Unit.orderToPoint(unit, Unit.getOrderTargetX(targetUnit), Unit.getOrderTargetY(targetUnit));
+				Unit.orderToPoint(unit, Unit.getNextMovementWaypointX(targetUnit), Unit.getNextMovementWaypointY(targetUnit));
 			}
 		}
 	}

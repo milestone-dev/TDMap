@@ -14,15 +14,14 @@ const LocationInset = 8;
 const LocationSize = 8;
 const TileSize = 32;
 
-var CurrentWaveID;
+var CurrentWaveID = 1;
 var CurrentWaveSpawnTimer = 0;
 var CurrentWaveSpawnTimerIncrement = 0;
 var CurrentWave = EUDArray(7);
 var CurrentWaveReward = 0;
-var SpawnCooldown;
 
 const UseTestWave = false;
-const TestWave = [0,0,0,0,0,0,1];
+const TestWave = [0,0,0,0,0,0,28];
 
 // Foward declare
 function StartWave(waveID);
@@ -93,7 +92,7 @@ function SetLevel(levelID) {
 	} else {
 		LevelTrackCoordinates = 0;
 	}
-	StartWave(0);
+	StartWave(1);
 }
 
 function CalculateCurrentWaveRemainingMobs() {
@@ -117,8 +116,6 @@ function StartWave(waveID) {
 		CurrentWave = Balance.CalculateMobsForWave(CurrentWaveID); 
 		if (UseTestWave) {
 			CurrentWave = TestWave;
-			const CurrentWaveArr = EUDArray.cast(CurrentWave);
-			CurrentWaveArr[6] = 1;
 		}
 		CurrentWaveSpawnTimer = MobCountMultiplierConstant;
 		const remainingMobs = CalculateCurrentWaveRemainingMobs();
@@ -188,7 +185,6 @@ function Update() {
 	const LevelTrackCoordinatesArray = EUDArray.cast(LevelTrackCoordinates);
 	var endPoint;
 	for (var i = 0; i < 64; i++) {
-
 		if (LevelTrackCoordinatesArray[i] == 0 || LevelTrackCoordinatesArray[i+1] == 0) {
 			break;
 		}
