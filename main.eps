@@ -31,6 +31,7 @@ const Command_Minerals = 3; // M
 const Command_Level = 4; // L
 
 const PlayerSelectedUnit = EUDArray(6);
+const SelectedUnitID = EUDArray(6);
 var Debug_MissileMisses = 0;
 
 const MouseLoc = [
@@ -52,7 +53,6 @@ const SelectionAddresses = [
 ];
 
 
-const SelectedUnitID = EUDArray(6);
 
 function updateSelectedUnit(playerID) {
 	const address = SelectionAddresses[playerID];
@@ -100,7 +100,6 @@ function onPluginStart() {
 	initMap();
 	Utils.setup();
 }
-
 
 function handleConsoleCommand(command, value, playerID) {
 	switch(command) {
