@@ -11,43 +11,43 @@ const Damage = 0;
 const Speed = 1;
 const Range = 2;
 object TowerUpgrade {
-    var icon;
-    var title;
-    var nextSet; // pointer to TowerUpgradeOptionSet
-    var attributes : EUDArray(10); // See CreateTowerUpgrade for reference, make constants
+	var icon;
+	var title;
+	var nextSet; // pointer to TowerUpgradeOptionSet
+	var attributes : EUDArray(10); // See CreateTowerUpgrade for reference, make constants
 
-    function getCost(upgradeValue) {
-        return (upgradeValue+1) * (this.attributes[Damage] + this.attributes[Speed] + this.attributes[Range]);
-    }
+	function getCost(upgradeValue) {
+		return (upgradeValue+1) * (this.attributes[Damage] + this.attributes[Speed] + this.attributes[Range]);
+	}
 
-    function generateToltip(upgradeValue) {
-        const t = Db(64);
-        sprintf(t, "{:s}\n(UpgradeValue: {})\nCost: \x1C{}\x01", this.title, upgradeValue, this.getCost(upgradeValue));
-        return t;
-    }
+	function generateToltip(upgradeValue) {
+		const t = Db(64);
+		sprintf(t, "{:s}\n(UpgradeValue: {})\nCost: \x1C{}\x01", this.title, upgradeValue, this.getCost(upgradeValue));
+		return t;
+	}
 };
 
 function CreateTowerUpgrade(icon, title, nextSet, attributes:EUDArray) : TowerUpgrade {
-    const upg = TowerUpgrade.alloc();
-    upg.icon = icon;
-    upg.title = title;
-    upg.nextSet = nextSet;
-    upg.attributes = EUDArray(10);
-    upg.attributes = attributes;
-    return upg;
+	const upg = TowerUpgrade.alloc();
+	upg.icon = icon;
+	upg.title = title;
+	upg.nextSet = nextSet;
+	upg.attributes = EUDArray(10);
+	upg.attributes = attributes;
+	return upg;
 }
 
 object TowerUpgradeOptionSet {
-    var optionA : TowerUpgrade;
-    var optionB : TowerUpgrade;
-    var optionC : TowerUpgrade;
+	var optionA : TowerUpgrade;
+	var optionB : TowerUpgrade;
+	var optionC : TowerUpgrade;
 };
 
 function CreateUpgradeSet(optionA, optionB, optionC) : TowerUpgradeOptionSet {
-    const towerUpgradeSet = TowerUpgradeOptionSet.alloc();
-    towerUpgradeSet.optionA = optionA;
-    towerUpgradeSet.optionB = optionB;
-    towerUpgradeSet.optionC = optionC;
-    // setcurpl(P1); Screen.printf("CreateUpgradeSet [{:s}, {:s}, {:s}]", towerUpgradeSet.optionA.title, towerUpgradeSet.optionB.title, towerUpgradeSet.optionC.title);
-    return towerUpgradeSet;
+	const towerUpgradeSet = TowerUpgradeOptionSet.alloc();
+	towerUpgradeSet.optionA = optionA;
+	towerUpgradeSet.optionB = optionB;
+	towerUpgradeSet.optionC = optionC;
+	// setcurpl(P1); Screen.printf("CreateUpgradeSet [{:s}, {:s}, {:s}]", towerUpgradeSet.optionA.title, towerUpgradeSet.optionB.title, towerUpgradeSet.optionC.title);
+	return towerUpgradeSet;
 }

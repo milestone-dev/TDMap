@@ -4,24 +4,24 @@ const timerLength = 100;
 const timers = EUDArray(100);
 
 object Entry {
-    var callback: EUDFuncPtr (2, 1);
-    var index;
-    var originalTime;
-    var time;
-    var intervalCount;
-    var loops;
-    var ptr;
-    var completionCallback: EUDFuncPtr (1, 0);
-    
-    function tick() {
-    	if (this.time > 0) {
-    		this.time--;
-    	}
-    }
+	var callback: EUDFuncPtr (2, 1);
+	var index;
+	var originalTime;
+	var time;
+	var intervalCount;
+	var loops;
+	var ptr;
+	var completionCallback: EUDFuncPtr (1, 0);
+	
+	function tick() {
+		if (this.time > 0) {
+			this.time--;
+		}
+	}
   
-    function call() {
-        return this.callback(this.ptr, this.intervalCount);
-    }
+	function call() {
+		return this.callback(this.ptr, this.intervalCount);
+	}
 };
 
 function _getTimerEntry(i): Entry {

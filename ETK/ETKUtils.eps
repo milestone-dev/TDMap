@@ -114,7 +114,7 @@ function getImageClickable(imageID) {
 }
 
 function setImageClickable(imageID, clickable) {
-    bwrite(0x666778 + 23000 + imageID * 1, clickable);
+	bwrite(0x666778 + 23000 + imageID * 1, clickable);
 }
 
 function getUnitFlingy(unitType) {
@@ -149,58 +149,58 @@ function setSpriteImage(spriteID, imageID) {
 // Generic functions
 
 function SetPColor(pnum, color) {
-    const pcolor_dst = 0x581D76 + 8 * pnum;
-    const mcolor_dst = 0x581DD6 + pnum;
-    bwrite(pcolor_dst, color);
-    bwrite(mcolor_dst, color);
+	const pcolor_dst = 0x581D76 + 8 * pnum;
+	const mcolor_dst = 0x581DD6 + pnum;
+	bwrite(pcolor_dst, color);
+	bwrite(mcolor_dst, color);
 }
 
 function BuildCheckEPD(unitEPD, unitType) {
-    if(
-        wread_epd(unitEPD + 0x098 / 4,  0x098 % 4) == unitType || 
-        wread_epd(unitEPD + 0x09A / 4,  0x09A % 4) == unitType || 
-        wread_epd(unitEPD + 0x09C / 4,  0x09C % 4) == unitType || 
-        wread_epd(unitEPD + 0x09E / 4,  0x09E % 4) == unitType || 
-        wread_epd(unitEPD + 0x0A0 / 4,  0x0A0 % 4) == unitType
-    ){
-        return True;
-    }
-    return False;
+	if(
+		wread_epd(unitEPD + 0x098 / 4,  0x098 % 4) == unitType || 
+		wread_epd(unitEPD + 0x09A / 4,  0x09A % 4) == unitType || 
+		wread_epd(unitEPD + 0x09C / 4,  0x09C % 4) == unitType || 
+		wread_epd(unitEPD + 0x09E / 4,  0x09E % 4) == unitType || 
+		wread_epd(unitEPD + 0x0A0 / 4,  0x0A0 % 4) == unitType
+	){
+		return True;
+	}
+	return False;
 }
 
 function isLocationPathable(location) {
 	MoveUnit(1, ETKConstants.Unit_UnusedZergBuilding5, ETKUtilsEffectsPlayerID, $L("Anywhere"), location);
- 	if (Bring(ETKUtilsEffectsPlayerID, Exactly, 1, ETKConstants.Unit_UnusedZergBuilding5, location)) {
+	if (Bring(ETKUtilsEffectsPlayerID, Exactly, 1, ETKConstants.Unit_UnusedZergBuilding5, location)) {
 		MoveUnit(1, ETKConstants.Unit_UnusedZergBuilding5, ETKUtilsEffectsPlayerID, $L("Anywhere"), OFFSCREEN_LOCATION);
 		return true;
- 	}
+	}
 	MoveUnit(1, ETKConstants.Unit_UnusedZergBuilding5, ETKUtilsEffectsPlayerID, $L("Anywhere"), OFFSCREEN_LOCATION); 	
 	return false;
 }
 
 function offsetLocation(location,x,y) {
-    addloc(location,x,y);
+	addloc(location,x,y);
 }
 
 function SetLocationToUnitEPD(Location ,unit ,X ,Y) {
-    const xpos = wread_epd(unit + X / 4, 0);
-    const ypos = wread_epd(unit + Y / 4, 2);
-    setloc(Location, xpos, ypos);
+	const xpos = wread_epd(unit + X / 4, 0);
+	const ypos = wread_epd(unit + Y / 4, 2);
+	setloc(Location, xpos, ypos);
 }
 
 function setLocationToPoint(location, x, y) {
-    setloc(location, x, y);
+	setloc(location, x, y);
 }
 
 function getLocationPoint(location) {
-   	const locTable = EPD(0x58DC4C);
+	const locTable = EPD(0x58DC4C);
 	const lx1 = dwread_epd(locTable + location * 5);
 	const ly1 = dwread_epd(locTable + location * 5 + 1);
 	return lx1, ly1;
 }
 
 function getLocationRect(location) {
-   	const locTable = EPD(0x58DC4C);
+	const locTable = EPD(0x58DC4C);
 	const lx1 = dwread_epd(locTable + location * 5);
 	const ly1 = dwread_epd(locTable + location * 5 + 1);
 	const lx2 = dwread_epd(locTable + location * 5 + 2);
@@ -210,7 +210,7 @@ function getLocationRect(location) {
 
 
 function setLocationToRect(location, x, y, w, h) {
-    setloc(location, x, y, x+w, y+h);
+	setloc(location, x, y, x+w, y+h);
 }
 
 function setLocationToLocation(location, sourceLocation) {
@@ -219,13 +219,13 @@ function setLocationToLocation(location, sourceLocation) {
 	const ly1 = dwread_epd(locTable + sourceLocation * 5 + 1);
 	const lx2 = dwread_epd(locTable + sourceLocation * 5 + 2);
 	const ly2 = dwread_epd(locTable + sourceLocation * 5 + 3);
-    setloc(location, lx1, ly1, lx2, ly2);
+	setloc(location, lx1, ly1, lx2, ly2);
 }
 
 function centerLocationOnPoint(location, x, y, w, h) {
 	x -= w/2;
 	y -= h/2;
-    setloc(location, x, y, x+w, y+h);
+	setloc(location, x, y, x+w, y+h);
 }
 
 function centerLocationOnUnit(location, unit, w, h) {
@@ -234,13 +234,13 @@ function centerLocationOnUnit(location, unit, w, h) {
 }
 
 function moveUtilLocationToPoint(x, y) {
-    setLocationToPoint(UTILITY_LOCATION, x, y);
-    return UTILITY_LOCATION;
+	setLocationToPoint(UTILITY_LOCATION, x, y);
+	return UTILITY_LOCATION;
 }
 
 function moveUtilLocationToUnit(unit) {
 	SetLocationToUnitEPD(UTILITY_LOCATION, unit, 0x028, 0x02A);
-    return UTILITY_LOCATION;
+	return UTILITY_LOCATION;
 }
 
 function EUDTurbo() {
@@ -359,7 +359,7 @@ function applyFunctionToPlayerUnitsAtLocation(func: EUDFuncPtr (1, 0), location,
 }
 
 function applyFunctionToPlayerUnitsInRectangleAroundUnit(func: EUDFuncPtr (1, 0), playerIndexStart, playerIndexEnd, rectangleSide, unit) {
-    centerLocationOnUnit($L("Anysize"), unit, rectangleSide, rectangleSide);
+	centerLocationOnUnit($L("Anysize"), unit, rectangleSide, rectangleSide);
 	foreach(player : EUDLoopRange(playerIndexStart, playerIndexEnd)) {
 		foreach(ptr, unit : EUDLoopPlayerUnit(player)) {
 			if (CUnitInLocation(unit, $L("Anysize"))) {
@@ -550,7 +550,7 @@ function createUnitsSafe(count, unitType, location, playerID) {
 
 function setUnitColor(epd, color) {
 	const sprite = ETKUnit.getSprite(epd);
-    bwrite(sprite + 0x0A, color);
+	bwrite(sprite + 0x0A, color);
 }
 
 function canExecuteCustomTargetAbility(unit, orderID, energy, targetingMode, playerTargetingMode) {
@@ -696,12 +696,12 @@ function randomArrayItem(array:EUDArray, length) {
 }
 
 function concatenateIntegers(x, y) {
-    var pow = 10;
-    while(y >= pow) {
-        var pow = pow * 10;
-    }
-    x = x * pow;
-    return x + y;        
+	var pow = 10;
+	while(y >= pow) {
+		var pow = pow * 10;
+	}
+	x = x * pow;
+	return x + y;        
 }
 
 
@@ -715,7 +715,7 @@ function createFlashCopyOfUnit(unit, location) {
 	ETKUnit.removeCollision(flashUnit);
 	setImageDrawFunction(unitImageID, 0); // Reset for later use
 	ETKTimer.add(2, flashUnit, EUDFuncPtr (2, 0) (function(unit, intervalCount) {
-   		RemoveUnit(FLASH_UNIT_TYPE, ETKUtilsEffectsPlayerID);
+		RemoveUnit(FLASH_UNIT_TYPE, ETKUtilsEffectsPlayerID);
 	}));
 	return flashUnit;
 }

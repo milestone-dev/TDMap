@@ -92,33 +92,33 @@ function StartWave(waveID) {
 }
 
 function GoToNextWave() {
-    SetResources(AllPlayers, Add, CurrentWaveReward, 0);
+	SetResources(AllPlayers, Add, CurrentWaveReward, 0);
 	setcurpl(P1); Screen.printf("Wave completed! Adding {} minerals.", CurrentWaveReward);
-    CurrentWaveReward = 0;
+	CurrentWaveReward = 0;
 	StartWave(CurrentWaveID+1);
 }
 
 function GetUnitTypeForTier(tier) {
 	switch(tier) {
-	    case 1: return Const.Unit_ZergZergling; break;
-	    case 2: return Const.Unit_ZergMutalisk; break; // Broodling
-	    case 3: return Const.Unit_ZergDrone; break;
-	    case 4: return Const.Unit_ZergDefiler; break;
-	    case 5: return Const.Unit_ZergGuardian; break; // Lurker
-	    case 6: return Const.Unit_ZergUltralisk; break;
+		case 1: return Const.Unit_ZergZergling; break;
+		case 2: return Const.Unit_ZergMutalisk; break; // Broodling
+		case 3: return Const.Unit_ZergDrone; break;
+		case 4: return Const.Unit_ZergDefiler; break;
+		case 5: return Const.Unit_ZergGuardian; break; // Lurker
+		case 6: return Const.Unit_ZergUltralisk; break;
 	}
-    return Const.Unit_None;
+	return Const.Unit_None;
 }
 
 function GetNextUnitType(unitType) {
-    switch(unitType) {
-        case Const.Unit_ZergUltralisk: return Const.Unit_ZergGuardian; break;
-        case Const.Unit_ZergGuardian: return Const.Unit_ZergDefiler; break;
-        case Const.Unit_ZergDefiler: return Const.Unit_ZergDrone; break;
-        case Const.Unit_ZergDrone: return Const.Unit_ZergMutalisk; break;
-        case Const.Unit_ZergMutalisk: return Const.Unit_ZergZergling; break;
-    }
-    return Const.Unit_None;
+	switch(unitType) {
+		case Const.Unit_ZergUltralisk: return Const.Unit_ZergGuardian; break;
+		case Const.Unit_ZergGuardian: return Const.Unit_ZergDefiler; break;
+		case Const.Unit_ZergDefiler: return Const.Unit_ZergDrone; break;
+		case Const.Unit_ZergDrone: return Const.Unit_ZergMutalisk; break;
+		case Const.Unit_ZergMutalisk: return Const.Unit_ZergZergling; break;
+	}
+	return Const.Unit_None;
 }
 
 
@@ -181,6 +181,6 @@ function Update() {
 	// Removing units
 	if (Bring(MobPlayer, AtLeast, 1, Const.Unit_AnyUnit, endPoint)) {
 		RemoveUnitAt(1, Const.Unit_AnyUnit, endPoint, MobPlayer);
-        SetResources(AllPlayers, Subtract, 1, 1);
+		SetResources(AllPlayers, Subtract, 1, 1);
 	}
 }

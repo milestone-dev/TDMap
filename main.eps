@@ -90,12 +90,12 @@ function initMap() {
 	Content.loadData();
 	Waves.SetLevel(1);
 
-    SetResources(AllPlayers, SetTo, 100, 1);
-    SetResources(AllPlayers, Add, 16, 0);
+	SetResources(AllPlayers, SetTo, 100, 1);
+	SetResources(AllPlayers, Add, 16, 0);
 
 	EUDPlayerLoop()();
-    if (IsUserCP()) {
-    	CommandCard.hideAllButtonIcons();
+	if (IsUserCP()) {
+		CommandCard.hideAllButtonIcons();
 	}
 	EUDEndPlayerLoop();
 }
@@ -120,7 +120,7 @@ function handleConsoleCommand(command, value, playerID) {
 		case Command_Minerals:
 			if (value > 0) {
 				Screen.printf("Adding {} minerals", value);
-	        	SetResources(playerID, 8, value, 0);
+				SetResources(playerID, 8, value, 0);
 			}
 		break;
 	}
@@ -185,7 +185,7 @@ function beforeTriggerExec() {
 				var x, y = Utils.getLocationPoint(MouseLoc[playerID]);
 				var roundedX = ((x / 32) * 32) + 32;
 				var roundedY = ((y / 32) * 32) + 32;
-			    Utils.centerLocationOnPoint(Utils.LOCATION_ANYSIZE, roundedX, roundedY, 32, 32);
+				Utils.centerLocationOnPoint(Utils.LOCATION_ANYSIZE, roundedX, roundedY, 32, 32);
 				Towers.createBaseTower(Utils.LOCATION_ANYSIZE, playerID);
 				Unit.setOrder(selectedUnit, Const.Order_Nothing2_Normal);
 				refreshSelection(playerID);
@@ -266,7 +266,7 @@ function beforeTriggerExec() {
 				}
 			} else {
 				Screen.printfAt(2, "Miss: {},{}, O: {} TU: {}", Unit.getOrderTargetX(unit), Unit.getOrderTargetY(unit), Unit.getOrder(unit), Unit.getAutoTargetUnit(unit));
-   				Debug_MissileMisses++; setcurpl(P1); Screen.printfAt(3, "Missile misses {}", Debug_MissileMisses);
+				Debug_MissileMisses++; setcurpl(P1); Screen.printfAt(3, "Missile misses {}", Debug_MissileMisses);
 				Utils.removeUnit(unit);
 			}
 		}

@@ -12,7 +12,7 @@ import ETK.ETKCommon as Common;
  * The unit pointer
 ***/
 function getPrev(unitPointer) {
-    return dwread_epd(unitPointer + 0x000 / 4);
+	return dwread_epd(unitPointer + 0x000 / 4);
 }
 
 /***
@@ -24,7 +24,7 @@ function getPrev(unitPointer) {
  * The new value
 ***/
 function setPrev(unitPointer, value) {
-    Common.dwwrite_epd(unitPointer, 0x000, value);
+	Common.dwwrite_epd(unitPointer, 0x000, value);
 }
 
 /***
@@ -34,7 +34,7 @@ function setPrev(unitPointer, value) {
  * The unit pointer
 ***/
 function getNext(unitPointer) {
-    return dwread_epd(unitPointer + 0x004 / 4);
+	return dwread_epd(unitPointer + 0x004 / 4);
 }
 
 /***
@@ -46,7 +46,7 @@ function getNext(unitPointer) {
  * The new value
 ***/
 function setNext(unitPointer, value) {
-    Common.dwwrite_epd(unitPointer, 0x004, value);
+	Common.dwwrite_epd(unitPointer, 0x004, value);
 }
 
 /***
@@ -56,7 +56,7 @@ function setNext(unitPointer, value) {
  * The unit pointer
 ***/
 function getHitpoints(unitPointer) {
-    return dwread_epd(unitPointer + 0x008 / 4) / 256;
+	return dwread_epd(unitPointer + 0x008 / 4) / 256;
 }
 
 
@@ -67,7 +67,7 @@ function getHitpoints(unitPointer) {
  * The unit pointer
 ***/
 function getHitpointsRaw(unitPointer) {
-    return dwread_epd(unitPointer + 0x008 / 4);
+	return dwread_epd(unitPointer + 0x008 / 4);
 }
 
 /***
@@ -79,7 +79,7 @@ function getHitpointsRaw(unitPointer) {
  * The new hitpoints
 ***/
 function setHitpoints(unitPointer, hitpoints) {
-    Common.dwwrite_epd(unitPointer, 0x008, hitpoints * 256);
+	Common.dwwrite_epd(unitPointer, 0x008, hitpoints * 256);
 }
 
 /***
@@ -89,7 +89,7 @@ function setHitpoints(unitPointer, hitpoints) {
  * The unit pointer
 ***/
 function getSprite(unitPointer) {
-    return dwread_epd(unitPointer + 0x00C / 4);
+	return dwread_epd(unitPointer + 0x00C / 4);
 }
 
 /***
@@ -101,7 +101,7 @@ function getSprite(unitPointer) {
  * The new sprite
 ***/
 function setSprite(unitPointer, sprite) {
-    Common.dwwrite_epd(unitPointer, 0x00C, sprite);
+	Common.dwwrite_epd(unitPointer, 0x00C, sprite);
 }
 
 /***
@@ -111,7 +111,7 @@ function setSprite(unitPointer, sprite) {
  * The unit pointer
 ***/
 function getMoveTargetX(unitPointer) {
-    return wread_epd(unitPointer + 0x010 / 4, 0x010 % 4);
+	return wread_epd(unitPointer + 0x010 / 4, 0x010 % 4);
 }
 
 /***
@@ -123,7 +123,7 @@ function getMoveTargetX(unitPointer) {
  * The new value
 ***/
 function setMoveTargetX(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x010 / 4, 0x010 % 4, value);
+	wwrite_epd(unitPointer + 0x010 / 4, 0x010 % 4, value);
 }
 
 /***
@@ -133,7 +133,7 @@ function setMoveTargetX(unitPointer, value) {
  * The unit pointer
 ***/
 function getMoveTargetY(unitPointer) {
-    return wread_epd(unitPointer + 0x012 / 4, 0x012 % 4);
+	return wread_epd(unitPointer + 0x012 / 4, 0x012 % 4);
 }
 
 /***
@@ -145,7 +145,7 @@ function getMoveTargetY(unitPointer) {
  * The new value
 ***/
 function setMoveTargetY(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x012 / 4, 0x012 % 4, value);
+	wwrite_epd(unitPointer + 0x012 / 4, 0x012 % 4, value);
 }
 
 /***
@@ -155,7 +155,7 @@ function setMoveTargetY(unitPointer, value) {
  * The unit pointer
 ***/
 function getMoveTargetUnit(unitPointer) {
-    return dwread_epd(unitPointer + 0x014 / 4);
+	return dwread_epd(unitPointer + 0x014 / 4);
 }
 
 /***
@@ -167,7 +167,7 @@ function getMoveTargetUnit(unitPointer) {
  * The new value
 ***/
 function setMoveTargetUnit(unitPointer, value) {
-    dwwrite_epd(unitPointer + 0x014 / 4, value);
+	dwwrite_epd(unitPointer + 0x014 / 4, value);
 }
 
 /***
@@ -177,7 +177,7 @@ function setMoveTargetUnit(unitPointer, value) {
  * The unit pointer
 ***/
 function getNextMovementWaypointX(unitPointer) {
-    return wread_epd(unitPointer + 0x018 / 4, 0x018 % 4);
+	return wread_epd(unitPointer + 0x018 / 4, 0x018 % 4);
 }
 
 /***
@@ -189,7 +189,7 @@ function getNextMovementWaypointX(unitPointer) {
  * The new value
 ***/
 function setNextMovementWaypointX(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x018 / 4, 0x018 % 4, value);
+	wwrite_epd(unitPointer + 0x018 / 4, 0x018 % 4, value);
 }
 
 /***
@@ -199,7 +199,7 @@ function setNextMovementWaypointX(unitPointer, value) {
  * The unit pointer
 ***/
 function getNextMovementWaypointY(unitPointer) {
-    return wread_epd(unitPointer + 0x01A / 4, 0x01A % 4);
+	return wread_epd(unitPointer + 0x01A / 4, 0x01A % 4);
 }
 
 /***
@@ -211,7 +211,7 @@ function getNextMovementWaypointY(unitPointer) {
  * The new value
 ***/
 function setNextMovementWaypointY(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x01A / 4, 0x01A % 4, value);
+	wwrite_epd(unitPointer + 0x01A / 4, 0x01A % 4, value);
 }
 
 /***
@@ -221,7 +221,7 @@ function setNextMovementWaypointY(unitPointer, value) {
  * The unit pointer
 ***/
 function getNextTargetWaypointX(unitPointer) {
-    return wread_epd(unitPointer + 0x01C / 4, 0x01C % 4);
+	return wread_epd(unitPointer + 0x01C / 4, 0x01C % 4);
 }
 
 /***
@@ -233,7 +233,7 @@ function getNextTargetWaypointX(unitPointer) {
  * The new value
 ***/
 function setNextTargetWaypointX(unitPointer, value) {
-    dwwrite_epd(unitPointer + 0x01C / 4, 0x01C % 4, value);
+	dwwrite_epd(unitPointer + 0x01C / 4, 0x01C % 4, value);
 }
 
 /***
@@ -243,7 +243,7 @@ function setNextTargetWaypointX(unitPointer, value) {
  * The unit pointer
 ***/
 function getNextTargetWaypointY(unitPointer) {
-    return wread_epd(unitPointer + 0x01E / 4, 0x01E % 4);
+	return wread_epd(unitPointer + 0x01E / 4, 0x01E % 4);
 }
 
 /***
@@ -255,7 +255,7 @@ function getNextTargetWaypointY(unitPointer) {
  * The new value
 ***/
 function setNextTargetWaypointY(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x01E / 4, 0x01E % 4);
+	wwrite_epd(unitPointer + 0x01E / 4, 0x01E % 4);
 }
 
 /***
@@ -265,7 +265,7 @@ function setNextTargetWaypointY(unitPointer, value) {
  * The unit pointer
 ***/
 function getMovementFlags(unitPointer) {
-    return bread_epd(unitPointer + 0x020 / 4, 0x020 % 4);
+	return bread_epd(unitPointer + 0x020 / 4, 0x020 % 4);
 }
 
 /***
@@ -277,7 +277,7 @@ function getMovementFlags(unitPointer) {
  * The new value
 ***/
 function setMovementFlags(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x020 / 4, 0x020 % 4, value);
+	bwrite_epd(unitPointer + 0x020 / 4, 0x020 % 4, value);
 }
 
 /***
@@ -287,7 +287,7 @@ function setMovementFlags(unitPointer, value) {
  * The unit pointer
 ***/
 function getCurrentDirection1(unitPointer) {
-    return bread_epd(unitPointer + 0x021 / 4, 0x021 % 4);
+	return bread_epd(unitPointer + 0x021 / 4, 0x021 % 4);
 }
 
 /***
@@ -299,7 +299,7 @@ function getCurrentDirection1(unitPointer) {
  * The new value
 ***/
 function setCurrentDirection1(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x021 / 4, 0x021 % 4, value);
+	bwrite_epd(unitPointer + 0x021 / 4, 0x021 % 4, value);
 }
 
 /***
@@ -309,7 +309,7 @@ function setCurrentDirection1(unitPointer, value) {
  * The unit pointer
 ***/
 function getFlingyTurnRadius(unitPointer) {
-    return bread_epd(unitPointer + 0x022 / 4, 0x022 % 4);
+	return bread_epd(unitPointer + 0x022 / 4, 0x022 % 4);
 }
 
 /***
@@ -321,7 +321,7 @@ function getFlingyTurnRadius(unitPointer) {
  * The new value
 ***/
 function setFlingyTurnRadius(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x022 / 4, 0x022 % 4, value);
+	bwrite_epd(unitPointer + 0x022 / 4, 0x022 % 4, value);
 }
 
 /***
@@ -331,7 +331,7 @@ function setFlingyTurnRadius(unitPointer, value) {
  * The unit pointer
 ***/
 function getVelocityDirection1(unitPointer) {
-    return bread_epd(unitPointer + 0x023 / 4, 0x023 % 4);
+	return bread_epd(unitPointer + 0x023 / 4, 0x023 % 4);
 }
 
 /***
@@ -343,7 +343,7 @@ function getVelocityDirection1(unitPointer) {
  * The new value
 ***/
 function setVelocityDirection1(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x023 / 4, 0x023 % 4, value);
+	bwrite_epd(unitPointer + 0x023 / 4, 0x023 % 4, value);
 }
 
 /***
@@ -353,7 +353,7 @@ function setVelocityDirection1(unitPointer, value) {
  * The unit pointer
 ***/
 function getFlingyID(unitPointer) {
-    return wread_epd(unitPointer + 0x024 / 4, 0x024 % 4);
+	return wread_epd(unitPointer + 0x024 / 4, 0x024 % 4);
 }
 
 /***
@@ -365,7 +365,7 @@ function getFlingyID(unitPointer) {
  * The new value
 ***/
 function setFlingyID(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x024 / 4, 0x024 % 4, value);
+	wwrite_epd(unitPointer + 0x024 / 4, 0x024 % 4, value);
 }
 
 /***
@@ -375,7 +375,7 @@ function setFlingyID(unitPointer, value) {
  * The unit pointer
 ***/
 function getUnknown26(unitPointer) {
-    return bread_epd(unitPointer + 0x026 / 4, 0x026 % 4);
+	return bread_epd(unitPointer + 0x026 / 4, 0x026 % 4);
 }
 
 /***
@@ -387,7 +387,7 @@ function getUnknown26(unitPointer) {
  * The new value
 ***/
 function setUnknown26(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x026 / 4, 0x026 % 4, value);
+	bwrite_epd(unitPointer + 0x026 / 4, 0x026 % 4, value);
 }
 
 /***
@@ -397,7 +397,7 @@ function setUnknown26(unitPointer, value) {
  * The unit pointer
 ***/
 function getFlingyMovementType(unitPointer) {
-    return bread_epd(unitPointer + 0x027 / 4, 0x027 % 4);
+	return bread_epd(unitPointer + 0x027 / 4, 0x027 % 4);
 }
 
 /***
@@ -409,7 +409,7 @@ function getFlingyMovementType(unitPointer) {
  * The new value
 ***/
 function setFlingyMovementType(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x027 / 4, 0x027 % 4, value);
+	bwrite_epd(unitPointer + 0x027 / 4, 0x027 % 4, value);
 }
 
 /***
@@ -419,7 +419,7 @@ function setFlingyMovementType(unitPointer, value) {
  * The unit pointer
 ***/
 function getPositionX(unitPointer) {
-    return wread_epd(unitPointer + 0x028 / 4, 0x028 % 4);
+	return wread_epd(unitPointer + 0x028 / 4, 0x028 % 4);
 }
 
 /***
@@ -431,7 +431,7 @@ function getPositionX(unitPointer) {
  * The new value
 ***/
 function setPositionX(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x028 / 4, 0x028 % 4, value);
+	wwrite_epd(unitPointer + 0x028 / 4, 0x028 % 4, value);
 }
 
 /***
@@ -441,7 +441,7 @@ function setPositionX(unitPointer, value) {
  * The unit pointer
 ***/
 function getPositionY(unitPointer) {
-    return wread_epd(unitPointer + 0x02A / 4, 0x02A % 4);
+	return wread_epd(unitPointer + 0x02A / 4, 0x02A % 4);
 }
 
 /***
@@ -453,7 +453,7 @@ function getPositionY(unitPointer) {
  * The new value
 ***/
 function setPositionY(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x02A / 4, 0x02A % 4, value);
+	wwrite_epd(unitPointer + 0x02A / 4, 0x02A % 4, value);
 }
 
 /***
@@ -463,7 +463,7 @@ function setPositionY(unitPointer, value) {
  * The unit pointer
 ***/
 function getHaltX(unitPointer) {
-    return dwread_epd(unitPointer + 0x02C / 4);
+	return dwread_epd(unitPointer + 0x02C / 4);
 }
 
 /***
@@ -475,7 +475,7 @@ function getHaltX(unitPointer) {
  * The new value
 ***/
 function setHaltX(unitPointer, value) {
-    Common.dwwrite_epd(unitPointer, 0x02C, value);
+	Common.dwwrite_epd(unitPointer, 0x02C, value);
 }
 
 /***
@@ -485,7 +485,7 @@ function setHaltX(unitPointer, value) {
  * The unit pointer
 ***/
 function getHaltY(unitPointer) {
-    return dwread_epd(unitPointer + 0x030 / 4);
+	return dwread_epd(unitPointer + 0x030 / 4);
 }
 
 /***
@@ -497,7 +497,7 @@ function getHaltY(unitPointer) {
  * The new value
 ***/
 function setHaltY(unitPointer, value) {
-    Common.dwwrite_epd(unitPointer, 0x030, value);
+	Common.dwwrite_epd(unitPointer, 0x030, value);
 }
 
 /***
@@ -507,7 +507,7 @@ function setHaltY(unitPointer, value) {
  * The unit pointer
 ***/
 function getFlingyTopSpeed(unitPointer) {
-    return dwread_epd(unitPointer + 0x034 / 4);
+	return dwread_epd(unitPointer + 0x034 / 4);
 }
 
 /***
@@ -519,7 +519,7 @@ function getFlingyTopSpeed(unitPointer) {
  * The new value
 ***/
 function setFlingyTopSpeed(unitPointer, value) {
-    Common.dwwrite_epd(unitPointer, 0x034, value);
+	Common.dwwrite_epd(unitPointer, 0x034, value);
 }
 
 /***
@@ -529,7 +529,7 @@ function setFlingyTopSpeed(unitPointer, value) {
  * The unit pointer
 ***/
 function getCurrentSpeed1(unitPointer) {
-    return dwread_epd(unitPointer + 0x038 / 4);
+	return dwread_epd(unitPointer + 0x038 / 4);
 }
 
 /***
@@ -541,7 +541,7 @@ function getCurrentSpeed1(unitPointer) {
  * The new value
 ***/
 function setCurrentSpeed1(unitPointer, value) {
-    Common.dwwrite_epd(unitPointer, 0x038, value);
+	Common.dwwrite_epd(unitPointer, 0x038, value);
 }
 
 /***
@@ -551,7 +551,7 @@ function setCurrentSpeed1(unitPointer, value) {
  * The unit pointer
 ***/
 function getCurrentSpeed2(unitPointer) {
-    return dwread_epd(unitPointer + 0x03C / 4);
+	return dwread_epd(unitPointer + 0x03C / 4);
 }
 
 /***
@@ -563,7 +563,7 @@ function getCurrentSpeed2(unitPointer) {
  * The new value
 ***/
 function setCurrentSpeed2(unitPointer, value) {
-    Common.dwwrite_epd(unitPointer, 0x03C, value);
+	Common.dwwrite_epd(unitPointer, 0x03C, value);
 }
 
 /***
@@ -573,7 +573,7 @@ function setCurrentSpeed2(unitPointer, value) {
  * The unit pointer
 ***/
 function getCurrentSpeedX(unitPointer) {
-    return dwread_epd(unitPointer + 0x040 / 4);
+	return dwread_epd(unitPointer + 0x040 / 4);
 }
 
 /***
@@ -585,7 +585,7 @@ function getCurrentSpeedX(unitPointer) {
  * The new value
 ***/
 function setCurrentSpeedX(unitPointer, value) {
-    Common.dwwrite_epd(unitPointer, 0x040, value);
+	Common.dwwrite_epd(unitPointer, 0x040, value);
 }
 
 /***
@@ -595,7 +595,7 @@ function setCurrentSpeedX(unitPointer, value) {
  * The unit pointer
 ***/
 function getCurrentSpeedY(unitPointer) {
-    return dwread_epd(unitPointer + 0x044 / 4);
+	return dwread_epd(unitPointer + 0x044 / 4);
 }
 
 /***
@@ -607,7 +607,7 @@ function getCurrentSpeedY(unitPointer) {
  * The new value
 ***/
 function setCurrentSpeedY(unitPointer, value) {
-    Common.dwwrite_epd(unitPointer, 0x044, value);
+	Common.dwwrite_epd(unitPointer, 0x044, value);
 }
 
 /***
@@ -617,7 +617,7 @@ function setCurrentSpeedY(unitPointer, value) {
  * The unit pointer
 ***/
 function getFlingyAcceleration(unitPointer) {
-    return wread_epd(unitPointer + 0x048 / 4, 0x048 % 4);
+	return wread_epd(unitPointer + 0x048 / 4, 0x048 % 4);
 }
 
 /***
@@ -629,7 +629,7 @@ function getFlingyAcceleration(unitPointer) {
  * The new value
 ***/
 function setFlingyAcceleration(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x048 / 4, 0x048 % 4, value);
+	wwrite_epd(unitPointer + 0x048 / 4, 0x048 % 4, value);
 }
 
 /***
@@ -639,7 +639,7 @@ function setFlingyAcceleration(unitPointer, value) {
  * The unit pointer
 ***/
 function getCurrentDirection2(unitPointer) {
-    return bread_epd(unitPointer + 0x04A / 4, 0x04A % 4);
+	return bread_epd(unitPointer + 0x04A / 4, 0x04A % 4);
 }
 
 /***
@@ -651,7 +651,7 @@ function getCurrentDirection2(unitPointer) {
  * The new value
 ***/
 function setCurrentDirection2(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x04A / 4, 0x04A % 4, value);
+	bwrite_epd(unitPointer + 0x04A / 4, 0x04A % 4, value);
 }
 
 /***
@@ -661,7 +661,7 @@ function setCurrentDirection2(unitPointer, value) {
  * The unit pointer
 ***/
 function getVelocityDirection2(unitPointer) {
-    return bread_epd(unitPointer + 0x04B / 4, 0x04B % 4);
+	return bread_epd(unitPointer + 0x04B / 4, 0x04B % 4);
 }
 
 /***
@@ -673,7 +673,7 @@ function getVelocityDirection2(unitPointer) {
  * The new value
 ***/
 function setVelocityDirection2(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x04B / 4, 0x04B % 4, value);
+	bwrite_epd(unitPointer + 0x04B / 4, 0x04B % 4, value);
 }
 
 /***
@@ -683,7 +683,7 @@ function setVelocityDirection2(unitPointer, value) {
  * The unit pointer
 ***/
 function getPlayerID(unitPointer) {
-    return bread_epd(unitPointer + 0x04C / 4, 0x04C % 4);
+	return bread_epd(unitPointer + 0x04C / 4, 0x04C % 4);
 }
 
 /***
@@ -695,7 +695,7 @@ function getPlayerID(unitPointer) {
  * The new value
 ***/
 function setPlayerID(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x04C / 4, 0x04C % 4, value);
+	bwrite_epd(unitPointer + 0x04C / 4, 0x04C % 4, value);
 }
 
 /***
@@ -705,7 +705,7 @@ function setPlayerID(unitPointer, value) {
  * The unit pointer
 ***/
 function getOrderID(unitPointer) {
-    return bread_epd(unitPointer + 0x04D / 4, 0x04D % 4);
+	return bread_epd(unitPointer + 0x04D / 4, 0x04D % 4);
 }
 
 /***
@@ -717,7 +717,7 @@ function getOrderID(unitPointer) {
  * The new value
 ***/
 function setOrderID(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x04D / 4, 0x04D % 4, value);
+	bwrite_epd(unitPointer + 0x04D / 4, 0x04D % 4, value);
 }
 
 /***
@@ -727,7 +727,7 @@ function setOrderID(unitPointer, value) {
  * The unit pointer
 ***/
 function getOrderState(unitPointer) {
-    return bread_epd(unitPointer + 0x04E / 4, 0x04E % 4);
+	return bread_epd(unitPointer + 0x04E / 4, 0x04E % 4);
 }
 
 /***
@@ -739,7 +739,7 @@ function getOrderState(unitPointer) {
  * The new value
 ***/
 function setOrderState(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x04E / 4, 0x04E % 4, value);
+	bwrite_epd(unitPointer + 0x04E / 4, 0x04E % 4, value);
 }
 
 /***
@@ -749,7 +749,7 @@ function setOrderState(unitPointer, value) {
  * The unit pointer
 ***/
 function getOrderSignal(unitPointer) {
-    return bread_epd(unitPointer + 0x04F / 4, 0x04F % 4);
+	return bread_epd(unitPointer + 0x04F / 4, 0x04F % 4);
 }
 
 /***
@@ -761,7 +761,7 @@ function getOrderSignal(unitPointer) {
  * The new value
 ***/
 function setOrderSignal(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x04F / 4, 0x04F % 4, value);
+	bwrite_epd(unitPointer + 0x04F / 4, 0x04F % 4, value);
 }
 
 /***
@@ -771,7 +771,7 @@ function setOrderSignal(unitPointer, value) {
  * The unit pointer
 ***/
 function getOrderUnitType(unitPointer) {
-    return wread_epd(unitPointer + 0x050 / 4, 0x050 % 4);
+	return wread_epd(unitPointer + 0x050 / 4, 0x050 % 4);
 }
 
 /***
@@ -783,7 +783,7 @@ function getOrderUnitType(unitPointer) {
  * The new value
 ***/
 function setOrderUnitType(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x050 / 4, 0x050 % 4, value);
+	wwrite_epd(unitPointer + 0x050 / 4, 0x050 % 4, value);
 }
 
 /***
@@ -793,7 +793,7 @@ function setOrderUnitType(unitPointer, value) {
  * The unit pointer
 ***/
 function get52Flag(unitPointer) {
-    return wread_epd(unitPointer + 0x052 / 4, 0x052 % 4);
+	return wread_epd(unitPointer + 0x052 / 4, 0x052 % 4);
 }
 
 /***
@@ -805,7 +805,7 @@ function get52Flag(unitPointer) {
  * The new value
 ***/
 function set52Flag(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x052 / 4, 0x052 % 4, value);
+	wwrite_epd(unitPointer + 0x052 / 4, 0x052 % 4, value);
 }
 
 /***
@@ -815,7 +815,7 @@ function set52Flag(unitPointer, value) {
  * The unit pointer
 ***/
 function getMainOrderTimer(unitPointer) {
-    return bread_epd(unitPointer + 0x054 / 4, 0x054 % 4);
+	return bread_epd(unitPointer + 0x054 / 4, 0x054 % 4);
 }
 
 /***
@@ -827,7 +827,7 @@ function getMainOrderTimer(unitPointer) {
  * The new value
 ***/
 function setMainOrderTimer(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x054 / 4, 0x054 % 4, value);
+	bwrite_epd(unitPointer + 0x054 / 4, 0x054 % 4, value);
 }
 
 /***
@@ -837,7 +837,7 @@ function setMainOrderTimer(unitPointer, value) {
  * The unit pointer
 ***/
 function getGroundWeaponCooldown(unitPointer) {
-    return bread_epd(unitPointer + 0x055 / 4, 0x055 % 4);
+	return bread_epd(unitPointer + 0x055 / 4, 0x055 % 4);
 }
 
 /***
@@ -849,7 +849,7 @@ function getGroundWeaponCooldown(unitPointer) {
  * The new value
 ***/
 function setGroundWeaponCooldown(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x055 / 4, 0x055 % 4, value);
+	bwrite_epd(unitPointer + 0x055 / 4, 0x055 % 4, value);
 }
 
 /***
@@ -859,7 +859,7 @@ function setGroundWeaponCooldown(unitPointer, value) {
  * The unit pointer
 ***/
 function getAirWeaponCooldown(unitPointer) {
-    return bread_epd(unitPointer + 0x056 / 4, 0x056 % 4);
+	return bread_epd(unitPointer + 0x056 / 4, 0x056 % 4);
 }
 
 /***
@@ -871,7 +871,7 @@ function getAirWeaponCooldown(unitPointer) {
  * The new value
 ***/
 function setAirWeaponCooldown(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x056 / 4, 0x056 % 4, value);
+	bwrite_epd(unitPointer + 0x056 / 4, 0x056 % 4, value);
 }
 
 /***
@@ -881,7 +881,7 @@ function setAirWeaponCooldown(unitPointer, value) {
  * The unit pointer
 ***/
 function getSpellCooldown(unitPointer) {
-    return bread_epd(unitPointer + 0x057 / 4, 0x057 % 4);
+	return bread_epd(unitPointer + 0x057 / 4, 0x057 % 4);
 }
 
 /***
@@ -893,7 +893,7 @@ function getSpellCooldown(unitPointer) {
  * The new value
 ***/
 function setSpellCooldown(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x057 / 4, 0x057 % 4, value);
+	bwrite_epd(unitPointer + 0x057 / 4, 0x057 % 4, value);
 }
 
 /***
@@ -903,7 +903,7 @@ function setSpellCooldown(unitPointer, value) {
  * The unit pointer
 ***/
 function getOrderTargetX(unitPointer) {
-    return wread_epd(unitPointer + 0x058 / 4, 0x058 % 4);
+	return wread_epd(unitPointer + 0x058 / 4, 0x058 % 4);
 }
 
 /***
@@ -915,7 +915,7 @@ function getOrderTargetX(unitPointer) {
  * The new value
 ***/
 function setOrderTargetX(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x058 / 4, 0x058 % 4, value);
+	wwrite_epd(unitPointer + 0x058 / 4, 0x058 % 4, value);
 }
 
 /***
@@ -925,7 +925,7 @@ function setOrderTargetX(unitPointer, value) {
  * The unit pointer
 ***/
 function getOrderTargetY(unitPointer) {
-    return wread_epd(unitPointer + 0x05A / 4, 0x05A % 4);
+	return wread_epd(unitPointer + 0x05A / 4, 0x05A % 4);
 }
 
 /***
@@ -937,7 +937,7 @@ function getOrderTargetY(unitPointer) {
  * The new value
 ***/
 function setOrderTargetY(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x05A / 4, 0x05A % 4, value);
+	wwrite_epd(unitPointer + 0x05A / 4, 0x05A % 4, value);
 }
 
 /***
@@ -947,7 +947,7 @@ function setOrderTargetY(unitPointer, value) {
  * The unit pointer
 ***/
 function getOrderTargetUnit(unitPointer) {
-    return dwread_epd(unitPointer + 0x05C / 4);
+	return dwread_epd(unitPointer + 0x05C / 4);
 }
 
 /***
@@ -959,7 +959,7 @@ function getOrderTargetUnit(unitPointer) {
  * The new value
 ***/
 function setOrderTargetUnit(unitPointer, value) {
-    Common.dwwrite_epd(unitPointer, 0x05C, value);
+	Common.dwwrite_epd(unitPointer, 0x05C, value);
 }
 
 /***
@@ -969,7 +969,7 @@ function setOrderTargetUnit(unitPointer, value) {
  * The unit pointer
 ***/
 function getShields(unitPointer) {
-    return dwread_epd(unitPointer + 0x060 / 4) / 256;
+	return dwread_epd(unitPointer + 0x060 / 4) / 256;
 }
 
 /***
@@ -981,7 +981,7 @@ function getShields(unitPointer) {
  * The new value
 ***/
 function setShields(unitPointer, shields) {
-    Common.dwwrite_epd(unitPointer, 0x060, shields * 256);
+	Common.dwwrite_epd(unitPointer, 0x060, shields * 256);
 }
 
 /***
@@ -991,7 +991,7 @@ function setShields(unitPointer, shields) {
  * The unit pointer
 ***/
 function getUnitType(unitPointer) {
-    return wread_epd(unitPointer + 0x064 / 4, 0x064 % 4);
+	return wread_epd(unitPointer + 0x064 / 4, 0x064 % 4);
 }
 
 /***
@@ -1003,7 +1003,7 @@ function getUnitType(unitPointer) {
  * The new value
 ***/
 function setUnitType(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x064 / 4, 0x064 % 4, value);
+	wwrite_epd(unitPointer + 0x064 / 4, 0x064 % 4, value);
 }
 
 /***
@@ -1013,7 +1013,7 @@ function setUnitType(unitPointer, value) {
  * The unit pointer
 ***/
 function get66Flag(unitPointer) {
-    return wread_epd(unitPointer + 0x066 / 4, 0x066 % 4);
+	return wread_epd(unitPointer + 0x066 / 4, 0x066 % 4);
 }
 
 /***
@@ -1025,7 +1025,7 @@ function get66Flag(unitPointer) {
  * The new value
 ***/
 function set66Flag(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x066 / 4, 0x066 % 4, value);
+	wwrite_epd(unitPointer + 0x066 / 4, 0x066 % 4, value);
 }
 
 /***
@@ -1035,7 +1035,7 @@ function set66Flag(unitPointer, value) {
  * The unit pointer
 ***/
 function getPreviousPlayerUnit(unitPointer) {
-    return dwread_epd(unitPointer + 0x068 / 4);
+	return dwread_epd(unitPointer + 0x068 / 4);
 }
 
 /***
@@ -1047,7 +1047,7 @@ function getPreviousPlayerUnit(unitPointer) {
  * The new value
 ***/
 function setPreviousPlayerUnit(unitPointer, value) {
-    Common.dwwrite_epd(unitPointer, 0x068, value);
+	Common.dwwrite_epd(unitPointer, 0x068, value);
 }
 
 /***
@@ -1057,7 +1057,7 @@ function setPreviousPlayerUnit(unitPointer, value) {
  * The unit pointer
 ***/
 function getNextPlayerUnit(unitPointer) {
-    return dwread_epd(unitPointer + 0x06C / 4);
+	return dwread_epd(unitPointer + 0x06C / 4);
 }
 
 /***
@@ -1069,7 +1069,7 @@ function getNextPlayerUnit(unitPointer) {
  * The new value
 ***/
 function setNextPlayerUnit(unitPointer, value) {
-    Common.dwwrite_epd(unitPointer, 0x06C, value);
+	Common.dwwrite_epd(unitPointer, 0x06C, value);
 }
 
 /***
@@ -1079,7 +1079,7 @@ function setNextPlayerUnit(unitPointer, value) {
  * The unit pointer
 ***/
 function getSubUnit(unitPointer) {
-    return dwread_epd(unitPointer + 0x070 / 4);
+	return dwread_epd(unitPointer + 0x070 / 4);
 }
 
 /***
@@ -1091,7 +1091,7 @@ function getSubUnit(unitPointer) {
  * The new value
 ***/
 function setSubUnit(unitPointer, value) {
-    Common.dwwrite_epd(unitPointer, 0x070, value);
+	Common.dwwrite_epd(unitPointer, 0x070, value);
 }
 
 /***
@@ -1101,7 +1101,7 @@ function setSubUnit(unitPointer, value) {
  * The unit pointer
 ***/
 function getOrderQueueHead(unitPointer) {
-    return dwread_epd(unitPointer + 0x074 / 4);
+	return dwread_epd(unitPointer + 0x074 / 4);
 }
 
 /***
@@ -1113,7 +1113,7 @@ function getOrderQueueHead(unitPointer) {
  * The new value
 ***/
 function setOrderQueueHead(unitPointer, value) {
-    Common.dwwrite_epd(unitPointer, 0x074, value);
+	Common.dwwrite_epd(unitPointer, 0x074, value);
 }
 
 /***
@@ -1123,7 +1123,7 @@ function setOrderQueueHead(unitPointer, value) {
  * The unit pointer
 ***/
 function getOrderQueueTail(unitPointer) {
-    return dwread_epd(unitPointer + 0x078 / 4);
+	return dwread_epd(unitPointer + 0x078 / 4);
 }
 
 /***
@@ -1135,7 +1135,7 @@ function getOrderQueueTail(unitPointer) {
  * The new value
 ***/
 function setOrderQueueTail(unitPointer, value) {
-    Common.dwwrite_epd(unitPointer, 0x078, value);
+	Common.dwwrite_epd(unitPointer, 0x078, value);
 }
 
 /***
@@ -1145,7 +1145,7 @@ function setOrderQueueTail(unitPointer, value) {
  * The unit pointer
 ***/
 function getAutoTargetUnit(unitPointer) {
-    return dwread_epd(unitPointer + 0x07C / 4);
+	return dwread_epd(unitPointer + 0x07C / 4);
 }
 
 /***
@@ -1157,7 +1157,7 @@ function getAutoTargetUnit(unitPointer) {
  * The new value
 ***/
 function setAutoTargetUnit(unitPointer, value) {
-    Common.dwwrite_epd(unitPointer, 0x07C, value);
+	Common.dwwrite_epd(unitPointer, 0x07C, value);
 }
 
 /***
@@ -1167,7 +1167,7 @@ function setAutoTargetUnit(unitPointer, value) {
  * The unit pointer
 ***/
 function getOrderQueueCount(unitPointer) {
-    return bread_epd(unitPointer + 0x084 / 4, 0x084 % 4);
+	return bread_epd(unitPointer + 0x084 / 4, 0x084 % 4);
 }
 
 /***
@@ -1179,7 +1179,7 @@ function getOrderQueueCount(unitPointer) {
  * The new value
 ***/
 function setOrderQueueCount(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x084 / 4, 0x084 % 4, value);
+	bwrite_epd(unitPointer + 0x084 / 4, 0x084 % 4, value);
 }
 
 /***
@@ -1189,7 +1189,7 @@ function setOrderQueueCount(unitPointer, value) {
  * The unit pointer
 ***/
 function getOrderQueueTimer(unitPointer) {
-    return bread_epd(unitPointer + 0x085 / 4, 0x085 % 4);
+	return bread_epd(unitPointer + 0x085 / 4, 0x085 % 4);
 }
 
 /***
@@ -1201,7 +1201,7 @@ function getOrderQueueTimer(unitPointer) {
  * The new value
 ***/
 function setOrderQueueTimer(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x085 / 4, 0x085 % 4, value);
+	bwrite_epd(unitPointer + 0x085 / 4, 0x085 % 4, value);
 }
 
 /***
@@ -1211,7 +1211,7 @@ function setOrderQueueTimer(unitPointer, value) {
  * The unit pointer
 ***/
 function getUnknown86(unitPointer) {
-    return bread_epd(unitPointer + 0x086 / 4, 0x086 % 4);
+	return bread_epd(unitPointer + 0x086 / 4, 0x086 % 4);
 }
 
 /***
@@ -1223,7 +1223,7 @@ function getUnknown86(unitPointer) {
  * The new value
 ***/
 function setUnknown86(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x086 / 4, 0x086 % 4, value);
+	bwrite_epd(unitPointer + 0x086 / 4, 0x086 % 4, value);
 }
 
 /***
@@ -1233,7 +1233,7 @@ function setUnknown86(unitPointer, value) {
  * The unit pointer
 ***/
 function getAttackNotifyTimer(unitPointer) {
-    return bread_epd(unitPointer + 0x087 / 4, 0x087 % 4);
+	return bread_epd(unitPointer + 0x087 / 4, 0x087 % 4);
 }
 
 /***
@@ -1245,7 +1245,7 @@ function getAttackNotifyTimer(unitPointer) {
  * The new value
 ***/
 function setAttackNotifyTimer(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x087 / 4, 0x087 % 4, value);
+	bwrite_epd(unitPointer + 0x087 / 4, 0x087 % 4, value);
 }
 
 /***
@@ -1255,7 +1255,7 @@ function setAttackNotifyTimer(unitPointer, value) {
  * The unit pointer
 ***/
 function getPreviousUnitType(unitPointer) {
-    return wread_epd(unitPointer + 0x088 / 4, 0x088 % 4);
+	return wread_epd(unitPointer + 0x088 / 4, 0x088 % 4);
 }
 
 /***
@@ -1267,7 +1267,7 @@ function getPreviousUnitType(unitPointer) {
  * The new value
 ***/
 function setPreviousUnitType(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x088 / 4, 0x088 % 4, value);
+	wwrite_epd(unitPointer + 0x088 / 4, 0x088 % 4, value);
 }
 
 /***
@@ -1277,7 +1277,7 @@ function setPreviousUnitType(unitPointer, value) {
  * The unit pointer
 ***/
 function getLastEventTimer(unitPointer) {
-    return bread_epd(unitPointer + 0x08A / 4, 0x08A % 4);
+	return bread_epd(unitPointer + 0x08A / 4, 0x08A % 4);
 }
 
 /***
@@ -1289,7 +1289,7 @@ function getLastEventTimer(unitPointer) {
  * The new value
 ***/
 function setLastEventTimer(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x08A / 4, 0x08A % 4, value);
+	bwrite_epd(unitPointer + 0x08A / 4, 0x08A % 4, value);
 }
 
 /***
@@ -1299,7 +1299,7 @@ function setLastEventTimer(unitPointer, value) {
  * The unit pointer
 ***/
 function getLastEventColor(unitPointer) {
-    return bread_epd(unitPointer + 0x08B / 4, 0x08B % 4);
+	return bread_epd(unitPointer + 0x08B / 4, 0x08B % 4);
 }
 
 /***
@@ -1311,7 +1311,7 @@ function getLastEventColor(unitPointer) {
  * The new value
 ***/
 function setLastEventColor(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x08B / 4, 0x08B % 4, value);
+	bwrite_epd(unitPointer + 0x08B / 4, 0x08B % 4, value);
 }
 
 /***
@@ -1321,7 +1321,7 @@ function setLastEventColor(unitPointer, value) {
  * The unit pointer
 ***/
 function get8Flag(unitPointer) {
-    return wread_epd(unitPointer + 0x08C / 4, 0x08C % 4);
+	return wread_epd(unitPointer + 0x08C / 4, 0x08C % 4);
 }
 
 /***
@@ -1333,7 +1333,7 @@ function get8Flag(unitPointer) {
  * The new value
 ***/
 function set8Flag(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x08C / 4, 0x08C % 4, value);
+	wwrite_epd(unitPointer + 0x08C / 4, 0x08C % 4, value);
 }
 
 /***
@@ -1343,7 +1343,7 @@ function set8Flag(unitPointer, value) {
  * The unit pointer
 ***/
 function getRankIncrease(unitPointer) {
-    return bread_epd(unitPointer + 0x08E / 4, 0x08E % 4);
+	return bread_epd(unitPointer + 0x08E / 4, 0x08E % 4);
 }
 
 /***
@@ -1355,7 +1355,7 @@ function getRankIncrease(unitPointer) {
  * The new value
 ***/
 function setRankIncrease(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x08E / 4, 0x08E % 4, value);
+	bwrite_epd(unitPointer + 0x08E / 4, 0x08E % 4, value);
 }
 
 /***
@@ -1365,7 +1365,7 @@ function setRankIncrease(unitPointer, value) {
  * The unit pointer
 ***/
 function getKillCount(unitPointer) {
-    return bread_epd(unitPointer + 0x08F / 4, 0x08F % 4);
+	return bread_epd(unitPointer + 0x08F / 4, 0x08F % 4);
 }
 
 /***
@@ -1377,7 +1377,7 @@ function getKillCount(unitPointer) {
  * The new value
 ***/
 function setKillCount(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x08F / 4, 0x08F % 4, value);
+	bwrite_epd(unitPointer + 0x08F / 4, 0x08F % 4, value);
 }
 
 /***
@@ -1387,7 +1387,7 @@ function setKillCount(unitPointer, value) {
  * The unit pointer
 ***/
 function getLastAttackingPlayer(unitPointer) {
-    return bread_epd(unitPointer + 0x090 / 4, 0x090 % 4);
+	return bread_epd(unitPointer + 0x090 / 4, 0x090 % 4);
 }
 
 /***
@@ -1399,7 +1399,7 @@ function getLastAttackingPlayer(unitPointer) {
  * The new value
 ***/
 function setLastAttackingPlayer(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x090 / 4, 0x090 % 4, value);
+	bwrite_epd(unitPointer + 0x090 / 4, 0x090 % 4, value);
 }
 
 /***
@@ -1409,7 +1409,7 @@ function setLastAttackingPlayer(unitPointer, value) {
  * The unit pointer
 ***/
 function getSecondaryOrderTimer(unitPointer) {
-    return bread_epd(unitPointer + 0x091 / 4, 0x091 % 4);
+	return bread_epd(unitPointer + 0x091 / 4, 0x091 % 4);
 }
 
 /***
@@ -1421,7 +1421,7 @@ function getSecondaryOrderTimer(unitPointer) {
  * The new value
 ***/
 function setSecondaryOrderTimer(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x091 / 4, 0x091 % 4, value);
+	bwrite_epd(unitPointer + 0x091 / 4, 0x091 % 4, value);
 }
 
 /***
@@ -1431,7 +1431,7 @@ function setSecondaryOrderTimer(unitPointer, value) {
  * The unit pointer
 ***/
 function getAIActionFlag(unitPointer) {
-    return bread_epd(unitPointer + 0x092 / 4, 0x092 % 4);
+	return bread_epd(unitPointer + 0x092 / 4, 0x092 % 4);
 }
 
 /***
@@ -1443,7 +1443,7 @@ function getAIActionFlag(unitPointer) {
  * The new value
 ***/
 function setAIActionFlag(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x092 / 4, 0x092 % 4, value);
+	bwrite_epd(unitPointer + 0x092 / 4, 0x092 % 4, value);
 }
 
 /***
@@ -1453,7 +1453,7 @@ function setAIActionFlag(unitPointer, value) {
  * The unit pointer
 ***/
 function getUserActionFlags(unitPointer) {
-    return bread_epd(unitPointer + 0x093 / 4, 0x093 % 4);
+	return bread_epd(unitPointer + 0x093 / 4, 0x093 % 4);
 }
 
 /***
@@ -1465,7 +1465,7 @@ function getUserActionFlags(unitPointer) {
  * The new value
 ***/
 function setUserActionFlags(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x093 / 4, 0x093 % 4, value);
+	bwrite_epd(unitPointer + 0x093 / 4, 0x093 % 4, value);
 }
 
 /***
@@ -1475,7 +1475,7 @@ function setUserActionFlags(unitPointer, value) {
  * The unit pointer
 ***/
 function getCurrentButtonSet(unitPointer) {
-    return wread_epd(unitPointer + 0x094 / 4, 0x094 % 4);
+	return wread_epd(unitPointer + 0x094 / 4, 0x094 % 4);
 }
 
 /***
@@ -1487,7 +1487,7 @@ function getCurrentButtonSet(unitPointer) {
  * The new value
 ***/
 function setCurrentButtonSet(unitPointer, value) {
-    wwrite_epd(0x094 / 4, 0x094 % 4, value);
+	wwrite_epd(0x094 / 4, 0x094 % 4, value);
 }
 
 /***
@@ -1497,7 +1497,7 @@ function setCurrentButtonSet(unitPointer, value) {
  * The unit pointer
 ***/
 function getIsCloaked(unitPointer) {
-    return bread_epd(unitPointer + 0x096 / 4, 0x096 % 4);
+	return bread_epd(unitPointer + 0x096 / 4, 0x096 % 4);
 }
 
 /***
@@ -1509,7 +1509,7 @@ function getIsCloaked(unitPointer) {
  * The new value
 ***/
 function setIsCloaked(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x096 / 4, 0x096 % 4, value);
+	bwrite_epd(unitPointer + 0x096 / 4, 0x096 % 4, value);
 }
 
 /***
@@ -1519,7 +1519,7 @@ function setIsCloaked(unitPointer, value) {
  * The unit pointer
 ***/
 function getMovementState(unitPointer) {
-    return bread_epd(unitPointer + 0x097 / 4, 0x097 % 4);
+	return bread_epd(unitPointer + 0x097 / 4, 0x097 % 4);
 }
 
 /***
@@ -1531,7 +1531,7 @@ function getMovementState(unitPointer) {
  * The new value
 ***/
 function setMovementState(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x097 / 4, 0x097 % 4, value);
+	bwrite_epd(unitPointer + 0x097 / 4, 0x097 % 4, value);
 }
 
 /***
@@ -1541,7 +1541,7 @@ function setMovementState(unitPointer, value) {
  * The unit pointer
 ***/
 function getBuildQueue1(unitPointer) {
-    return wread_epd(unitPointer + 0x098 / 4, 0x098 % 4);
+	return wread_epd(unitPointer + 0x098 / 4, 0x098 % 4);
 }
 
 /***
@@ -1553,7 +1553,7 @@ function getBuildQueue1(unitPointer) {
  * The new value
 ***/
 function setBuildQueue1(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x098 / 4, 0x098 % 4, value);
+	wwrite_epd(unitPointer + 0x098 / 4, 0x098 % 4, value);
 }
 
 /***
@@ -1563,7 +1563,7 @@ function setBuildQueue1(unitPointer, value) {
  * The unit pointer
 ***/
 function getBuildQueue2(unitPointer) {
-    return wread_epd(unitPointer + 0x09A / 4, 0x09A % 4);
+	return wread_epd(unitPointer + 0x09A / 4, 0x09A % 4);
 }
 
 /***
@@ -1575,7 +1575,7 @@ function getBuildQueue2(unitPointer) {
  * The new value
 ***/
 function setBuildQueue2(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x09A / 4, 0x09A % 4, value);
+	wwrite_epd(unitPointer + 0x09A / 4, 0x09A % 4, value);
 }
 
 /***
@@ -1585,7 +1585,7 @@ function setBuildQueue2(unitPointer, value) {
  * The unit pointer
 ***/
 function getBuildQueue3(unitPointer) {
-    return wread_epd(unitPointer + 0x09C / 4, 0x09C % 4);
+	return wread_epd(unitPointer + 0x09C / 4, 0x09C % 4);
 }
 
 /***
@@ -1597,7 +1597,7 @@ function getBuildQueue3(unitPointer) {
  * The new value
 ***/
 function setBuildQueue3(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x09C / 4, 0x09C % 4, value);
+	wwrite_epd(unitPointer + 0x09C / 4, 0x09C % 4, value);
 }
 
 /***
@@ -1607,7 +1607,7 @@ function setBuildQueue3(unitPointer, value) {
  * The unit pointer
 ***/
 function getBuildQueue4(unitPointer) {
-    return wread_epd(unitPointer + 0x09E / 4, 0x09E % 4);
+	return wread_epd(unitPointer + 0x09E / 4, 0x09E % 4);
 }
 
 /***
@@ -1619,7 +1619,7 @@ function getBuildQueue4(unitPointer) {
  * The new value
 ***/
 function setBuildQueue4(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x09E / 4, 0x09E % 4, value);
+	wwrite_epd(unitPointer + 0x09E / 4, 0x09E % 4, value);
 }
 
 /***
@@ -1629,7 +1629,7 @@ function setBuildQueue4(unitPointer, value) {
  * The unit pointer
 ***/
 function getBuildQueue5(unitPointer) {
-    return wread_epd(unitPointer + 0x0A0 / 4, 0x0A0 % 4);
+	return wread_epd(unitPointer + 0x0A0 / 4, 0x0A0 % 4);
 }
 
 /***
@@ -1641,7 +1641,7 @@ function getBuildQueue5(unitPointer) {
  * The new value
 ***/
 function setBuildQueue5(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x0A0 / 4, 0x0A0 % 4, value);
+	wwrite_epd(unitPointer + 0x0A0 / 4, 0x0A0 % 4, value);
 }
 
 /***
@@ -1652,7 +1652,7 @@ function setBuildQueue5(unitPointer, value) {
 ***/
 
 function getEnergy(unitPointer) {
-    return wread_epd(unitPointer + 0x0A2 / 4,  0x0A2 % 4) / 256;
+	return wread_epd(unitPointer + 0x0A2 / 4,  0x0A2 % 4) / 256;
 }
 
 /***
@@ -1664,7 +1664,7 @@ function getEnergy(unitPointer) {
  * The new value
 ***/
 function setEnergy(unitPointer, energy) {
-    Common.dwwrite_epd(unitPointer, 0x0,(energy * 256) * 65536);
+	Common.dwwrite_epd(unitPointer, 0x0,(energy * 256) * 65536);
 }
 
 /***
@@ -1674,7 +1674,7 @@ function setEnergy(unitPointer, energy) {
  * The unit pointer
 ***/
 function getBuildQueueSlot(unitPointer) {
-    return bread_epd(unitPointer + 0x0A4 / 4, 0x0A4 % 4);
+	return bread_epd(unitPointer + 0x0A4 / 4, 0x0A4 % 4);
 }
 
 /***
@@ -1686,7 +1686,7 @@ function getBuildQueueSlot(unitPointer) {
  * The new value
 ***/
 function setBuildQueueSlot(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x0A4 / 4, 0x0A4 % 4, value);
+	bwrite_epd(unitPointer + 0x0A4 / 4, 0x0A4 % 4, value);
 }
 
 /***
@@ -1696,7 +1696,7 @@ function setBuildQueueSlot(unitPointer, value) {
  * The unit pointer
 ***/
 function getUniquenessIdentifier(unitPointer) {
-    return bread_epd(unitPointer + 0x0A5 / 4, 0x0A5 % 4);
+	return bread_epd(unitPointer + 0x0A5 / 4, 0x0A5 % 4);
 }
 
 /***
@@ -1708,7 +1708,7 @@ function getUniquenessIdentifier(unitPointer) {
  * The new value
 ***/
 function setUniquenessIdentifier(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x0A5 / 4, 0x0A5 % 4, value);
+	bwrite_epd(unitPointer + 0x0A5 / 4, 0x0A5 % 4, value);
 }
 
 /***
@@ -1718,7 +1718,7 @@ function setUniquenessIdentifier(unitPointer, value) {
  * The unit pointer
 ***/
 function getSecondaryOrderID(unitPointer) {
-    return bread_epd(unitPointer + 0x0A6 / 4, 0x0A6 % 4);
+	return bread_epd(unitPointer + 0x0A6 / 4, 0x0A6 % 4);
 }
 
 /***
@@ -1730,7 +1730,7 @@ function getSecondaryOrderID(unitPointer) {
  * The new value
 ***/
 function setSecondaryOrderID(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x0A6 / 4, 0x0A6 % 4, value);
+	bwrite_epd(unitPointer + 0x0A6 / 4, 0x0A6 % 4, value);
 }
 
 /***
@@ -1740,7 +1740,7 @@ function setSecondaryOrderID(unitPointer, value) {
  * The unit pointer
 ***/
 function getBuildingOverlayState(unitPointer) {
-    return bread_epd(unitPointer + 0x0A7 / 4, 0x0A7 % 4);
+	return bread_epd(unitPointer + 0x0A7 / 4, 0x0A7 % 4);
 }
 
 /***
@@ -1752,7 +1752,7 @@ function getBuildingOverlayState(unitPointer) {
  * The new value
 ***/
 function setBuildingOverlayState(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x0A7 / 4, 0x0A7 % 4, value);
+	bwrite_epd(unitPointer + 0x0A7 / 4, 0x0A7 % 4, value);
 }
 
 /***
@@ -1762,7 +1762,7 @@ function setBuildingOverlayState(unitPointer, value) {
  * The unit pointer
 ***/
 function getHpGain(unitPointer) {
-    return wread_epd(unitPointer + 0x0A8 / 4, 0x0A8 % 4);
+	return wread_epd(unitPointer + 0x0A8 / 4, 0x0A8 % 4);
 }
 
 /***
@@ -1774,7 +1774,7 @@ function getHpGain(unitPointer) {
  * The new value
 ***/
 function setHpGain(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x0A8 / 4, 0x0A8 % 4, value);
+	wwrite_epd(unitPointer + 0x0A8 / 4, 0x0A8 % 4, value);
 }
 
 /***
@@ -1784,7 +1784,7 @@ function setHpGain(unitPointer, value) {
  * The unit pointer
 ***/
 function getShieldGain(unitPointer) {
-    return wread_epd(unitPointer + 0x0AA / 4, 0x0AA % 4);
+	return wread_epd(unitPointer + 0x0AA / 4, 0x0AA % 4);
 }
 
 /***
@@ -1796,7 +1796,7 @@ function getShieldGain(unitPointer) {
  * The new value
 ***/
 function setShieldGain(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x0AA / 4, 0x0AA % 4, value);
+	wwrite_epd(unitPointer + 0x0AA / 4, 0x0AA % 4, value);
 }
 
 /***
@@ -1806,7 +1806,7 @@ function setShieldGain(unitPointer, value) {
  * The unit pointer
 ***/
 function getRemainingBuildTime(unitPointer) {
-    return wread_epd(unitPointer + 0x0AC / 4, 0x0AC % 4);
+	return wread_epd(unitPointer + 0x0AC / 4, 0x0AC % 4);
 }
 
 /***
@@ -1818,7 +1818,7 @@ function getRemainingBuildTime(unitPointer) {
  * The new value
 ***/
 function setRemainingBuildTime(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x0AC / 4, 0x0AC % 4, value);
+	wwrite_epd(unitPointer + 0x0AC / 4, 0x0AC % 4, value);
 }
 
 /***
@@ -1830,7 +1830,7 @@ function setRemainingBuildTime(unitPointer, value) {
  * The new value
 ***/
 function setPreviousHitpoints(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x0AE / 4,  0x0AE % 4, value);
+	wwrite_epd(unitPointer + 0x0AE / 4,  0x0AE % 4, value);
 }
 
 /***
@@ -1840,7 +1840,7 @@ function setPreviousHitpoints(unitPointer, value) {
  * The unit pointer
 ***/
 function getPreviousHitpoints(unitPointer) {
-    return wread_epd(unitPointer + 0x0AE / 4,  0x0AE % 4);
+	return wread_epd(unitPointer + 0x0AE / 4,  0x0AE % 4);
 }
 
 /***
@@ -1850,7 +1850,7 @@ function getPreviousHitpoints(unitPointer) {
  * The unit pointer
 ***/
 function getLoadedUnitIndex1(unitPointer) {
-    return wread_epd(unitPointer + 0x0B0 / 4, 0x0B0 % 4);
+	return wread_epd(unitPointer + 0x0B0 / 4, 0x0B0 % 4);
 }
 
 /***
@@ -1862,7 +1862,7 @@ function getLoadedUnitIndex1(unitPointer) {
  * The new value
 ***/
 function setLoadedUnitIndex1(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x0B0 / 4, 0x0B0 % 4, value);
+	wwrite_epd(unitPointer + 0x0B0 / 4, 0x0B0 % 4, value);
 }
 
 /***
@@ -1872,7 +1872,7 @@ function setLoadedUnitIndex1(unitPointer, value) {
  * The unit pointer
 ***/
 function getLoadedUnitIndex2(unitPointer) {
-    return wread_epd(unitPointer + 0x0B2 / 4, 0x0B2 % 4);
+	return wread_epd(unitPointer + 0x0B2 / 4, 0x0B2 % 4);
 }
 
 /***
@@ -1884,7 +1884,7 @@ function getLoadedUnitIndex2(unitPointer) {
  * The new value
 ***/
 function setLoadedUnitIndex2(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x0B2 / 4, 0x0B2 % 4, value);
+	wwrite_epd(unitPointer + 0x0B2 / 4, 0x0B2 % 4, value);
 }
 
 /***
@@ -1894,7 +1894,7 @@ function setLoadedUnitIndex2(unitPointer, value) {
  * The unit pointer
 ***/
 function getLoadedUnitIndex3(unitPointer) {
-    return wread_epd(unitPointer + 0x0B4 / 4, 0x0B4 % 4);
+	return wread_epd(unitPointer + 0x0B4 / 4, 0x0B4 % 4);
 }
 
 /***
@@ -1906,7 +1906,7 @@ function getLoadedUnitIndex3(unitPointer) {
  * The new value
 ***/
 function setLoadedUnitIndex3(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x0B4 / 4, 0x0B4 % 4, value);
+	wwrite_epd(unitPointer + 0x0B4 / 4, 0x0B4 % 4, value);
 }
 
 /***
@@ -1916,7 +1916,7 @@ function setLoadedUnitIndex3(unitPointer, value) {
  * The unit pointer
 ***/
 function getLoadedUnitIndex4(unitPointer) {
-    return wread_epd(unitPointer + 0x0B6 / 4, 0x0B6 % 4);
+	return wread_epd(unitPointer + 0x0B6 / 4, 0x0B6 % 4);
 }
 
 /***
@@ -1928,7 +1928,7 @@ function getLoadedUnitIndex4(unitPointer) {
  * The new value
 ***/
 function setLoadedUnitIndex4(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x0B6 / 4, 0x0B6 % 4, value);
+	wwrite_epd(unitPointer + 0x0B6 / 4, 0x0B6 % 4, value);
 }
 
 /***
@@ -1938,7 +1938,7 @@ function setLoadedUnitIndex4(unitPointer, value) {
  * The unit pointer
 ***/
 function getLoadedUnitIndex5(unitPointer) {
-    return wread_epd(unitPointer + 0x0B8 / 4, 0x0B8 % 4);
+	return wread_epd(unitPointer + 0x0B8 / 4, 0x0B8 % 4);
 }
 
 /***
@@ -1950,7 +1950,7 @@ function getLoadedUnitIndex5(unitPointer) {
  * The new value
 ***/
 function setLoadedUnitIndex5(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x0B8 / 4, 0x0B8 % 4, value);
+	wwrite_epd(unitPointer + 0x0B8 / 4, 0x0B8 % 4, value);
 }
 
 /***
@@ -1960,7 +1960,7 @@ function setLoadedUnitIndex5(unitPointer, value) {
  * The unit pointer
 ***/
 function getLoadedUnitIndex6(unitPointer) {
-    return wread_epd(unitPointer + 0x0BA / 4, 0x0BA % 4);
+	return wread_epd(unitPointer + 0x0BA / 4, 0x0BA % 4);
 }
 
 /***
@@ -1972,7 +1972,7 @@ function getLoadedUnitIndex6(unitPointer) {
  * The new value
 ***/
 function setLoadedUnitIndex6(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x0BA / 4, 0x0BA % 4, value);
+	wwrite_epd(unitPointer + 0x0BA / 4, 0x0BA % 4, value);
 }
 
 /***
@@ -1982,7 +1982,7 @@ function setLoadedUnitIndex6(unitPointer, value) {
  * The unit pointer
 ***/
 function getLoadedUnitIndex7(unitPointer) {
-    return wread_epd(unitPointer + 0x0BC / 4, 0x0BC % 4);
+	return wread_epd(unitPointer + 0x0BC / 4, 0x0BC % 4);
 }
 
 /***
@@ -1994,7 +1994,7 @@ function getLoadedUnitIndex7(unitPointer) {
  * The new value
 ***/
 function setLoadedUnitIndex7(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x0BC / 4, 0x0BC % 4, value);
+	wwrite_epd(unitPointer + 0x0BC / 4, 0x0BC % 4, value);
 }
 
 /***
@@ -2004,7 +2004,7 @@ function setLoadedUnitIndex7(unitPointer, value) {
  * The unit pointer
 ***/
 function getLoadedUnitIndex8(unitPointer) {
-    return wread_epd(unitPointer + 0x0BE / 4, 0x0BE % 4);
+	return wread_epd(unitPointer + 0x0BE / 4, 0x0BE % 4);
 }
 
 /***
@@ -2016,7 +2016,7 @@ function getLoadedUnitIndex8(unitPointer) {
  * The new value
 ***/
 function setLoadedUnitIndex8(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x0BE / 4, 0x0BE % 4, value);
+	wwrite_epd(unitPointer + 0x0BE / 4, 0x0BE % 4, value);
 }
 
 /***
@@ -2026,7 +2026,7 @@ function setLoadedUnitIndex8(unitPointer, value) {
  * The unit pointer
 ***/
 function getSpiderMineCount(unitPointer) {
-    return bread_epd(unitPointer + 0x0C0 / 4, 0x0C0 % 4);
+	return bread_epd(unitPointer + 0x0C0 / 4, 0x0C0 % 4);
 }
 
 /***
@@ -2038,7 +2038,7 @@ function getSpiderMineCount(unitPointer) {
  * The new value
 ***/
 function setSpiderMineCount(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x0C0 / 4, 0x0C0 % 4, value);
+	bwrite_epd(unitPointer + 0x0C0 / 4, 0x0C0 % 4, value);
 }
 
 /***
@@ -2048,7 +2048,7 @@ function setSpiderMineCount(unitPointer, value) {
  * The unit pointer
 ***/
 function getPInHanger(unitPointer) {
-    return dwread_epd(unitPointer + 0x0C0 / 4);
+	return dwread_epd(unitPointer + 0x0C0 / 4);
 }
 
 /***
@@ -2060,7 +2060,7 @@ function getPInHanger(unitPointer) {
  * The new value
 ***/
 function setPInHanger(unitPointer, value) {
-    Common.dwwrite_epd(unitPointer, 0x0C0, value);
+	Common.dwwrite_epd(unitPointer, 0x0C0, value);
 }
 
 /***
@@ -2070,7 +2070,7 @@ function setPInHanger(unitPointer, value) {
  * The unit pointer
 ***/
 function getPOutHanger(unitPointer) {
-    return dwread_epd(unitPointer + 0x0C4 / 4);
+	return dwread_epd(unitPointer + 0x0C4 / 4);
 }
 
 /***
@@ -2082,7 +2082,7 @@ function getPOutHanger(unitPointer) {
  * The new value
 ***/
 function setPOutHanger(unitPointer, value) {
-    Common.dwwrite_epd(unitPointer, 0x0C4, value);
+	Common.dwwrite_epd(unitPointer, 0x0C4, value);
 }
 
 /***
@@ -2092,7 +2092,7 @@ function setPOutHanger(unitPointer, value) {
  * The unit pointer
 ***/
 function getInHangerCount(unitPointer) {
-    return bread_epd(unitPointer + 0x0C8 / 4, 0x0C8 % 4);
+	return bread_epd(unitPointer + 0x0C8 / 4, 0x0C8 % 4);
 }
 
 /***
@@ -2104,7 +2104,7 @@ function getInHangerCount(unitPointer) {
  * The new value
 ***/
 function setInHangerCount(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x0C8 / 4, 0x0C8 % 4, value);
+	bwrite_epd(unitPointer + 0x0C8 / 4, 0x0C8 % 4, value);
 }
 
 /***
@@ -2114,7 +2114,7 @@ function setInHangerCount(unitPointer, value) {
  * The unit pointer
 ***/
 function getOutHangerCount(unitPointer) {
-    return bread_epd(unitPointer + 0x0C9 / 4, 0x0C9 % 4);
+	return bread_epd(unitPointer + 0x0C9 / 4, 0x0C9 % 4);
 }
 
 /***
@@ -2126,7 +2126,7 @@ function getOutHangerCount(unitPointer) {
  * The new value
 ***/
 function setOutHangerCount(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x0C9 / 4, 0x0C9 % 4, value);
+	bwrite_epd(unitPointer + 0x0C9 / 4, 0x0C9 % 4, value);
 }
 
 /***
@@ -2136,7 +2136,7 @@ function setOutHangerCount(unitPointer, value) {
  * The unit pointer
 ***/
 function getFighterParent(unitPointer) {
-    return dwread_epd(unitPointer + 0x0C0 / 4);
+	return dwread_epd(unitPointer + 0x0C0 / 4);
 }
 
 /***
@@ -2148,7 +2148,7 @@ function getFighterParent(unitPointer) {
  * The new value
 ***/
 function setFighterParent(unitPointer, value) {
-    Common.dwwrite_epd(unitPointer, 0x0C0, value);
+	Common.dwwrite_epd(unitPointer, 0x0C0, value);
 }
 
 /***
@@ -2158,7 +2158,7 @@ function setFighterParent(unitPointer, value) {
  * The unit pointer
 ***/
 function getFighterPrev(unitPointer) {
-    return dwread_epd(unitPointer + 0x0C4 / 4);
+	return dwread_epd(unitPointer + 0x0C4 / 4);
 }
 
 /***
@@ -2170,7 +2170,7 @@ function getFighterPrev(unitPointer) {
  * The new value
 ***/
 function setFighterPrev(unitPointer, value) {
-    Common.dwwrite_epd(unitPointer, 0x0C4, value);
+	Common.dwwrite_epd(unitPointer, 0x0C4, value);
 }
 
 /***
@@ -2180,7 +2180,7 @@ function setFighterPrev(unitPointer, value) {
  * The unit pointer
 ***/
 function getFighterNext(unitPointer) {
-    return dwread_epd(unitPointer + 0x0C8 / 4);
+	return dwread_epd(unitPointer + 0x0C8 / 4);
 }
 
 /***
@@ -2192,7 +2192,7 @@ function getFighterNext(unitPointer) {
  * The new value
 ***/
 function setFighterNext(unitPointer, value) {
-    Common.dwwrite_epd(unitPointer, 0x0C8, value);
+	Common.dwwrite_epd(unitPointer, 0x0C8, value);
 }
 
 /***
@@ -2202,7 +2202,7 @@ function setFighterNext(unitPointer, value) {
  * The unit pointer
 ***/
 function getFighterInHanger(unitPointer) {
-    return bread_epd(unitPointer + 0x0CC / 4, 0x0CC % 4);
+	return bread_epd(unitPointer + 0x0CC / 4, 0x0CC % 4);
 }
 
 /***
@@ -2214,7 +2214,7 @@ function getFighterInHanger(unitPointer) {
  * The new value
 ***/
 function setFighterInHanger(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x0CC / 4, 0x0CC % 4, value);
+	bwrite_epd(unitPointer + 0x0CC / 4, 0x0CC % 4, value);
 }
 
 /***
@@ -2224,7 +2224,7 @@ function setFighterInHanger(unitPointer, value) {
  * The unit pointer
 ***/
 function getUnknown00(unitPointer) {
-    return dwread_epd(unitPointer + 0x0C0 / 4);
+	return dwread_epd(unitPointer + 0x0C0 / 4);
 }
 
 /***
@@ -2236,7 +2236,7 @@ function getUnknown00(unitPointer) {
  * The new value
 ***/
 function setUnknown00(unitPointer, value) {
-    Common.dwwrite_epd(unitPointer, 0x0C0, value);
+	Common.dwwrite_epd(unitPointer, 0x0C0, value);
 }
 
 /***
@@ -2246,7 +2246,7 @@ function setUnknown00(unitPointer, value) {
  * The unit pointer
 ***/
 function getUnknown04(unitPointer) {
-    return dwread_epd(unitPointer + 0x0C4 / 4);
+	return dwread_epd(unitPointer + 0x0C4 / 4);
 }
 
 /***
@@ -2258,7 +2258,7 @@ function getUnknown04(unitPointer) {
  * The new value
 ***/
 function setUnknown04(unitPointer, value) {
-    Common.dwwrite_epd(unitPointer, 0x0C4, value);
+	Common.dwwrite_epd(unitPointer, 0x0C4, value);
 }
 
 /***
@@ -2268,7 +2268,7 @@ function setUnknown04(unitPointer, value) {
  * The unit pointer
 ***/
 function getFlagSpawnFrame(unitPointer) {
-    return dwread_epd(unitPointer + 0x0C8 / 4);
+	return dwread_epd(unitPointer + 0x0C8 / 4);
 }
 
 /***
@@ -2280,7 +2280,7 @@ function getFlagSpawnFrame(unitPointer) {
  * The new value
 ***/
 function setFlagSpawnFrame(unitPointer, value) {
-    Common.dwwrite_epd(unitPointer, 0x0C8, value);
+	Common.dwwrite_epd(unitPointer, 0x0C8, value);
 }
 
 /***
@@ -2290,7 +2290,7 @@ function setFlagSpawnFrame(unitPointer, value) {
  * The unit pointer
 ***/
 function getAddon(unitPointer) {
-    return dwread_epd(unitPointer + 0x0C0 / 4);
+	return dwread_epd(unitPointer + 0x0C0 / 4);
 }
 
 /***
@@ -2302,7 +2302,7 @@ function getAddon(unitPointer) {
  * The new value
 ***/
 function setAddon(unitPointer, value) {
-    Common.dwwrite_epd(unitPointer, 0x0C0, value);
+	Common.dwwrite_epd(unitPointer, 0x0C0, value);
 }
 
 /***
@@ -2312,7 +2312,7 @@ function setAddon(unitPointer, value) {
  * The unit pointer
 ***/
 function getAddonBuildType(unitPointer) {
-    return wread_epd(unitPointer + 0x0C4 / 4, 0x0C4 % 4);
+	return wread_epd(unitPointer + 0x0C4 / 4, 0x0C4 % 4);
 }
 
 /***
@@ -2324,7 +2324,7 @@ function getAddonBuildType(unitPointer) {
  * The new value
 ***/
 function setAddonBuildType(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x0C4 / 4, 0x0C4 % 4, value);
+	wwrite_epd(unitPointer + 0x0C4 / 4, 0x0C4 % 4, value);
 }
 
 /***
@@ -2334,7 +2334,7 @@ function setAddonBuildType(unitPointer, value) {
  * The unit pointer
 ***/
 function getUpgradeResearchTime(unitPointer) {
-    return wread_epd(unitPointer + 0x0C6 / 4, 0x0C6 % 4);
+	return wread_epd(unitPointer + 0x0C6 / 4, 0x0C6 % 4);
 }
 
 /***
@@ -2346,7 +2346,7 @@ function getUpgradeResearchTime(unitPointer) {
  * The new value
 ***/
 function setUpgradeResearchTime(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x0C6 / 4, 0x0C6 % 4, value);
+	wwrite_epd(unitPointer + 0x0C6 / 4, 0x0C6 % 4, value);
 }
 
 /***
@@ -2356,7 +2356,7 @@ function setUpgradeResearchTime(unitPointer, value) {
  * The unit pointer
 ***/
 function getTechType(unitPointer) {
-    return bread_epd(unitPointer + 0x0C8 / 4, 0x0C8 % 4);
+	return bread_epd(unitPointer + 0x0C8 / 4, 0x0C8 % 4);
 }
 
 /***
@@ -2368,7 +2368,7 @@ function getTechType(unitPointer) {
  * The new value
 ***/
 function setTechType(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x0C8 / 4, 0x0C8 % 4, value);
+	bwrite_epd(unitPointer + 0x0C8 / 4, 0x0C8 % 4, value);
 }
 
 /***
@@ -2378,7 +2378,7 @@ function setTechType(unitPointer, value) {
  * The unit pointer
 ***/
 function getUpgradeType(unitPointer) {
-    return bread_epd(unitPointer + 0x0C9 / 4, 0x0C9 % 4);
+	return bread_epd(unitPointer + 0x0C9 / 4, 0x0C9 % 4);
 }
 
 /***
@@ -2390,7 +2390,7 @@ function getUpgradeType(unitPointer) {
  * The new value
 ***/
 function setUpgradeType(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x0C9 / 4, 0x0C9 % 4, value);
+	bwrite_epd(unitPointer + 0x0C9 / 4, 0x0C9 % 4, value);
 }
 
 /***
@@ -2400,7 +2400,7 @@ function setUpgradeType(unitPointer, value) {
  * The unit pointer
 ***/
 function getLarvaTimer(unitPointer) {
-    return bread_epd(unitPointer + 0x0CA / 4, 0x0CA % 4) / 65536 ;
+	return bread_epd(unitPointer + 0x0CA / 4, 0x0CA % 4) / 65536 ;
 }
 
 /***
@@ -2412,7 +2412,7 @@ function getLarvaTimer(unitPointer) {
  * The new value
 ***/
 function setLarvaTimer(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x0CA / 4, 0x0CA % 4, value * 65536);
+	bwrite_epd(unitPointer + 0x0CA / 4, 0x0CA % 4, value * 65536);
 }
 
 /***
@@ -2422,7 +2422,7 @@ function setLarvaTimer(unitPointer, value) {
  * The unit pointer
 ***/
 function getLandingTimer(unitPointer) {
-    return bread_epd(unitPointer + 0x0CB / 4, 0x0CB % 4);
+	return bread_epd(unitPointer + 0x0CB / 4, 0x0CB % 4);
 }
 
 /***
@@ -2434,7 +2434,7 @@ function getLandingTimer(unitPointer) {
  * The new value
 ***/
 function setLandingTimer(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x0CB / 4, 0x0CB % 4, value);
+	bwrite_epd(unitPointer + 0x0CB / 4, 0x0CB % 4, value);
 }
 
 /***
@@ -2444,7 +2444,7 @@ function setLandingTimer(unitPointer, value) {
  * The unit pointer
 ***/
 function getCreepTimer(unitPointer) {
-    return bread_epd(unitPointer + 0x0CC / 4, 0x0CC % 4);
+	return bread_epd(unitPointer + 0x0CC / 4, 0x0CC % 4);
 }
 
 /***
@@ -2456,7 +2456,7 @@ function getCreepTimer(unitPointer) {
  * The new value
 ***/
 function setCreepTimer(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x0CC / 4, 0x0CC % 4, value);
+	bwrite_epd(unitPointer + 0x0CC / 4, 0x0CC % 4, value);
 }
 
 /***
@@ -2466,7 +2466,7 @@ function setCreepTimer(unitPointer, value) {
  * The unit pointer
 ***/
 function getUpgradeLevel(unitPointer) {
-    return bread_epd(unitPointer + 0x0CD / 4, 0x0CD % 4);
+	return bread_epd(unitPointer + 0x0CD / 4, 0x0CD % 4);
 }
 
 /***
@@ -2478,7 +2478,7 @@ function getUpgradeLevel(unitPointer) {
  * The new value
 ***/
 function setUpgradeLevel(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x0CD / 4, 0x0CD % 4, value);
+	bwrite_epd(unitPointer + 0x0CD / 4, 0x0CD % 4, value);
 }
 
 /***
@@ -2488,7 +2488,7 @@ function setUpgradeLevel(unitPointer, value) {
  * The unit pointer
 ***/
 function getUnknownE(unitPointer) {
-    return wread_epd(unitPointer + 0x0CE / 4, 0x0CE % 4);
+	return wread_epd(unitPointer + 0x0CE / 4, 0x0CE % 4);
 }
 
 /***
@@ -2500,7 +2500,7 @@ function getUnknownE(unitPointer) {
  * The new value
 ***/
 function setUnknownE(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x0CE / 4, 0x0CE % 4, value);
+	wwrite_epd(unitPointer + 0x0CE / 4, 0x0CE % 4, value);
 }
 
 /***
@@ -2510,7 +2510,7 @@ function setUnknownE(unitPointer, value) {
  * The unit pointer
 ***/
 function getPowerup(unitPointer) {
-    return dwread_epd(unitPointer + 0x0C0 / 4);
+	return dwread_epd(unitPointer + 0x0C0 / 4);
 }
 
 /***
@@ -2522,7 +2522,7 @@ function getPowerup(unitPointer) {
  * The new value
 ***/
 function setPowerup(unitPointer, value) {
-    Common.dwwrite_epd(unitPointer, 0x0C0, value);
+	Common.dwwrite_epd(unitPointer, 0x0C0, value);
 }
 
 /***
@@ -2532,7 +2532,7 @@ function setPowerup(unitPointer, value) {
  * The unit pointer
 ***/
 function getTargetResourceX(unitPointer) {
-    return wread_epd(unitPointer + 0x0C4 / 4, 0x0C4 % 4);
+	return wread_epd(unitPointer + 0x0C4 / 4, 0x0C4 % 4);
 }
 
 /***
@@ -2544,7 +2544,7 @@ function getTargetResourceX(unitPointer) {
  * The new value
 ***/
 function setTargetResourceX(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x0C4 / 4, 0x0C4 % 4, value);
+	wwrite_epd(unitPointer + 0x0C4 / 4, 0x0C4 % 4, value);
 }
 
 /***
@@ -2554,7 +2554,7 @@ function setTargetResourceX(unitPointer, value) {
  * The unit pointer
 ***/
 function getTargetResourceY(unitPointer) {
-    return wread_epd(unitPointer + 0x0C6 / 4, 0x0C6 % 4);
+	return wread_epd(unitPointer + 0x0C6 / 4, 0x0C6 % 4);
 }
 
 /***
@@ -2566,7 +2566,7 @@ function getTargetResourceY(unitPointer) {
  * The new value
 ***/
 function setTargetResourceY(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x0C6 / 4, 0x0C6 % 4, value);
+	wwrite_epd(unitPointer + 0x0C6 / 4, 0x0C6 % 4, value);
 }
 
 /***
@@ -2576,7 +2576,7 @@ function setTargetResourceY(unitPointer, value) {
  * The unit pointer
 ***/
 function getTargetResourceUnit(unitPointer) {
-    return dwread_epd(unitPointer + 0x0C8 / 4);
+	return dwread_epd(unitPointer + 0x0C8 / 4);
 }
 
 /***
@@ -2588,7 +2588,7 @@ function getTargetResourceUnit(unitPointer) {
  * The new value
 ***/
 function setTargetResourceUnit(unitPointer, value) {
-    Common.dwwrite_epd(unitPointer, 0x0C8, value);
+	Common.dwwrite_epd(unitPointer, 0x0C8, value);
 }
 
 /***
@@ -2598,7 +2598,7 @@ function setTargetResourceUnit(unitPointer, value) {
  * The unit pointer
 ***/
 function getRepairResourceLossTimer(unitPointer) {
-    return wread_epd(unitPointer + 0x0CC / 4, 0x0CC % 4);
+	return wread_epd(unitPointer + 0x0CC / 4, 0x0CC % 4);
 }
 
 /***
@@ -2610,7 +2610,7 @@ function getRepairResourceLossTimer(unitPointer) {
  * The new value
 ***/
 function setRepairResourceLossTimer(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x0CC / 4, 0x0CC % 4, value);
+	wwrite_epd(unitPointer + 0x0CC / 4, 0x0CC % 4, value);
 }
 
 /***
@@ -2620,7 +2620,7 @@ function setRepairResourceLossTimer(unitPointer, value) {
  * The unit pointer
 ***/
 function getHarvestTarget(unitPointer) {
-    return dwread_epd(unitPointer + 0x0D0 / 4);
+	return dwread_epd(unitPointer + 0x0D0 / 4);
 }
 
 /***
@@ -2632,7 +2632,7 @@ function getHarvestTarget(unitPointer) {
  * The new value
 ***/
 function setHarvestTarget(unitPointer, value) {
-    Common.dwwrite_epd(unitPointer, 0x0D0, value);
+	Common.dwwrite_epd(unitPointer, 0x0D0, value);
 }
 
 /***
@@ -2642,7 +2642,7 @@ function setHarvestTarget(unitPointer, value) {
  * The unit pointer
 ***/
 function getPrevHarvestUnit(unitPointer) {
-    return dwread_epd(unitPointer + 0x0D4 / 4);
+	return dwread_epd(unitPointer + 0x0D4 / 4);
 }
 
 /***
@@ -2654,7 +2654,7 @@ function getPrevHarvestUnit(unitPointer) {
  * The new value
 ***/
 function setPrevHarvestUnit(unitPointer, value) {
-    Common.dwwrite_epd(unitPointer, 0x0D4, value);
+	Common.dwwrite_epd(unitPointer, 0x0D4, value);
 }
 
 /***
@@ -2664,7 +2664,7 @@ function setPrevHarvestUnit(unitPointer, value) {
  * The unit pointer
 ***/
 function getNextHarvestUnit(unitPointer) {
-    return dwread_epd(unitPointer + 0x0D8 / 4);
+	return dwread_epd(unitPointer + 0x0D8 / 4);
 }
 
 /***
@@ -2676,7 +2676,7 @@ function getNextHarvestUnit(unitPointer) {
  * The new value
 ***/
 function setNextHarvestUnit(unitPointer, value) {
-    Common.dwwrite_epd(unitPointer, 0x0D8, value);
+	Common.dwwrite_epd(unitPointer, 0x0D8, value);
 }
 
 /***
@@ -2686,7 +2686,7 @@ function setNextHarvestUnit(unitPointer, value) {
  * The unit pointer
 ***/
 function getResourceCount(unitPointer) {
-    return wread_epd(unitPointer + 0x0D0 / 4, 0x0D0 % 4);
+	return wread_epd(unitPointer + 0x0D0 / 4, 0x0D0 % 4);
 }
 
 /***
@@ -2698,7 +2698,7 @@ function getResourceCount(unitPointer) {
  * The new value
 ***/
 function setResourceCount(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x0D0 / 4, 0x0D0 % 4, value);
+	wwrite_epd(unitPointer + 0x0D0 / 4, 0x0D0 % 4, value);
 }
 
 /***
@@ -2708,7 +2708,7 @@ function setResourceCount(unitPointer, value) {
  * The unit pointer
 ***/
 function getResourceIscript(unitPointer) {
-    return bread_epd(unitPointer + 0x0D2 / 4, 0x0D2 % 4);
+	return bread_epd(unitPointer + 0x0D2 / 4, 0x0D2 % 4);
 }
 
 /***
@@ -2720,7 +2720,7 @@ function getResourceIscript(unitPointer) {
  * The new value
 ***/
 function setResourceIscript(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x0D2 / 4, 0x0D2 % 4, value);
+	bwrite_epd(unitPointer + 0x0D2 / 4, 0x0D2 % 4, value);
 }
 
 /***
@@ -2730,7 +2730,7 @@ function setResourceIscript(unitPointer, value) {
  * The unit pointer
 ***/
 function getGatherQueueCount(unitPointer) {
-    return bread_epd(unitPointer + 0x0D3 / 4, 0x0D3 % 4);
+	return bread_epd(unitPointer + 0x0D3 / 4, 0x0D3 % 4);
 }
 
 /***
@@ -2742,7 +2742,7 @@ function getGatherQueueCount(unitPointer) {
  * The new value
 ***/
 function setGatherQueueCount(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x0D3 / 4, 0x0D3 % 4, value);
+	bwrite_epd(unitPointer + 0x0D3 / 4, 0x0D3 % 4, value);
 }
 
 /***
@@ -2752,7 +2752,7 @@ function setGatherQueueCount(unitPointer, value) {
  * The unit pointer
 ***/
 function getNextGatherer(unitPointer) {
-    return dwread_epd(unitPointer + 0x0D4 / 4);
+	return dwread_epd(unitPointer + 0x0D4 / 4);
 }
 
 /***
@@ -2764,7 +2764,7 @@ function getNextGatherer(unitPointer) {
  * The new value
 ***/
 function setNextGatherer(unitPointer, value) {
-    Common.dwwrite_epd(unitPointer, 0x0D4, value);
+	Common.dwwrite_epd(unitPointer, 0x0D4, value);
 }
 
 /***
@@ -2774,7 +2774,7 @@ function setNextGatherer(unitPointer, value) {
  * The unit pointer
 ***/
 function getResourceGroup(unitPointer) {
-    return bread_epd(unitPointer + 0x0D8 / 4, 0x0D8 % 4);
+	return bread_epd(unitPointer + 0x0D8 / 4, 0x0D8 % 4);
 }
 
 /***
@@ -2786,7 +2786,7 @@ function getResourceGroup(unitPointer) {
  * The new value
 ***/
 function setResourceGroup(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x0D8 / 4, 0x0D8 % 4, value);
+	bwrite_epd(unitPointer + 0x0D8 / 4, 0x0D8 % 4, value);
 }
 
 /***
@@ -2796,7 +2796,7 @@ function setResourceGroup(unitPointer, value) {
  * The unit pointer
 ***/
 function getResourceBelongsToAI(unitPointer) {
-    return bread_epd(unitPointer + 0x0D9 / 4, 0x0D9 % 4);
+	return bread_epd(unitPointer + 0x0D9 / 4, 0x0D9 % 4);
 }
 
 /***
@@ -2808,7 +2808,7 @@ function getResourceBelongsToAI(unitPointer) {
  * The new value
 ***/
 function setResourceBelongsToAI(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x0D9 / 4, 0x0D9 % 4, value);
+	bwrite_epd(unitPointer + 0x0D9 / 4, 0x0D9 % 4, value);
 }
 
 /***
@@ -2818,7 +2818,7 @@ function setResourceBelongsToAI(unitPointer, value) {
  * The unit pointer
 ***/
 function getNydusExit(unitPointer) {
-    return dwread_epd(unitPointer + 0x0D0 / 4);
+	return dwread_epd(unitPointer + 0x0D0 / 4);
 }
 
 /***
@@ -2830,7 +2830,7 @@ function getNydusExit(unitPointer) {
  * The new value
 ***/
 function setNydusExit(unitPointer, value) {
-    Common.dwwrite_epd(unitPointer, 0x0D0, value);
+	Common.dwwrite_epd(unitPointer, 0x0D0, value);
 }
 
 /***
@@ -2840,7 +2840,7 @@ function setNydusExit(unitPointer, value) {
  * The unit pointer
 ***/
 function getGhostNukeDot(unitPointer) {
-    return dwread_epd(unitPointer + 0x0D0 / 4);
+	return dwread_epd(unitPointer + 0x0D0 / 4);
 }
 
 /***
@@ -2852,7 +2852,7 @@ function getGhostNukeDot(unitPointer) {
  * The new value
 ***/
 function setGhostNukeDot(unitPointer, value) {
-    Common.dwwrite_epd(unitPointer, 0x0D0, value);
+	Common.dwwrite_epd(unitPointer, 0x0D0, value);
 }
 
 /***
@@ -2862,7 +2862,7 @@ function setGhostNukeDot(unitPointer, value) {
  * The unit pointer
 ***/
 function getPylonpPowerTemplate(unitPointer) {
-    return dwread_epd(unitPointer + 0x0D0 / 4);
+	return dwread_epd(unitPointer + 0x0D0 / 4);
 }
 
 /***
@@ -2874,7 +2874,7 @@ function getPylonpPowerTemplate(unitPointer) {
  * The new value
 ***/
 function setPylonpPowerTemplate(unitPointer, value) {
-    Common.dwwrite_epd(unitPointer, 0x0D0, value);
+	Common.dwwrite_epd(unitPointer, 0x0D0, value);
 }
 
 /***
@@ -2884,7 +2884,7 @@ function setPylonpPowerTemplate(unitPointer, value) {
  * The unit pointer
 ***/
 function getSiloNuke(unitPointer) {
-    return dwread_epd(unitPointer + 0x0D0 / 4);
+	return dwread_epd(unitPointer + 0x0D0 / 4);
 }
 
 /***
@@ -2896,7 +2896,7 @@ function getSiloNuke(unitPointer) {
  * The new value
 ***/
 function setSiloNuke(unitPointer, value) {
-    Common.dwwrite_epd(unitPointer, 0x0D0, value);
+	Common.dwwrite_epd(unitPointer, 0x0D0, value);
 }
 
 /***
@@ -2906,7 +2906,7 @@ function setSiloNuke(unitPointer, value) {
  * The unit pointer
 ***/
 function getSiloReady(unitPointer) {
-    return bread_epd(unitPointer + 0x0D4 / 4, 0x0D4 % 4);
+	return bread_epd(unitPointer + 0x0D4 / 4, 0x0D4 % 4);
 }
 
 /***
@@ -2918,7 +2918,7 @@ function getSiloReady(unitPointer) {
  * The new value
 ***/
 function setSiloReady(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x0D4 / 4, 0x0D4 % 4, value);
+	bwrite_epd(unitPointer + 0x0D4 / 4, 0x0D4 % 4, value);
 }
 
 /***
@@ -2928,7 +2928,7 @@ function setSiloReady(unitPointer, value) {
  * The unit pointer
 ***/
 function getHatcheryHarvestValueLeft(unitPointer) {
-    return wread_epd(unitPointer + 0x0D0 / 4, 0x0D0 % 4);
+	return wread_epd(unitPointer + 0x0D0 / 4, 0x0D0 % 4);
 }
 
 /***
@@ -2940,7 +2940,7 @@ function getHatcheryHarvestValueLeft(unitPointer) {
  * The new value
 ***/
 function setHatcheryHarvestValueLeft(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x0D0 / 4, 0x0D0 % 4, value);
+	wwrite_epd(unitPointer + 0x0D0 / 4, 0x0D0 % 4, value);
 }
 
 /***
@@ -2950,7 +2950,7 @@ function setHatcheryHarvestValueLeft(unitPointer, value) {
  * The unit pointer
 ***/
 function getHatcheryHarvestValueTop(unitPointer) {
-    return wread_epd(unitPointer + 0x0D2 / 4, 0x0D2 % 4);
+	return wread_epd(unitPointer + 0x0D2 / 4, 0x0D2 % 4);
 }
 
 /***
@@ -2962,7 +2962,7 @@ function getHatcheryHarvestValueTop(unitPointer) {
  * The new value
 ***/
 function setHatcheryHarvestValueTop(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x0D2 / 4, 0x0D2 % 4, value);
+	wwrite_epd(unitPointer + 0x0D2 / 4, 0x0D2 % 4, value);
 }
 
 /***
@@ -2972,7 +2972,7 @@ function setHatcheryHarvestValueTop(unitPointer, value) {
  * The unit pointer
 ***/
 function getHatcheryHarvestValueRight(unitPointer) {
-    return wread_epd(unitPointer + 0x0D4 / 4, 0x0D4 % 4);
+	return wread_epd(unitPointer + 0x0D4 / 4, 0x0D4 % 4);
 }
 
 /***
@@ -2984,7 +2984,7 @@ function getHatcheryHarvestValueRight(unitPointer) {
  * The new value
 ***/
 function setHatcheryHarvestValueRight(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x0D4 / 4, 0x0D4 % 4, value);
+	wwrite_epd(unitPointer + 0x0D4 / 4, 0x0D4 % 4, value);
 }
 
 /***
@@ -2994,7 +2994,7 @@ function setHatcheryHarvestValueRight(unitPointer, value) {
  * The unit pointer
 ***/
 function getHatcheryHarvestValueBottom(unitPointer) {
-    return wread_epd(unitPointer + 0x0D6 / 4, 0x0D6 % 4);
+	return wread_epd(unitPointer + 0x0D6 / 4, 0x0D6 % 4);
 }
 
 /***
@@ -3006,7 +3006,7 @@ function getHatcheryHarvestValueBottom(unitPointer) {
  * The new value
 ***/
 function setHatcheryHarvestValueBottom(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x0D6 / 4, 0x0D6 % 4, value);
+	wwrite_epd(unitPointer + 0x0D6 / 4, 0x0D6 % 4, value);
 }
 
 /***
@@ -3016,7 +3016,7 @@ function setHatcheryHarvestValueBottom(unitPointer, value) {
  * The unit pointer
 ***/
 function getOriginX(unitPointer) {
-    return wread_epd(unitPointer + 0x0D0 / 4, 0x0D0 % 4);
+	return wread_epd(unitPointer + 0x0D0 / 4, 0x0D0 % 4);
 }
 
 /***
@@ -3028,7 +3028,7 @@ function getOriginX(unitPointer) {
  * The new value
 ***/
 function setOriginX(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x0D0 / 4, 0x0D0 % 4, value);
+	wwrite_epd(unitPointer + 0x0D0 / 4, 0x0D0 % 4, value);
 }
 
 /***
@@ -3038,7 +3038,7 @@ function setOriginX(unitPointer, value) {
  * The unit pointer
 ***/
 function getOriginY(unitPointer) {
-    return wread_epd(unitPointer + 0x0D2 / 4, 0x0D2 % 4);
+	return wread_epd(unitPointer + 0x0D2 / 4, 0x0D2 % 4);
 }
 
 /***
@@ -3050,7 +3050,7 @@ function getOriginY(unitPointer) {
  * The new value
 ***/
 function setOriginY(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x0D2 / 4, 0x0D2 % 4, value);
+	wwrite_epd(unitPointer + 0x0D2 / 4, 0x0D2 % 4, value);
 }
 
 /***
@@ -3060,7 +3060,7 @@ function setOriginY(unitPointer, value) {
  * The unit pointer
 ***/
 function getStatusFlags(unitPointer) {
-    return dwread_epd(unitPointer + 0x0DC / 4);
+	return dwread_epd(unitPointer + 0x0DC / 4);
 }
 
 /***
@@ -3072,7 +3072,7 @@ function getStatusFlags(unitPointer) {
  * The new value
 ***/
 function setStatusFlags(unitPointer, value) {
-     Common.dwwrite_epd(unitPointer, 0x0DC, value);
+	 Common.dwwrite_epd(unitPointer, 0x0DC, value);
 }
 
 /***
@@ -3082,7 +3082,7 @@ function setStatusFlags(unitPointer, value) {
  * The unit pointer
 ***/
 function getResourceType(unitPointer) {
-    return bread_epd(unitPointer + 0x0E0 / 4, 0x0E0 % 4);
+	return bread_epd(unitPointer + 0x0E0 / 4, 0x0E0 % 4);
 }
 
 /***
@@ -3094,7 +3094,7 @@ function getResourceType(unitPointer) {
  * The new value
 ***/
 function setResourceType(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x0E0 / 4, 0x0E0 % 4, value);
+	bwrite_epd(unitPointer + 0x0E0 / 4, 0x0E0 % 4, value);
 }
 
 /***
@@ -3104,7 +3104,7 @@ function setResourceType(unitPointer, value) {
  * The unit pointer
 ***/
 function getWireframeRandomizer(unitPointer) {
-    return bread_epd(unitPointer + 0x0E1 / 4, 0x0E1 % 4);
+	return bread_epd(unitPointer + 0x0E1 / 4, 0x0E1 % 4);
 }
 
 /***
@@ -3116,7 +3116,7 @@ function getWireframeRandomizer(unitPointer) {
  * The new value
 ***/
 function setWireframeRandomizer(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x0E1 / 4, 0x0E1 % 4, value);
+	bwrite_epd(unitPointer + 0x0E1 / 4, 0x0E1 % 4, value);
 }
 
 /***
@@ -3126,7 +3126,7 @@ function setWireframeRandomizer(unitPointer, value) {
  * The unit pointer
 ***/
 function getSecondaryOrderState(unitPointer) {
-    return bread_epd(unitPointer + 0x0E2 / 4, 0x0E2 % 4);
+	return bread_epd(unitPointer + 0x0E2 / 4, 0x0E2 % 4);
 }
 
 /***
@@ -3138,7 +3138,7 @@ function getSecondaryOrderState(unitPointer) {
  * The new value
 ***/
 function setSecondaryOrderState(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x0E2 / 4, 0x0E2 % 4, value);
+	bwrite_epd(unitPointer + 0x0E2 / 4, 0x0E2 % 4, value);
 }
 
 /***
@@ -3148,7 +3148,7 @@ function setSecondaryOrderState(unitPointer, value) {
  * The unit pointer
 ***/
 function getRecentOrderTimer(unitPointer) {
-    return bread_epd(unitPointer + 0x0E3 / 4, 0x0E3 % 4);
+	return bread_epd(unitPointer + 0x0E3 / 4, 0x0E3 % 4);
 }
 
 /***
@@ -3160,7 +3160,7 @@ function getRecentOrderTimer(unitPointer) {
  * The new value
 ***/
 function setRecentOrderTimer(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x0E3 / 4, 0x0E3 % 4, value);
+	bwrite_epd(unitPointer + 0x0E3 / 4, 0x0E3 % 4, value);
 }
 
 /***
@@ -3170,7 +3170,7 @@ function setRecentOrderTimer(unitPointer, value) {
  * The unit pointer
 ***/
 function getVisibilityStatus(unitPointer) {
-    return dwread_epd(unitPointer + 0x0E4 / 4);
+	return dwread_epd(unitPointer + 0x0E4 / 4);
 }
 
 /***
@@ -3182,7 +3182,7 @@ function getVisibilityStatus(unitPointer) {
  * The new value
 ***/
 function setVisibilityStatus(unitPointer, value) {
-    Common.dwwrite_epd(unitPointer, 0x0E4, value);
+	Common.dwwrite_epd(unitPointer, 0x0E4, value);
 }
 
 /***
@@ -3192,7 +3192,7 @@ function setVisibilityStatus(unitPointer, value) {
  * The unit pointer
 ***/
 function getSecondaryOrderPositionX(unitPointer) {
-    return wread_epd(unitPointer + 0x0E8 / 4, 0x0E8 % 4);
+	return wread_epd(unitPointer + 0x0E8 / 4, 0x0E8 % 4);
 }
 
 /***
@@ -3204,7 +3204,7 @@ function getSecondaryOrderPositionX(unitPointer) {
  * The new value
 ***/
 function setSecondaryOrderPositionX(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x0E8 / 4, 0x0E8 % 4, value);
+	wwrite_epd(unitPointer + 0x0E8 / 4, 0x0E8 % 4, value);
 }
 
 /***
@@ -3214,7 +3214,7 @@ function setSecondaryOrderPositionX(unitPointer, value) {
  * The unit pointer
 ***/
 function getSecondaryOrderPositionY(unitPointer) {
-    return wread_epd(unitPointer + 0x0EA / 4, 0x0EA % 4);
+	return wread_epd(unitPointer + 0x0EA / 4, 0x0EA % 4);
 }
 
 /***
@@ -3226,7 +3226,7 @@ function getSecondaryOrderPositionY(unitPointer) {
  * The new value
 ***/
 function setSecondaryOrderPositionY(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x0EA / 4, 0x0EA % 4, value);
+	wwrite_epd(unitPointer + 0x0EA / 4, 0x0EA % 4, value);
 }
 
 /***
@@ -3236,7 +3236,7 @@ function setSecondaryOrderPositionY(unitPointer, value) {
  * The unit pointer
 ***/
 function getCurrentBuildUnit(unitPointer) {
-    return dwread_epd(unitPointer + 0x0EC / 4);
+	return dwread_epd(unitPointer + 0x0EC / 4);
 }
 
 /***
@@ -3248,7 +3248,7 @@ function getCurrentBuildUnit(unitPointer) {
  * The new value
 ***/
 function setCurrentBuildUnit(unitPointer, value) {
-    Common.dwwrite_epd(unitPointer, 0x0EC, value);
+	Common.dwwrite_epd(unitPointer, 0x0EC, value);
 }
 
 /***
@@ -3258,7 +3258,7 @@ function setCurrentBuildUnit(unitPointer, value) {
  * The unit pointer
 ***/
 function getPreviousBurrowedUnit(unitPointer) {
-    return dwread_epd(unitPointer + 0x0F0 / 4);
+	return dwread_epd(unitPointer + 0x0F0 / 4);
 }
 
 /***
@@ -3270,7 +3270,7 @@ function getPreviousBurrowedUnit(unitPointer) {
  * The new value
 ***/
 function setPreviousBurrowedUnit(unitPointer, value) {
-    Common.dwwrite_epd(unitPointer, 0x0F0, value);
+	Common.dwwrite_epd(unitPointer, 0x0F0, value);
 }
 
 /***
@@ -3280,7 +3280,7 @@ function setPreviousBurrowedUnit(unitPointer, value) {
  * The unit pointer
 ***/
 function getNextBurrowedUnit(unitPointer) {
-    return dwread_epd(unitPointer + 0x0F4 / 4);
+	return dwread_epd(unitPointer + 0x0F4 / 4);
 }
 
 /***
@@ -3292,7 +3292,7 @@ function getNextBurrowedUnit(unitPointer) {
  * The new value
 ***/
 function setNextBurrowedUnit(unitPointer, value) {
-    Common.dwwrite_epd(unitPointer, 0x0F4, value);
+	Common.dwwrite_epd(unitPointer, 0x0F4, value);
 }
 
 /***
@@ -3302,7 +3302,7 @@ function setNextBurrowedUnit(unitPointer, value) {
  * The unit pointer
 ***/
 function getRallyPositionX(unitPointer) {
-    return wread_epd(unitPointer + 0x0F8 / 4, 0x0F8 % 4);
+	return wread_epd(unitPointer + 0x0F8 / 4, 0x0F8 % 4);
 }
 
 /***
@@ -3314,7 +3314,7 @@ function getRallyPositionX(unitPointer) {
  * The new value
 ***/
 function setRallyPositionX(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x0F8 / 4, 0x0F8 % 4, value);
+	wwrite_epd(unitPointer + 0x0F8 / 4, 0x0F8 % 4, value);
 }
 
 /***
@@ -3324,7 +3324,7 @@ function setRallyPositionX(unitPointer, value) {
  * The unit pointer
 ***/
 function getRallyPositionY(unitPointer) {
-    return wread_epd(unitPointer + 0x0FA / 4, 0x0FA % 4);
+	return wread_epd(unitPointer + 0x0FA / 4, 0x0FA % 4);
 }
 
 /***
@@ -3336,7 +3336,7 @@ function getRallyPositionY(unitPointer) {
  * The new value
 ***/
 function setRallyPositionY(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x0FA / 4, 0x0FA % 4, value);
+	wwrite_epd(unitPointer + 0x0FA / 4, 0x0FA % 4, value);
 }
 
 /***
@@ -3346,7 +3346,7 @@ function setRallyPositionY(unitPointer, value) {
  * The unit pointer
 ***/
 function getRallyUnit(unitPointer) {
-    return dwread_epd(unitPointer + 0x0FC / 4);
+	return dwread_epd(unitPointer + 0x0FC / 4);
 }
 
 /***
@@ -3358,7 +3358,7 @@ function getRallyUnit(unitPointer) {
  * The new value
 ***/
 function setRallyUnit(unitPointer, value) {
-    Common.dwwrite_epd(unitPointer, 0x0FC, value);
+	Common.dwwrite_epd(unitPointer, 0x0FC, value);
 }
 
 /***
@@ -3368,7 +3368,7 @@ function setRallyUnit(unitPointer, value) {
  * The unit pointer
 ***/
 function getPylonPrevPsiProvider(unitPointer) {
-    return dwread_epd(unitPointer + 0x0F8 / 4);
+	return dwread_epd(unitPointer + 0x0F8 / 4);
 }
 
 /***
@@ -3380,7 +3380,7 @@ function getPylonPrevPsiProvider(unitPointer) {
  * The new value
 ***/
 function setPylonPrevPsiProvider(unitPointer, value) {
-    Common.dwwrite_epd(unitPointer, 0x0F8, value);
+	Common.dwwrite_epd(unitPointer, 0x0F8, value);
 }
 
 /***
@@ -3390,7 +3390,7 @@ function setPylonPrevPsiProvider(unitPointer, value) {
  * The unit pointer
 ***/
 function getPylonNextPsiProvider(unitPointer) {
-    return dwread_epd(unitPointer + 0x0FC / 4);
+	return dwread_epd(unitPointer + 0x0FC / 4);
 }
 
 /***
@@ -3402,7 +3402,7 @@ function getPylonNextPsiProvider(unitPointer) {
  * The new value
 ***/
 function setPylonNextPsiProvider(unitPointer, value) {
-    Common.dwwrite_epd(unitPointer, 0x0FC, value);
+	Common.dwwrite_epd(unitPointer, 0x0FC, value);
 }
 
 /***
@@ -3412,7 +3412,7 @@ function setPylonNextPsiProvider(unitPointer, value) {
  * The unit pointer
 ***/
 function getPath(unitPointer) {
-    return dwread_epd(unitPointer + 0x100 / 4);
+	return dwread_epd(unitPointer + 0x100 / 4);
 }
 
 /***
@@ -3424,7 +3424,7 @@ function getPath(unitPointer) {
  * The new value
 ***/
 function setPath(unitPointer, value) {
-    Common.dwwrite_epd(unitPointer, 0x100, value);
+	Common.dwwrite_epd(unitPointer, 0x100, value);
 }
 
 /***
@@ -3434,7 +3434,7 @@ function setPath(unitPointer, value) {
  * The unit pointer
 ***/
 function getPathingCollisionInterval(unitPointer) {
-    return bread_epd(unitPointer + 0x104 / 4, 0x104 % 4);
+	return bread_epd(unitPointer + 0x104 / 4, 0x104 % 4);
 }
 
 /***
@@ -3446,7 +3446,7 @@ function getPathingCollisionInterval(unitPointer) {
  * The new value
 ***/
 function setPathingCollisionInterval(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x104 / 4, 0x104 % 4, value);
+	bwrite_epd(unitPointer + 0x104 / 4, 0x104 % 4, value);
 }
 
 /***
@@ -3456,7 +3456,7 @@ function setPathingCollisionInterval(unitPointer, value) {
  * The unit pointer
 ***/
 function getPathingFlags(unitPointer) {
-    return bread_epd(unitPointer + 0x105 / 4, 0x105 % 4);
+	return bread_epd(unitPointer + 0x105 / 4, 0x105 % 4);
 }
 
 /***
@@ -3468,7 +3468,7 @@ function getPathingFlags(unitPointer) {
  * The new value
 ***/
 function setPathingFlags(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x105 / 4, 0x105 % 4, value);
+	bwrite_epd(unitPointer + 0x105 / 4, 0x105 % 4, value);
 }
 
 /***
@@ -3478,7 +3478,7 @@ function setPathingFlags(unitPointer, value) {
  * The unit pointer
 ***/
 function get106Flag(unitPointer) {
-    return bread_epd(unitPointer + 0x106 / 4, 0x106 % 4);
+	return bread_epd(unitPointer + 0x106 / 4, 0x106 % 4);
 }
 
 /***
@@ -3490,7 +3490,7 @@ function get106Flag(unitPointer) {
  * The new value
 ***/
 function set106Flag(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x106 / 4, 0x106 % 4, value);
+	bwrite_epd(unitPointer + 0x106 / 4, 0x106 % 4, value);
 }
 
 /***
@@ -3500,7 +3500,7 @@ function set106Flag(unitPointer, value) {
  * The unit pointer
 ***/
 function getIsBeingHealed(unitPointer) {
-    return bread_epd(unitPointer + 0x107 / 4, 0x107 % 4);
+	return bread_epd(unitPointer + 0x107 / 4, 0x107 % 4);
 }
 
 /***
@@ -3512,7 +3512,7 @@ function getIsBeingHealed(unitPointer) {
  * The new value
 ***/
 function setIsBeingHealed(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x107 / 4, 0x107 % 4, value);
+	bwrite_epd(unitPointer + 0x107 / 4, 0x107 % 4, value);
 }
 
 /***
@@ -3522,7 +3522,7 @@ function setIsBeingHealed(unitPointer, value) {
  * The unit pointer
 ***/
 function getContourBoundsLeft(unitPointer) {
-    return wread_epd(unitPointer + 0x108 / 4, 0x108 % 4);
+	return wread_epd(unitPointer + 0x108 / 4, 0x108 % 4);
 }
 
 /***
@@ -3534,7 +3534,7 @@ function getContourBoundsLeft(unitPointer) {
  * The new value
 ***/
 function setContourBoundsLeft(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x108 / 4, 0x108 % 4, value);
+	wwrite_epd(unitPointer + 0x108 / 4, 0x108 % 4, value);
 }
 
 /***
@@ -3544,7 +3544,7 @@ function setContourBoundsLeft(unitPointer, value) {
  * The unit pointer
 ***/
 function getContourBoundsTop(unitPointer) {
-    return wread_epd(unitPointer + 0x10A / 4, 0x10A % 4);
+	return wread_epd(unitPointer + 0x10A / 4, 0x10A % 4);
 }
 
 /***
@@ -3556,7 +3556,7 @@ function getContourBoundsTop(unitPointer) {
  * The new value
 ***/
 function setContourBoundsTop(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x10A / 4, 0x10A % 4, value);
+	wwrite_epd(unitPointer + 0x10A / 4, 0x10A % 4, value);
 }
 
 /***
@@ -3566,7 +3566,7 @@ function setContourBoundsTop(unitPointer, value) {
  * The unit pointer
 ***/
 function getContourBoundsRight(unitPointer) {
-    return wread_epd(unitPointer + 0x10C / 4, 0x10C % 4);
+	return wread_epd(unitPointer + 0x10C / 4, 0x10C % 4);
 }
 
 /***
@@ -3578,7 +3578,7 @@ function getContourBoundsRight(unitPointer) {
  * The new value
 ***/
 function setContourBoundsRight(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x10C / 4, 0x10C % 4, value);
+	wwrite_epd(unitPointer + 0x10C / 4, 0x10C % 4, value);
 }
 
 /***
@@ -3588,7 +3588,7 @@ function setContourBoundsRight(unitPointer, value) {
  * The unit pointer
 ***/
 function getContourBoundsBottom(unitPointer) {
-    return wread_epd(unitPointer + 0x10E / 4, 0x10E % 4);
+	return wread_epd(unitPointer + 0x10E / 4, 0x10E % 4);
 }
 
 /***
@@ -3600,7 +3600,7 @@ function getContourBoundsBottom(unitPointer) {
  * The new value
 ***/
 function setContourBoundsBottom(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x10E / 4, 0x10E % 4, value);
+	wwrite_epd(unitPointer + 0x10E / 4, 0x10E % 4, value);
 }
 
 /***
@@ -3610,7 +3610,7 @@ function setContourBoundsBottom(unitPointer, value) {
  * The unit pointer
 ***/
 function getRemoveTimer(unitPointer) {
-    return wread_epd(unitPointer + 0x110 / 4, 0x110 % 4);
+	return wread_epd(unitPointer + 0x110 / 4, 0x110 % 4);
 }
 
 /***
@@ -3622,7 +3622,7 @@ function getRemoveTimer(unitPointer) {
  * The new value
 ***/
 function setRemoveTimer(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x110 / 4, 0x110 % 4, value);
+	wwrite_epd(unitPointer + 0x110 / 4, 0x110 % 4, value);
 }
 
 /***
@@ -3632,7 +3632,7 @@ function setRemoveTimer(unitPointer, value) {
  * The unit pointer
 ***/
 function getDefenseMatrixDamage(unitPointer) {
-    return wread_epd(unitPointer + 0x112 / 4, 0x112 % 4);
+	return wread_epd(unitPointer + 0x112 / 4, 0x112 % 4);
 }
 
 /***
@@ -3644,7 +3644,7 @@ function getDefenseMatrixDamage(unitPointer) {
  * The new value
 ***/
 function setDefenseMatrixDamage(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x112 / 4, 0x112 % 4, value);
+	wwrite_epd(unitPointer + 0x112 / 4, 0x112 % 4, value);
 }
 
 /***
@@ -3654,7 +3654,7 @@ function setDefenseMatrixDamage(unitPointer, value) {
  * The unit pointer
 ***/
 function getDefenseMatrixTimer(unitPointer) {
-    return bread_epd(unitPointer + 0x114 / 4, 0x114 % 4);
+	return bread_epd(unitPointer + 0x114 / 4, 0x114 % 4);
 }
 
 /***
@@ -3666,7 +3666,7 @@ function getDefenseMatrixTimer(unitPointer) {
  * The new value
 ***/
 function setDefenseMatrixTimer(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x114 / 4, 0x114 % 4, value);
+	bwrite_epd(unitPointer + 0x114 / 4, 0x114 % 4, value);
 }
 
 /***
@@ -3676,7 +3676,7 @@ function setDefenseMatrixTimer(unitPointer, value) {
  * The unit pointer
 ***/
 function getStimTimer(unitPointer) {
-    return bread_epd(unitPointer + 0x115 / 4, 0x115 % 4) / 256;
+	return bread_epd(unitPointer + 0x115 / 4, 0x115 % 4) / 256;
 }
 
 /***
@@ -3688,7 +3688,7 @@ function getStimTimer(unitPointer) {
  * The new value
 ***/
 function setStimTimer(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x115 / 4, 0x115 % 4, value * 256);
+	bwrite_epd(unitPointer + 0x115 / 4, 0x115 % 4, value * 256);
 }
 
 /***
@@ -3698,7 +3698,7 @@ function setStimTimer(unitPointer, value) {
  * The unit pointer
 ***/
 function getEnsnareTimer(unitPointer) {
-    return bread_epd(unitPointer + 0x116 / 4, 0x116 % 4);
+	return bread_epd(unitPointer + 0x116 / 4, 0x116 % 4);
 }
 
 /***
@@ -3710,7 +3710,7 @@ function getEnsnareTimer(unitPointer) {
  * The new value
 ***/
 function setEnsnareTimer(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x116 / 4, 0x116 % 4, value);
+	bwrite_epd(unitPointer + 0x116 / 4, 0x116 % 4, value);
 }
 
 /***
@@ -3720,7 +3720,7 @@ function setEnsnareTimer(unitPointer, value) {
  * The unit pointer
 ***/
 function getLockdownTimer(unitPointer) {
-    return bread_epd(unitPointer + 0x117 / 4, 0x117 % 4);
+	return bread_epd(unitPointer + 0x117 / 4, 0x117 % 4);
 }
 
 /***
@@ -3732,7 +3732,7 @@ function getLockdownTimer(unitPointer) {
  * The new value
 ***/
 function setLockdownTimer(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x117 / 4, 0x117 % 4, value);
+	bwrite_epd(unitPointer + 0x117 / 4, 0x117 % 4, value);
 }
 
 /***
@@ -3742,7 +3742,7 @@ function setLockdownTimer(unitPointer, value) {
  * The unit pointer
 ***/
 function getIrradiateTimer(unitPointer) {
-    return bread_epd(unitPointer + 0x118 / 4, 0x118 % 4);
+	return bread_epd(unitPointer + 0x118 / 4, 0x118 % 4);
 }
 
 /***
@@ -3754,7 +3754,7 @@ function getIrradiateTimer(unitPointer) {
  * The new value
 ***/
 function setIrradiateTimer(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x118 / 4, 0x118 % 4, value);
+	bwrite_epd(unitPointer + 0x118 / 4, 0x118 % 4, value);
 }
 
 /***
@@ -3764,7 +3764,7 @@ function setIrradiateTimer(unitPointer, value) {
  * The unit pointer
 ***/
 function getStasisTimer(unitPointer) {
-    return bread_epd(unitPointer + 0x119 / 4, 0x119 % 4);
+	return bread_epd(unitPointer + 0x119 / 4, 0x119 % 4);
 }
 
 /***
@@ -3776,7 +3776,7 @@ function getStasisTimer(unitPointer) {
  * The new value
 ***/
 function setStasisTimer(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x119 / 4, 0x119 % 4, value);
+	bwrite_epd(unitPointer + 0x119 / 4, 0x119 % 4, value);
 }
 
 /***
@@ -3786,7 +3786,7 @@ function setStasisTimer(unitPointer, value) {
  * The unit pointer
 ***/
 function getPlagueTimer(unitPointer) {
-    return bread_epd(unitPointer + 0x11A / 4, 0x11A % 4);
+	return bread_epd(unitPointer + 0x11A / 4, 0x11A % 4);
 }
 
 /***
@@ -3798,7 +3798,7 @@ function getPlagueTimer(unitPointer) {
  * The new value
 ***/
 function setPlagueTimer(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x11A / 4, 0x11A % 4, value);
+	bwrite_epd(unitPointer + 0x11A / 4, 0x11A % 4, value);
 }
 
 /***
@@ -3808,7 +3808,7 @@ function setPlagueTimer(unitPointer, value) {
  * The unit pointer
 ***/
 function getStormTimer(unitPointer) {
-    return bread_epd(unitPointer + 0x11B / 4, 0x11B % 4);
+	return bread_epd(unitPointer + 0x11B / 4, 0x11B % 4);
 }
 
 /***
@@ -3820,7 +3820,7 @@ function getStormTimer(unitPointer) {
  * The new value
 ***/
 function setStormTimer(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x11B / 4, 0x11B % 4, value);
+	bwrite_epd(unitPointer + 0x11B / 4, 0x11B % 4, value);
 }
 
 /***
@@ -3830,7 +3830,7 @@ function setStormTimer(unitPointer, value) {
  * The unit pointer
 ***/
 function getIrradiatedBy(unitPointer) {
-    return dwread_epd(unitPointer + 0x11C / 4);
+	return dwread_epd(unitPointer + 0x11C / 4);
 }
 
 /***
@@ -3842,7 +3842,7 @@ function getIrradiatedBy(unitPointer) {
  * The new value
 ***/
 function setIrradiatedBy(unitPointer, value) {
-    Common.dwwrite_epd(unitPointer, 0x11C, value);
+	Common.dwwrite_epd(unitPointer, 0x11C, value);
 }
 
 /***
@@ -3852,7 +3852,7 @@ function setIrradiatedBy(unitPointer, value) {
  * The unit pointer
 ***/
 function getIrradiatePlayerID(unitPointer) {
-    return bread_epd(unitPointer + 0x120 / 4, 0x120 % 4);
+	return bread_epd(unitPointer + 0x120 / 4, 0x120 % 4);
 }
 
 /***
@@ -3864,7 +3864,7 @@ function getIrradiatePlayerID(unitPointer) {
  * The new value
 ***/
 function setIrradiatePlayerID(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x120 / 4, 0x120 % 4, value);
+	bwrite_epd(unitPointer + 0x120 / 4, 0x120 % 4, value);
 }
 
 /***
@@ -3874,7 +3874,7 @@ function setIrradiatePlayerID(unitPointer, value) {
  * The unit pointer
 ***/
 function getParasiteFlag(unitPointer) {
-    return bread_epd(unitPointer + 0x121 / 4, 0x121 % 4);
+	return bread_epd(unitPointer + 0x121 / 4, 0x121 % 4);
 }
 
 /***
@@ -3886,7 +3886,7 @@ function getParasiteFlag(unitPointer) {
  * The new value
 ***/
 function setParasiteFlag(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x121 / 4, 0x121 % 4, value);
+	bwrite_epd(unitPointer + 0x121 / 4, 0x121 % 4, value);
 }
 
 /***
@@ -3896,7 +3896,7 @@ function setParasiteFlag(unitPointer, value) {
  * The unit pointer
 ***/
 function getCycleCounter(unitPointer) {
-    return bread_epd(unitPointer + 0x122 / 4, 0x122 % 4);
+	return bread_epd(unitPointer + 0x122 / 4, 0x122 % 4);
 }
 
 /***
@@ -3908,7 +3908,7 @@ function getCycleCounter(unitPointer) {
  * The new value
 ***/
 function setCycleCounter(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x122 / 4, 0x122 % 4, value);
+	bwrite_epd(unitPointer + 0x122 / 4, 0x122 % 4, value);
 }
 
 /***
@@ -3918,7 +3918,7 @@ function setCycleCounter(unitPointer, value) {
  * The unit pointer
 ***/
 function getIsBlind(unitPointer) {
-    return bread_epd(unitPointer + 0x123 / 4, 0x123 % 4);
+	return bread_epd(unitPointer + 0x123 / 4, 0x123 % 4);
 }
 
 /***
@@ -3930,7 +3930,7 @@ function getIsBlind(unitPointer) {
  * The new value
 ***/
 function setIsBlind(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x123 / 4, 0x123 % 4, value);
+	bwrite_epd(unitPointer + 0x123 / 4, 0x123 % 4, value);
 }
 
 /***
@@ -3940,7 +3940,7 @@ function setIsBlind(unitPointer, value) {
  * The unit pointer
 ***/
 function getMaelstromTimer(unitPointer) {
-    return bread_epd(unitPointer + 0x124 / 4, 0x124 % 4);
+	return bread_epd(unitPointer + 0x124 / 4, 0x124 % 4);
 }
 
 /***
@@ -3952,7 +3952,7 @@ function getMaelstromTimer(unitPointer) {
  * The new value
 ***/
 function setMaelstromTimer(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x124 / 4, 0x124 % 4, value);
+	bwrite_epd(unitPointer + 0x124 / 4, 0x124 % 4, value);
 }
 
 /***
@@ -3962,7 +3962,7 @@ function setMaelstromTimer(unitPointer, value) {
  * The unit pointer
 ***/
 function getUnused125(unitPointer) {
-    return bread_epd(unitPointer + 0x125 / 4, 0x125 % 4);
+	return bread_epd(unitPointer + 0x125 / 4, 0x125 % 4);
 }
 
 /***
@@ -3974,7 +3974,7 @@ function getUnused125(unitPointer) {
  * The new value
 ***/
 function setUnused125(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x125 / 4, 0x125 % 4, value);
+	bwrite_epd(unitPointer + 0x125 / 4, 0x125 % 4, value);
 }
 
 /***
@@ -3984,7 +3984,7 @@ function setUnused125(unitPointer, value) {
  * The unit pointer
 ***/
 function getAcidSporeCount(unitPointer) {
-    return bread_epd(unitPointer + 0x126 / 4, 0x126 % 4);
+	return bread_epd(unitPointer + 0x126 / 4, 0x126 % 4);
 }
 
 /***
@@ -3996,7 +3996,7 @@ function getAcidSporeCount(unitPointer) {
  * The new value
 ***/
 function setAcidSporeCount(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x126 / 4, 0x126 % 4, value);
+	bwrite_epd(unitPointer + 0x126 / 4, 0x126 % 4, value);
 }
 
 /***
@@ -4006,7 +4006,7 @@ function setAcidSporeCount(unitPointer, value) {
  * The unit pointer
 ***/
 function getAcidSporeTime1(unitPointer) {
-    return bread_epd(unitPointer + 0x127 / 4, 0x127 % 4);
+	return bread_epd(unitPointer + 0x127 / 4, 0x127 % 4);
 }
 
 /***
@@ -4018,7 +4018,7 @@ function getAcidSporeTime1(unitPointer) {
  * The new value
 ***/
 function setAcidSporeTime1(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x127 / 4, 0x127 % 4, value);
+	bwrite_epd(unitPointer + 0x127 / 4, 0x127 % 4, value);
 }
 
 /***
@@ -4028,7 +4028,7 @@ function setAcidSporeTime1(unitPointer, value) {
  * The unit pointer
 ***/
 function getAcidSporeTime2(unitPointer) {
-    return bread_epd(unitPointer + 0x128 / 4, 0x128 % 4);
+	return bread_epd(unitPointer + 0x128 / 4, 0x128 % 4);
 }
 
 /***
@@ -4040,7 +4040,7 @@ function getAcidSporeTime2(unitPointer) {
  * The new value
 ***/
 function setAcidSporeTime2(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x128 / 4, 0x128 % 4, value);
+	bwrite_epd(unitPointer + 0x128 / 4, 0x128 % 4, value);
 }
 
 /***
@@ -4050,7 +4050,7 @@ function setAcidSporeTime2(unitPointer, value) {
  * The unit pointer
 ***/
 function getAcidSporeTime3(unitPointer) {
-    return bread_epd(unitPointer + 0x129 / 4, 0x129 % 4);
+	return bread_epd(unitPointer + 0x129 / 4, 0x129 % 4);
 }
 
 /***
@@ -4062,7 +4062,7 @@ function getAcidSporeTime3(unitPointer) {
  * The new value
 ***/
 function setAcidSporeTime3(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x129 / 4, 0x129 % 4, value);
+	bwrite_epd(unitPointer + 0x129 / 4, 0x129 % 4, value);
 }
 
 /***
@@ -4072,7 +4072,7 @@ function setAcidSporeTime3(unitPointer, value) {
  * The unit pointer
 ***/
 function getAcidSporeTime4(unitPointer) {
-    return bread_epd(unitPointer + 0x12A / 4, 0x12A % 4);
+	return bread_epd(unitPointer + 0x12A / 4, 0x12A % 4);
 }
 
 /***
@@ -4084,7 +4084,7 @@ function getAcidSporeTime4(unitPointer) {
  * The new value
 ***/
 function setAcidSporeTime4(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x12A / 4, 0x12A % 4, value);
+	bwrite_epd(unitPointer + 0x12A / 4, 0x12A % 4, value);
 }
 
 /***
@@ -4094,7 +4094,7 @@ function setAcidSporeTime4(unitPointer, value) {
  * The unit pointer
 ***/
 function getAcidSporeTime5(unitPointer) {
-    return bread_epd(unitPointer + 0x12B / 4, 0x12B % 4);
+	return bread_epd(unitPointer + 0x12B / 4, 0x12B % 4);
 }
 
 /***
@@ -4106,7 +4106,7 @@ function getAcidSporeTime5(unitPointer) {
  * The new value
 ***/
 function setAcidSporeTime5(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x12B / 4, 0x12B % 4, value);
+	bwrite_epd(unitPointer + 0x12B / 4, 0x12B % 4, value);
 }
 
 /***
@@ -4116,7 +4116,7 @@ function setAcidSporeTime5(unitPointer, value) {
  * The unit pointer
 ***/
 function getAcidSporeTime6(unitPointer) {
-    return bread_epd(unitPointer + 0x12C / 4, 0x12C % 4);
+	return bread_epd(unitPointer + 0x12C / 4, 0x12C % 4);
 }
 
 /***
@@ -4128,7 +4128,7 @@ function getAcidSporeTime6(unitPointer) {
  * The new value
 ***/
 function setAcidSporeTime6(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x12C / 4, 0x12C % 4, value);
+	bwrite_epd(unitPointer + 0x12C / 4, 0x12C % 4, value);
 }
 
 /***
@@ -4138,7 +4138,7 @@ function setAcidSporeTime6(unitPointer, value) {
  * The unit pointer
 ***/
 function getAcidSporeTime7(unitPointer) {
-    return bread_epd(unitPointer + 0x12D / 4, 0x12D % 4);
+	return bread_epd(unitPointer + 0x12D / 4, 0x12D % 4);
 }
 
 /***
@@ -4150,7 +4150,7 @@ function getAcidSporeTime7(unitPointer) {
  * The new value
 ***/
 function setAcidSporeTime7(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x12D / 4, 0x12D % 4, value);
+	bwrite_epd(unitPointer + 0x12D / 4, 0x12D % 4, value);
 }
 
 /***
@@ -4160,7 +4160,7 @@ function setAcidSporeTime7(unitPointer, value) {
  * The unit pointer
 ***/
 function getAcidSporeTime8(unitPointer) {
-    return bread_epd(unitPointer + 0x12E / 4, 0x12E % 4);
+	return bread_epd(unitPointer + 0x12E / 4, 0x12E % 4);
 }
 
 /***
@@ -4172,7 +4172,7 @@ function getAcidSporeTime8(unitPointer) {
  * The new value
 ***/
 function setAcidSporeTime8(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x12E / 4, 0x12E % 4, value);
+	bwrite_epd(unitPointer + 0x12E / 4, 0x12E % 4, value);
 }
 
 /***
@@ -4182,7 +4182,7 @@ function setAcidSporeTime8(unitPointer, value) {
  * The unit pointer
 ***/
 function getAcidSporeTime9(unitPointer) {
-    return bread_epd(unitPointer + 0x12F / 4, 0x12F % 4);
+	return bread_epd(unitPointer + 0x12F / 4, 0x12F % 4);
 }
 
 /***
@@ -4194,7 +4194,7 @@ function getAcidSporeTime9(unitPointer) {
  * The new value
 ***/
 function setAcidSporeTime9(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x12F / 4, 0x12F % 4, value);
+	bwrite_epd(unitPointer + 0x12F / 4, 0x12F % 4, value);
 }
 
 /***
@@ -4204,7 +4204,7 @@ function setAcidSporeTime9(unitPointer, value) {
  * The unit pointer
 ***/
 function getBulletBehaviour3by3AttackSequence(unitPointer) {
-    return wread_epd(unitPointer + 0x130 / 4, 0x130 % 4);
+	return wread_epd(unitPointer + 0x130 / 4, 0x130 % 4);
 }
 
 /***
@@ -4216,7 +4216,7 @@ function getBulletBehaviour3by3AttackSequence(unitPointer) {
  * The new value
 ***/
 function setBulletBehaviour3by3AttackSequence(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x130 / 4, 0x130 % 4, value);
+	wwrite_epd(unitPointer + 0x130 / 4, 0x130 % 4, value);
 }
 
 /***
@@ -4226,7 +4226,7 @@ function setBulletBehaviour3by3AttackSequence(unitPointer, value) {
  * The unit pointer
 ***/
 function getPadding132(unitPointer) {
-    return wread_epd(unitPointer + 0x132 / 4, 0x132 % 4);
+	return wread_epd(unitPointer + 0x132 / 4, 0x132 % 4);
 }
 
 /***
@@ -4238,7 +4238,7 @@ function getPadding132(unitPointer) {
  * The new value
 ***/
 function setPadding132(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x132 / 4, 0x132 % 4, value);
+	wwrite_epd(unitPointer + 0x132 / 4, 0x132 % 4, value);
 }
 
 /***
@@ -4248,7 +4248,7 @@ function setPadding132(unitPointer, value) {
  * The unit pointer
 ***/
 function getAIData(unitPointer) {
-    return dwread_epd(unitPointer + 0x134 / 4);
+	return dwread_epd(unitPointer + 0x134 / 4);
 }
 
 /***
@@ -4260,7 +4260,7 @@ function getAIData(unitPointer) {
  * The new value
 ***/
 function setAIData(unitPointer, value) {
-    Common.dwwrite_epd(unitPointer, 0x134, value);
+	Common.dwwrite_epd(unitPointer, 0x134, value);
 }
 
 /***
@@ -4270,7 +4270,7 @@ function setAIData(unitPointer, value) {
  * The unit pointer
 ***/
 function getAirStrength(unitPointer) {
-    return wread_epd(unitPointer + 0x138 / 4, 0x138 % 4);
+	return wread_epd(unitPointer + 0x138 / 4, 0x138 % 4);
 }
 
 /***
@@ -4282,7 +4282,7 @@ function getAirStrength(unitPointer) {
  * The new value
 ***/
 function setAirStrength(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x138 / 4, 0x138 % 4, value);
+	wwrite_epd(unitPointer + 0x138 / 4, 0x138 % 4, value);
 }
 
 /***
@@ -4292,7 +4292,7 @@ function setAirStrength(unitPointer, value) {
  * The unit pointer
 ***/
 function getGroundStrength(unitPointer) {
-    return wread_epd(unitPointer + 0x13A / 4, 0x13A % 4);
+	return wread_epd(unitPointer + 0x13A / 4, 0x13A % 4);
 }
 
 /***
@@ -4304,7 +4304,7 @@ function getGroundStrength(unitPointer) {
  * The new value
 ***/
 function setGroundStrength(unitPointer, value) {
-    wwrite_epd(unitPointer + 0x13A / 4, 0x13A % 4, value);
+	wwrite_epd(unitPointer + 0x13A / 4, 0x13A % 4, value);
 }
 
 /***
@@ -4314,7 +4314,7 @@ function setGroundStrength(unitPointer, value) {
  * The unit pointer
 ***/
 function getFinderLeft(unitPointer) {
-    return bread_epd(unitPointer + 0x13C / 4, 0x13C % 4);
+	return bread_epd(unitPointer + 0x13C / 4, 0x13C % 4);
 }
 
 /***
@@ -4326,7 +4326,7 @@ function getFinderLeft(unitPointer) {
  * The new value
 ***/
 function setFinderLeft(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x13C / 4, 0x13C % 4, value);
+	bwrite_epd(unitPointer + 0x13C / 4, 0x13C % 4, value);
 }
 
 /***
@@ -4336,7 +4336,7 @@ function setFinderLeft(unitPointer, value) {
  * The unit pointer
 ***/
 function getFinderRight(unitPointer) {
-    return bread_epd(unitPointer + 0x140 / 4, 0x140 % 4);
+	return bread_epd(unitPointer + 0x140 / 4, 0x140 % 4);
 }
 
 /***
@@ -4348,7 +4348,7 @@ function getFinderRight(unitPointer) {
  * The new value
 ***/
 function setFinderRight(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x140 / 4, 0x140 % 4, value);
+	bwrite_epd(unitPointer + 0x140 / 4, 0x140 % 4, value);
 }
 
 /***
@@ -4358,7 +4358,7 @@ function setFinderRight(unitPointer, value) {
  * The unit pointer
 ***/
 function getFinderTop(unitPointer) {
-    return bread_epd(unitPointer + 0x144 / 4, 0x144 % 4);
+	return bread_epd(unitPointer + 0x144 / 4, 0x144 % 4);
 }
 
 /***
@@ -4370,7 +4370,7 @@ function getFinderTop(unitPointer) {
  * The new value
 ***/
 function setFinderTop(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x144 / 4, 0x144 % 4, value);
+	bwrite_epd(unitPointer + 0x144 / 4, 0x144 % 4, value);
 }
 
 /***
@@ -4380,7 +4380,7 @@ function setFinderTop(unitPointer, value) {
  * The unit pointer
 ***/
 function getFinderBottom(unitPointer) {
-    return bread_epd(unitPointer + 0x148 / 4, 0x148 % 4);
+	return bread_epd(unitPointer + 0x148 / 4, 0x148 % 4);
 }
 
 /***
@@ -4392,7 +4392,7 @@ function getFinderBottom(unitPointer) {
  * The new value
 ***/
 function setFinderBottom(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x148 / 4, 0x148 % 4, value);
+	bwrite_epd(unitPointer + 0x148 / 4, 0x148 % 4, value);
 }
 
 /***
@@ -4402,7 +4402,7 @@ function setFinderBottom(unitPointer, value) {
  * The unit pointer
 ***/
 function getRepulseUnknown(unitPointer) {
-    return bread_epd(unitPointer + 0x14C / 4, 0x14C % 4);
+	return bread_epd(unitPointer + 0x14C / 4, 0x14C % 4);
 }
 
 /***
@@ -4414,7 +4414,7 @@ function getRepulseUnknown(unitPointer) {
  * The new value
 ***/
 function setRepulseUnknown(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x14C / 4, 0x14C % 4, value);
+	bwrite_epd(unitPointer + 0x14C / 4, 0x14C % 4, value);
 }
 
 /***
@@ -4424,7 +4424,7 @@ function setRepulseUnknown(unitPointer, value) {
  * The unit pointer
 ***/
 function getRepulseAngle(unitPointer) {
-    return bread_epd(unitPointer + 0x14D / 4, 0x14D % 4);
+	return bread_epd(unitPointer + 0x14D / 4, 0x14D % 4);
 }
 
 /***
@@ -4436,7 +4436,7 @@ function getRepulseAngle(unitPointer) {
  * The new value
 ***/
 function setRepulseAngle(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x14D / 4, 0x14D % 4, value);
+	bwrite_epd(unitPointer + 0x14D / 4, 0x14D % 4, value);
 }
 
 /***
@@ -4446,7 +4446,7 @@ function setRepulseAngle(unitPointer, value) {
  * The unit pointer
 ***/
 function getBRepMtxX(unitPointer) {
-    return bread_epd(unitPointer + 0x14E / 4, 0x14E % 4);
+	return bread_epd(unitPointer + 0x14E / 4, 0x14E % 4);
 }
 
 /***
@@ -4458,7 +4458,7 @@ function getBRepMtxX(unitPointer) {
  * The new value
 ***/
 function setBRepMtxX(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x14E / 4, 0x14E % 4, value);
+	bwrite_epd(unitPointer + 0x14E / 4, 0x14E % 4, value);
 }
 
 /***
@@ -4468,7 +4468,7 @@ function setBRepMtxX(unitPointer, value) {
  * The unit pointer
 ***/
 function getBRepMtxY(unitPointer) {
-    return bread_epd(unitPointer + 0x14F / 4, 0x14F % 4);
+	return bread_epd(unitPointer + 0x14F / 4, 0x14F % 4);
 }
 
 /***
@@ -4480,7 +4480,7 @@ function getBRepMtxY(unitPointer) {
  * The new value
 ***/
 function setBRepMtxY(unitPointer, value) {
-    bwrite_epd(unitPointer + 0x14F / 4, 0x14F % 4, value);
+	bwrite_epd(unitPointer + 0x14F / 4, 0x14F % 4, value);
 }
 
 
@@ -4488,7 +4488,7 @@ function setBRepMtxY(unitPointer, value) {
 
 
 function isUnitType(unitPointer, unitType) {
-    return getUnitType(unitPointer) == unitType;
+	return getUnitType(unitPointer) == unitType;
 }
 
 /***
@@ -4498,8 +4498,8 @@ function isUnitType(unitPointer, unitType) {
  * The unit pointer
 ***/
 function getMaxHitpoints(unitPointer) {
-    const unitType = getUnitType(unitPointer);
-    return dwread(0x65FD00 + 9808 + unitType * 4) / 256;
+	const unitType = getUnitType(unitPointer);
+	return dwread(0x65FD00 + 9808 + unitType * 4) / 256;
 }
 
 /***
@@ -4509,8 +4509,8 @@ function getMaxHitpoints(unitPointer) {
  * The unit pointer
 ***/
 function getMaxShields(unitPointer) {
-    const unitType = getUnitType(unitPointer);
-    return wread(0x65FD00 + 4352 + unitType * 2);
+	const unitType = getUnitType(unitPointer);
+	return wread(0x65FD00 + 4352 + unitType * 2);
 }
 
 
@@ -4521,7 +4521,7 @@ function getMaxShields(unitPointer) {
  * The unit pointer
 ***/
 function getTopSpeed(unitPointer) {
-    return getCurrentSpeed2(unitPointer);
+	return getCurrentSpeed2(unitPointer);
 }
 
 /***
@@ -4533,8 +4533,8 @@ function getTopSpeed(unitPointer) {
  * The new speed value
 ***/
 function setTopSpeed(unitPointer, speed) {
-    setCurrentSpeed2(unitPointer, speed);
-    setFlingyTopSpeed(unitPointer, speed);
+	setCurrentSpeed2(unitPointer, speed);
+	setFlingyTopSpeed(unitPointer, speed);
 }
 
 /***
@@ -4544,8 +4544,8 @@ function setTopSpeed(unitPointer, speed) {
  * The unit pointer
 ***/
 function getOriginalTopSpeed(unitPointer) {
-    const unitType = getUnitType(unitPointer);
-    return dwread(0x6C9858 + 1696 + unitType * 4);
+	const unitType = getUnitType(unitPointer);
+	return dwread(0x6C9858 + 1696 + unitType * 4);
 }
 
 /***
@@ -4555,7 +4555,7 @@ function getOriginalTopSpeed(unitPointer) {
  * The unit pointer
 ***/
 function restoreOriginalTopSpeed(unitPointer) {
-    setTopSpeed(unitPointer, (getOriginalTopSpeed(unitPointer) * 100) / 266);
+	setTopSpeed(unitPointer, (getOriginalTopSpeed(unitPointer) * 100) / 266);
 }
 
 /***
@@ -4565,7 +4565,7 @@ function restoreOriginalTopSpeed(unitPointer) {
  * The unit pointer
 ***/
 function getAcceleration(unitPointer) {
-    return wread_epd(unitPointer + 0x048 / 4,  0x048 % 4);
+	return wread_epd(unitPointer + 0x048 / 4,  0x048 % 4);
 }
 
 /***
@@ -4577,7 +4577,7 @@ function getAcceleration(unitPointer) {
  * The new acceleration value
 ***/
 function setAcceleration(unitPointer, acceleration) {
-    wwrite_epd(unitPointer + 0x048 / 4,  0x048 % 4, acceleration);
+	wwrite_epd(unitPointer + 0x048 / 4,  0x048 % 4, acceleration);
 }
 
 /***
@@ -4587,7 +4587,7 @@ function setAcceleration(unitPointer, acceleration) {
  * The unit pointer
 ***/
 function getOrder(unitPointer) {
-    return bread_epd(unitPointer + 0x04D / 4,  0x04D % 4);
+	return bread_epd(unitPointer + 0x04D / 4,  0x04D % 4);
 }
 
 /***
@@ -4599,7 +4599,7 @@ function getOrder(unitPointer) {
  * The new order (ETKConstant)
 ***/
 function setOrder(unitPointer, order) {
-    bwrite_epd(unitPointer + 0x04D / 4,  0x04D % 4, order);
+	bwrite_epd(unitPointer + 0x04D / 4,  0x04D % 4, order);
 }
 
 /***
@@ -4609,7 +4609,7 @@ function setOrder(unitPointer, order) {
  * The unit pointer
 ***/
 function getSecondaryOrder(unitPointer) {
-    return bread_epd(unitPointer + 0x0A6 / 4,  0x0A6 % 4);
+	return bread_epd(unitPointer + 0x0A6 / 4,  0x0A6 % 4);
 }
 
 /***
@@ -4621,7 +4621,7 @@ function getSecondaryOrder(unitPointer) {
  * The new value
 ***/
 function setSecondaryOrder(unitPointer, order) {
-    bwrite_epd(unitPointer + 0x0A6 / 4,  0x0A6 % 4, order);
+	bwrite_epd(unitPointer + 0x0A6 / 4,  0x0A6 % 4, order);
 }
 
 /***
@@ -4631,7 +4631,7 @@ function setSecondaryOrder(unitPointer, order) {
  * The unit pointer
 ***/
 function getCommandCard(unitPointer) {
-    return wread_epd(unitPointer + 0x094 / 4,  0x094 % 4);
+	return wread_epd(unitPointer + 0x094 / 4,  0x094 % 4);
 }
 
 /***
@@ -4643,11 +4643,11 @@ function getCommandCard(unitPointer) {
  * The new value
 ***/
 function setCommandCard(unitPointer, id) {
-    wwrite_epd(unitPointer + 0x094 / 4,  0x094 % 4, id);
+	wwrite_epd(unitPointer + 0x094 / 4,  0x094 % 4, id);
 }
 
 function increment106Flag(unitPointer) {
-    set106Flag(unitPointer, get106Flag(unitPointer) + 1);
+	set106Flag(unitPointer, get106Flag(unitPointer) + 1);
 }
 
 /***
@@ -4661,8 +4661,8 @@ function increment106Flag(unitPointer) {
  * The new y value
 ***/
 function setPosition(unitPointer, x, y) {
-    setPositionX(unitPointer, x);
-    setPositionY(unitPointer, y + y*65536);
+	setPositionX(unitPointer, x);
+	setPositionY(unitPointer, y + y*65536);
 }
 
 /***
@@ -4672,7 +4672,7 @@ function setPosition(unitPointer, x, y) {
  * The unit pointer
 ***/
 function getPosition(unitPointer) {
-    return getPositionX(unitPointer), getPositionY(unitPointer);
+	return getPositionX(unitPointer), getPositionY(unitPointer);
 }
 
 /***
@@ -4682,7 +4682,7 @@ function getPosition(unitPointer) {
  * The unit pointer
 ***/
 function getResourceCarryCount(unitPointer) {
-    return bread_epd(unitPointer + 0x0CF / 4,  0x0CF % 4);
+	return bread_epd(unitPointer + 0x0CF / 4,  0x0CF % 4);
 }
 
 /***
@@ -4694,7 +4694,7 @@ function getResourceCarryCount(unitPointer) {
  * The new value
 ***/
 function setResourceCarryCount(unitPointer, count) {
-    bwrite_epd(unitPointer + 0x0CF / 4,  0x0CF % 4, count);
+	bwrite_epd(unitPointer + 0x0CF / 4,  0x0CF % 4, count);
 }
 
 /***
@@ -4704,7 +4704,7 @@ function setResourceCarryCount(unitPointer, count) {
  * The unit pointer
 ***/
 function getIsCarryingSomething(unitPointer) {
-    return bread_epd(unitPointer + 0x0CE / 4,  0x0CE % 4);
+	return bread_epd(unitPointer + 0x0CE / 4,  0x0CE % 4);
 }
 
 /***
@@ -4716,7 +4716,7 @@ function getIsCarryingSomething(unitPointer) {
  * The new value
 ***/
 function setIsCarryingSomething(unitPointer, flag) {
-    bwrite_epd(unitPointer + 0x0CE / 4,  0x0CE % 4, flag);
+	bwrite_epd(unitPointer + 0x0CE / 4,  0x0CE % 4, flag);
 }
 
 /***
@@ -4728,7 +4728,7 @@ function setIsCarryingSomething(unitPointer, flag) {
  * The new value
 ***/
 function setConnectedUnit(unitPointer, value) {
-    Common.dwwrite_epd(unitPointer, 0x080, value);
+	Common.dwwrite_epd(unitPointer, 0x080, value);
 }
 
 /***
@@ -4738,7 +4738,7 @@ function setConnectedUnit(unitPointer, value) {
  * The unit pointer
 ***/
 function getConnectedUnit(unitPointer) {
-    return dwread_epd(unitPointer + 0x080 / 4);
+	return dwread_epd(unitPointer + 0x080 / 4);
 }
 
 // TARGETING 
@@ -4750,7 +4750,7 @@ function getConnectedUnit(unitPointer) {
  * The unit pointer
 ***/
 function getTargetX(unitPointer) {
-    return wread_epd(unitPointer + 0x058 / 4,  0x058 % 4);
+	return wread_epd(unitPointer + 0x058 / 4,  0x058 % 4);
 }
 
 /***
@@ -4760,7 +4760,7 @@ function getTargetX(unitPointer) {
  * The unit unitPointer
 ***/
 function getTargetY(unitPointer) {
-    return wread_epd(unitPointer + 0x05A / 4,  0x05A % 4);
+	return wread_epd(unitPointer + 0x05A / 4,  0x05A % 4);
 }
 
 /***
@@ -4770,7 +4770,7 @@ function getTargetY(unitPointer) {
  * The unit pointer
 ***/
 function getTargetUnit(unitPointer) {
-    return Common.EPD(dwread_epd(unitPointer + 0x05C / 4));
+	return Common.EPD(dwread_epd(unitPointer + 0x05C / 4));
 }
 
 /***
@@ -4780,7 +4780,7 @@ function getTargetUnit(unitPointer) {
  * The unit pointer
 ***/
 function isOrderTargetUnitValid(unitPointer) {
-    return Common.PTR(getTargetUnit(unitPointer)) > 0;
+	return Common.PTR(getTargetUnit(unitPointer)) > 0;
 }
 
 /***
@@ -4792,8 +4792,8 @@ function isOrderTargetUnitValid(unitPointer) {
  * The target unit (Note: Will be converted to raw ptr)
 ***/
 function setTargetUnit(unitPointer, targetUnit) {
-    const targetUnitPtr = Common.PTR(targetUnit);
-    Common.dwwrite_epd(unitPointer, 0x05C, targetUnitPtr);
+	const targetUnitPtr = Common.PTR(targetUnit);
+	Common.dwwrite_epd(unitPointer, 0x05C, targetUnitPtr);
 }
 
 /***
@@ -4803,7 +4803,7 @@ function setTargetUnit(unitPointer, targetUnit) {
  * The unit pointer
 ***/
 function clearTargetUnit(unitPointer) {
-    Common.dwwrite_epd(unitPointer, 0x05C, 0);
+	Common.dwwrite_epd(unitPointer, 0x05C, 0);
 }
 
 /***
@@ -4813,7 +4813,7 @@ function clearTargetUnit(unitPointer) {
  * The unit pointer
 ***/
 function getTargetResource(unitPointer) {
-    return EPD(dwread_epd(unitPointer + 0x0C8 / 4));
+	return EPD(dwread_epd(unitPointer + 0x0C8 / 4));
 }
 
 /***
@@ -4823,7 +4823,7 @@ function getTargetResource(unitPointer) {
  * The unit pointer
 ***/
 function isTargetResourceUnitValid(unitPointer) {
-    return Common.PTR(getTargetResource(unitPointer)) > 0;
+	return Common.PTR(getTargetResource(unitPointer)) > 0;
 }
 
 /***
@@ -4833,7 +4833,7 @@ function isTargetResourceUnitValid(unitPointer) {
  * The unit pointer
 ***/
 function removeCollision(unitPointer) {
-    SetMemoryEPD(unitPointer + 0x0DC / 4, SetTo, 0x00250205);
+	SetMemoryEPD(unitPointer + 0x0DC / 4, SetTo, 0x00250205);
 //  SetMemoryEPD(unitPointer + 0x0DC / 4, SetTo, 0x04240003);
 }
 
@@ -4846,8 +4846,8 @@ function removeCollision(unitPointer) {
  * The target unit pointer
 ***/
 function attackUnit(unitPointer, targetUnitPointer) {
-    setTargetUnit(unitPointer, targetUnitPointer);
-    setOrder(unitPointer, Const.Order_AttackUnit_Normal);
+	setTargetUnit(unitPointer, targetUnitPointer);
+	setOrder(unitPointer, Const.Order_AttackUnit_Normal);
 }
 
 /***
@@ -4861,14 +4861,14 @@ function attackUnit(unitPointer, targetUnitPointer) {
  * The target Y coordinate
 ***/
 function orderToPoint(unitPointer, x, y) {
-    setOrder(unitPointer, Const.Order_Ignore_Normal);
-    setMoveTargetX(unitPointer, x);
-    setMoveTargetY(unitPointer, y + y * 65536);
-    setNextMovementWaypointX(unitPointer, x);
-    setNextMovementWaypointY(unitPointer, y + y * 65536);
-    setOrderTargetX(unitPointer, x);
-    setOrderTargetY(unitPointer, y + y * 65536);
-    setOrder(unitPointer, Const.Order_Ignore_Normal);
+	setOrder(unitPointer, Const.Order_Ignore_Normal);
+	setMoveTargetX(unitPointer, x);
+	setMoveTargetY(unitPointer, y + y * 65536);
+	setNextMovementWaypointX(unitPointer, x);
+	setNextMovementWaypointY(unitPointer, y + y * 65536);
+	setOrderTargetX(unitPointer, x);
+	setOrderTargetY(unitPointer, y + y * 65536);
+	setOrder(unitPointer, Const.Order_Ignore_Normal);
 }
 
 /***
@@ -4878,7 +4878,7 @@ function orderToPoint(unitPointer, x, y) {
  * The unit pointer
 ***/
 function stop(unitPointer) {
-    setOrder(unitPointer, Const.Order_Stop);
+	setOrder(unitPointer, Const.Order_Stop);
 }
 
 /***
@@ -4888,7 +4888,7 @@ function stop(unitPointer) {
  * The unit pointer
 ***/
 function destroy(unitPointer) {
-    setOrder(unitPointer, Const.Order_Die);
+	setOrder(unitPointer, Const.Order_Die);
 }
 
 /***
@@ -4898,11 +4898,11 @@ function destroy(unitPointer) {
  * The unit pointer
 ***/
 function heal(unitPointer, hp) {
-    var healValue = getHitpoints(unitPointer) + hp;
-    if (healValue >= getMaxHitpoints(unitPointer)) {
-        healValue = getMaxHitpoints(unitPointer);
-    }
-    setHitpoints(unitPointer, healValue);
+	var healValue = getHitpoints(unitPointer) + hp;
+	if (healValue >= getMaxHitpoints(unitPointer)) {
+		healValue = getMaxHitpoints(unitPointer);
+	}
+	setHitpoints(unitPointer, healValue);
 }
 
 /***
@@ -4914,29 +4914,29 @@ function heal(unitPointer, hp) {
  * The amount of damage points to damage the unit
 ***/
 function damage(unitPointer, damagePoints) {
-    // if (getHitpointsRaw(unitPointer) < 256) {
-    //     return false;
-    // }
+	// if (getHitpointsRaw(unitPointer) < 256) {
+	//     return false;
+	// }
 
-    // // TODO Look up actual subunit status 
-    // if (getOrder(unitPointer, Const.Order_Die)
-    //     || getOrder(unitPointer, Const.Order_Fatal)
-    //     || getHitpoints(unitPointer) == 0
-    //     ) {
-    //     return false;
-    // }
-    const unitType = getUnitType(unitPointer);
-    if (unitType == 4 || unitType == 6 || unitType == 18 || unitType == 24 || unitType == 26) {
-        return false;
-    }
-    const hp = getHitpoints(unitPointer);
-    if (damagePoints >= hp) {
-        setOrder(unitPointer, Const.Order_Die);
-        return true;
-    } else {
-        setHitpoints(unitPointer, hp - damagePoints);
-        return false;
-    }
+	// // TODO Look up actual subunit status 
+	// if (getOrder(unitPointer, Const.Order_Die)
+	//     || getOrder(unitPointer, Const.Order_Fatal)
+	//     || getHitpoints(unitPointer) == 0
+	//     ) {
+	//     return false;
+	// }
+	const unitType = getUnitType(unitPointer);
+	if (unitType == 4 || unitType == 6 || unitType == 18 || unitType == 24 || unitType == 26) {
+		return false;
+	}
+	const hp = getHitpoints(unitPointer);
+	if (damagePoints >= hp) {
+		setOrder(unitPointer, Const.Order_Die);
+		return true;
+	} else {
+		setHitpoints(unitPointer, hp - damagePoints);
+		return false;
+	}
 }
 
 /***
@@ -4948,11 +4948,11 @@ function damage(unitPointer, damagePoints) {
  * The amount of shields to heal
 ***/
 function healShields(unitPointer, shieldPoints) {
-    var healValue = getShields(unitPointer) + shieldPoints;
-    if (healValue >= getMaxShields(unitPointer)) {
-        healValue = getMaxShields(unitPointer);
-    }
-    setShields(unitPointer, healValue);
+	var healValue = getShields(unitPointer) + shieldPoints;
+	if (healValue >= getMaxShields(unitPointer)) {
+		healValue = getMaxShields(unitPointer);
+	}
+	setShields(unitPointer, healValue);
 }
 
 
@@ -4965,21 +4965,21 @@ function healShields(unitPointer, shieldPoints) {
  * The amount of damage points to damage the unit
 ***/
 function damageShields(unitPointer, damagePoints) {
-    const shields = getShields(unitPointer);
-    if (damagePoints >= shields) {
-        setShields(unitPointer, 0);
-        return true;
-    } else {
-        setShields(unitPointer, shields - damagePoints);
-        return false;
-    }
+	const shields = getShields(unitPointer);
+	if (damagePoints >= shields) {
+		setShields(unitPointer, 0);
+		return true;
+	} else {
+		setShields(unitPointer, shields - damagePoints);
+		return false;
+	}
 }
 
 function setDirection(unitPointer, value) {
-    setVelocityDirection1(unitPointer, value);
-    setVelocityDirection2(unitPointer, value);
-    setCurrentDirection1(unitPointer, value);
-    setCurrentDirection2(unitPointer, value);
+	setVelocityDirection1(unitPointer, value);
+	setVelocityDirection2(unitPointer, value);
+	setCurrentDirection1(unitPointer, value);
+	setCurrentDirection2(unitPointer, value);
 }
 
 /***
@@ -4989,7 +4989,7 @@ function setDirection(unitPointer, value) {
  * The unit pointer
 ***/
 function junkYardDog(unitPointer) {
-    setOrder(unitPointer, Const.Order_Move_JunkYardDog);
+	setOrder(unitPointer, Const.Order_Move_JunkYardDog);
 }
 
 /***
@@ -4999,7 +4999,7 @@ function junkYardDog(unitPointer) {
  * The unit pointer
 ***/
 function getCustomValue(unitPointer) {
-    return get106Flag(unitPointer);
+	return get106Flag(unitPointer);
 }
 
 /***
@@ -5011,17 +5011,17 @@ function getCustomValue(unitPointer) {
  * The new value
 ***/
 function setCustomValue(unitPointer, value) {
-    set106Flag(unitPointer, value);
+	set106Flag(unitPointer, value);
 }
 
 // TBC
 function removeStatusFlag(unitPointer, flags) {
-    dwsubtract_epd(unitPointer + 0xDC / 4, flags & dwread_epd(unitPointer + 0xDC / 4));
+	dwsubtract_epd(unitPointer + 0xDC / 4, flags & dwread_epd(unitPointer + 0xDC / 4));
 }
 
 // TBC
 function addStatusFlags(unitPointer ,flags) {
-    SetMemoryXEPD(unitPointer + 0xDC/4, SetTo, flags, flags);
+	SetMemoryXEPD(unitPointer + 0xDC/4, SetTo, flags, flags);
 }
 
 
@@ -5032,24 +5032,24 @@ function addStatusFlags(unitPointer ,flags) {
  * The unit pointer
 ***/
 function clearBuildQueue(unitPointer) {
-    setBuildQueue1(unitPointer, Const.Unit_None);
-    setBuildQueue2(unitPointer, Const.Unit_None);
-    setBuildQueue3(unitPointer, Const.Unit_None);
-    setBuildQueue4(unitPointer, Const.Unit_None);
-    setBuildQueue5(unitPointer, Const.Unit_None);
-    unitPointer += 0x098 / 4;
-    const oldcp = getcurpl();
-    setcurpl(unitPointer);
-    DoActions(list(
-    SetDeaths(CurrentPlayer, SetTo, 0xE400E4, 0),
-    SetMemory(0x6509B0, Add, 1),
-    SetDeaths(CurrentPlayer, SetTo, 0xE400E4, 0),
-    SetMemory(0x6509B0, Add, 1),
-    SetDeathsX(CurrentPlayer, SetTo, 228, 0, 0xFFFF),
-    SetMemory(0x6509B0, Add, 1),
-    SetDeathsX(CurrentPlayer, SetTo, 0x20000, 0, 0xFF0000),
-    ));
-    setcurpl(oldcp);
+	setBuildQueue1(unitPointer, Const.Unit_None);
+	setBuildQueue2(unitPointer, Const.Unit_None);
+	setBuildQueue3(unitPointer, Const.Unit_None);
+	setBuildQueue4(unitPointer, Const.Unit_None);
+	setBuildQueue5(unitPointer, Const.Unit_None);
+	unitPointer += 0x098 / 4;
+	const oldcp = getcurpl();
+	setcurpl(unitPointer);
+	DoActions(list(
+	SetDeaths(CurrentPlayer, SetTo, 0xE400E4, 0),
+	SetMemory(0x6509B0, Add, 1),
+	SetDeaths(CurrentPlayer, SetTo, 0xE400E4, 0),
+	SetMemory(0x6509B0, Add, 1),
+	SetDeathsX(CurrentPlayer, SetTo, 228, 0, 0xFFFF),
+	SetMemory(0x6509B0, Add, 1),
+	SetDeathsX(CurrentPlayer, SetTo, 0x20000, 0, 0xFF0000),
+	));
+	setcurpl(oldcp);
 }
 
 /***
@@ -5059,11 +5059,11 @@ function clearBuildQueue(unitPointer) {
  * The unit pointer
 ***/
 function getBuildQueueLength(unitPointer) {
-    var length = 0;
-    if (getBuildQueue1(unitPointer) != Const.Unit_None) { length++; }
-    if (getBuildQueue2(unitPointer) != Const.Unit_None) { length++; }
-    if (getBuildQueue3(unitPointer) != Const.Unit_None) { length++; }
-    if (getBuildQueue4(unitPointer) != Const.Unit_None) { length++; }
-    if (getBuildQueue5(unitPointer) != Const.Unit_None) { length++; }
-    return length;
+	var length = 0;
+	if (getBuildQueue1(unitPointer) != Const.Unit_None) { length++; }
+	if (getBuildQueue2(unitPointer) != Const.Unit_None) { length++; }
+	if (getBuildQueue3(unitPointer) != Const.Unit_None) { length++; }
+	if (getBuildQueue4(unitPointer) != Const.Unit_None) { length++; }
+	if (getBuildQueue5(unitPointer) != Const.Unit_None) { length++; }
+	return length;
 }

@@ -9,200 +9,200 @@ import Towers;
 
 function loadData() {
 
-    // UPGRADES
-    const AirUpgradeSet6 = Common.Null;
-    const FireUpgradeSet6 = Common.Null;
-    const WaterUpgradeSet6 = Common.Null;
-    const EarthUpgradeSet6 = Common.Null;
+	// UPGRADES
+	const AirUpgradeSet6 = Common.Null;
+	const FireUpgradeSet6 = Common.Null;
+	const WaterUpgradeSet6 = Common.Null;
+	const EarthUpgradeSet6 = Common.Null;
 
-    const AirUpgradeSet5 = Upgrades.CreateUpgradeSet(
-        Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db('q\x01[\x03Q\x01] Damage upgrade 5'), AirUpgradeSet6, [50, 0, 0]),
-        Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db('w\x01[\x03W\x01] Speed upgrade 5'), AirUpgradeSet6, [0, 50, 0]),
-        Upgrades.CreateTowerUpgrade(Const.Icon_U238Shells, Db('e\x01[\x03E\x01] Range upgrade 5'), AirUpgradeSet6, [0, 0, 80])
-        );
+	const AirUpgradeSet5 = Upgrades.CreateUpgradeSet(
+		Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db('q\x01[\x03Q\x01] Damage upgrade 5'), AirUpgradeSet6, [50, 0, 0]),
+		Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db('w\x01[\x03W\x01] Speed upgrade 5'), AirUpgradeSet6, [0, 50, 0]),
+		Upgrades.CreateTowerUpgrade(Const.Icon_U238Shells, Db('e\x01[\x03E\x01] Range upgrade 5'), AirUpgradeSet6, [0, 0, 80])
+		);
 
-    const AirUpgradeSet4 = Upgrades.CreateUpgradeSet(
-        Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db('q\x01[\x03Q\x01] Damage upgrade 4'), AirUpgradeSet5, [40, 0, 0]),
-        Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db('w\x01[\x03W\x01] Speed upgrade 4'), AirUpgradeSet5, [0, 40, 0]),
-        Upgrades.CreateTowerUpgrade(Const.Icon_U238Shells, Db('e\x01[\x03E\x01] Range upgrade 4'), AirUpgradeSet5, [0, 0, 64])
-        );
+	const AirUpgradeSet4 = Upgrades.CreateUpgradeSet(
+		Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db('q\x01[\x03Q\x01] Damage upgrade 4'), AirUpgradeSet5, [40, 0, 0]),
+		Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db('w\x01[\x03W\x01] Speed upgrade 4'), AirUpgradeSet5, [0, 40, 0]),
+		Upgrades.CreateTowerUpgrade(Const.Icon_U238Shells, Db('e\x01[\x03E\x01] Range upgrade 4'), AirUpgradeSet5, [0, 0, 64])
+		);
 
-    const AirUpgradeSet3 = Upgrades.CreateUpgradeSet(
-        Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db('q\x01[\x03Q\x01] Damage upgrade 3'), AirUpgradeSet4, [30, 0, 0]),
-        Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db('w\x01[\x03W\x01] Speed upgrade 3'), AirUpgradeSet4, [0, 30, 0]),
-        Upgrades.CreateTowerUpgrade(Const.Icon_U238Shells, Db('e\x01[\x03E\x01] Range upgrade 3'), AirUpgradeSet4, [0, 0, 48])
-        );
+	const AirUpgradeSet3 = Upgrades.CreateUpgradeSet(
+		Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db('q\x01[\x03Q\x01] Damage upgrade 3'), AirUpgradeSet4, [30, 0, 0]),
+		Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db('w\x01[\x03W\x01] Speed upgrade 3'), AirUpgradeSet4, [0, 30, 0]),
+		Upgrades.CreateTowerUpgrade(Const.Icon_U238Shells, Db('e\x01[\x03E\x01] Range upgrade 3'), AirUpgradeSet4, [0, 0, 48])
+		);
 
-    const AirUpgradeSet2 = Upgrades.CreateUpgradeSet(
-        Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db('q\x01[\x03Q\x01] Damage upgrade 2'), AirUpgradeSet3, [20, 0, 0]),
-        Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db('w\x01[\x03W\x01] Speed upgrade 2'), AirUpgradeSet3, [0, 20, 0]),
-        Upgrades.CreateTowerUpgrade(Const.Icon_U238Shells, Db('e\x01[\x03E\x01] Range upgrade 2'), AirUpgradeSet3, [0, 0, 32])
-        );
+	const AirUpgradeSet2 = Upgrades.CreateUpgradeSet(
+		Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db('q\x01[\x03Q\x01] Damage upgrade 2'), AirUpgradeSet3, [20, 0, 0]),
+		Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db('w\x01[\x03W\x01] Speed upgrade 2'), AirUpgradeSet3, [0, 20, 0]),
+		Upgrades.CreateTowerUpgrade(Const.Icon_U238Shells, Db('e\x01[\x03E\x01] Range upgrade 2'), AirUpgradeSet3, [0, 0, 32])
+		);
 
-    const AirUpgradeSet1 = Upgrades.CreateUpgradeSet(
-        Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db('q\x01[\x03Q\x01] Damage upgrade 1'), AirUpgradeSet2, [10, 0, 0]),
-        Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db('w\x01[\x03W\x01] Speed upgrade 1'), AirUpgradeSet2, [0, 10, 0]),
-        Upgrades.CreateTowerUpgrade(Const.Icon_U238Shells, Db('e\x01[\x03E\x01] Range upgrade 1'), AirUpgradeSet2, [0, 0, 16])
-        );
+	const AirUpgradeSet1 = Upgrades.CreateUpgradeSet(
+		Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db('q\x01[\x03Q\x01] Damage upgrade 1'), AirUpgradeSet2, [10, 0, 0]),
+		Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db('w\x01[\x03W\x01] Speed upgrade 1'), AirUpgradeSet2, [0, 10, 0]),
+		Upgrades.CreateTowerUpgrade(Const.Icon_U238Shells, Db('e\x01[\x03E\x01] Range upgrade 1'), AirUpgradeSet2, [0, 0, 16])
+		);
 
-    const EarthUpgradeSet5 = Upgrades.CreateUpgradeSet(
-        Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db('q\x01[\x03Q\x01] Damage upgrade 5'), EarthUpgradeSet6, [105, 0, 0]),
-        Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db('w\x01[\x03W\x01] Speed upgrade 5'), EarthUpgradeSet6, [0, 30, 0]),
-        Upgrades.CreateTowerUpgrade(Const.Icon_U238Shells, Db('e\x01[\x03E\x01] Range upgrade 5'), EarthUpgradeSet6, [0, 0, 120])
-        );
+	const EarthUpgradeSet5 = Upgrades.CreateUpgradeSet(
+		Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db('q\x01[\x03Q\x01] Damage upgrade 5'), EarthUpgradeSet6, [105, 0, 0]),
+		Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db('w\x01[\x03W\x01] Speed upgrade 5'), EarthUpgradeSet6, [0, 30, 0]),
+		Upgrades.CreateTowerUpgrade(Const.Icon_U238Shells, Db('e\x01[\x03E\x01] Range upgrade 5'), EarthUpgradeSet6, [0, 0, 120])
+		);
 
-    const EarthUpgradeSet4 = Upgrades.CreateUpgradeSet(
-        Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db('q\x01[\x03Q\x01] Damage upgrade 4'), EarthUpgradeSet5, [84, 0, 0]),
-        Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db('w\x01[\x03W\x01] Speed upgrade 4'), EarthUpgradeSet5, [0, 24, 0]),
-        Upgrades.CreateTowerUpgrade(Const.Icon_U238Shells, Db('e\x01[\x03E\x01] Range upgrade 4'), EarthUpgradeSet5, [0, 0, 96])
-        );
+	const EarthUpgradeSet4 = Upgrades.CreateUpgradeSet(
+		Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db('q\x01[\x03Q\x01] Damage upgrade 4'), EarthUpgradeSet5, [84, 0, 0]),
+		Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db('w\x01[\x03W\x01] Speed upgrade 4'), EarthUpgradeSet5, [0, 24, 0]),
+		Upgrades.CreateTowerUpgrade(Const.Icon_U238Shells, Db('e\x01[\x03E\x01] Range upgrade 4'), EarthUpgradeSet5, [0, 0, 96])
+		);
 
-    const EarthUpgradeSet3 = Upgrades.CreateUpgradeSet(
-        Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db('q\x01[\x03Q\x01] Damage upgrade 3'), EarthUpgradeSet4, [63, 0, 0]),
-        Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db('w\x01[\x03W\x01] Speed upgrade 3'), EarthUpgradeSet4, [0, 18, 0]),
-        Upgrades.CreateTowerUpgrade(Const.Icon_U238Shells, Db('e\x01[\x03E\x01] Range upgrade 3'), EarthUpgradeSet4, [0, 0, 72])
-        );
+	const EarthUpgradeSet3 = Upgrades.CreateUpgradeSet(
+		Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db('q\x01[\x03Q\x01] Damage upgrade 3'), EarthUpgradeSet4, [63, 0, 0]),
+		Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db('w\x01[\x03W\x01] Speed upgrade 3'), EarthUpgradeSet4, [0, 18, 0]),
+		Upgrades.CreateTowerUpgrade(Const.Icon_U238Shells, Db('e\x01[\x03E\x01] Range upgrade 3'), EarthUpgradeSet4, [0, 0, 72])
+		);
 
-    const EarthUpgradeSet2 = Upgrades.CreateUpgradeSet(
-        Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db('q\x01[\x03Q\x01] Damage upgrade 2'), EarthUpgradeSet3, [42, 0, 0]),
-        Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db('w\x01[\x03W\x01] Speed upgrade 2'), EarthUpgradeSet3, [0, 12, 0]),
-        Upgrades.CreateTowerUpgrade(Const.Icon_U238Shells, Db('e\x01[\x03E\x01] Range upgrade 2'), EarthUpgradeSet3, [0, 0, 48])
-        );
+	const EarthUpgradeSet2 = Upgrades.CreateUpgradeSet(
+		Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db('q\x01[\x03Q\x01] Damage upgrade 2'), EarthUpgradeSet3, [42, 0, 0]),
+		Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db('w\x01[\x03W\x01] Speed upgrade 2'), EarthUpgradeSet3, [0, 12, 0]),
+		Upgrades.CreateTowerUpgrade(Const.Icon_U238Shells, Db('e\x01[\x03E\x01] Range upgrade 2'), EarthUpgradeSet3, [0, 0, 48])
+		);
 
-    const EarthUpgradeSet1 = Upgrades.CreateUpgradeSet(
-        Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db('q\x01[\x03Q\x01] Damage upgrade 1'), EarthUpgradeSet2, [21, 0, 0]),
-        Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db('w\x01[\x03W\x01] Speed upgrade 1'), EarthUpgradeSet2, [0, 6, 0]),
-        Upgrades.CreateTowerUpgrade(Const.Icon_U238Shells, Db('e\x01[\x03E\x01] Range upgrade 1'), EarthUpgradeSet2, [0, 0, 24])
-        );
+	const EarthUpgradeSet1 = Upgrades.CreateUpgradeSet(
+		Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db('q\x01[\x03Q\x01] Damage upgrade 1'), EarthUpgradeSet2, [21, 0, 0]),
+		Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db('w\x01[\x03W\x01] Speed upgrade 1'), EarthUpgradeSet2, [0, 6, 0]),
+		Upgrades.CreateTowerUpgrade(Const.Icon_U238Shells, Db('e\x01[\x03E\x01] Range upgrade 1'), EarthUpgradeSet2, [0, 0, 24])
+		);
 
-    const FireUpgradeSet5 = Upgrades.CreateUpgradeSet(
-        Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db('q\x01[\x03Q\x01] Damage upgrade 5'), FireUpgradeSet6, [75, 0, 0]),
-        Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db('w\x01[\x03W\x01] Speed upgrade 5'), FireUpgradeSet6, [0, 40, 0]),
-        Upgrades.CreateTowerUpgrade(Const.Icon_U238Shells, Db('e\x01[\x03E\x01] Range upgrade 5'), FireUpgradeSet6, [0, 0, 70])
-        );
+	const FireUpgradeSet5 = Upgrades.CreateUpgradeSet(
+		Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db('q\x01[\x03Q\x01] Damage upgrade 5'), FireUpgradeSet6, [75, 0, 0]),
+		Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db('w\x01[\x03W\x01] Speed upgrade 5'), FireUpgradeSet6, [0, 40, 0]),
+		Upgrades.CreateTowerUpgrade(Const.Icon_U238Shells, Db('e\x01[\x03E\x01] Range upgrade 5'), FireUpgradeSet6, [0, 0, 70])
+		);
 
-    const FireUpgradeSet4 = Upgrades.CreateUpgradeSet(
-        Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db('q\x01[\x03Q\x01] Damage upgrade 4'), FireUpgradeSet5, [60, 0, 0]),
-        Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db('w\x01[\x03W\x01] Speed upgrade 4'), FireUpgradeSet5, [0, 32, 0]),
-        Upgrades.CreateTowerUpgrade(Const.Icon_U238Shells, Db('e\x01[\x03E\x01] Range upgrade 4'), FireUpgradeSet5, [0, 0, 56])
-        );
+	const FireUpgradeSet4 = Upgrades.CreateUpgradeSet(
+		Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db('q\x01[\x03Q\x01] Damage upgrade 4'), FireUpgradeSet5, [60, 0, 0]),
+		Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db('w\x01[\x03W\x01] Speed upgrade 4'), FireUpgradeSet5, [0, 32, 0]),
+		Upgrades.CreateTowerUpgrade(Const.Icon_U238Shells, Db('e\x01[\x03E\x01] Range upgrade 4'), FireUpgradeSet5, [0, 0, 56])
+		);
 
-    const FireUpgradeSet3 = Upgrades.CreateUpgradeSet(
-        Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db('q\x01[\x03Q\x01] Damage upgrade 3'), FireUpgradeSet4, [45, 0, 0]),
-        Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db('w\x01[\x03W\x01] Speed upgrade 3'), FireUpgradeSet4, [0, 24, 0]),
-        Upgrades.CreateTowerUpgrade(Const.Icon_U238Shells, Db('e\x01[\x03E\x01] Range upgrade 3'), FireUpgradeSet4, [0, 0, 42])
-        );
+	const FireUpgradeSet3 = Upgrades.CreateUpgradeSet(
+		Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db('q\x01[\x03Q\x01] Damage upgrade 3'), FireUpgradeSet4, [45, 0, 0]),
+		Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db('w\x01[\x03W\x01] Speed upgrade 3'), FireUpgradeSet4, [0, 24, 0]),
+		Upgrades.CreateTowerUpgrade(Const.Icon_U238Shells, Db('e\x01[\x03E\x01] Range upgrade 3'), FireUpgradeSet4, [0, 0, 42])
+		);
 
-    const FireUpgradeSet2 = Upgrades.CreateUpgradeSet(
-        Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db('q\x01[\x03Q\x01] Damage upgrade 2'), FireUpgradeSet3, [30, 0, 0]),
-        Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db('w\x01[\x03W\x01] Speed upgrade 2'), FireUpgradeSet3, [0, 16, 0]),
-        Upgrades.CreateTowerUpgrade(Const.Icon_U238Shells, Db('e\x01[\x03E\x01] Range upgrade 2'), FireUpgradeSet3, [0, 0, 28])
-        );
+	const FireUpgradeSet2 = Upgrades.CreateUpgradeSet(
+		Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db('q\x01[\x03Q\x01] Damage upgrade 2'), FireUpgradeSet3, [30, 0, 0]),
+		Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db('w\x01[\x03W\x01] Speed upgrade 2'), FireUpgradeSet3, [0, 16, 0]),
+		Upgrades.CreateTowerUpgrade(Const.Icon_U238Shells, Db('e\x01[\x03E\x01] Range upgrade 2'), FireUpgradeSet3, [0, 0, 28])
+		);
 
-    const FireUpgradeSet1 = Upgrades.CreateUpgradeSet(
-        Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db('q\x01[\x03Q\x01] Damage upgrade 1'), FireUpgradeSet2, [15, 0, 0]),
-        Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db('w\x01[\x03W\x01] Speed upgrade 1'), FireUpgradeSet2, [0, 8, 0]),
-        Upgrades.CreateTowerUpgrade(Const.Icon_U238Shells, Db('e\x01[\x03E\x01] Range upgrade 1'), FireUpgradeSet2, [0, 0, 14])
-        );
+	const FireUpgradeSet1 = Upgrades.CreateUpgradeSet(
+		Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db('q\x01[\x03Q\x01] Damage upgrade 1'), FireUpgradeSet2, [15, 0, 0]),
+		Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db('w\x01[\x03W\x01] Speed upgrade 1'), FireUpgradeSet2, [0, 8, 0]),
+		Upgrades.CreateTowerUpgrade(Const.Icon_U238Shells, Db('e\x01[\x03E\x01] Range upgrade 1'), FireUpgradeSet2, [0, 0, 14])
+		);
 
-    const WaterUpgradeSet5 = Upgrades.CreateUpgradeSet(
-        Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db('q\x01[\x03Q\x01] Damage upgrade 5'), WaterUpgradeSet6, [40, 0, 0]),
-        Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db('w\x01[\x03W\x01] Speed upgrade 5'), WaterUpgradeSet6, [0, 35, 0]),
-        Upgrades.CreateTowerUpgrade(Const.Icon_U238Shells, Db('e\x01[\x03E\x01] Range upgrade 5'), WaterUpgradeSet6, [0, 0, 40])
-        );
+	const WaterUpgradeSet5 = Upgrades.CreateUpgradeSet(
+		Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db('q\x01[\x03Q\x01] Damage upgrade 5'), WaterUpgradeSet6, [40, 0, 0]),
+		Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db('w\x01[\x03W\x01] Speed upgrade 5'), WaterUpgradeSet6, [0, 35, 0]),
+		Upgrades.CreateTowerUpgrade(Const.Icon_U238Shells, Db('e\x01[\x03E\x01] Range upgrade 5'), WaterUpgradeSet6, [0, 0, 40])
+		);
 
-    const WaterUpgradeSet4 = Upgrades.CreateUpgradeSet(
-        Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db('q\x01[\x03Q\x01] Damage upgrade 4'), WaterUpgradeSet5, [32, 0, 0]),
-        Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db('w\x01[\x03W\x01] Speed upgrade 4'), WaterUpgradeSet5, [0, 28, 0]),
-        Upgrades.CreateTowerUpgrade(Const.Icon_U238Shells, Db('e\x01[\x03E\x01] Range upgrade 4'), WaterUpgradeSet5, [0, 0, 32])
-        );
+	const WaterUpgradeSet4 = Upgrades.CreateUpgradeSet(
+		Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db('q\x01[\x03Q\x01] Damage upgrade 4'), WaterUpgradeSet5, [32, 0, 0]),
+		Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db('w\x01[\x03W\x01] Speed upgrade 4'), WaterUpgradeSet5, [0, 28, 0]),
+		Upgrades.CreateTowerUpgrade(Const.Icon_U238Shells, Db('e\x01[\x03E\x01] Range upgrade 4'), WaterUpgradeSet5, [0, 0, 32])
+		);
 
-    const WaterUpgradeSet3 = Upgrades.CreateUpgradeSet(
-        Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db('q\x01[\x03Q\x01] Damage upgrade 3'), WaterUpgradeSet4, [24, 0, 0]),
-        Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db('w\x01[\x03W\x01] Speed upgrade 3'), WaterUpgradeSet4, [0, 21, 0]),
-        Upgrades.CreateTowerUpgrade(Const.Icon_U238Shells, Db('e\x01[\x03E\x01] Range upgrade 3'), WaterUpgradeSet4, [0, 0, 24])
-        );
+	const WaterUpgradeSet3 = Upgrades.CreateUpgradeSet(
+		Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db('q\x01[\x03Q\x01] Damage upgrade 3'), WaterUpgradeSet4, [24, 0, 0]),
+		Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db('w\x01[\x03W\x01] Speed upgrade 3'), WaterUpgradeSet4, [0, 21, 0]),
+		Upgrades.CreateTowerUpgrade(Const.Icon_U238Shells, Db('e\x01[\x03E\x01] Range upgrade 3'), WaterUpgradeSet4, [0, 0, 24])
+		);
 
-    const WaterUpgradeSet2 = Upgrades.CreateUpgradeSet(
-        Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db('q\x01[\x03Q\x01] Damage upgrade 2'), WaterUpgradeSet3, [16, 0, 0]),
-        Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db('w\x01[\x03W\x01] Speed upgrade 2'), WaterUpgradeSet3, [0, 14, 0]),
-        Upgrades.CreateTowerUpgrade(Const.Icon_U238Shells, Db('e\x01[\x03E\x01] Range upgrade 2'), WaterUpgradeSet3, [0, 0, 16])
-        );
+	const WaterUpgradeSet2 = Upgrades.CreateUpgradeSet(
+		Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db('q\x01[\x03Q\x01] Damage upgrade 2'), WaterUpgradeSet3, [16, 0, 0]),
+		Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db('w\x01[\x03W\x01] Speed upgrade 2'), WaterUpgradeSet3, [0, 14, 0]),
+		Upgrades.CreateTowerUpgrade(Const.Icon_U238Shells, Db('e\x01[\x03E\x01] Range upgrade 2'), WaterUpgradeSet3, [0, 0, 16])
+		);
 
-    const WaterUpgradeSet1 = Upgrades.CreateUpgradeSet(
-        Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db('q\x01[\x03Q\x01] Damage upgrade 1'), WaterUpgradeSet2, [8, 0, 0]),
-        Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db('w\x01[\x03W\x01] Speed upgrade 1'), WaterUpgradeSet2, [0, 7, 0]),
-        Upgrades.CreateTowerUpgrade(Const.Icon_U238Shells, Db('e\x01[\x03E\x01] Range upgrade 1'), WaterUpgradeSet2, [0, 0, 8])
-        );
+	const WaterUpgradeSet1 = Upgrades.CreateUpgradeSet(
+		Upgrades.CreateTowerUpgrade(Const.Icon_ScarabDamage, Db('q\x01[\x03Q\x01] Damage upgrade 1'), WaterUpgradeSet2, [8, 0, 0]),
+		Upgrades.CreateTowerUpgrade(Const.Icon_PhaseDisruptor, Db('w\x01[\x03W\x01] Speed upgrade 1'), WaterUpgradeSet2, [0, 7, 0]),
+		Upgrades.CreateTowerUpgrade(Const.Icon_U238Shells, Db('e\x01[\x03E\x01] Range upgrade 1'), WaterUpgradeSet2, [0, 0, 8])
+		);
 
-    // TOWERS
+	// TOWERS
 
-    const AirTower = Towers.CreateTowerType(1,
-        AirUpgradeSet1,
-        Towers.CreateTowerData(100, 100, 96),
-        Towers.CreateTowerDisplayData(Const.Icon_PsiAssault, Strings.AirTowerTitle), 
-        Towers.CreateTowerImageData(
-            Common.MakeImage(Const.Image_STA_STS_Photon_Cannon_Overlay, 6, -12),
-            Common.MakeImage(Const.Image_None, 0, 0),
-            Common.MakeImage(Const.Image_Phase_Disruptor, 0, -16),
-            Common.MakeImage(Const.Image_Phase_Disruptor_Hit, 0, 0)
-        )
-    );
+	const AirTower = Towers.CreateTowerType(1,
+		AirUpgradeSet1,
+		Towers.CreateTowerData(100, 100, 96),
+		Towers.CreateTowerDisplayData(Const.Icon_PsiAssault, Strings.AirTowerTitle), 
+		Towers.CreateTowerImageData(
+			Common.MakeImage(Const.Image_STA_STS_Photon_Cannon_Overlay, 6, -12),
+			Common.MakeImage(Const.Image_None, 0, 0),
+			Common.MakeImage(Const.Image_Phase_Disruptor, 0, -16),
+			Common.MakeImage(Const.Image_Phase_Disruptor_Hit, 0, 0)
+		)
+	);
 
-    const EarthTower = Towers.CreateTowerType(2,
-        EarthUpgradeSet1,
-        Towers.CreateTowerData(175, 75, 128),
-        Towers.CreateTowerDisplayData(Const.Icon_Spines, Strings.EarthTowerTitle), 
-        Towers.CreateTowerImageData(
-            Common.MakeImage(Const.Image_Doodad_9_5_Jungle, -12, 0),
-            Common.MakeImage(Const.Image_None, 0, 0),
-            Common.MakeImage(Const.Image_Venom_Unused_Zerg_Weapon, 0, 0),
-            Common.MakeImage(Const.Image_Glave_Wurm_Seeker_Spores_Hit, 0, 0)
-        )
-    );
-    EarthTower.hit = EUDFuncPtr (3, 0) (function(towerType, missileUnit, targetUnit) {
-        PlayWAV("sound\\bullet\\zdrhit00.wav");
-    });
+	const EarthTower = Towers.CreateTowerType(2,
+		EarthUpgradeSet1,
+		Towers.CreateTowerData(175, 75, 128),
+		Towers.CreateTowerDisplayData(Const.Icon_Spines, Strings.EarthTowerTitle), 
+		Towers.CreateTowerImageData(
+			Common.MakeImage(Const.Image_Doodad_9_5_Jungle, -12, 0),
+			Common.MakeImage(Const.Image_None, 0, 0),
+			Common.MakeImage(Const.Image_Venom_Unused_Zerg_Weapon, 0, 0),
+			Common.MakeImage(Const.Image_Glave_Wurm_Seeker_Spores_Hit, 0, 0)
+		)
+	);
+	EarthTower.hit = EUDFuncPtr (3, 0) (function(towerType, missileUnit, targetUnit) {
+		PlayWAV("sound\\bullet\\zdrhit00.wav");
+	});
 
-    const FireTower = Towers.CreateTowerType(3,
-        FireUpgradeSet1,
-        Towers.CreateTowerData(125, 80, 112),
-        Towers.CreateTowerDisplayData(Const.Icon_FlameThrower, Strings.FireTowerTitle), 
-        Towers.CreateTowerImageData(
-            Common.MakeImage(Const.Image_Maelstrom_Overlay_Small, 0, -16),
-            Common.MakeImage(Const.Image_None, 0, 0),
-            Common.MakeImage(Const.Image_Burst_Lasers_Hit, 0, -16),
-            Common.MakeImage(Const.Image_Yamato_Gun_Hit, 0, 0)
-        )
-    );
-    FireTower.hit = EUDFuncPtr (3, 0) (function(towerType, missileUnit, targetUnit) {
-        Utils.createOverlayForUnit(targetUnit, Const.Image_Flames2_Type3_Small, 64);
-        Unit.setPlagueTimer(targetUnit, 64);
-    });
+	const FireTower = Towers.CreateTowerType(3,
+		FireUpgradeSet1,
+		Towers.CreateTowerData(125, 80, 112),
+		Towers.CreateTowerDisplayData(Const.Icon_FlameThrower, Strings.FireTowerTitle), 
+		Towers.CreateTowerImageData(
+			Common.MakeImage(Const.Image_Maelstrom_Overlay_Small, 0, -16),
+			Common.MakeImage(Const.Image_None, 0, 0),
+			Common.MakeImage(Const.Image_Burst_Lasers_Hit, 0, -16),
+			Common.MakeImage(Const.Image_Yamato_Gun_Hit, 0, 0)
+		)
+	);
+	FireTower.hit = EUDFuncPtr (3, 0) (function(towerType, missileUnit, targetUnit) {
+		Utils.createOverlayForUnit(targetUnit, Const.Image_Flames2_Type3_Small, 64);
+		Unit.setPlagueTimer(targetUnit, 64);
+	});
 
-    const WaterTower = Towers.CreateTowerType(4,
-        WaterUpgradeSet1,
-        Towers.CreateTowerData(100, 50, 64),
-        Towers.CreateTowerDisplayData(Const.Icon_ArgusJewel, Strings.WaterTowerTitle), 
-        Towers.CreateTowerImageData(
-            Common.MakeImage(Const.Image_Khalis, 0, -16),
-            Common.MakeImage(Const.Image_None, 0, 0),
-            Common.MakeImage(Const.Image_Hallucination_Death3, 0, 0),
-            Common.MakeImage(Const.Image_None, 0, 0)
-        )
-    );
-    WaterTower.hit = EUDFuncPtr (3, 0) (function(towerType, missileUnit, targetUnit) {
-        const slowSpeed = 100;//Unit.getOriginalTopSpeed(targetUnit) / 10;
-        if (Unit.getTopSpeed(targetUnit) == slowSpeed) {
-            return;
-        }
-        const duration = 64;
-        Unit.setTopSpeed(targetUnit, slowSpeed);
-        Utils.createOverlayForUnit(targetUnit, Const.Image_Acid_Spores_6_9_Overlay_Small, duration);
-        Timer.add(duration, targetUnit, EUDFuncPtr (2, 0) (function(callbackUnit, intervalCount) {
-            Unit.restoreOriginalTopSpeed(callbackUnit);
-        }));
-    });
+	const WaterTower = Towers.CreateTowerType(4,
+		WaterUpgradeSet1,
+		Towers.CreateTowerData(100, 50, 64),
+		Towers.CreateTowerDisplayData(Const.Icon_ArgusJewel, Strings.WaterTowerTitle), 
+		Towers.CreateTowerImageData(
+			Common.MakeImage(Const.Image_Khalis, 0, -16),
+			Common.MakeImage(Const.Image_None, 0, 0),
+			Common.MakeImage(Const.Image_Hallucination_Death3, 0, 0),
+			Common.MakeImage(Const.Image_None, 0, 0)
+		)
+	);
+	WaterTower.hit = EUDFuncPtr (3, 0) (function(towerType, missileUnit, targetUnit) {
+		const slowSpeed = 100;//Unit.getOriginalTopSpeed(targetUnit) / 10;
+		if (Unit.getTopSpeed(targetUnit) == slowSpeed) {
+			return;
+		}
+		const duration = 64;
+		Unit.setTopSpeed(targetUnit, slowSpeed);
+		Utils.createOverlayForUnit(targetUnit, Const.Image_Acid_Spores_6_9_Overlay_Small, duration);
+		Timer.add(duration, targetUnit, EUDFuncPtr (2, 0) (function(callbackUnit, intervalCount) {
+			Unit.restoreOriginalTopSpeed(callbackUnit);
+		}));
+	});
 
 
 

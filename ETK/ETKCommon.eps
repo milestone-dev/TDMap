@@ -3,45 +3,45 @@ const EmptyString = Db("");
 const Null = 0;
 
 function dwwrite_epd(epd, addr, value) {
-    SetMemoryEPD(epd + addr / 4, SetTo, value);
+	SetMemoryEPD(epd + addr / 4, SetTo, value);
 }
 
 function PTR(epd) {
-    return 4 * epd + 0x58A364;
+	return 4 * epd + 0x58A364;
 }
 
 function makeUnitStackable(epd) {
-    dwwrite_epd(epd + (0xDC / 4), dwread_epd(epd + (0xDC / 4)) | 0x200000);
+	dwwrite_epd(epd + (0xDC / 4), dwread_epd(epd + (0xDC / 4)) | 0x200000);
 }
 
 object Point {
-    var x;
-    var y;
+	var x;
+	var y;
 };
 
 function CreatePoint(x, y) : Point {
-    const point = Point.alloc();
-    point.x = x; 
-    point.y = y; 
-    return point;
+	const point = Point.alloc();
+	point.x = x; 
+	point.y = y; 
+	return point;
 }
 
 object Image {
-    var id;
-    var x;
-    var y;
-    // var drawFunction
-    // var drawWhenCloaked
-    // var iscriptHeader
-    // function drawAtPoint(x, y);
-    // function drawAtUnit(x, y);
-    // function drawAtLocaton(x, y);
+	var id;
+	var x;
+	var y;
+	// var drawFunction
+	// var drawWhenCloaked
+	// var iscriptHeader
+	// function drawAtPoint(x, y);
+	// function drawAtUnit(x, y);
+	// function drawAtLocaton(x, y);
 };
 
 function MakeImage(imageID, x, y) : Image {
-    const image = Image.alloc();
-    image.id = imageID;
-    image.x = x; 
-    image.y = y; 
-    return image;
+	const image = Image.alloc();
+	image.id = imageID;
+	image.x = x; 
+	image.y = y; 
+	return image;
 }

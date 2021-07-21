@@ -19,397 +19,397 @@ var fntil = 0;
 // TODO: Move utils
 
 function findNewTargetInLocation(location, playerID) {
-    var targetUnit = 0;
-    var highestPriority = 0;
-    foreach(ptr, unit : EUDLoopPlayerUnit(playerID)) {
-        if (Utils.CUnitInLocation(unit, location)) {
-            const priority  = Unit.getRemoveTimer(unit);
-            if (targetUnit == 0 || priority  > highestPriority) {
-                highestPriority = priority ;
-                targetUnit = unit;
-            }
-        }
-    }
-    return targetUnit;
+	var targetUnit = 0;
+	var highestPriority = 0;
+	foreach(ptr, unit : EUDLoopPlayerUnit(playerID)) {
+		if (Utils.CUnitInLocation(unit, location)) {
+			const priority  = Unit.getRemoveTimer(unit);
+			if (targetUnit == 0 || priority  > highestPriority) {
+				highestPriority = priority ;
+				targetUnit = unit;
+			}
+		}
+	}
+	return targetUnit;
 }
 
 const TOWER_TYPES = EUDArray(64);
 
 object TowerData {
-    var baseDamage;
-    var baseSpeed;
-    var baseRange;
+	var baseDamage;
+	var baseSpeed;
+	var baseRange;
 };
 
 function CreateTowerData(baseDamage, baseSpeed, baseRange) : TowerData {
-    const data = TowerData.alloc();
-    data.baseDamage = baseDamage;
-    data.baseSpeed = baseSpeed;
-    data.baseRange = baseRange;
-    return data;
+	const data = TowerData.alloc();
+	data.baseDamage = baseDamage;
+	data.baseSpeed = baseSpeed;
+	data.baseRange = baseRange;
+	return data;
 }
 
 object TowerImageData {
-    var spriteImage : Common.Image;
-    var missileSpawnImage : Common.Image;
-    var missileImage : Common.Image;
-    var hitImage : Common.Image;
+	var spriteImage : Common.Image;
+	var missileSpawnImage : Common.Image;
+	var missileImage : Common.Image;
+	var hitImage : Common.Image;
 };
 
 object TowerDisplayData {
-    var title;
-    var icon;
+	var title;
+	var icon;
 };
 
 function CreateTowerImageData(spriteImage, missileSpawnImage, missileImage, hitImage) : TowerImageData {
-    const data = TowerImageData.alloc();
-    data.spriteImage = spriteImage;
-    data.missileSpawnImage = missileSpawnImage;
-    data.missileImage = missileImage;
-    data.hitImage = hitImage;
-    return data;
+	const data = TowerImageData.alloc();
+	data.spriteImage = spriteImage;
+	data.missileSpawnImage = missileSpawnImage;
+	data.missileImage = missileImage;
+	data.hitImage = hitImage;
+	return data;
 }
 
 
 function CreateTowerDisplayData(icon, title) : TowerDisplayData {
-    const data = TowerDisplayData.alloc();
-    data.icon = icon;
-    data.title = title;
-    return data;
+	const data = TowerDisplayData.alloc();
+	data.icon = icon;
+	data.title = title;
+	return data;
 }
 
 object TowerType {
-    var id;
-    var firstUpgradeOptionSet;
-    var data : TowerData;
-    var displayData : TowerDisplayData;
-    var imageData : TowerImageData;
-    var fire: EUDFuncPtr (1, 0);
-    var hit: EUDFuncPtr (3, 0);
+	var id;
+	var firstUpgradeOptionSet;
+	var data : TowerData;
+	var displayData : TowerDisplayData;
+	var imageData : TowerImageData;
+	var fire: EUDFuncPtr (1, 0);
+	var hit: EUDFuncPtr (3, 0);
 };
 
 function CreateTowerType(id, firstUpgradeOptionSet, data: TowerData, displayData: TowerDisplayData, imageData: TowerImageData) : TowerType {
-    const towerType = TowerType.alloc();
-    towerType.firstUpgradeOptionSet = firstUpgradeOptionSet;
-    towerType.data = data;
-    towerType.displayData = displayData;
-    towerType.imageData = imageData;
-    towerType.id = id;
-    TOWER_TYPES[id] = towerType;
-    return towerType;
+	const towerType = TowerType.alloc();
+	towerType.firstUpgradeOptionSet = firstUpgradeOptionSet;
+	towerType.data = data;
+	towerType.displayData = displayData;
+	towerType.imageData = imageData;
+	towerType.id = id;
+	TOWER_TYPES[id] = towerType;
+	return towerType;
 }
 
 object Tower {
-    var unit;
-    var type : TowerType;
-    var currentUpgradeOptionSet : Upgrades.TowerUpgradeOptionSet;
-    var damage;
-    var range;
-    var speed;
-    var fireTimer;
-    var upgradeValue;
+	var unit;
+	var type : TowerType;
+	var currentUpgradeOptionSet : Upgrades.TowerUpgradeOptionSet;
+	var damage;
+	var range;
+	var speed;
+	var fireTimer;
+	var upgradeValue;
 
-    function fire();
-    function updateInterface();
+	function fire();
+	function updateInterface();
 
-    function init() {
-        CommandCard.setupUnit(this.unit);
-        this.setTarget(0);
-        this.type = 0;
-        this.fireTimer = 0;
-    }
+	function init() {
+		CommandCard.setupUnit(this.unit);
+		this.setTarget(0);
+		this.type = 0;
+		this.fireTimer = 0;
+	}
 
-    function setType(towerTypeID) {
-        if (towerTypeID == 0) {
-            return;
-        }
-        this.type = TOWER_TYPES[towerTypeID];
-        this.damage += this.type.data.baseDamage;
-        this.speed += this.type.data.baseSpeed;
-        this.range += this.type.data.baseRange; 
+	function setType(towerTypeID) {
+		if (towerTypeID == 0) {
+			return;
+		}
+		this.type = TOWER_TYPES[towerTypeID];
+		this.damage += this.type.data.baseDamage;
+		this.speed += this.type.data.baseSpeed;
+		this.range += this.type.data.baseRange; 
 
-        const playerID = Unit.getPlayerID(this.unit);
-        Utils.moveUtilLocationToUnit(this.unit);
-        const cannonSpriteID = 487;
-        const cannonImageID = this.type.imageData.spriteImage.id;
-        Utils.setImageDrawFunction(cannonImageID, 1);
-        Utils.setImageClickable(cannonImageID, 0);
-        Utils.setSpriteImage(cannonSpriteID, cannonImageID);
-        const cannonUnit = Utils.createUnitAtLocationWithOffset(Const.Unit_ProtossCorsair, Utils.UTILITY_LOCATION, $P8, this.type.imageData.spriteImage.x, this.type.imageData.spriteImage.y);
-        Utils.setUnitColor(cannonUnit, playerID);
-        Unit.setStatusFlags(cannonUnit, 0x04240201);
-        Unit.setConnectedUnit(this.unit, cannonUnit);
-        this.currentUpgradeOptionSet = this.type.firstUpgradeOptionSet;
-        Utils.refreshInterface();
-    }
+		const playerID = Unit.getPlayerID(this.unit);
+		Utils.moveUtilLocationToUnit(this.unit);
+		const cannonSpriteID = 487;
+		const cannonImageID = this.type.imageData.spriteImage.id;
+		Utils.setImageDrawFunction(cannonImageID, 1);
+		Utils.setImageClickable(cannonImageID, 0);
+		Utils.setSpriteImage(cannonSpriteID, cannonImageID);
+		const cannonUnit = Utils.createUnitAtLocationWithOffset(Const.Unit_ProtossCorsair, Utils.UTILITY_LOCATION, $P8, this.type.imageData.spriteImage.x, this.type.imageData.spriteImage.y);
+		Utils.setUnitColor(cannonUnit, playerID);
+		Unit.setStatusFlags(cannonUnit, 0x04240201);
+		Unit.setConnectedUnit(this.unit, cannonUnit);
+		this.currentUpgradeOptionSet = this.type.firstUpgradeOptionSet;
+		Utils.refreshInterface();
+	}
 
-    function applyUpgrade(upgrade) {
-        if (upgrade == 0) {
-            return false;
-        }
-        const playerID = Unit.getPlayerID(this.unit);
-        const upgradeObject = Upgrades.TowerUpgrade.cast(upgrade);
-        const cost = upgradeObject.getCost(this.upgradeValue);
-        if (Accumulate(playerID, AtLeast, cost, 0)) {
-            this.damage += upgradeObject.attributes[Upgrades.Damage];
-            this.speed += upgradeObject.attributes[Upgrades.Speed];
-            this.range += upgradeObject.attributes[Upgrades.Range];
-            this.currentUpgradeOptionSet = upgradeObject.nextSet;
-            this.upgradeValue++;
-            SetResources(playerID, Subtract, cost, 0);
-            return true;
-        } else {
-            eprintln("Not enough minerals. Kill more mobs.");
-            return false;
-        }
-    }
+	function applyUpgrade(upgrade) {
+		if (upgrade == 0) {
+			return false;
+		}
+		const playerID = Unit.getPlayerID(this.unit);
+		const upgradeObject = Upgrades.TowerUpgrade.cast(upgrade);
+		const cost = upgradeObject.getCost(this.upgradeValue);
+		if (Accumulate(playerID, AtLeast, cost, 0)) {
+			this.damage += upgradeObject.attributes[Upgrades.Damage];
+			this.speed += upgradeObject.attributes[Upgrades.Speed];
+			this.range += upgradeObject.attributes[Upgrades.Range];
+			this.currentUpgradeOptionSet = upgradeObject.nextSet;
+			this.upgradeValue++;
+			SetResources(playerID, Subtract, cost, 0);
+			return true;
+		} else {
+			eprintln("Not enough minerals. Kill more mobs.");
+			return false;
+		}
+	}
 
-    function getPlayerID() {
-        return Unit.getPlayerID(this.unit);
-    }
+	function getPlayerID() {
+		return Unit.getPlayerID(this.unit);
+	}
 
-    function setTarget(targetUnit) {
-        Unit.setUnknown04(this.unit, targetUnit);
-    }
+	function setTarget(targetUnit) {
+		Unit.setUnknown04(this.unit, targetUnit);
+	}
 
-    function getTarget() {
-        return Unit.getUnknown04(this.unit);
-    }
+	function getTarget() {
+		return Unit.getUnknown04(this.unit);
+	}
 
-    function update() {
-        if (this.type == 0) {
-            return;
-        }
-        const enemyPlayerID = $P7;
+	function update() {
+		if (this.type == 0) {
+			return;
+		}
+		const enemyPlayerID = $P7;
 
-        const threshold = 2380;
-        if (this.fireTimer < threshold) {
-            this.fireTimer += this.speed;
-        }
+		const threshold = 2380;
+		if (this.fireTimer < threshold) {
+			this.fireTimer += this.speed;
+		}
 
-        if (this.getTarget() == 0 && this.fireTimer >= threshold) {
-            // Check if there are enemy units nearby and target a new unit
-            Utils.centerLocationOnUnit(Utils.LOCATION_ANYSIZE, this.unit, this.range * 2, this.range * 2);
-            Utils.refreshLocations();
-            if (Bring(enemyPlayerID, AtLeast, 1, Const.Unit_AnyUnit, Utils.LOCATION_ANYSIZE)) {
-                const enemyUnit = findNewTargetInLocation(Utils.LOCATION_ANYSIZE, enemyPlayerID);
-                if (enemyUnit != 0) {
-                    this.setTarget(enemyUnit);
-                }
-            }
-        } else {
-            // Check if target is still within range, otherwise clear it and target a new unit
-            Utils.centerLocationOnUnit(Utils.LOCATION_ANYSIZE, this.unit, this.range * 2, this.range * 2);
-            Utils.refreshLocations();
-            if (!Utils.bringUnit(this.getTarget(), Utils.LOCATION_ANYSIZE)) {
-                this.setTarget(0);
-                // Unit.setOrder(this.unit, Const.Order_Nothing1_Unused);
-                // setcurpl(P1); Screen.printAt(3, "No bring - clearTarget");
-            }
-        }
+		if (this.getTarget() == 0 && this.fireTimer >= threshold) {
+			// Check if there are enemy units nearby and target a new unit
+			Utils.centerLocationOnUnit(Utils.LOCATION_ANYSIZE, this.unit, this.range * 2, this.range * 2);
+			Utils.refreshLocations();
+			if (Bring(enemyPlayerID, AtLeast, 1, Const.Unit_AnyUnit, Utils.LOCATION_ANYSIZE)) {
+				const enemyUnit = findNewTargetInLocation(Utils.LOCATION_ANYSIZE, enemyPlayerID);
+				if (enemyUnit != 0) {
+					this.setTarget(enemyUnit);
+				}
+			}
+		} else {
+			// Check if target is still within range, otherwise clear it and target a new unit
+			Utils.centerLocationOnUnit(Utils.LOCATION_ANYSIZE, this.unit, this.range * 2, this.range * 2);
+			Utils.refreshLocations();
+			if (!Utils.bringUnit(this.getTarget(), Utils.LOCATION_ANYSIZE)) {
+				this.setTarget(0);
+				// Unit.setOrder(this.unit, Const.Order_Nothing1_Unused);
+				// setcurpl(P1); Screen.printAt(3, "No bring - clearTarget");
+			}
+		}
 
-        if (this.fireTimer >= threshold && this.getTarget() != 0) {
-            while(this.fireTimer >= threshold) {
-                this.fireTimer -= threshold;
-                this.fire();
-            }
-        }
-    }
+		if (this.fireTimer >= threshold && this.getTarget() != 0) {
+			while(this.fireTimer >= threshold) {
+				this.fireTimer -= threshold;
+				this.fire();
+			}
+		}
+	}
 
-    function fire() {
-        if (this.type == 0) {
-            return;
-        }
-        const cannonUnit = Unit.getConnectedUnit(this.unit);
-        const towerType = this.type;
-        const targetUnit = this.getTarget();
+	function fire() {
+		if (this.type == 0) {
+			return;
+		}
+		const cannonUnit = Unit.getConnectedUnit(this.unit);
+		const towerType = this.type;
+		const targetUnit = this.getTarget();
 
-        if (towerType.imageData.missileImage.id != Const.Image_None) {
-            Utils.setSpriteImage(202, towerType.imageData.missileImage.id);
-            Utils.setImageDrawFunction(towerType.imageData.missileImage.id, 1);
-            Utils.setImageDrawIfCloaked(towerType.imageData.missileImage.id, 1);
-        } else {
-            Utils.setSpriteImage(202, Const.Image_Observer);
-            Utils.setImageDrawFunction(towerType.imageData.missileImage.id, 0);
-            Utils.setImageDrawIfCloaked(Const.Image_Observer, 0);
-        }
+		if (towerType.imageData.missileImage.id != Const.Image_None) {
+			Utils.setSpriteImage(202, towerType.imageData.missileImage.id);
+			Utils.setImageDrawFunction(towerType.imageData.missileImage.id, 1);
+			Utils.setImageDrawIfCloaked(towerType.imageData.missileImage.id, 1);
+		} else {
+			Utils.setSpriteImage(202, Const.Image_Observer);
+			Utils.setImageDrawFunction(towerType.imageData.missileImage.id, 0);
+			Utils.setImageDrawIfCloaked(Const.Image_Observer, 0);
+		}
 
-        if (towerType.fire != 0) {
-            towerType.fire(this.unit);
-        }
+		if (towerType.fire != 0) {
+			towerType.fire(this.unit);
+		}
 
-        const direction = Utils.getDirectionFromPosition32(this.unit, Unit.getPositionX(targetUnit), Unit.getPositionY(targetUnit));
-        Utils.moveUtilLocationToUnit(this.unit);
-        Utils.setUnitInitialDirection(Const.Unit_ProtossObserver, direction);
-        const missileUnit = Utils.createUnitAtLocationWithOffset(Const.Unit_ProtossObserver, Utils.UTILITY_LOCATION, $P8, towerType.imageData.missileImage.x, towerType.imageData.missileImage.y);
-        // Unit.setStatusFlags(missileUnit, 0x04250205);
-        Utils.setUnitColor(missileUnit, Unit.getPlayerID(this.unit));
+		const direction = Utils.getDirectionFromPosition32(this.unit, Unit.getPositionX(targetUnit), Unit.getPositionY(targetUnit));
+		Utils.moveUtilLocationToUnit(this.unit);
+		Utils.setUnitInitialDirection(Const.Unit_ProtossObserver, direction);
+		const missileUnit = Utils.createUnitAtLocationWithOffset(Const.Unit_ProtossObserver, Utils.UTILITY_LOCATION, $P8, towerType.imageData.missileImage.x, towerType.imageData.missileImage.y);
+		// Unit.setStatusFlags(missileUnit, 0x04250205);
+		Utils.setUnitColor(missileUnit, Unit.getPlayerID(this.unit));
 
-        if (towerType.imageData.missileSpawnImage.id != Const.Image_None) {
-            Utils.createImageSpriteAtUnitPosition(towerType.imageData.missileSpawnImage.id, cannonUnit);
-        }
-        Unit.setOrder(missileUnit, Const.Order_Ignore_Normal);
-        Unit.setConnectedUnit(missileUnit, this.unit);
-        Unit.setAutoTargetUnit(missileUnit, targetUnit);
-    }
+		if (towerType.imageData.missileSpawnImage.id != Const.Image_None) {
+			Utils.createImageSpriteAtUnitPosition(towerType.imageData.missileSpawnImage.id, cannonUnit);
+		}
+		Unit.setOrder(missileUnit, Const.Order_Ignore_Normal);
+		Unit.setConnectedUnit(missileUnit, this.unit);
+		Unit.setAutoTargetUnit(missileUnit, targetUnit);
+	}
 
-    function sell() {
-        const cannonUnit = Unit.getConnectedUnit(this.unit);
-        Utils.removeUnit(this.unit);
-        Utils.removeUnitSafe(cannonUnit);
-    }
+	function sell() {
+		const cannonUnit = Unit.getConnectedUnit(this.unit);
+		Utils.removeUnit(this.unit);
+		Utils.removeUnitSafe(cannonUnit);
+	}
 
-    function handleButtonClick() {
-        if (this.unit == 0) {
-            return;
-        }
-        const button = CommandCard.getButtonIndexFromBuildQueue(this.unit);
-        Unit.clearBuildQueue(this.unit);
-        // setcurpl(P1); Screen.printf("handleButtonClick {}", button);
-        if (this.type == 0) {
-            switch(button) {
-                case 0: this.setType(1); break;
-                case 1: this.setType(2); break;
-                case 2: this.setType(3); break;
-                case 3: this.setType(4); break;
-                case 8: this.sell(); break;
-            }
-        } else {
-            if (button == 8) {
-                this.sell();
-            }
-            if (this.currentUpgradeOptionSet != 0) {
-                switch(button) {
-                    case 0: this.applyUpgrade(this.currentUpgradeOptionSet.optionA); break;
-                    case 1: this.applyUpgrade(this.currentUpgradeOptionSet.optionB); break;
-                    case 2: this.applyUpgrade(this.currentUpgradeOptionSet.optionC); break;
-                }
-            }
-        }
-    }
+	function handleButtonClick() {
+		if (this.unit == 0) {
+			return;
+		}
+		const button = CommandCard.getButtonIndexFromBuildQueue(this.unit);
+		Unit.clearBuildQueue(this.unit);
+		// setcurpl(P1); Screen.printf("handleButtonClick {}", button);
+		if (this.type == 0) {
+			switch(button) {
+				case 0: this.setType(1); break;
+				case 1: this.setType(2); break;
+				case 2: this.setType(3); break;
+				case 3: this.setType(4); break;
+				case 8: this.sell(); break;
+			}
+		} else {
+			if (button == 8) {
+				this.sell();
+			}
+			if (this.currentUpgradeOptionSet != 0) {
+				switch(button) {
+					case 0: this.applyUpgrade(this.currentUpgradeOptionSet.optionA); break;
+					case 1: this.applyUpgrade(this.currentUpgradeOptionSet.optionB); break;
+					case 2: this.applyUpgrade(this.currentUpgradeOptionSet.optionC); break;
+				}
+			}
+		}
+	}
 
-    function updateInterface(playerID) {
-        if (IsUserCP()) {
-            // setcurpl(P1); Screen.printf("updateInterface {}", playerID);
-            if (this.type == 0) {
-                // setcurpl(P1); Screen.printf("type = 0");
-                Utils.setUnitWeapon(TowerUnitType, Const.Weapon_None);
-                CommandCard.hideAllButtonIcons();
-                CommandCard.setButtonIcon(0, Const.Icon_PsiAssault, Strings.SelectAirTower);
-                CommandCard.setButtonIcon(1, Const.Icon_Spines, Strings.SelectEarthTower);
-                CommandCard.setButtonIcon(2, Const.Icon_FlameThrower, Strings.SelectFireTower);
-                CommandCard.setButtonIcon(3, Const.Icon_ArgusJewel, Strings.SelectWaterTower);
-                CommandCard.setButtonIcon(8, Const.Icon_ReturnResources, Strings.SellTower);
-            } else {
-                // Have a unit for every player that is just there to represent the mineral cost for next upgrade        
-                // Utils.setUnitCost(100 + playerID, 10 + Unit.getRankIncrease(selectedUnit) * 10);
-                // setcurpl(P1); Screen.printf("updateInterface t{} d{} s{} r{} ", this.type, this.damage, this.speed, this.range);
-                const weaponStringID = 229 + playerID;
-                settblf(weaponStringID, 0, "Speed: {}\nRange: {}", this.speed, this.range);
-                Utils.setWeaponDamage(playerID, this.damage);
-                Utils.setWeaponIcon(playerID, this.type.displayData.icon);
-                Utils.setUnitWeapon(TowerUnitType, playerID);
-                CommandCard.hideAllButtonIcons();
-                if (this.currentUpgradeOptionSet == 0) {
-                    CommandCard.setButtonIcon(8, Const.Icon_ReturnResources, Strings.SellTower);
-                } else {
-                    // setcurpl(P1); Screen.printf("icons = [{},{},{}]", this.currentUpgradeOptionSet.optionA.icon, this.currentUpgradeOptionSet.optionB.icon, this.currentUpgradeOptionSet.optionC.icon);
-                    CommandCard.setButtonIcon(0, this.currentUpgradeOptionSet.optionA.icon, this.currentUpgradeOptionSet.optionA.generateToltip(this.upgradeValue));
-                    CommandCard.setButtonIcon(1, this.currentUpgradeOptionSet.optionB.icon, this.currentUpgradeOptionSet.optionB.generateToltip(this.upgradeValue));
-                    CommandCard.setButtonIcon(2, this.currentUpgradeOptionSet.optionC.icon, this.currentUpgradeOptionSet.optionC.generateToltip(this.upgradeValue));
-                    CommandCard.setButtonIcon(8, Const.Icon_ReturnResources, Strings.SellTower);
-                }
-            }
-        }
-        Utils.refreshInterface();
-    }
+	function updateInterface(playerID) {
+		if (IsUserCP()) {
+			// setcurpl(P1); Screen.printf("updateInterface {}", playerID);
+			if (this.type == 0) {
+				// setcurpl(P1); Screen.printf("type = 0");
+				Utils.setUnitWeapon(TowerUnitType, Const.Weapon_None);
+				CommandCard.hideAllButtonIcons();
+				CommandCard.setButtonIcon(0, Const.Icon_PsiAssault, Strings.SelectAirTower);
+				CommandCard.setButtonIcon(1, Const.Icon_Spines, Strings.SelectEarthTower);
+				CommandCard.setButtonIcon(2, Const.Icon_FlameThrower, Strings.SelectFireTower);
+				CommandCard.setButtonIcon(3, Const.Icon_ArgusJewel, Strings.SelectWaterTower);
+				CommandCard.setButtonIcon(8, Const.Icon_ReturnResources, Strings.SellTower);
+			} else {
+				// Have a unit for every player that is just there to represent the mineral cost for next upgrade        
+				// Utils.setUnitCost(100 + playerID, 10 + Unit.getRankIncrease(selectedUnit) * 10);
+				// setcurpl(P1); Screen.printf("updateInterface t{} d{} s{} r{} ", this.type, this.damage, this.speed, this.range);
+				const weaponStringID = 229 + playerID;
+				settblf(weaponStringID, 0, "Speed: {}\nRange: {}", this.speed, this.range);
+				Utils.setWeaponDamage(playerID, this.damage);
+				Utils.setWeaponIcon(playerID, this.type.displayData.icon);
+				Utils.setUnitWeapon(TowerUnitType, playerID);
+				CommandCard.hideAllButtonIcons();
+				if (this.currentUpgradeOptionSet == 0) {
+					CommandCard.setButtonIcon(8, Const.Icon_ReturnResources, Strings.SellTower);
+				} else {
+					// setcurpl(P1); Screen.printf("icons = [{},{},{}]", this.currentUpgradeOptionSet.optionA.icon, this.currentUpgradeOptionSet.optionB.icon, this.currentUpgradeOptionSet.optionC.icon);
+					CommandCard.setButtonIcon(0, this.currentUpgradeOptionSet.optionA.icon, this.currentUpgradeOptionSet.optionA.generateToltip(this.upgradeValue));
+					CommandCard.setButtonIcon(1, this.currentUpgradeOptionSet.optionB.icon, this.currentUpgradeOptionSet.optionB.generateToltip(this.upgradeValue));
+					CommandCard.setButtonIcon(2, this.currentUpgradeOptionSet.optionC.icon, this.currentUpgradeOptionSet.optionC.generateToltip(this.upgradeValue));
+					CommandCard.setButtonIcon(8, Const.Icon_ReturnResources, Strings.SellTower);
+				}
+			}
+		}
+		Utils.refreshInterface();
+	}
 };
 
 // function CreateTower(type : TowerType, towerUnit) : Tower {
 function CreateTower(towerUnit) : Tower {
-    const tower = Tower.alloc();
-    tower.unit = towerUnit;
-    Unit.setUnknown00(towerUnit, tower);
-    return tower;
+	const tower = Tower.alloc();
+	tower.unit = towerUnit;
+	Unit.setUnknown00(towerUnit, tower);
+	return tower;
 }
 
 function getTowerForUnit(unitPointer) : Tower {
-    const towerObj = Unit.getUnknown00(unitPointer);
-    if (towerObj == 0) {
-        return 0;
-    }
-    return Tower.cast(towerObj);
+	const towerObj = Unit.getUnknown00(unitPointer);
+	if (towerObj == 0) {
+		return 0;
+	}
+	return Tower.cast(towerObj);
 }
 
 function getTowerTypeByID(id): TowerType {
-    return TOWER_TYPES[id];
+	return TOWER_TYPES[id];
 }
 
 function isUnitTower(unit) {
-    if (unit == 0 || Unit.getUnitType(unit) != TowerUnitType) {
-        return false;
-    }
-    if (getTowerForUnit(unit) != 0) {
-        return true;
-    }
-    return false;
+	if (unit == 0 || Unit.getUnitType(unit) != TowerUnitType) {
+		return false;
+	}
+	if (getTowerForUnit(unit) != 0) {
+		return true;
+	}
+	return false;
 }
 
 function isTowerTypeValid(towerType) {
-    return towerType != 0;
+	return towerType != 0;
 }
 
 function createBaseTower(location, playerID) : Tower {
-    const towerUnit = Utils.createUnit(TowerUnitType, Utils.OFFSCREEN_LOCATION, $P8);
-    MoveUnit(1, TowerUnitType, $P8, Utils.OFFSCREEN_LOCATION, location);
-    if (Bring($P8, AtLeast, 1, TowerUnitType, Utils.OFFSCREEN_LOCATION)) {
-        RemoveUnitAt(1, TowerUnitType, Utils.OFFSCREEN_LOCATION, $P8);
-        eprintln("You can't build there.");
-        return 0;
-    } else {
-        GiveUnits(1, TowerUnitType, $P8, location, playerID);
-    }
-    const tower = CreateTower(towerUnit);
-    tower.init();
-    return tower;
+	const towerUnit = Utils.createUnit(TowerUnitType, Utils.OFFSCREEN_LOCATION, $P8);
+	MoveUnit(1, TowerUnitType, $P8, Utils.OFFSCREEN_LOCATION, location);
+	if (Bring($P8, AtLeast, 1, TowerUnitType, Utils.OFFSCREEN_LOCATION)) {
+		RemoveUnitAt(1, TowerUnitType, Utils.OFFSCREEN_LOCATION, $P8);
+		eprintln("You can't build there.");
+		return 0;
+	} else {
+		GiveUnits(1, TowerUnitType, $P8, location, playerID);
+	}
+	const tower = CreateTower(towerUnit);
+	tower.init();
+	return tower;
 }
 
 function drawTowerRange(x, y, range) {
-    Utils.moveUtilLocationToPoint(x, y);
+	Utils.moveUtilLocationToPoint(x, y);
 
-    const lx1 = x - range;
-    const lx2 = x + range;
-    const ly1 = y - range;
-    const ly2 = y + range;
+	const lx1 = x - range;
+	const lx2 = x + range;
+	const ly1 = y - range;
+	const ly2 = y + range;
 
-    Utils.createImageSpriteAtPoint(Const.Image_Nuke_Target_Dot, lx1, ly1);
-    Utils.createImageSpriteAtPoint(Const.Image_Nuke_Target_Dot, lx2, ly1);
-    Utils.createImageSpriteAtPoint(Const.Image_Nuke_Target_Dot, lx1, ly2);
-    Utils.createImageSpriteAtPoint(Const.Image_Nuke_Target_Dot, lx2, ly2);
+	Utils.createImageSpriteAtPoint(Const.Image_Nuke_Target_Dot, lx1, ly1);
+	Utils.createImageSpriteAtPoint(Const.Image_Nuke_Target_Dot, lx2, ly1);
+	Utils.createImageSpriteAtPoint(Const.Image_Nuke_Target_Dot, lx1, ly2);
+	Utils.createImageSpriteAtPoint(Const.Image_Nuke_Target_Dot, lx2, ly2);
 }
 
 function missileHit(missileUnit) {
-    const targetUnit = Unit.getAutoTargetUnit(missileUnit);
-    const tower = getTowerForUnit(Unit.getConnectedUnit(missileUnit));
-    if (tower != 0) {
-        const targetUnitType = Unit.getUnitType(targetUnit);
-        if (tower.type.imageData.hitImage.id != Const.Image_None) {
-            Utils.createImageSpriteAtUnitPosition(tower.type.imageData.hitImage.id, targetUnit);
-        }
-        if (tower.type.hit != 0) {
-            tower.type.hit(tower.type, missileUnit, targetUnit);
-        }
-        if (Unit.damage(targetUnit, tower.damage)) {
-            SetResources(tower.getPlayerID(), 8, Utils.getUnitDestroyValue(targetUnitType), 0);
-            const unitType = Waves.GetNextUnitType(targetUnitType);
-            if (unitType != Const.Unit_None) {
-                const unit = Utils.createUnit(unitType, Utils.OFFSCREEN_LOCATION, $P7);
-                Unit.setStatusFlags(unit, 0x00230005); // 5xxxx does not move
-                Utils.moveUnit(unit, Utils.moveUtilLocationToUnit(targetUnit));
-                Unit.setRemoveTimer(unit, Unit.getRemoveTimer(targetUnit));
-                Unit.orderToPoint(unit, Unit.getOrderTargetX(targetUnit), Unit.getOrderTargetY(targetUnit));
-            }
-        }
-    }
-    Utils.removeUnit(missileUnit);
+	const targetUnit = Unit.getAutoTargetUnit(missileUnit);
+	const tower = getTowerForUnit(Unit.getConnectedUnit(missileUnit));
+	if (tower != 0) {
+		const targetUnitType = Unit.getUnitType(targetUnit);
+		if (tower.type.imageData.hitImage.id != Const.Image_None) {
+			Utils.createImageSpriteAtUnitPosition(tower.type.imageData.hitImage.id, targetUnit);
+		}
+		if (tower.type.hit != 0) {
+			tower.type.hit(tower.type, missileUnit, targetUnit);
+		}
+		if (Unit.damage(targetUnit, tower.damage)) {
+			SetResources(tower.getPlayerID(), 8, Utils.getUnitDestroyValue(targetUnitType), 0);
+			const unitType = Waves.GetNextUnitType(targetUnitType);
+			if (unitType != Const.Unit_None) {
+				const unit = Utils.createUnit(unitType, Utils.OFFSCREEN_LOCATION, $P7);
+				Unit.setStatusFlags(unit, 0x00230005); // 5xxxx does not move
+				Utils.moveUnit(unit, Utils.moveUtilLocationToUnit(targetUnit));
+				Unit.setRemoveTimer(unit, Unit.getRemoveTimer(targetUnit));
+				Unit.orderToPoint(unit, Unit.getOrderTargetX(targetUnit), Unit.getOrderTargetY(targetUnit));
+			}
+		}
+	}
+	Utils.removeUnit(missileUnit);
 }
