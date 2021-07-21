@@ -1,0 +1,25 @@
+var ActiveSoundChannels = 0;
+var SoundChannelCooldownTimer = 0;
+const MAX_CHANNELS = 10;
+const SoundChannelCooldown = 6;
+const Screen = StringBuffer(256);
+
+function PlaySound() {
+	if (ActiveSoundChannels < MAX_CHANNELS) {
+		ActiveSoundChannels++; 
+		return true;
+	}
+	return false;
+}
+
+function Update() {
+	// setcurpl(P1); Screen.printfAt(0, "SND # {} ({}/{})", ActiveSoundChannels, SoundChannelCooldownTimer, SoundChannelCooldown);
+	if (ActiveSoundChannels > 0) {
+		if (SoundChannelCooldownTimer >= SoundChannelCooldown) {
+			ActiveSoundChannels--;
+			SoundChannelCooldownTimer = 0;
+		} else {
+			SoundChannelCooldownTimer++;
+		}
+	}
+}

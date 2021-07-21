@@ -4,6 +4,7 @@ import ETK.ETKTimer as Timer;
 import ETK.ETKConstants as Const;
 import ETK.ETKCommon as Common;
 import Balance;
+import Sound;
 import Waves;
 import Towers;
 import Content;
@@ -90,7 +91,8 @@ function initMap() {
 	}
 	EUDEndPlayerLoop();
 
-	Screen.print("Welcome! Type L1 in chat to get started");
+	// Screen.print("Welcome! Type L1 in chat to get started");
+	Waves.SetLevel(1);
 }
 
 function onPluginStart() {
@@ -160,6 +162,7 @@ function handleConsoleInput(playerID) {
 
 function beforeTriggerExec() {
 	Utils.EUDTurbo();
+	Sound.Update();
 	Timer.tick();
 	Waves.Update();
 

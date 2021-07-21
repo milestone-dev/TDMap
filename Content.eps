@@ -4,6 +4,7 @@ import ETK.ETKTimer as Timer;
 import ETK.ETKConstants as Const;
 import ETK.ETKCommon as Common;
 import Strings;
+import Sound;
 import Upgrades;
 import Towers;
 
@@ -138,8 +139,7 @@ function loadData() {
 	// TOWERS
 
 	const AirTower = Towers.CreateTowerType(1,
-		AirUpgradeSet1,
-		Towers.CreateTowerData(100, 100, 96),
+		Towers.CreateTowerData(100, 100, 96, AirUpgradeSet1),
 		Towers.CreateTowerDisplayData(Const.Icon_PsiAssault, Strings.AirTowerTitle), 
 		Towers.CreateTowerImageData(
 			Common.MakeImage(Const.Image_STA_STS_Photon_Cannon_Overlay, 5, -12),
@@ -148,10 +148,24 @@ function loadData() {
 			Common.MakeImage(Const.Image_Phase_Disruptor_Hit, 0, 0)
 		)
 	);
+	AirTower.onPlace = EUDFuncPtr (1, 0) (function(tower : Towers.Tower) {
+		PlayWAV("sound\\misc\\tbldgplc.wav");
+		PlayWAV("sound\\misc\\ptesum00.wav");
+		Utils.createImageSpriteAtUnitPositionWithOffset(Const.Image_Particle_Beam_Hit, tower.unit, 0, -16);
+	});
+	AirTower.onUpgrade = EUDFuncPtr (1, 0) (function(tower : Towers.Tower) {
+		PlayWAV("sound\\protoss\\bldg\\ppbwht00.wav");
+		Utils.createImageSpriteAtUnitPositionWithOffset(Const.Image_Particle_Beam_Hit, tower.unit, 0, -16);
+	});
+	AirTower.onFire = EUDFuncPtr (1, 0) (function(tower : Towers.Tower) {
+		if(Sound.PlaySound()) { PlayWAV("sound\\bullet\\laserb.wav"); }
+	});
+	AirTower.onHit = EUDFuncPtr (1, 0) (function(tower : Towers.Tower) {
+		// No sound, the sprite already plays a sound
+	});
 
 	const EarthTower = Towers.CreateTowerType(2,
-		EarthUpgradeSet1,
-		Towers.CreateTowerData(175, 75, 128),
+		Towers.CreateTowerData(175, 75, 128, EarthUpgradeSet1),
 		Towers.CreateTowerDisplayData(Const.Icon_Spines, Strings.EarthTowerTitle), 
 		Towers.CreateTowerImageData(
 			Common.MakeImage(Const.Image_Seeker_Spores, 2, -18),
@@ -160,13 +174,24 @@ function loadData() {
 			Common.MakeImage(Const.Image_Glave_Wurm_Seeker_Spores_Hit, 0, 0)
 		)
 	);
-	EarthTower.hit = EUDFuncPtr (3, 0) (function(towerType, missileUnit, targetUnit) {
-		PlayWAV("sound\\bullet\\zdrhit00.wav");
+	EarthTower.onPlace = EUDFuncPtr (1, 0) (function(tower : Towers.Tower) {
+		PlayWAV("sound\\misc\\tbldgplc.wav");
+		PlayWAV("sound\\zerg\\bldg\\zfcwht00.wav");
+		Utils.createImageSpriteAtUnitPositionWithOffset(Const.Image_Vespene_Geyser_Smoke2, tower.unit, 0, -16);
+	});
+	EarthTower.onUpgrade = EUDFuncPtr (1, 0) (function(tower : Towers.Tower) {
+		PlayWAV("sound\\zerg\\bldg\\zchrdy00.wav");
+		Utils.createImageSpriteAtUnitPositionWithOffset(Const.Image_Vespene_Geyser_Smoke2, tower.unit, 0, -16);
+	});
+	EarthTower.onFire = EUDFuncPtr (1, 0) (function(tower : Towers.Tower) {
+		if(Sound.PlaySound()) { PlayWAV("sound\\bullet\\zgufir00.wav"); }
+	});
+	EarthTower.onHit = EUDFuncPtr (3, 0) (function(towerType, missileUnit, targetUnit) {
+		if(Sound.PlaySound()) { PlayWAV("sound\\zerg\\devourer\\goophit.wav"); }
 	});
 
 	const FireTower = Towers.CreateTowerType(3,
-		FireUpgradeSet1,
-		Towers.CreateTowerData(125, 80, 112),
+		Towers.CreateTowerData(125, 80, 112, FireUpgradeSet1),
 		Towers.CreateTowerDisplayData(Const.Icon_FlameThrower, Strings.FireTowerTitle), 
 		Towers.CreateTowerImageData(
 			Common.MakeImage(Const.Image_Maelstrom_Overlay_Small, 2, -18),
@@ -175,14 +200,28 @@ function loadData() {
 			Common.MakeImage(Const.Image_Yamato_Gun_Hit, 0, 0)
 		)
 	);
-	FireTower.hit = EUDFuncPtr (3, 0) (function(towerType, missileUnit, targetUnit) {
-		Utils.createOverlayForUnit(targetUnit, Const.Image_Flames2_Type3_Small, 64);
-		Unit.setPlagueTimer(targetUnit, 64);
+	FireTower.onPlace = EUDFuncPtr (1, 0) (function(tower : Towers.Tower) {
+		PlayWAV("sound\\misc\\tbldgplc.wav");
+		PlayWAV("sound\\misc\\onfirsml.wav");
+		Utils.createImageSpriteAtUnitPositionWithOffset(Const.Image_Nuclear_Missile_Death, tower.unit, 6, -12);
+	});
+	FireTower.onUpgrade = EUDFuncPtr (1, 0) (function(tower : Towers.Tower) {
+		PlayWAV("sound\\protoss\\darchon\\feedback.wav");
+		Utils.createImageSpriteAtUnitPositionWithOffset(Const.Image_Nuclear_Missile_Death, tower.unit, 6, -12);
+	});
+	FireTower.onFire = EUDFuncPtr (1, 0) (function(tower : Towers.Tower) {
+		if(Sound.PlaySound()) { PlayWAV("sound\\terran\\firebat\\tfbfir01.wav"); }
+	});
+	FireTower.onHit = EUDFuncPtr (3, 0) (function(towerType, missileUnit, targetUnit) {
+		if (Unit.getPlagueTimer(targetUnit) == 0) {
+			Utils.createOverlayForUnit(targetUnit, Const.Image_Flames2_Type3_Small, 64);
+			Unit.setPlagueTimer(targetUnit, 64);
+			PlayWAV("sound\\misc\\onfirsml.wav");
+		}
 	});
 
 	const WaterTower = Towers.CreateTowerType(4,
-		WaterUpgradeSet1,
-		Towers.CreateTowerData(100, 50, 64),
+		Towers.CreateTowerData(100, 50, 64, WaterUpgradeSet1),
 		Towers.CreateTowerDisplayData(Const.Icon_ArgusJewel, Strings.WaterTowerTitle), 
 		Towers.CreateTowerImageData(
 			Common.MakeImage(Const.Image_Scanner_Sweep_Hit, -16, -18),
@@ -191,19 +230,32 @@ function loadData() {
 			Common.MakeImage(Const.Image_None, 0, 0)
 		)
 	);
-	WaterTower.hit = EUDFuncPtr (3, 0) (function(towerType, missileUnit, targetUnit) {
-		const slowSpeed = 100;//Unit.getOriginalTopSpeed(targetUnit) / 10;
-		if (Unit.getTopSpeed(targetUnit) == slowSpeed) {
-			return;
-		}
-		const duration = 64;
-		Unit.setTopSpeed(targetUnit, slowSpeed);
-		Utils.createOverlayForUnit(targetUnit, Const.Image_Acid_Spores_6_9_Overlay_Small, duration);
-		Timer.add(duration, targetUnit, EUDFuncPtr (2, 0) (function(callbackUnit, intervalCount) {
-			Unit.restoreOriginalTopSpeed(callbackUnit);
-		}));
+	WaterTower.onPlace = EUDFuncPtr (1, 0) (function(tower : Towers.Tower) {
+		PlayWAV("sound\\misc\\tbldgplc.wav");
+		PlayWAV("sound\\protoss\\bldg\\ppywht00.wav");
+		Utils.createImageSpriteAtUnitPositionWithOffset(Const.Image_Grenade_Shot_Smoke, tower.unit, -2, -18);
 	});
-
-
-
+	WaterTower.onUpgrade = EUDFuncPtr (1, 0) (function(tower : Towers.Tower) {
+		PlayWAV("sound\\protoss\\bldg\\pciwht00.wav");
+		Utils.createImageSpriteAtUnitPositionWithOffset(Const.Image_Grenade_Shot_Smoke, tower.unit, -2, -18);
+	});
+	WaterTower.onFire = EUDFuncPtr (1, 0) (function(tower : Towers.Tower) {
+		if(Sound.PlaySound()) { PlayWAV("sound\\bullet\\zdeatt00.wav"); }
+	});
+	WaterTower.onHit = EUDFuncPtr (3, 0) (function(towerType, missileUnit, targetUnit) {
+		if(Sound.PlaySound()) { PlayWAV("sound\\bullet\\zbghit00.wav"); }
+		if (Unit.getEnsnareTimer(targetUnit) == 0) {
+			const duration = 64;
+			Unit.setEnsnareTimer(targetUnit, duration);
+			const slowSpeed = 100;//Unit.getOriginalTopSpeed(targetUnit) / 10;
+			if (Unit.getTopSpeed(targetUnit) == slowSpeed) {
+				return;
+			}
+			Unit.setTopSpeed(targetUnit, slowSpeed);
+			Utils.createOverlayForUnit(targetUnit, Const.Image_Acid_Spores_6_9_Overlay_Small, duration);
+			Timer.add(duration, targetUnit, EUDFuncPtr (2, 0) (function(callbackUnit, intervalCount) {
+				Unit.restoreOriginalTopSpeed(callbackUnit);
+			}));
+		}
+	});
 }

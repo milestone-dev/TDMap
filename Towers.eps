@@ -39,13 +39,15 @@ object TowerData {
 	var baseDamage;
 	var baseSpeed;
 	var baseRange;
+	var firstUpgradeOptionSet;
 };
 
-function CreateTowerData(baseDamage, baseSpeed, baseRange) : TowerData {
+function CreateTowerData(baseDamage, baseSpeed, baseRange, firstUpgradeOptionSet) : TowerData {
 	const data = TowerData.alloc();
 	data.baseDamage = baseDamage;
 	data.baseSpeed = baseSpeed;
 	data.baseRange = baseRange;
+	data.firstUpgradeOptionSet = firstUpgradeOptionSet;
 	return data;
 }
 
@@ -80,17 +82,17 @@ function CreateTowerDisplayData(icon, title) : TowerDisplayData {
 
 object TowerType {
 	var id;
-	var firstUpgradeOptionSet;
 	var data : TowerData;
 	var displayData : TowerDisplayData;
 	var imageData : TowerImageData;
-	var fire: EUDFuncPtr (1, 0);
-	var hit: EUDFuncPtr (3, 0);
+	var onFire: EUDFuncPtr (1, 0);
+	var onHit: EUDFuncPtr (3, 0);
+	var onPlace: EUDFuncPtr (1, 0);
+	var onUpgrade: EUDFuncPtr (1, 0);
 };
 
-function CreateTowerType(id, firstUpgradeOptionSet, data: TowerData, displayData: TowerDisplayData, imageData: TowerImageData) : TowerType {
+function CreateTowerType(id, data: TowerData, displayData: TowerDisplayData, imageData: TowerImageData) : TowerType {
 	const towerType = TowerType.alloc();
-	towerType.firstUpgradeOptionSet = firstUpgradeOptionSet;
 	towerType.data = data;
 	towerType.displayData = displayData;
 	towerType.imageData = imageData;
@@ -139,8 +141,11 @@ object Tower {
 		Utils.setUnitColor(cannonUnit, playerID);
 		Unit.setStatusFlags(cannonUnit, 0x04240201);
 		Unit.setConnectedUnit(this.unit, cannonUnit);
-		this.currentUpgradeOptionSet = this.type.firstUpgradeOptionSet;
+		this.currentUpgradeOptionSet = this.type.data.firstUpgradeOptionSet;
 		Utils.refreshInterface();
+		if (this.type.onPlace != 0) {
+			this.type.onPlace(this);
+		}
 	}
 
 	function applyUpgrade(upgrade) {
@@ -157,6 +162,9 @@ object Tower {
 			this.currentUpgradeOptionSet = upgradeObject.nextSet;
 			this.upgradeValue++;
 			SetResources(playerID, Subtract, cost, 0);
+			if (this.type.onUpgrade != 0) {
+				this.type.onUpgrade(this);
+			}
 			return true;
 		} else {
 			eprintln("Not enough minerals. Kill more mobs.");
@@ -234,8 +242,8 @@ object Tower {
 			Utils.setImageDrawIfCloaked(Const.Image_Observer, 0);
 		}
 
-		if (towerType.fire != 0) {
-			towerType.fire(this.unit);
+		if (towerType.onFire != 0) {
+			towerType.onFire(this);
 		}
 
 		const direction = Utils.getDirectionFromPosition32(this.unit, Unit.getPositionX(targetUnit), Unit.getPositionY(targetUnit));
@@ -396,8 +404,8 @@ function missileHit(missileUnit) {
 		if (tower.type.imageData.hitImage.id != Const.Image_None) {
 			Utils.createImageSpriteAtUnitPosition(tower.type.imageData.hitImage.id, targetUnit);
 		}
-		if (tower.type.hit != 0) {
-			tower.type.hit(tower.type, missileUnit, targetUnit);
+		if (tower.type.onHit != 0) {
+			tower.type.onHit(tower.type, missileUnit, targetUnit);
 		}
 		if (Unit.damage(targetUnit, tower.damage)) {
 			SetResources(tower.getPlayerID(), 8, Utils.getUnitDestroyValue(targetUnitType), 0);

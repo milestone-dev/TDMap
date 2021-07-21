@@ -31,7 +31,7 @@ function StartWave(waveID);
 // TODO Move to Levels.eps later
 const TrackLocationFrom = $L("TrackLocation1");
 const TrackLocationTo = $L("TrackLocation2");
-var LevelTrackCoordinates = EUDArray(1);
+var LevelTrackCoordinates = 0;
 const Level1TrackCoordinates = [
 	Common.CreatePoint(124, 29),
 	Common.CreatePoint(105, 29),
@@ -93,7 +93,7 @@ function SetLevel(levelID) {
 	} else {
 		LevelTrackCoordinates = 0;
 	}
-	StartWave(1);
+	StartWave(0);
 }
 
 function CalculateCurrentWaveRemainingMobs() {
