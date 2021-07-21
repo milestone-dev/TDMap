@@ -16,25 +16,17 @@ var TOWER_COUNT = 0;
 const Screen = StringBuffer(256);
 var fntil = 0;
 
-// UTILS; MOVE
+// TODO: Move utils
 
 function findNewTargetInLocation(location, playerID) {
-    // fntil++; setcurpl(P1); Screen.printfAt(4, "findNewTargetInLocation {}", fntil);
-
     var targetUnit = 0;
-    var lowestHP = 0;
-    var longestDistanceOnPath = 0;
+    var highestPriority = 0;
     foreach(ptr, unit : EUDLoopPlayerUnit(playerID)) {
-        if (Utils.CUnitInLocationPadded(unit, location, 128)) {
-            const distanceOnPath  = Unit.getRemoveTimer(unit);
-            if (targetUnit == 0 || distanceOnPath  > longestDistanceOnPath) {
-                longestDistanceOnPath = distanceOnPath ;
+        if (Utils.CUnitInLocation(unit, location)) {
+            const priority  = Unit.getRemoveTimer(unit);
+            if (targetUnit == 0 || priority  > highestPriority) {
+                highestPriority = priority ;
                 targetUnit = unit;
-                const hp = Unit.getHitpoints(unit);
-                if (targetUnit == 0 || hp < lowestHP) {
-                    lowestHP = hp;
-                    targetUnit = unit;
-                }
             }
         }
     }
@@ -172,6 +164,10 @@ object Tower {
         }
     }
 
+    function getPlayerID() {
+        return Unit.getPlayerID(this.unit);
+    }
+
     function setTarget(targetUnit) {
         Unit.setUnknown04(this.unit, targetUnit);
     }
@@ -252,9 +248,9 @@ object Tower {
         if (towerType.imageData.missileSpawnImage.id != Const.Image_None) {
             Utils.createImageSpriteAtUnitPosition(towerType.imageData.missileSpawnImage.id, cannonUnit);
         }
-        Unit.setConnectedUnit(missileUnit, this.unit);
         Unit.setOrder(missileUnit, Const.Order_Ignore_Normal);
-        Unit.setTargetUnit(missileUnit, targetUnit);
+        Unit.setConnectedUnit(missileUnit, this.unit);
+        Unit.setAutoTargetUnit(missileUnit, targetUnit);
     }
 
     function sell() {
@@ -393,28 +389,26 @@ function drawTowerRange(x, y, range) {
 }
 
 function missileHit(missileUnit) {
-    const targetUnit = Unit.getTargetUnit(missileUnit);
-    const towerUnit = Unit.getConnectedUnit(missileUnit);
-    const tower = getTowerForUnit(towerUnit);
-    if (tower == 0) {
-        return;
-    }
-    const targetUnitType = Unit.getUnitType(targetUnit);
-    if (tower.type.imageData.hitImage.id != Const.Image_None) {
-        Utils.createImageSpriteAtUnitPosition(tower.type.imageData.hitImage.id, targetUnit);
-    }
-    if (tower.type.hit != 0) {
-        tower.type.hit(tower.type, missileUnit, targetUnit);
-    }
-    if (Unit.damage(targetUnit, tower.damage)) {
-        SetResources(Unit.getPlayerID(towerUnit), 8, Utils.getUnitDestroyValue(targetUnitType), 0);
-        const unitType = Waves.GetNextUnitType(targetUnitType);
-        if (unitType != Const.Unit_None) {
-            const unit = Utils.createUnit(unitType, Utils.OFFSCREEN_LOCATION, $P7);
-            Unit.setStatusFlags(unit, 0x00230005); // 5xxxx does not move
-            Utils.moveUnit(unit, Utils.moveUtilLocationToUnit(targetUnit));
-            Unit.setRemoveTimer(unit, Unit.getRemoveTimer(targetUnit));
-            Unit.orderToPoint(unit, Unit.getOrderTargetX(targetUnit), Unit.getOrderTargetY(targetUnit));
+    const targetUnit = Unit.getAutoTargetUnit(missileUnit);
+    const tower = getTowerForUnit(Unit.getConnectedUnit(missileUnit));
+    if (tower != 0) {
+        const targetUnitType = Unit.getUnitType(targetUnit);
+        if (tower.type.imageData.hitImage.id != Const.Image_None) {
+            Utils.createImageSpriteAtUnitPosition(tower.type.imageData.hitImage.id, targetUnit);
+        }
+        if (tower.type.hit != 0) {
+            tower.type.hit(tower.type, missileUnit, targetUnit);
+        }
+        if (Unit.damage(targetUnit, tower.damage)) {
+            SetResources(tower.getPlayerID(), 8, Utils.getUnitDestroyValue(targetUnitType), 0);
+            const unitType = Waves.GetNextUnitType(targetUnitType);
+            if (unitType != Const.Unit_None) {
+                const unit = Utils.createUnit(unitType, Utils.OFFSCREEN_LOCATION, $P7);
+                Unit.setStatusFlags(unit, 0x00230005); // 5xxxx does not move
+                Utils.moveUnit(unit, Utils.moveUtilLocationToUnit(targetUnit));
+                Unit.setRemoveTimer(unit, Unit.getRemoveTimer(targetUnit));
+                Unit.orderToPoint(unit, Unit.getOrderTargetX(targetUnit), Unit.getOrderTargetY(targetUnit));
+            }
         }
     }
     Utils.removeUnit(missileUnit);

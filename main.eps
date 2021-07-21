@@ -210,8 +210,9 @@ function beforeTriggerExec() {
 		// MOB DISPLAY
 		if (Unit.getPlayerID(selectedUnit) == $P7) {
 			Screen.printfAt(0,
-				"Unit: {}, Speed {}, Priority {}",
+				"Unit: {} ({}), Speed {}, Priority {}",
 				Unit.getUnitType(selectedUnit),
+				selectedUnit,
 				Unit.getFlingyTopSpeed(selectedUnit),
 				Unit.getRemoveTimer(selectedUnit)
 			);
@@ -252,19 +253,19 @@ function beforeTriggerExec() {
 	// Missiles
 	foreach(ptr, unit : EUDLoopPlayerUnit(P8)) {
 		if (Unit.getUnitType(unit) == Const.Unit_ProtossObserver) {
-
-			const targetUnit = Unit.getTargetUnit(unit);
-			if (Unit.isOrderTargetUnitValid(unit)) {
+			const targetUnit = Unit.getAutoTargetUnit(unit);
+			if (targetUnit != 0) {
 				const uX, uY = Unit.getPosition(unit);
 				const tX, tY = Unit.getPosition(targetUnit);
 				Unit.setOrder(unit, Const.Order_Ignore_Normal);
 				Unit.setOrderTargetX(unit, tX);
 				Unit.setOrderTargetY(unit, tY);
-				// Unit.setTargetUnit(unit, targetUnit);
-				if (Utils.abs(uX-tX) < 32 && Utils.abs(uY-tY) < 32) {
+				if (Utils.abs(uX-tX) < 48 && Utils.abs(uY-tY) < 48) {
 					Towers.missileHit(unit);
+					Screen.printfAt(2, "Hit: {},{}, O: {} TU: {}", Unit.getOrderTargetX(unit), Unit.getOrderTargetY(unit), Unit.getOrder(unit), Unit.getAutoTargetUnit(unit));
 				}
 			} else {
+				Screen.printfAt(2, "Miss: {},{}, O: {} TU: {}", Unit.getOrderTargetX(unit), Unit.getOrderTargetY(unit), Unit.getOrder(unit), Unit.getAutoTargetUnit(unit));
    				Debug_MissileMisses++; setcurpl(P1); Screen.printfAt(3, "Missile misses {}", Debug_MissileMisses);
 				Utils.removeUnit(unit);
 			}
