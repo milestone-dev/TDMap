@@ -35,9 +35,9 @@ function findNewTargetInLocationMethod1(location, playerID) {
 
 function findNewTargetInLocationMethod2(location, playerID) {
 	const tempPlayerID = $P6;
-	GiveUnits(0, Const.Unit_AnyUnit, playerID, location, tempPlayerID);
 	var targetUnit = 0;
 	var highestPriority = 0;
+	GiveUnits(0, Const.Unit_AnyUnit, playerID, location, tempPlayerID);
 	foreach(ptr, unit : EUDLoopPlayerUnit(tempPlayerID)) {
 		const priority  = Unit.getRemoveTimer(unit);
 		if (targetUnit == 0 || priority  > highestPriority) {
