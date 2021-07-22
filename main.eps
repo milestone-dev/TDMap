@@ -259,6 +259,10 @@ function beforeTriggerExec() {
 	// Missiles
 	foreach(ptr, unit : EUDLoopPlayerUnit(P8)) {
 		if (Unit.getUnitType(unit) == Const.Unit_ProtossObserver) {
+			if (Unit.getRemoveTimer(unit) < 10) {
+				Utils.removeUnit(unit);
+			}
+
 			const targetUnit = Unit.getAutoTargetUnit(unit);
 			if (targetUnit != 0 && Unit.getHitpoints(targetUnit) > 0) {
 				const uX, uY = Unit.getPosition(unit);
@@ -266,13 +270,13 @@ function beforeTriggerExec() {
 				Unit.setOrder(unit, Const.Order_Ignore_Normal);
 				Unit.setOrderTargetX(unit, tX);
 				Unit.setOrderTargetY(unit, tY);
-				if (Utils.abs(uX-tX) < 48 && Utils.abs(uY-tY) < 48) {
+				if (Utils.abs(uX-tX) < 32 && Utils.abs(uY-tY) < 32) {
 					Towers.missileHit(unit);
 					// Screen.printfAt(2, "Hit: {},{}, O: {} TU: {}", Unit.getOrderTargetX(unit), Unit.getOrderTargetY(unit), Unit.getOrder(unit), Unit.getAutoTargetUnit(unit));
 				}
 			} else {
 				// Screen.printfAt(2, "Miss: {},{}, O: {} TU: {}", Unit.getOrderTargetX(unit), Unit.getOrderTargetY(unit), Unit.getOrder(unit), Unit.getAutoTargetUnit(unit));
-				Debug_MissileMisses++; setcurpl(P1); Screen.printfAt(3, "Missile misses {}", Debug_MissileMisses);
+				// Debug_MissileMisses++; setcurpl(P1); Screen.printfAt(3, "Missile misses {}", Debug_MissileMisses);
 				Utils.removeUnit(unit);
 			}
 		}
@@ -286,7 +290,9 @@ function beforeTriggerExec() {
 			// TODO: Move into UpdateMob function later.
 			Unit.setRemoveTimer(unit, Unit.getRemoveTimer(unit) + Unit.getFlingyTopSpeed(unit)/100);
 
-			if (Unit.getOrder(unit) == Const.Order_ReturnToBase_Computer) {
+			if (Unit.getOrder(unit) == Const.Order_ReturnToBase_Computer
+				|| Unit.getOrderTargetX(unit) == 0
+				|| Unit.getOrderTargetY(unit) == 0) {
 				Waves.MoveUnitToStart(unit);
 			}
 
