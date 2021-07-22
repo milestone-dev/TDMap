@@ -180,12 +180,18 @@ function ExtractNextMobFromCurrentWave() {
 	return Const.Unit_None;
 }
 
-function Update() {
-	if (CurrentWaveID == 0) {
+function MoveUnitToStart(unit) {
+	if (CurrentWaveID == 0 || LevelTrackCoordinates == 0) {
 		return;
 	}
+	const LevelTrackCoordinatesArray = EUDArray.cast(LevelTrackCoordinates);
+	const startPoint = Common.Point.cast(LevelTrackCoordinatesArray[0]);
+	Utils.setLocationToRect(TrackLocationFrom, startPoint.x * TileSize + LocationInset, startPoint.y * TileSize + LocationInset, LocationSize, LocationSize);
+	Utils.moveUnit(unit, TrackLocationFrom);
+}
 
-	if (LevelTrackCoordinates == 0) {
+function Update() {
+	if (CurrentWaveID == 0 || LevelTrackCoordinates == 0) {
 		return;
 	}
 
@@ -215,7 +221,6 @@ function Update() {
 		const nextUnitType = ExtractNextMobFromCurrentWave();
 		if (nextUnitType != Const.Unit_None) {
 			const unit = Utils.createUnit(nextUnitType, TrackLocationFrom, MobPlayer);
-			Utils.setUnitColor(unit, 8);
 			Unit.setStatusFlags(unit, 0x00230005); // 5xxxx does not move, 3xxxx crashes	
 		} else {
 			if (Command(MobPlayer, Exactly, 0, Const.Unit_AnyUnit)) {

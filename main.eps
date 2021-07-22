@@ -286,6 +286,10 @@ function beforeTriggerExec() {
 			// TODO: Move into UpdateMob function later.
 			Unit.setRemoveTimer(unit, Unit.getRemoveTimer(unit) + Unit.getFlingyTopSpeed(unit)/100);
 
+			if (Unit.getOrder(unit) == Const.Order_ReturnToBase_Computer) {
+				Waves.MoveUnitToStart(unit);
+			}
+
 			if (false) {
 				// Note, only keep if using findNewTargetInLocationMethod2
 				if (Unit.getOrderTargetX(unit) != 0 && Unit.getOrderTargetY(unit) != 0) {
@@ -310,7 +314,7 @@ function beforeTriggerExec() {
 				} else if (hp <= fraction*3) {
 					Utils.setUnitColor(unit, $P8);
 				} else {
-					Utils.setUnitColor(unit, 8);
+					Utils.setUnitColor(unit, $P7);
 				}
 			}
 		}
