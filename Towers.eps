@@ -115,11 +115,8 @@ function findNewTargetInLocationMethod2(location, playerID) {
 
 function findNewTargetInLocationMethod3(location, playerID) {
 	for (var i = 0; i < MOB_ARRAY_LENGTH; i++) {
-		// TODO Deal with dead unis
-		if (MobsSorted[i] == 0) {
-			return 0;
-		}
-		if (Utils.CUnitInLocation(MobsSorted[i], location)) {
+		const unit = MobsSorted[i];
+		if (unit != 0 && Utils.CUnitInLocation(unit, location) && Unit.getHitpoints(unit) > 0) {
 			return MobsSorted[i];
 		}
 	}
