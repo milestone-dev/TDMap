@@ -34,6 +34,11 @@ const PlayerSelectedUnit = EUDArray(6);
 const SelectedUnitID = EUDArray(6);
 var Debug_MissileMisses = 0;
 
+
+// Mob stuff, move out
+var MobUpdateTimer = 0;
+const MobUpdateCooldown = 12;
+
 const MouseLoc = [
 	$L("MouseLoc1"),
 	$L("MouseLoc2"),
@@ -281,29 +286,39 @@ function beforeTriggerExec() {
 			// TODO: Move into UpdateMob function later.
 			Unit.setRemoveTimer(unit, Unit.getRemoveTimer(unit) + Unit.getFlingyTopSpeed(unit)/100);
 
-			// Note, only keep if using findNewTargetInLocationMethod2
-			if (Unit.getOrderTargetX(unit) != 0 && Unit.getOrderTargetY(unit) != 0) {
-				Unit.setNextMovementWaypointX(unit, Unit.getOrderTargetX(unit));
-				Unit.setNextMovementWaypointY(unit, Unit.getOrderTargetY(unit));
-			} else {
-				Unit.setOrderTargetX(unit, Unit.getNextMovementWaypointX(unit));
-				Unit.setOrderTargetY(unit, Unit.getNextMovementWaypointY(unit));
-				Unit.setOrder(unit, Const.Order_Ignore_Normal);
+			if (false) {
+				// Note, only keep if using findNewTargetInLocationMethod2
+				if (Unit.getOrderTargetX(unit) != 0 && Unit.getOrderTargetY(unit) != 0) {
+					Unit.setNextMovementWaypointX(unit, Unit.getOrderTargetX(unit));
+					Unit.setNextMovementWaypointY(unit, Unit.getOrderTargetY(unit));
+				} else {
+					Unit.setOrderTargetX(unit, Unit.getNextMovementWaypointX(unit));
+					Unit.setOrderTargetY(unit, Unit.getNextMovementWaypointY(unit));
+					Unit.setOrder(unit, Const.Order_Ignore_Normal);
+				}
 			}
 			
-			// TODO Throttle
-			const maxHP = Unit.getMaxHitpoints(unit);
-			const hp = Unit.getHitpoints(unit);
-			const fraction = maxHP / 4;
-			if (hp <= fraction) {
-				Utils.setUnitColor(unit, $P1);
-			} else if (hp <= fraction*2) {
-				Utils.setUnitColor(unit, $P5);
-			} else if (hp <= fraction*3) {
-				Utils.setUnitColor(unit, $P8);
-			} else {
-				Utils.setUnitColor(unit, 8);
+			if (MobUpdateTimer >= MobUpdateCooldown) {
+				// TODO Throttle
+				const maxHP = Unit.getMaxHitpoints(unit);
+				const hp = Unit.getHitpoints(unit);
+				const fraction = maxHP / 4;
+				if (hp <= fraction) {
+					Utils.setUnitColor(unit, $P1);
+				} else if (hp <= fraction*2) {
+					Utils.setUnitColor(unit, $P5);
+				} else if (hp <= fraction*3) {
+					Utils.setUnitColor(unit, $P8);
+				} else {
+					Utils.setUnitColor(unit, 8);
+				}
 			}
 		}
+	}
+
+	if (MobUpdateTimer >= MobUpdateCooldown) {
+		MobUpdateTimer = 0;
+	} else {
+		MobUpdateTimer++;
 	}
 }
