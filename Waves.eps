@@ -213,6 +213,7 @@ function Update() {
 		const nextUnitType = ExtractNextMobFromCurrentWave();
 		if (nextUnitType != Const.Unit_None) {
 			const unit = Utils.createUnit(nextUnitType, TrackLocationFrom, MobPlayer);
+			Utils.setUnitColor(unit, 8);
 			Unit.setStatusFlags(unit, 0x00230005); // 5xxxx does not move, 3xxxx crashes	
 		} else {
 			if (Command(MobPlayer, Exactly, 0, Const.Unit_AnyUnit)) {
