@@ -16,6 +16,56 @@ var TOWER_COUNT = 0;
 const Screen = StringBuffer(256);
 var fntil = 0;
 
+var MobPriorityRebuildTimer = 0;
+const MobPriorityRebuildCooldown = 12;
+const MOB_ARRAY_LENGTH = 512;
+const Mobs = EUDArray(512);
+const MobsSorted = EUDArray(512);
+const MOB_PLAYER_ID = $P7;
+
+function UpdateMobPriority() {
+	for (var i = 0; i < MOB_ARRAY_LENGTH; i++) {
+		MobsSorted[i] = 0;
+	}
+
+	var i = 0;
+	foreach(ptr, unit : EUDLoopPlayerUnit(MOB_PLAYER_ID)) {
+		MobsSorted[i] = unit;
+		i++;
+	}
+
+	var a, n;
+
+	for (var i = 0; i < n; ++i) {
+        for (var j = i + 1; j < n; ++j) {
+            if (Unit.getRemoveTimer(Mobs[i]) < Unit.getRemoveTimer(Mobs[j])) {
+                a = MobsSorted[i];
+                MobsSorted[i] = MobsSorted[j];
+                MobsSorted[j] = a;
+            }
+        }
+    }
+
+	setcurpl(P1); Screen.printfAt(4, "{} {} {} {}",
+		MobsSorted[0],
+		MobsSorted[1],
+		MobsSorted[2],
+		MobsSorted[3]
+	);
+
+}
+
+function Update() {
+	setcurpl(P1); Screen.printfAt(5, "Update {}", MobPriorityRebuildTimer);
+
+	if (MobPriorityRebuildTimer >= MobPriorityRebuildCooldown) {
+		MobPriorityRebuildTimer = 0;
+		UpdateMobPriority();
+	} else {
+		MobPriorityRebuildTimer++;
+	}
+}
+
 // TODO: Move utils
 
 function findNewTargetInLocationMethod1(location, playerID) {
@@ -47,6 +97,19 @@ function findNewTargetInLocationMethod2(location, playerID) {
 	}
 	GiveUnits(0, Const.Unit_AnyUnit, tempPlayerID, $L("Anywhere"), playerID);
 	return targetUnit;
+}
+
+function findNewTargetInLocationMethod3(location, playerID) {
+	for (var i = 0; i < MOB_ARRAY_LENGTH; i++) {
+		// TODO Deal with dead unis
+		if (MobsSorted[i] == 0) {
+			return 0;
+		}
+		if (Utils.CUnitInLocation(MobsSorted[i], location)) {
+			return MobsSorted[i];
+		}
+	}
+	return 0;
 }
 
 const TOWER_TYPES = EUDArray(64);
@@ -216,7 +279,7 @@ object Tower {
 			Utils.centerLocationOnUnit(Utils.LOCATION_ANYSIZE, this.unit, this.range * 2, this.range * 2);
 			Utils.refreshLocations();
 			if (Bring(enemyPlayerID, AtLeast, 1, Const.Unit_AnyUnit, Utils.LOCATION_ANYSIZE)) {
-				const enemyUnit = findNewTargetInLocationMethod2(Utils.LOCATION_ANYSIZE, enemyPlayerID);
+				const enemyUnit = findNewTargetInLocationMethod3(Utils.LOCATION_ANYSIZE, enemyPlayerID);
 				if (enemyUnit != 0) {
 					this.setTarget(enemyUnit);
 				}
