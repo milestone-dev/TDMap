@@ -4,6 +4,7 @@ import ETK.ETKTimer as Timer;
 import ETK.ETKConstants as Const;
 import ETK.ETKCommon as Common;
 import Balance;
+import Towers;
 const Screen = StringBuffer(64);
 
 const MobCountMultiplierConstant = 1000;
@@ -115,6 +116,7 @@ function KillAllMobs() {
 function StartWave(waveID) {
 	CurrentWaveID = waveID;
 	KillAllMobs();
+	Towers.ResetMobPriorty();
 	if (waveID > 0) {
 		// TODO Make sure array is copied, otherwise you can't replay the same wave twice
 		CurrentWave = Balance.CalculateMobsForWave(CurrentWaveID); 

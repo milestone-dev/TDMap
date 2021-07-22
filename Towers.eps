@@ -19,44 +19,58 @@ var fntil = 0;
 var MobPriorityRebuildTimer = 0;
 const MobPriorityRebuildCooldown = 12;
 const MOB_ARRAY_LENGTH = 512;
-const Mobs = EUDArray(512);
 const MobsSorted = EUDArray(512);
 const MOB_PLAYER_ID = $P7;
 
-function UpdateMobPriority() {
+
+const TowerFireThreshold = 2380;
+
+function ResetMobPriorty() {
 	for (var i = 0; i < MOB_ARRAY_LENGTH; i++) {
+		if (MobsSorted[i] == 0) {
+			return;
+		}
 		MobsSorted[i] = 0;
 	}
+}
 
-	var i = 0;
+function UpdateMobPriority() {
+	ResetMobPriorty();
+
+	var mobIndex = 0;
 	foreach(ptr, unit : EUDLoopPlayerUnit(MOB_PLAYER_ID)) {
-		MobsSorted[i] = unit;
-		i++;
+		MobsSorted[mobIndex] = unit;
+		mobIndex++;
 	}
 
-	var a, n;
+	var temp, j, i;
+	const mobCount = mobIndex + 1;
 
-	for (var i = 0; i < n; ++i) {
-        for (var j = i + 1; j < n; ++j) {
-            if (Unit.getRemoveTimer(Mobs[i]) < Unit.getRemoveTimer(Mobs[j])) {
-                a = MobsSorted[i];
-                MobsSorted[i] = MobsSorted[j];
-                MobsSorted[j] = a;
-            }
-        }
-    }
+	for (i = 0; i < mobIndex; ++i) {
+		for (j = i + 1; j < mobIndex; ++j) {
+			if (Unit.getRemoveTimer(MobsSorted[i]) < Unit.getRemoveTimer(MobsSorted[j])) {
+				temp = MobsSorted[i];
+				MobsSorted[i] = MobsSorted[j];
+				MobsSorted[j] = temp;
+			}
+		}
+	}
 
-	setcurpl(P1); Screen.printfAt(4, "{} {} {} {}",
-		MobsSorted[0],
-		MobsSorted[1],
-		MobsSorted[2],
-		MobsSorted[3]
-	);
-
+	/*
+	setcurpl(P1); Screen.printfAt(4, "{} ({}) - {} ({}) - {} ({}) - {} ({}) - {} ({}) - {} ({}) - {} ({})",
+		MobsSorted[0], Unit.getRemoveTimer(MobsSorted[0]),
+		MobsSorted[1], Unit.getRemoveTimer(MobsSorted[1]),
+		MobsSorted[2], Unit.getRemoveTimer(MobsSorted[2]),
+		MobsSorted[3], Unit.getRemoveTimer(MobsSorted[3]),
+		MobsSorted[3], Unit.getRemoveTimer(MobsSorted[4]),
+		MobsSorted[3], Unit.getRemoveTimer(MobsSorted[5]),
+		MobsSorted[3], Unit.getRemoveTimer(MobsSorted[6])
+		);
+	*/
 }
 
 function Update() {
-	setcurpl(P1); Screen.printfAt(5, "Update {}", MobPriorityRebuildTimer);
+	// setcurpl(P1); Screen.printfAt(5, "Update {}", MobPriorityRebuildTimer);
 
 	if (MobPriorityRebuildTimer >= MobPriorityRebuildCooldown) {
 		MobPriorityRebuildTimer = 0;
@@ -269,12 +283,11 @@ object Tower {
 		}
 		const enemyPlayerID = $P7;
 
-		const threshold = 2380;
-		if (this.fireTimer < threshold) {
+		if (this.fireTimer < TowerFireThreshold) {
 			this.fireTimer += this.speed;
 		}
 
-		if (this.getTarget() == 0 && this.fireTimer >= threshold) {
+		if (this.getTarget() == 0 && this.fireTimer >= TowerFireThreshold) {
 			// Check if there are enemy units nearby and target a new unit
 			Utils.centerLocationOnUnit(Utils.LOCATION_ANYSIZE, this.unit, this.range * 2, this.range * 2);
 			Utils.refreshLocations();
@@ -295,9 +308,9 @@ object Tower {
 			}
 		}
 
-		if (this.fireTimer >= threshold && this.getTarget() != 0) {
-			while(this.fireTimer >= threshold) {
-				this.fireTimer -= threshold;
+		if (this.fireTimer >= TowerFireThreshold && this.getTarget() != 0) {
+			while(this.fireTimer >= TowerFireThreshold) {
+				this.fireTimer -= TowerFireThreshold;
 				this.fire();
 			}
 		}
