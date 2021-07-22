@@ -505,7 +505,7 @@ function missileHit(missileUnit) {
 				Unit.setStatusFlags(unit, 0x00230005); // 5xxxx does not move
 				Utils.moveUnit(unit, Utils.moveUtilLocationToUnit(targetUnit));
 				Unit.setRemoveTimer(unit, Unit.getRemoveTimer(targetUnit));
-				Unit.orderToPoint(unit, Unit.getNextMovementWaypointX(targetUnit), Unit.getNextMovementWaypointY(targetUnit));
+				Unit.orderToPoint(unit, Unit.getOrderTargetX(targetUnit), Unit.getOrderTargetY(targetUnit));
 			}
 		}
 	}
