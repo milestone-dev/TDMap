@@ -260,7 +260,7 @@ function beforeTriggerExec() {
 	foreach(ptr, unit : EUDLoopPlayerUnit(P8)) {
 		if (Unit.getUnitType(unit) == Const.Unit_ProtossObserver) {
 			const targetUnit = Unit.getAutoTargetUnit(unit);
-			if (targetUnit != 0) {
+			if (targetUnit != 0 && Unit.getHitpoints(targetUnit) > 0) {
 				const uX, uY = Unit.getPosition(unit);
 				const tX, tY = Unit.getPosition(targetUnit);
 				Unit.setOrder(unit, Const.Order_Ignore_Normal);
