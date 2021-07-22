@@ -97,7 +97,9 @@ function SetLevel(levelID) {
 	} else {
 		LevelTrackCoordinates = 0;
 	}
-	StartWave(1);
+	if (!UseTestWave) {
+		StartWave(1);
+	}
 }
 
 function CalculateCurrentWaveRemainingMobs() {
