@@ -149,7 +149,6 @@ function loadData() {
 		)
 	);
 	AirTower.onPlace = EUDFuncPtr (1, 0) (function(tower : Towers.Tower) {
-		PlayWAV("sound\\misc\\tbldgplc.wav");
 		PlayWAV("sound\\misc\\ptesum00.wav");
 		Utils.createImageSpriteAtUnitPositionWithOffset(Const.Image_Particle_Beam_Hit, tower.unit, 0, -16);
 	});
@@ -175,7 +174,6 @@ function loadData() {
 		)
 	);
 	EarthTower.onPlace = EUDFuncPtr (1, 0) (function(tower : Towers.Tower) {
-		PlayWAV("sound\\misc\\tbldgplc.wav");
 		PlayWAV("sound\\zerg\\bldg\\zfcwht00.wav");
 		Utils.createImageSpriteAtUnitPositionWithOffset(Const.Image_Vespene_Geyser_Smoke2, tower.unit, 0, -16);
 	});
@@ -201,7 +199,6 @@ function loadData() {
 		)
 	);
 	FireTower.onPlace = EUDFuncPtr (1, 0) (function(tower : Towers.Tower) {
-		PlayWAV("sound\\misc\\tbldgplc.wav");
 		PlayWAV("sound\\misc\\onfirsml.wav");
 		Utils.createImageSpriteAtUnitPositionWithOffset(Const.Image_Nuclear_Missile_Death, tower.unit, 6, -12);
 	});
@@ -232,7 +229,6 @@ function loadData() {
 		)
 	);
 	WaterTower.onPlace = EUDFuncPtr (1, 0) (function(tower : Towers.Tower) {
-		PlayWAV("sound\\misc\\tbldgplc.wav");
 		PlayWAV("sound\\protoss\\bldg\\ppywht00.wav");
 		Utils.createImageSpriteAtUnitPositionWithOffset(Const.Image_Grenade_Shot_Smoke, tower.unit, -2, -18);
 	});
