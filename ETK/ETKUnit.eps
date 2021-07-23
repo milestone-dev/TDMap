@@ -4931,6 +4931,7 @@ function damage(unitPointer, damagePoints) {
 	}
 	const hp = getHitpoints(unitPointer);
 	if (damagePoints >= hp) {
+        setHitpoints(unitPointer, 0);
 		setOrder(unitPointer, Const.Order_Die);
 		return true;
 	} else {

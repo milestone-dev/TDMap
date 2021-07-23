@@ -231,6 +231,7 @@ function centerLocationOnPoint(location, x, y, w, h) {
 function centerLocationOnUnit(location, unit, w, h) {
 	const x, y = ETKUnit.getPosition(unit);
 	centerLocationOnPoint(location, x, y, w, h);
+	return location;
 }
 
 function moveUtilLocationToPoint(x, y) {
@@ -330,21 +331,17 @@ function createImageSpriteAtUnitPositionWithOffset(image, unit, xOffset, yOffset
 	createImageSpriteAtLocation(image, UTILITY_LOCATION);
 }
 
-function dealDamageToPlayerUnitsAtLocation(damage, location, playerIndexStart, playerIndexEnd) {
-	foreach(player : EUDLoopRange(playerIndexStart, playerIndexEnd)) {
-		foreach(ptr, enemyUnit : EUDLoopPlayerUnit(player)) {
-			if (CUnitInLocation(enemyUnit, location)) {
-				ETKUnit.damage(enemyUnit, damage);
-			}
+function dealDamageToUnitsAtLocation(damage, location, playerID) {
+	foreach(ptr, enemyUnit : EUDLoopPlayerUnit(playerID)) {
+		if (CUnitInLocation(enemyUnit, location)) {
+			ETKUnit.damage(enemyUnit, damage);
 		}
 	}
 }
 
-function dealDamageToUnitsAtLocation(damage, location, player) {
-	foreach(ptr, enemyUnit : EUDLoopPlayerUnit(player)) {
-		if (CUnitInLocation(enemyUnit, location)) {
-			ETKUnit.damage(enemyUnit, damage);
-		}
+function dealDamageToPlayerUnitsAtLocation(damage, location, playerIndexStart, playerIndexEnd) {
+	foreach(playerID : EUDLoopRange(playerIndexStart, playerIndexEnd)) {
+		dealDamageToUnitsAtLocation(damage, location, playerID);
 	}
 }
 
@@ -730,11 +727,11 @@ function knockbackUnit(unit, direction, distance) {
 }
 
 function refreshInterface() {
-	ETKUnit.destroy(createUnit(ETKConstants.Unit_ZergZergling, OFFSCREEN_LOCATION, ETKUtilsEffectsPlayerID));	
+	removeUnit(createUnit(ETKConstants.Unit_ZergZergling, OFFSCREEN_LOCATION, ETKUtilsEffectsPlayerID));	
 }
 
 function refreshLocations() {
-	createImageSpriteAtLocation(ETKConstants.Image_Vespene_Geyser_Smoke1, OFFSCREEN_LOCATION);
+	refreshInterface();
 }
 
 function setLight(val) {

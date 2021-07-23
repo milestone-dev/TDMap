@@ -186,7 +186,7 @@ function loadData() {
 	EarthTower.onFire = EUDFuncPtr (1, 0) (function(tower : Towers.Tower) {
 		if(Sound.PlaySound()) { PlayWAV("sound\\bullet\\zgufir00.wav"); }
 	});
-	EarthTower.onHit = EUDFuncPtr (3, 0) (function(towerType, missileUnit, targetUnit) {
+	EarthTower.onHit = EUDFuncPtr (3, 0) (function(tower : Towers.Tower, missileUnit, targetUnit) {
 		if(Sound.PlaySound()) { PlayWAV("sound\\zerg\\devourer\\goophit.wav"); }
 	});
 
@@ -212,12 +212,13 @@ function loadData() {
 	FireTower.onFire = EUDFuncPtr (1, 0) (function(tower : Towers.Tower) {
 		if(Sound.PlaySound()) { PlayWAV("sound\\terran\\firebat\\tfbfir01.wav"); }
 	});
-	FireTower.onHit = EUDFuncPtr (3, 0) (function(towerType, missileUnit, targetUnit) {
-		if (Unit.getPlagueTimer(targetUnit) == 0) {
-			Utils.createOverlayForUnit(targetUnit, Const.Image_Flames2_Type3_Small, 64);
-			Unit.setPlagueTimer(targetUnit, 64);
-			PlayWAV("sound\\misc\\onfirsml.wav");
-		}
+	FireTower.onHit = EUDFuncPtr (3, 0) (function(tower : Towers.Tower, missileUnit, targetUnit) {
+		Utils.dealDamageToUnitsAtLocation(tower.damage/4, Utils.centerLocationOnUnit(Utils.LOCATION_ANYSIZE, targetUnit, 64, 64), $P7);
+		// if (Unit.getPlagueTimer(targetUnit) == 0) {
+		// 	Utils.createOverlayForUnit(targetUnit, Const.Image_Flames2_Type3_Small, 64);
+		// 	Unit.setPlagueTimer(targetUnit, 64);
+		// 	PlayWAV("sound\\misc\\onfirsml.wav");
+		// }
 	});
 
 	const WaterTower = Towers.CreateTowerType(4,
@@ -242,15 +243,12 @@ function loadData() {
 	WaterTower.onFire = EUDFuncPtr (1, 0) (function(tower : Towers.Tower) {
 		if(Sound.PlaySound()) { PlayWAV("sound\\bullet\\zdeatt00.wav"); }
 	});
-	WaterTower.onHit = EUDFuncPtr (3, 0) (function(towerType, missileUnit, targetUnit) {
+	WaterTower.onHit = EUDFuncPtr (3, 0) (function(tower : Towers.Tower, missileUnit, targetUnit) {
 		if(Sound.PlaySound()) { PlayWAV("sound\\bullet\\zbghit00.wav"); }
 		if (Unit.getEnsnareTimer(targetUnit) == 0) {
 			const duration = 64;
 			Unit.setEnsnareTimer(targetUnit, duration);
 			const slowSpeed = 100;//Unit.getOriginalTopSpeed(targetUnit) / 10;
-			if (Unit.getTopSpeed(targetUnit) == slowSpeed) {
-				return;
-			}
 			Unit.setTopSpeed(targetUnit, slowSpeed);
 			Utils.createOverlayForUnit(targetUnit, Const.Image_Acid_Spores_6_9_Overlay_Small, duration);
 			Timer.add(duration, targetUnit, EUDFuncPtr (2, 0) (function(callbackUnit, intervalCount) {
