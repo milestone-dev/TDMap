@@ -21,6 +21,21 @@ var CurrentWaveSpawnTimerIncrement = 0;
 var CurrentWave = EUDArray(7);
 var CurrentWaveReward = 0;
 
+const Tier1UnitType = Const.Unit_ZergZergling;
+const Tier2UnitType = Const.Unit_ZergMutalisk;
+const Tier3UnitType = Const.Unit_ZergMutalisk;
+const Tier4UnitType = Const.Unit_ZergDefiler;
+const Tier5UnitType = Const.Unit_ZergGuardian;
+const Tier6UnitType = Const.Unit_ZergUltralisk;
+
+// TODO update later
+const Tier1Penalty = 1;
+const Tier2Penalty = 2;
+const Tier3Penalty = 5;
+const Tier4Penalty = 15;
+const Tier5Penalty = 25;
+const Tier6Penalty = 60;
+
 const UseTestWave = false;
 const TestWave = [0,0,0,0,0,0,28];
 
@@ -146,23 +161,23 @@ function GoToNextWave() {
 
 function GetUnitTypeForTier(tier) {
 	switch(tier) {
-		case 1: return Const.Unit_ZergZergling; break;
-		case 2: return Const.Unit_ZergMutalisk; break; // Broodling
-		case 3: return Const.Unit_ZergDrone; break;
-		case 4: return Const.Unit_ZergDefiler; break;
-		case 5: return Const.Unit_ZergGuardian; break; // Lurker
-		case 6: return Const.Unit_ZergUltralisk; break;
+		case 1: return Tier1UnitType; break;
+		case 2: return Tier2UnitType; break; // Broodling
+		case 3: return Tier3UnitType; break;
+		case 4: return Tier4UnitType; break;
+		case 5: return Tier5UnitType; break; // Lurker
+		case 6: return Tier6UnitType; break;
 	}
 	return Const.Unit_None;
 }
 
 function GetNextUnitType(unitType) {
 	switch(unitType) {
-		case Const.Unit_ZergUltralisk: return Const.Unit_ZergGuardian; break;
-		case Const.Unit_ZergGuardian: return Const.Unit_ZergDefiler; break;
-		case Const.Unit_ZergDefiler: return Const.Unit_ZergDrone; break;
-		case Const.Unit_ZergDrone: return Const.Unit_ZergMutalisk; break;
-		case Const.Unit_ZergMutalisk: return Const.Unit_ZergZergling; break;
+		case Const.Unit_ZergUltralisk: return Tier5UnitType; break;
+		case Const.Unit_ZergGuardian: return Tier4UnitType; break;
+		case Const.Unit_ZergDefiler: return Tier3UnitType; break;
+		case Const.Unit_ZergDrone: return Tier2UnitType; break;
+		case Const.Unit_ZergMutalisk: return Tier1UnitType; break;
 	}
 	return Const.Unit_None;
 }
@@ -230,8 +245,29 @@ function Update() {
 	}
 
 	// Removing units
-	if (Bring(MobPlayer, AtLeast, 1, Const.Unit_AnyUnit, endPoint)) {
-		RemoveUnitAt(1, Const.Unit_AnyUnit, endPoint, MobPlayer);
-		SetResources(AllPlayers, Subtract, 1, 1);
+	// TODO Make into a loop later
+	if (Bring(MobPlayer, AtLeast, 1, Tier1UnitType, endPoint)) {
+		RemoveUnitAt(1, Tier1UnitType, endPoint, MobPlayer);
+		SetResources(AllPlayers, Subtract, Tier1Penalty, 1);
+	}
+	if (Bring(MobPlayer, AtLeast, 1, Tier2UnitType, endPoint)) {
+		RemoveUnitAt(1, Tier2UnitType, endPoint, MobPlayer);
+		SetResources(AllPlayers, Subtract, Tier2Penalty, 1);
+	}
+	if (Bring(MobPlayer, AtLeast, 1, Tier3UnitType, endPoint)) {
+		RemoveUnitAt(1, Tier3UnitType, endPoint, MobPlayer);
+		SetResources(AllPlayers, Subtract, Tier3Penalty, 1);
+	}
+	if (Bring(MobPlayer, AtLeast, 1, Tier4UnitType, endPoint)) {
+		RemoveUnitAt(1, Tier4UnitType, endPoint, MobPlayer);
+		SetResources(AllPlayers, Subtract, Tier4Penalty, 1);
+	}
+	if (Bring(MobPlayer, AtLeast, 1, Tier5UnitType, endPoint)) {
+		RemoveUnitAt(1, Tier5UnitType, endPoint, MobPlayer);
+		SetResources(AllPlayers, Subtract, Tier5Penalty, 1);
+	}
+	if (Bring(MobPlayer, AtLeast, 1, Tier6UnitType, endPoint)) {
+		RemoveUnitAt(1, Tier6UnitType, endPoint, MobPlayer);
+		SetResources(AllPlayers, Subtract, Tier6Penalty, 1);
 	}
 }
