@@ -218,7 +218,7 @@ function beforeTriggerExec() {
 		// MOB DISPLAY
 		if (Unit.getPlayerID(selectedUnit) == $P7) {
 			Screen.printfAt(0,
-				"P{} - Unit: {} ({}), Speed {}, Priority {} O:{} {}x{} == {}x{}",
+				"P{} - Unit: {} ({}), Speed {}, Priority {} O:{} {}x{} == {}x{} ET {}",
 				Unit.getPlayerID(selectedUnit)+1,
 				Unit.getUnitType(selectedUnit),
 				selectedUnit,
@@ -228,7 +228,8 @@ function beforeTriggerExec() {
 				Unit.getOrderTargetX(selectedUnit),
 				Unit.getOrderTargetY(selectedUnit),
 				Unit.getNextMovementWaypointX(selectedUnit),
-				Unit.getNextMovementWaypointY(selectedUnit)
+				Unit.getNextMovementWaypointY(selectedUnit),
+				Unit.getEnsnareTimer(selectedUnit)
 			);
 		}
 
