@@ -96,7 +96,7 @@ function initMap() {
 	EUDEndPlayerLoop();
 
 	// Screen.print("Welcome! Type L1 in chat to get started");
-	if (Command($P2, AtLeast, 1, Const.Unit_KhaydarinCrystalFormation)) {
+	if (Memory(0x57F1E1, AtLeast, 2)) {
 		SetCountdownTimer(SetTo, 30);
 	} else {
 		Waves.SetLevel(1);
@@ -110,7 +110,7 @@ function onPluginStart() {
 }
 
 function handleConsoleCommand(command, value, playerID) {
-	if (Command($P2, AtLeast, 1, Const.Unit_KhaydarinCrystalFormation)) {
+	if (Memory(0x57F1E1, AtLeast, 2)) {
 		return;
 	}
 	switch(command) {
