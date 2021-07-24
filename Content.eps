@@ -139,7 +139,7 @@ function loadData() {
 	// TOWERS
 
 	const AirTower = Towers.CreateTowerType(1,
-		Towers.CreateTowerData(100, 100, 96, 35, AirUpgradeSet1),
+		Towers.CreateTowerData(100, 100, 96, 50, AirUpgradeSet1),
 		Towers.CreateTowerDisplayData(Const.Icon_PsiAssault, Strings.AirTowerTitle), 
 		Towers.CreateTowerImageData(
 			Common.MakeImage(Const.Image_STA_STS_Photon_Cannon_Overlay, 5, -12),
@@ -154,6 +154,7 @@ function loadData() {
 	});
 	AirTower.onUpgrade = EUDFuncPtr (1, 0) (function(tower : Towers.Tower) {
 		PlayWAV("sound\\protoss\\bldg\\ppbwht00.wav");
+		PlayWAV("sound\\protoss\\advisor\\padupd06.wav");
 		Utils.createImageSpriteAtUnitPositionWithOffset(Const.Image_Particle_Beam_Hit, tower.unit, 0, -16);
 	});
 	AirTower.onFire = EUDFuncPtr (1, 0) (function(tower : Towers.Tower) {
@@ -179,6 +180,7 @@ function loadData() {
 	});
 	EarthTower.onUpgrade = EUDFuncPtr (1, 0) (function(tower : Towers.Tower) {
 		PlayWAV("sound\\zerg\\bldg\\zchrdy00.wav");
+		PlayWAV("sound\\protoss\\advisor\\padupd06.wav");
 		Utils.createImageSpriteAtUnitPositionWithOffset(Const.Image_Vespene_Geyser_Smoke2, tower.unit, 0, -16);
 	});
 	EarthTower.onFire = EUDFuncPtr (1, 0) (function(tower : Towers.Tower) {
@@ -204,6 +206,7 @@ function loadData() {
 	});
 	FireTower.onUpgrade = EUDFuncPtr (1, 0) (function(tower : Towers.Tower) {
 		PlayWAV("sound\\protoss\\darchon\\feedback.wav");
+		PlayWAV("sound\\protoss\\advisor\\padupd06.wav");
 		Utils.createImageSpriteAtUnitPositionWithOffset(Const.Image_Nuclear_Missile_Death, tower.unit, 6, -12);
 	});
 	FireTower.onFire = EUDFuncPtr (1, 0) (function(tower : Towers.Tower) {
@@ -219,7 +222,7 @@ function loadData() {
 	});
 
 	const WaterTower = Towers.CreateTowerType(4,
-		Towers.CreateTowerData(100, 50, 64, 75, WaterUpgradeSet1),
+		Towers.CreateTowerData(100, 50, 64, 150, WaterUpgradeSet1),
 		Towers.CreateTowerDisplayData(Const.Icon_ArgusJewel, Strings.WaterTowerTitle), 
 		Towers.CreateTowerImageData(
 			Common.MakeImage(Const.Image_Scanner_Sweep_Hit, -16, -18),
@@ -234,6 +237,7 @@ function loadData() {
 	});
 	WaterTower.onUpgrade = EUDFuncPtr (1, 0) (function(tower : Towers.Tower) {
 		PlayWAV("sound\\protoss\\bldg\\pciwht00.wav");
+		PlayWAV("sound\\protoss\\advisor\\padupd06.wav");
 		Utils.createImageSpriteAtUnitPositionWithOffset(Const.Image_Grenade_Shot_Smoke, tower.unit, -2, -18);
 	});
 	WaterTower.onFire = EUDFuncPtr (1, 0) (function(tower : Towers.Tower) {
