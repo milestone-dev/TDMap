@@ -29,6 +29,7 @@ const Command_Wave = 1; // W
 const Command_Kill = 2; // K
 const Command_Minerals = 3; // M
 const Command_Level = 4; // L
+const Command_Speed = 5; // s
 
 const PlayerSelectedUnit = EUDArray(6);
 const SelectedUnitID = EUDArray(6);
@@ -131,6 +132,14 @@ function handleConsoleCommand(command, value, playerID) {
 			if (value > 0) {
 				Screen.printf("Starting Level {}", value);
 				Waves.SetLevel(value);
+			}
+		break;
+		case Command_Speed:
+			if (value > 0 && value <= 6) {
+				Screen.printf("Setting speed to {}", value);
+				const rate = 42 - (value - 1) * 6;
+				SetMemoryEPD(EPD(0x5124F0), SetTo, rate);
+				// Screen.print(dwread_epd(EPD(0x5124F0)));
 			}
 		break;
 	}
