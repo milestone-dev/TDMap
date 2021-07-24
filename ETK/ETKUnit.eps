@@ -4545,7 +4545,9 @@ function setTopSpeed(unitPointer, speed) {
 ***/
 function getOriginalTopSpeed(unitPointer) {
 	const unitType = getUnitType(unitPointer);
-	return dwread(0x6C9858 + 1696 + unitType * 4);
+    const flingyID = bread(0x65FD00 + 18424 + unitType * 1);
+    const flingyTopSpeed = dwread(0x6C9858 + 1696 + flingyID * 4);
+    return flingyTopSpeed;
 }
 
 /***
@@ -4555,7 +4557,7 @@ function getOriginalTopSpeed(unitPointer) {
  * The unit pointer
 ***/
 function restoreOriginalTopSpeed(unitPointer) {
-	setTopSpeed(unitPointer, (getOriginalTopSpeed(unitPointer) * 100) / 266);
+    setFlingyTopSpeed(unitPointer, getOriginalTopSpeed(unitPointer));
 }
 
 /***

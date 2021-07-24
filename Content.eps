@@ -243,7 +243,7 @@ function loadData() {
 		if(Sound.PlaySound()) { PlayWAV("sound\\bullet\\zbghit00.wav"); }
 		if (Unit.getEnsnareTimer(targetUnit) == 0) {
 			const duration = 64;
-			Unit.setEnsnareTimer(targetUnit, duration);
+			Unit.setEnsnareTimer(targetUnit, duration/8);
 			const slowSpeed = 100;//Unit.getOriginalTopSpeed(targetUnit) / 10;
 			Unit.setTopSpeed(targetUnit, slowSpeed);
 			Utils.createOverlayForUnit(targetUnit, Const.Image_Acid_Spores_6_9_Overlay_Small, duration);
