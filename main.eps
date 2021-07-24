@@ -272,7 +272,7 @@ function beforeTriggerExec() {
 			}
 
 			const targetUnit = Unit.getAutoTargetUnit(unit);
-			if (targetUnit != 0 && Unit.getHitpoints(targetUnit) > 0) {
+			if (targetUnit != 0 && Unit.getHitpoints(targetUnit) > 0 && Unit.getPlayerID(targetUnit) == $P7) {
 				const uX, uY = Unit.getPosition(unit);
 				const tX, tY = Unit.getPosition(targetUnit);
 				Unit.setOrder(unit, Const.Order_Ignore_Normal);
@@ -293,7 +293,7 @@ function beforeTriggerExec() {
 		}
 	}
 
-	foreach(ptr, unit : EUDLoopPlayerUnit(P7)) {
+	foreach(ptr, unit : EUDLoopPlayerUnit($P7)) {
 		if (true) {
 			// TODO: Move into UpdateMob function later.
 			Unit.setRemoveTimer(unit, Unit.getRemoveTimer(unit) + Unit.getFlingyTopSpeed(unit)/100);

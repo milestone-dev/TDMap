@@ -495,7 +495,7 @@ function missileHit(missileUnit) {
 			Utils.createImageSpriteAtUnitPosition(tower.type.imageData.hitImage.id, targetUnit);
 		}
 		if (tower.type.onHit != 0) {
-			tower.type.onHit(tower.type, missileUnit, targetUnit);
+			tower.type.onHit(tower, missileUnit, targetUnit);
 		}
 		if (Unit.damage(targetUnit, tower.damage)) {
 			SetResources(tower.getPlayerID(), 8, Utils.getUnitDestroyValue(targetUnitType), 0);
