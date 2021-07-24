@@ -57,8 +57,6 @@ const SelectionAddresses = [
 	0x6285D8
 ];
 
-
-
 function updateSelectedUnit(playerID) {
 	const address = SelectionAddresses[playerID];
 	const ptr = dwread(address);
@@ -97,7 +95,11 @@ function initMap() {
 	EUDEndPlayerLoop();
 
 	// Screen.print("Welcome! Type L1 in chat to get started");
-	Waves.SetLevel(1);
+	if (Command($P2, AtLeast, 1, Const.Unit_KhaydarinCrystalFormation)) {
+		SetCountdownTimer(SetTo, 30);
+	} else {
+		Waves.SetLevel(1);
+	}
 }
 
 function onPluginStart() {
@@ -107,6 +109,9 @@ function onPluginStart() {
 }
 
 function handleConsoleCommand(command, value, playerID) {
+	if (Command($P2, AtLeast, 1, Const.Unit_KhaydarinCrystalFormation)) {
+		return;
+	}
 	switch(command) {
 		case Command_Wave:
 			Waves.StartWave(value);
@@ -165,6 +170,13 @@ function handleConsoleInput(playerID) {
 
 
 function beforeTriggerExec() {
+
+	if (CountdownTimer(Exactly, 1)) {
+		SetCountdownTimer(SetTo, 0);
+		Waves.SetLevel(1);
+	}
+
+
 	Utils.EUDTurbo();
 	Sound.Update();
 	Timer.tick();
