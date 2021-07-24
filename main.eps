@@ -181,14 +181,22 @@ function beforeTriggerExec() {
 
 		// PLACING TOWERS
 		if (selectedUnit != 0 && Unit.getUnitType(selectedUnit) == Const.Unit_KhaydarinCrystalFormation) {
-			if (Unit.getOrder(selectedUnit) == Const.Order_Build_SCV) {
+			var towerTypeID = 0;
+			const orderID = Unit.getOrder(selectedUnit);
+			switch(Unit.getOrder(selectedUnit)) {
+				case Const.Order_Build_SCV: towerTypeID = 1; break;
+				case Const.Order_Build_Probe: towerTypeID = 2; break;
+				case Const.Order_DroneMutate: towerTypeID = 3; break;
+				case Const.Order_PlaceAddOn: towerTypeID = 4; break;
+			}
+			Unit.setOrder(selectedUnit, Const.Order_Nothing2_Normal);
+			if (towerTypeID != 0) {
 				var x, y = Utils.getLocationPoint(MouseLoc[playerID]);
-				var roundedX = ((x / 32) * 32) + 32;
-				var roundedY = ((y / 32) * 32) + 32;
-				Utils.centerLocationOnPoint(Utils.LOCATION_ANYSIZE, roundedX, roundedY, 32, 32);
-				Towers.createBaseTower(Utils.LOCATION_ANYSIZE, playerID);
-				Unit.setOrder(selectedUnit, Const.Order_Nothing2_Normal);
-				refreshSelection(playerID);
+				var roundedX = ((x / 32) * 32) + 16;
+				var roundedY = ((y / 32) * 32) + 16;
+				Utils.centerLocationOnPoint(Utils.LOCATION_ANYSIZE, roundedX, roundedY, 2, 2);
+				Towers.createTowerUnit(Utils.LOCATION_ANYSIZE, playerID, towerTypeID);
+				// refreshSelection(playerID); // TODO figure out if this is needed
 			}
 		}
 
