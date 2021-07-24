@@ -340,6 +340,18 @@ function dealDamageToUnitsAtLocation(damage, location, playerID) {
 	}
 }
 
+function dealDamageToUnitsAtLocationDestroyValue(damage, location, playerID) {
+	var destroyValue = 0;
+	foreach(ptr, enemyUnit : EUDLoopPlayerUnit(playerID)) {
+		if (CUnitInLocation(enemyUnit, location)) {
+			if (ETKUnit.damage(enemyUnit, damage)) {
+				destroyValue += getUnitDestroyValue(ETKUnit.getUnitType(enemyUnit));
+			}
+		}
+	}
+	return destroyValue;
+}
+
 function dealDamageToPlayerUnitsAtLocation(damage, location, playerIndexStart, playerIndexEnd) {
 	foreach(playerID : EUDLoopRange(playerIndexStart, playerIndexEnd)) {
 		dealDamageToUnitsAtLocation(damage, location, playerID);

@@ -540,7 +540,7 @@ function missileHit(missileUnit) {
 			tower.type.onHit(tower, missileUnit, targetUnit);
 		}
 		if (Unit.damage(targetUnit, tower.damage)) {
-			SetResources(tower.getPlayerID(), 8, Utils.getUnitDestroyValue(targetUnitType), 0);
+			SetResources(tower.getPlayerID(), Add, Utils.getUnitDestroyValue(targetUnitType), 0);
 			const unitType = Waves.GetNextUnitType(targetUnitType);
 			if (unitType != Const.Unit_None) {
 				const unit = Utils.createUnit(unitType, Utils.OFFSCREEN_LOCATION, $P7);
