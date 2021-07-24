@@ -248,7 +248,7 @@ function loadData() {
 	WaterTower.onHit = EUDFuncPtr (3, 0) (function(tower : Towers.Tower, missileUnit, targetUnit) {
 		if(Sound.PlaySound()) { PlayWAV("sound\\bullet\\zbghit00.wav"); }
 		if (Unit.getEnsnareTimer(targetUnit) == 0) {
-			const duration = 64;
+			const duration = 32;
 			Unit.setEnsnareTimer(targetUnit, duration/8);
 			const slowSpeed = 100;//Unit.getOriginalTopSpeed(targetUnit) / 10;
 			Unit.setTopSpeed(targetUnit, slowSpeed);
