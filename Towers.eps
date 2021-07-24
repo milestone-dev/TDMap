@@ -129,14 +129,16 @@ object TowerData {
 	var baseDamage;
 	var baseSpeed;
 	var baseRange;
+	var cost;
 	var firstUpgradeOptionSet;
 };
 
-function CreateTowerData(baseDamage, baseSpeed, baseRange, firstUpgradeOptionSet) : TowerData {
+function CreateTowerData(baseDamage, baseSpeed, baseRange, cost, firstUpgradeOptionSet) : TowerData {
 	const data = TowerData.alloc();
 	data.baseDamage = baseDamage;
 	data.baseSpeed = baseSpeed;
 	data.baseRange = baseRange;
+	data.cost = cost;
 	data.firstUpgradeOptionSet = firstUpgradeOptionSet;
 	return data;
 }
@@ -258,6 +260,7 @@ object Tower {
 			return true;
 		} else {
 			eprintln("Not enough minerals. Kill more mobs.");
+			PlayWAV("sound\\protoss\\advisor\\paderr00.wav");
 			return false;
 		}
 	}
@@ -439,7 +442,7 @@ function getTowerForUnit(unitPointer) : Tower {
 	return Tower.cast(towerObj);
 }
 
-function getTowerTypeByID(id): TowerType {
+function getTowerType(id): TowerType {
 	return TOWER_TYPES[id];
 }
 
@@ -471,6 +474,30 @@ function createBaseTower(location, playerID) : Tower {
 	tower.init();
 	return tower;
 }
+
+function createTowerUnit(location, playerID, towerTypeID) : Tower {
+	if (towerTypeID == 0) {
+		return 0;
+	}
+
+	const towerUnit = Utils.createUnit(TowerUnitType, Utils.OFFSCREEN_LOCATION, $P8);
+	MoveUnit(1, TowerUnitType, $P8, Utils.OFFSCREEN_LOCATION, location);
+	// MoveUnit(1, TowerUnitType, $P8, Utils.OFFSCREEN_LOCATION, Utils.offsetLocation(location, -2, -2));
+	// MoveUnit(1, TowerUnitType, $P8, Utils.OFFSCREEN_LOCATION, Utils.offsetLocation(location, 42, +4));
+	if (Bring($P8, AtLeast, 1, TowerUnitType, Utils.OFFSCREEN_LOCATION)) {
+		RemoveUnitAt(1, TowerUnitType, Utils.OFFSCREEN_LOCATION, $P8);
+		PlayWAV("sound\\protoss\\probe\\pprerr00.wav");
+		eprintln("You can't build there.");
+		return 0;
+	}
+
+	GiveUnits(1, TowerUnitType, $P8, location, playerID);
+	const tower = CreateTower(towerUnit);
+	tower.init();
+	tower.setType(towerTypeID);
+	return tower;
+}
+
 
 function drawTowerRange(x, y, range) {
 	Utils.moveUtilLocationToPoint(x, y);

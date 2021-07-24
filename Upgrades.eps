@@ -22,7 +22,7 @@ object TowerUpgrade {
 
 	function generateToltip(upgradeValue) {
 		const t = Db(64);
-		sprintf(t, "{:s}\n(UpgradeValue: {})\nCost: \x1C{}\x01", this.title, upgradeValue, this.getCost(upgradeValue));
+		sprintf(t, "{:s}\n(UpgradeValue: {})\n\nCost: \x1F{} Minerals\x01", this.title, upgradeValue, this.getCost(upgradeValue));
 		return t;
 	}
 };
