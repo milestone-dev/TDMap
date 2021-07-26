@@ -91,6 +91,7 @@ function initMap() {
 
 	EUDPlayerLoop()();
 	if (IsUserCP()) {
+		Towers.UpdateTowerCost(getcurpl());
 		CommandCard.hideAllButtonIcons();
 	}
 	EUDEndPlayerLoop();
@@ -214,14 +215,15 @@ function beforeTriggerExec() {
 			Unit.setOrder(selectedUnit, Const.Order_Nothing2_Normal);
 			if (towerTypeID != 0) {
 				const towerType = Towers.getTowerType(towerTypeID);
-				if (Accumulate(playerID, AtLeast, towerType.data.cost, 0)) {
+				const cost = towerType.calculcateCost(playerID);
+				if (Accumulate(playerID, AtLeast, cost, 0)) {
 					var x, y = Utils.getLocationPoint(MouseLoc[playerID]);
 					var roundedX = ((x / 32) * 32) + 16;
 					var roundedY = ((y / 32) * 32) + 16;
 					Utils.centerLocationOnPoint(Utils.LOCATION_ANYSIZE, roundedX, roundedY, 2, 2);
 					const tower = Towers.createTowerUnit(Utils.LOCATION_ANYSIZE, playerID, towerTypeID);
 					if (tower != 0) {
-						SetResources(playerID, Subtract, towerType.data.cost, 0);
+						SetResources(playerID, Subtract, cost, 0);
 					}
 					// refreshSelection(playerID); // TODO figure out if this is needed
 				} else {

@@ -21,9 +21,12 @@ const MobPriorityRebuildCooldown = 12;
 const MOB_ARRAY_LENGTH = 512;
 const MobsSorted = EUDArray(512);
 const MOB_PLAYER_ID = $P7;
-
+const TowerCount = EUDArray(6);
 
 const TowerFireThreshold = 2380;
+
+// Forward declaration
+function UpdateTowerCost(playerID);
 
 function ResetMobPriorty() {
 	for (var i = 0; i < MOB_ARRAY_LENGTH; i++) {
@@ -191,6 +194,11 @@ object TowerType {
 	var onHit: EUDFuncPtr (3, 0);
 	var onPlace: EUDFuncPtr (1, 0);
 	var onUpgrade: EUDFuncPtr (1, 0);
+
+	function calculcateCost(playerID) {
+		const numberOfTowers = TowerCount[playerID];
+		return this.data.cost + ((this.data.cost * numberOfTowers) * 10) / 100;
+	}
 };
 
 function CreateTowerType(id, data: TowerData, displayData: TowerDisplayData, imageData: TowerImageData) : TowerType {
@@ -370,7 +378,13 @@ object Tower {
 	}
 
 	function sell() {
+		Screen.print("Note: Selling towers not implemented yet - no minerals refunded.");
 		const cannonUnit = Unit.getConnectedUnit(this.unit);
+		const playerID = Unit.getPlayerID(this.unit);
+		if (TowerCount[playerID] > 0) {
+			TowerCount[playerID]--;
+		}
+		UpdateTowerCost(playerID);
 		Utils.removeUnit(this.unit);
 		Utils.removeUnitSafe(cannonUnit);
 	}
@@ -506,6 +520,9 @@ function createTowerUnit(location, playerID, towerTypeID) : Tower {
 		return 0;
 	}
 
+	TowerCount[playerID]++;
+	UpdateTowerCost(playerID);
+
 	GiveUnits(1, TowerUnitType, $P8, location, playerID);
 	const tower = CreateTower(towerUnit);
 	tower.init();
@@ -552,4 +569,25 @@ function missileHit(missileUnit) {
 		}
 	}
 	Utils.removeUnit(missileUnit);
+}
+
+function UpdateTowerCost(playerID) {
+	if (IsUserCP()) {
+		settblf(646, 0,
+			"a\x01Build \x03A\x01ir Element Tower\n\nFast rate of fire.\nCan be upgraded to \x19Thunderstorm\x01 or \x0FTornado\x01 tower.\n\nCost: \x1F{} Minerals",
+			getTowerType(1).calculcateCost(playerID)
+		);
+		settblf(647, 0,
+			"e\x01Build \x03E\x01arth Element Tower\n\nEffective single-target tower.\n\x01Can be upgraded to \x15Earthquake\x01 and \x1DOvergrowth\x01 tower.\n\nCost: \x1F{} Minerals",
+			getTowerType(2).calculcateCost(playerID)
+		);
+		settblf(648, 0,
+			"f\x01Build \x03F\x01ire Element Tower\n\nSlow rate of fire, but its missile damages enemies around the target.\n\x01Can be upgraded to \x11Wildfire\x01 and \x06Magma\x01 tower.\n\nCost: \x1F{} Minerals",
+			getTowerType(3).calculcateCost(playerID)
+		);
+		settblf(649, 0,
+			"w\x01Build \x03W\x01ater Element Tower\n\nWeak attack, but slows down enemies for a short duration.\nCan be upgraded to \x1FTsunami\x01 and \x04Arctic\x01 towers.\n\nCost: \x1F{} Minerals",
+			getTowerType(4).calculcateCost(playerID)
+		);
+	}
 }
