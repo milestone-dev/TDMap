@@ -324,6 +324,8 @@ object Tower {
 				var enemyUnit;
 				if (this.type.id == 4) {
 					enemyUnit = findNewTargetInLocationMethod3Water(Utils.LOCATION_ANYSIZE, enemyPlayerID);
+				// } else if (this.type.id == 3) {
+				// 	enemyUnit = findNewTargetInLocationMethod3Fire(Utils.LOCATION_ANYSIZE, enemyPlayerID);
 				} else {
 					enemyUnit = findNewTargetInLocationMethod3(Utils.LOCATION_ANYSIZE, enemyPlayerID);
 				}

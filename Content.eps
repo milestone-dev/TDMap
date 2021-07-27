@@ -200,8 +200,14 @@ function loadData() {
 			Common.MakeImage(Const.Image_Maelstrom_Overlay_Small, 2, -18),
 			Common.MakeImage(Const.Image_None, 0, 0),
 			Common.MakeImage(Const.Image_Burst_Lasers_Hit, 0, -16),
-			Common.MakeImage(Const.Image_Yamato_Gun_Hit, 0, 0)
+			Common.MakeImage(Const.Image_Maelstrom_Hit, 0, 0)
 		)
+		// Towers.CreateTowerImageData(
+		// 	Common.MakeImage(Const.Image_Yamato_Gun_Hit, 2, -18),
+		// 	Common.MakeImage(Const.Image_None, 0, 0),
+		// 	Common.MakeImage(Const.Image_Burst_Lasers_Hit, 0, -16),
+		// 	Common.MakeImage(Const.Image_Maelstrom_Hit, 0, 0)
+		// )
 	);
 	FireTower.onPlace = EUDFuncPtr (1, 0) (function(tower : Towers.Tower) {
 		PlayWAV("sound\\misc\\onfirsml.wav");
@@ -216,6 +222,12 @@ function loadData() {
 		if(Sound.PlaySound()) { PlayWAV("sound\\terran\\firebat\\tfbfir01.wav"); }
 	});
 	FireTower.onHit = EUDFuncPtr (3, 0) (function(tower : Towers.Tower, missileUnit, targetUnit) {
+		// if (Unit.getHitpoints(targetUnit) > 0 && Unit.getPlagueTimer(targetUnit) == 0) {
+		// 	const duration = 64;
+		// 	Utils.createOverlayForUnit(targetUnit, Const.Image_Flames2_Type3_Small, duration);
+		// 	Unit.setPlagueTimer(targetUnit, duration/8);
+		// }
+
 		const damage = tower.damage/5;
 		const splashLocation =  Utils.centerLocationOnUnit(Utils.LOCATION_ANYSIZE, targetUnit, 48, 48);
 		foreach(ptr, enemyUnit : EUDLoopPlayerUnit(enemyPlayerID)) {
@@ -223,11 +235,6 @@ function loadData() {
 				Waves.DamageMob(enemyUnit, damage, tower.getPlayerID(), tower);
 			}
 		}
-		// if (Unit.getPlagueTimer(targetUnit) == 0) {
-		// 	Utils.createOverlayForUnit(targetUnit, Const.Image_Flames2_Type3_Small, 64);
-		// 	Unit.setPlagueTimer(targetUnit, 64);
-		// 	PlayWAV("sound\\misc\\onfirsml.wav");
-		// }
 	});
 
 	const WaterTower = Towers.CreateTowerType(4,
@@ -237,8 +244,14 @@ function loadData() {
 			Common.MakeImage(Const.Image_Scanner_Sweep_Hit, -16, -18),
 			Common.MakeImage(Const.Image_None, 0, 0),
 			Common.MakeImage(Const.Image_Hallucination_Death3, 0, 0),
-			Common.MakeImage(Const.Image_None, 0, 0)
+			Common.MakeImage(Const.Image_Stasis_Field_Hit, 0, 0)
 		)
+		// Towers.CreateTowerImageData(
+		// 	Common.MakeImage(Const.Image_Khalis, 0, -16),
+		// 	Common.MakeImage(Const.Image_Grenade_Shot_Smoke, 0, 0),
+		// 	Common.MakeImage(Const.Image_None, 0, 0),
+		// 	Common.MakeImage(Const.Image_Stasis_Field_Hit, 0, 0)
+		// )
 	);
 	WaterTower.onPlace = EUDFuncPtr (1, 0) (function(tower : Towers.Tower) {
 		PlayWAV("sound\\protoss\\bldg\\ppywht00.wav");
@@ -264,5 +277,15 @@ function loadData() {
 				Unit.restoreOriginalTopSpeed(callbackUnit);
 			}));
 		}
+		// if (Unit.getEnsnareTimer(targetUnit) == 0) {
+		// 	const duration = 64;
+		// 	Unit.setEnsnareTimer(targetUnit, duration/8);
+		// 	const slowSpeed = 0;//Unit.getOriginalTopSpeed(targetUnit) / 10;
+		// 	Unit.setTopSpeed(targetUnit, slowSpeed);
+		// 	Utils.createOverlayForUnit(targetUnit, Const.Image_Stasis_Field_Small, duration);
+		// 	Timer.add(duration, targetUnit, EUDFuncPtr (2, 0) (function(callbackUnit, intervalCount) {
+		// 		Unit.restoreOriginalTopSpeed(callbackUnit);
+		// 	}));
+		// }
 	});
 }
