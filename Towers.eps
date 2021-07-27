@@ -537,6 +537,8 @@ function createTowerUnit(location, playerID, towerTypeID) : Tower {
 	UpdateTowerCost(playerID);
 
 	GiveUnits(1, TowerUnitType, $P8, location, playerID);
+	Utils.moveUtilLocationToUnit(towerUnit);
+	GiveUnits(1, TowerUnitType, $P8, Utils.UTILITY_LOCATION, playerID);
 	const tower = CreateTower(towerUnit);
 	tower.init();
 	tower.setType(towerTypeID);
