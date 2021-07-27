@@ -270,3 +270,24 @@ function Update() {
 		SetResources(AllPlayers, Subtract, Tier6Penalty, 1);
 	}
 }
+
+// tower can be 0
+function DamageMob(targetUnit, damage, playerID, tower : Towers.Tower) {
+	if (Unit.damage(targetUnit, damage)) {
+		const targetUnitType = Unit.getUnitType(targetUnit);
+		if (tower != 0) {
+			Unit.set8Flag(tower.unit, Unit.get8Flag(tower.unit) + 1);
+		}
+		SetResources(playerID, Add, Utils.getUnitDestroyValue(targetUnitType), 0);
+		const unitType = GetNextUnitType(targetUnitType);
+		if (unitType != Const.Unit_None) {
+			const unit = Utils.createUnit(unitType, Utils.OFFSCREEN_LOCATION, $P7);
+			Unit.setStatusFlags(unit, 0x00230005); // 5xxxx does not move
+			Utils.moveUnit(unit, Utils.moveUtilLocationToUnit(targetUnit));
+			Unit.setRemoveTimer(unit, Unit.getRemoveTimer(targetUnit));
+			Unit.orderToPoint(unit, Unit.getOrderTargetX(targetUnit), Unit.getOrderTargetY(targetUnit));
+		} else {
+			SubtractAliveMobCount(1);
+		}
+	}
+}

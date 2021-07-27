@@ -7,6 +7,9 @@ import Strings;
 import Sound;
 import Upgrades;
 import Towers;
+import Waves;
+
+const enemyPlayerID = $P7;
 
 function loadData() {
 
@@ -213,12 +216,13 @@ function loadData() {
 		if(Sound.PlaySound()) { PlayWAV("sound\\terran\\firebat\\tfbfir01.wav"); }
 	});
 	FireTower.onHit = EUDFuncPtr (3, 0) (function(tower : Towers.Tower, missileUnit, targetUnit) {
-		const killedUnits, destroyValue = Utils.dealDamageToUnitsAtLocationDestroyValue(tower.damage/5, Utils.centerLocationOnUnit(Utils.LOCATION_ANYSIZE, targetUnit, 48, 48), $P7);		
-		SetResources(tower.getPlayerID(), Add, destroyValue, 0);
-		if (killedUnits > 0) {
-			Unit.set8Flag(tower.unit, Unit.get8Flag(tower.unit) + killedUnits);
+		const damage = tower.damage/5;
+		const splashLocation =  Utils.centerLocationOnUnit(Utils.LOCATION_ANYSIZE, targetUnit, 48, 48);
+		foreach(ptr, enemyUnit : EUDLoopPlayerUnit(enemyPlayerID)) {
+			if (Utils.CUnitInLocation(enemyUnit, splashLocation)) {
+				Waves.DamageMob(enemyUnit, damage, tower.getPlayerID(), tower);
+			}
 		}
-
 		// if (Unit.getPlagueTimer(targetUnit) == 0) {
 		// 	Utils.createOverlayForUnit(targetUnit, Const.Image_Flames2_Type3_Small, 64);
 		// 	Unit.setPlagueTimer(targetUnit, 64);

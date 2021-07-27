@@ -536,7 +536,6 @@ function createTowerUnit(location, playerID, towerTypeID) : Tower {
 	TowerCount[playerID]++;
 	UpdateTowerCost(playerID);
 
-	GiveUnits(1, TowerUnitType, $P8, location, playerID);
 	Utils.moveUtilLocationToUnit(towerUnit);
 	GiveUnits(1, TowerUnitType, $P8, Utils.UTILITY_LOCATION, playerID);
 	const tower = CreateTower(towerUnit);
@@ -581,25 +580,13 @@ function missileHit(missileUnit) {
 	const targetUnit = Unit.getAutoTargetUnit(missileUnit);
 	const tower = getTowerForUnit(Unit.getConnectedUnit(missileUnit));
 	if (tower != 0) {
-		const targetUnitType = Unit.getUnitType(targetUnit);
 		if (tower.type.imageData.hitImage.id != Const.Image_None) {
 			Utils.createImageSpriteAtUnitPosition(tower.type.imageData.hitImage.id, targetUnit);
 		}
 		if (tower.type.onHit != 0) {
 			tower.type.onHit(tower, missileUnit, targetUnit);
 		}
-		if (Unit.damage(targetUnit, tower.damage)) {
-			SetResources(tower.getPlayerID(), Add, Utils.getUnitDestroyValue(targetUnitType), 0);
-			Unit.set8Flag(tower.unit, Unit.get8Flag(tower.unit) + 1);
-			const unitType = Waves.GetNextUnitType(targetUnitType);
-			if (unitType != Const.Unit_None) {
-				const unit = Utils.createUnit(unitType, Utils.OFFSCREEN_LOCATION, $P7);
-				Unit.setStatusFlags(unit, 0x00230005); // 5xxxx does not move
-				Utils.moveUnit(unit, Utils.moveUtilLocationToUnit(targetUnit));
-				Unit.setRemoveTimer(unit, Unit.getRemoveTimer(targetUnit));
-				Unit.orderToPoint(unit, Unit.getOrderTargetX(targetUnit), Unit.getOrderTargetY(targetUnit));
-			}
-		}
+		Waves.DamageMob(targetUnit, tower.damage, tower.getPlayerID(), tower);
 	}
 	Utils.removeUnit(missileUnit);
 }
