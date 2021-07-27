@@ -39,7 +39,7 @@ var DebugMode = false;
 
 // Mob stuff, move out
 var MobUpdateTimer = 0;
-const MobUpdateCooldown = 12;
+const MobUpdateCooldown = 6;
 
 const MouseLoc = [
 	$L("MouseLoc1"),
@@ -261,7 +261,7 @@ function beforeTriggerExec() {
 			RefreshTowerSelection(playerID);
 			if (DebugMode) {
 				Screen.printfAt(0,
-					"P{} - Unit: {} ({}), Speed {}, Priority {} O:{} {}x{} == {}x{} ET {}",
+					"P{} - Unit: {} ({}), Speed {}, Priority {} O:{} {}x{} == {}x{} ET {} PT {}",
 					Unit.getPlayerID(selectedUnit)+1,
 					Unit.getUnitType(selectedUnit),
 					selectedUnit,
@@ -272,7 +272,8 @@ function beforeTriggerExec() {
 					Unit.getOrderTargetY(selectedUnit),
 					Unit.getNextMovementWaypointX(selectedUnit),
 					Unit.getNextMovementWaypointY(selectedUnit),
-					Unit.getEnsnareTimer(selectedUnit)
+					Unit.getEnsnareTimer(selectedUnit),
+					Unit.getPlagueTimer(selectedUnit)
 				);
 			}
 		}

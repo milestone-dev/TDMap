@@ -136,6 +136,17 @@ function findNewTargetInLocationMethod3Water(location, playerID) {
 	return 0;
 }
 
+function findNewTargetInLocationMethod3Fire(location, playerID) {
+	for (var i = 0; i < MOB_ARRAY_LENGTH; i++) {
+		const unit = MobsSorted[i];
+		if (unit != 0 && Utils.CUnitInLocation(unit, location) && Unit.getHitpoints(unit) > 0 && Unit.getPlagueTimer(unit) == 0) {
+			return MobsSorted[i];
+		}
+	}
+	return 0;
+}
+
+
 const TOWER_TYPES = EUDArray(64);
 
 object TowerData {
