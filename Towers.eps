@@ -525,6 +525,7 @@ function createTowerUnit(location, playerID, towerTypeID) : Tower {
 	if (Bring($P8, AtLeast, 1, TowerUnitType, Utils.OFFSCREEN_LOCATION)) {
 		RemoveUnitAt(1, TowerUnitType, Utils.OFFSCREEN_LOCATION, $P8);
 		PlayWAV("sound\\protoss\\probe\\pprerr00.wav");
+		MinimapPing(location);
 		eprintln("You can't build there.");
 		return 0;
 	}

@@ -204,6 +204,10 @@ function beforeTriggerExec() {
 		const mouseLocation = MouseLoc[playerID];
 		handleConsoleInput(playerID);
 
+		if (Waves.CurrentWaveID > 0) {
+			eprintf("\x04Wave: {} \x01· \x04Lives: {} \x01· \x04Enemies Alive: {}", Waves.CurrentWaveID, Waves.Lives, Waves.CurrentWaveAliveMobs);
+		}
+
 		// PLACING TOWERS
 		if (selectedUnit != 0 && Unit.getUnitType(selectedUnit) == Const.Unit_Flag) {
 			RefreshTowerSelection(playerID);

@@ -15,11 +15,14 @@ const LocationInset = 8;
 const LocationSize = 8;
 const TileSize = 32;
 
+var Lives = 100;
+
 var CurrentWaveID = 1;
 var CurrentWaveSpawnTimer = 0;
 var CurrentWaveSpawnTimerIncrement = 0;
 var CurrentWave = EUDArray(7);
 var CurrentWaveReward = 0;
+var CurrentWaveAliveMobs = 0;
 
 const Tier1UnitType = Const.Unit_ZergZergling;
 const Tier2UnitType = Const.Unit_ZergMutalisk;
@@ -126,8 +129,25 @@ function CalculateCurrentWaveRemainingMobs() {
 	return num;
 }
 
+function SubtractLives(penalty) {
+	if (penalty > Lives) {
+		Lives = 0;
+	} else {
+		Lives -= penalty;
+	}
+}
+
+function SubtractAliveMobCount(number) {
+	if (number > CurrentWaveAliveMobs) {
+		CurrentWaveAliveMobs = 0;
+	} else {
+		CurrentWaveAliveMobs -= number;
+	}
+}
+
 function KillAllMobs() {
 	RemoveUnit(Const.Unit_AnyUnit, MobPlayer);
+	CurrentWaveAliveMobs = 0;
 }
 
 function StartWave(waveID) {
@@ -143,6 +163,7 @@ function StartWave(waveID) {
 		CurrentWaveSpawnTimer = MobCountMultiplierConstant;
 		const remainingMobs = CalculateCurrentWaveRemainingMobs();
 		CurrentWaveReward = remainingMobs;
+		CurrentWaveAliveMobs = remainingMobs;
 		CurrentWaveSpawnTimerIncrement = remainingMobs * MobCountMultiplierConstant / SpawnDurationConstant;
 		setcurpl(P1); Screen.printf("Starting Wave {}", waveID);
 		if (remainingMobs == 0) {
@@ -235,6 +256,7 @@ function Update() {
 		const nextUnitType = ExtractNextMobFromCurrentWave();
 		if (nextUnitType != Const.Unit_None) {
 			const unit = Utils.createUnit(nextUnitType, TrackLocationFrom, MobPlayer);
+			Unit.setRemoveTimer(unit, 100);
 			Unit.setStatusFlags(unit, 0x00230005); // 5xxxx does not move, 3xxxx crashes	
 		} else {
 			if (Command(MobPlayer, Exactly, 0, Const.Unit_AnyUnit)) {
@@ -247,32 +269,40 @@ function Update() {
 	// TODO Make into a loop later
 	if (Bring(MobPlayer, AtLeast, 1, Tier1UnitType, endPoint)) {
 		RemoveUnitAt(1, Tier1UnitType, endPoint, MobPlayer);
-		SetResources(AllPlayers, Subtract, Tier1Penalty, 1);
+		SubtractAliveMobCount(1);
+		SubtractLives(Tier1Penalty);
 	}
 	if (Bring(MobPlayer, AtLeast, 1, Tier2UnitType, endPoint)) {
 		RemoveUnitAt(1, Tier2UnitType, endPoint, MobPlayer);
-		SetResources(AllPlayers, Subtract, Tier2Penalty, 1);
+		SubtractAliveMobCount(1);
+		SubtractLives(Tier2Penalty);
 	}
 	if (Bring(MobPlayer, AtLeast, 1, Tier3UnitType, endPoint)) {
 		RemoveUnitAt(1, Tier3UnitType, endPoint, MobPlayer);
-		SetResources(AllPlayers, Subtract, Tier3Penalty, 1);
+		SubtractAliveMobCount(1);
+		SubtractLives(Tier3Penalty);
 	}
 	if (Bring(MobPlayer, AtLeast, 1, Tier4UnitType, endPoint)) {
 		RemoveUnitAt(1, Tier4UnitType, endPoint, MobPlayer);
-		SetResources(AllPlayers, Subtract, Tier4Penalty, 1);
+		SubtractAliveMobCount(1);
+		SubtractLives(Tier4Penalty);
 	}
 	if (Bring(MobPlayer, AtLeast, 1, Tier5UnitType, endPoint)) {
 		RemoveUnitAt(1, Tier5UnitType, endPoint, MobPlayer);
-		SetResources(AllPlayers, Subtract, Tier5Penalty, 1);
+		SubtractAliveMobCount(1);
+		SubtractLives(Tier5Penalty);
 	}
 	if (Bring(MobPlayer, AtLeast, 1, Tier6UnitType, endPoint)) {
 		RemoveUnitAt(1, Tier6UnitType, endPoint, MobPlayer);
-		SetResources(AllPlayers, Subtract, Tier6Penalty, 1);
+		SubtractLives(Tier6Penalty);
 	}
 }
 
 // tower can be 0
 function DamageMob(targetUnit, damage, playerID, tower : Towers.Tower) {
+	if (Unit.getHitpoints(targetUnit) == 0) {
+		return;
+	}
 	if (Unit.damage(targetUnit, damage)) {
 		const targetUnitType = Unit.getUnitType(targetUnit);
 		if (tower != 0) {
