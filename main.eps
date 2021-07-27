@@ -219,21 +219,18 @@ function beforeTriggerExec() {
 				case Const.Order_DroneMutate: towerTypeID = 3; break;
 				case Const.Order_PlaceAddOn: towerTypeID = 4; break;
 			}
-
 			Unit.setOrder(selectedUnit, Const.Order_Nothing2_Normal);
 			if (towerTypeID != 0) {
 				const towerType = Towers.getTowerType(towerTypeID);
 				const cost = towerType.calculcateCost(playerID);
+				const x = Unit.getOrderTargetX(selectedUnit);
+				const y = Unit.getOrderTargetY(selectedUnit);
 				if (Accumulate(playerID, AtLeast, cost, 0)) {
-					var x, y = Utils.getLocationPoint(MouseLoc[playerID]);
-					var roundedX = ((x / 32) * 32) + 16;
-					var roundedY = ((y / 32) * 32) + 16;
-					Utils.centerLocationOnPoint(Utils.LOCATION_ANYSIZE, roundedX, roundedY, 2, 2);
+					Utils.centerLocationOnPoint(Utils.LOCATION_ANYSIZE, x, y, 2, 2);
 					const tower = Towers.createTowerUnit(Utils.LOCATION_ANYSIZE, playerID, towerTypeID);
 					if (tower != 0) {
 						SetResources(playerID, Subtract, cost, 0);
 					}
-					// RefreshTowerSelection(playerID); // TODO figure out if this is needed
 				} else {
 					eprintln("Not enough minerals. Kill more mobs.");
 					PlayWAV("sound\\protoss\\advisor\\paderr00.wav");
