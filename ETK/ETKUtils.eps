@@ -482,6 +482,11 @@ function createUnit(unitType, location, playerID) {
 	return epd;
 }
 
+function createUnitAtPoint(unitType, playerID, x, y) {
+	moveUtilLocationToPoint(x,y);
+	return createUnit(unitType, UTILITY_LOCATION, playerID);
+}
+
 function createUnitAtLocationWithOffset(unitType, location, playerID, xOffset, yOffset) {
 	setLocationToLocation(UTILITY_LOCATION, location);
 	offsetLocation(UTILITY_LOCATION, xOffset, yOffset);

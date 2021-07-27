@@ -543,8 +543,12 @@ function createTowerUnit(location, playerID, towerTypeID) : Tower {
 	return tower;
 }
 
+function clearTowerRange(playerID) {
+	RemoveUnit(Const.Unit_NuclearMissile, playerID);
+}
 
-function drawTowerRange(x, y, range) {
+function drawTowerRange(playerID, x, y, range) {
+	clearTowerRange(playerID);
 	Utils.moveUtilLocationToPoint(x, y);
 
 	const lx1 = x - range;
@@ -552,10 +556,23 @@ function drawTowerRange(x, y, range) {
 	const ly1 = y - range;
 	const ly2 = y + range;
 
-	Utils.createImageSpriteAtPoint(Const.Image_Nuke_Target_Dot, lx1, ly1);
-	Utils.createImageSpriteAtPoint(Const.Image_Nuke_Target_Dot, lx2, ly1);
-	Utils.createImageSpriteAtPoint(Const.Image_Nuke_Target_Dot, lx1, ly2);
-	Utils.createImageSpriteAtPoint(Const.Image_Nuke_Target_Dot, lx2, ly2);
+	if (IsUserCP()) {
+		Utils.setImageDrawIfCloaked(Const.Image_Nuke_Target_Dot, 1);
+		Utils.setImageDrawFunction(Const.Image_Nuke_Target_Dot, 15);
+	}
+
+	const flags = 0x00230005;
+	Unit.setStatusFlags(Utils.createUnitAtPoint(Const.Unit_NuclearMissile, playerID, lx1, ly1), flags);
+	Unit.setStatusFlags(Utils.createUnitAtPoint(Const.Unit_NuclearMissile, playerID, lx1 + (lx2-lx1)/2, ly1), flags);
+	Unit.setStatusFlags(Utils.createUnitAtPoint(Const.Unit_NuclearMissile, playerID, lx1, ly1 + (ly2-ly1)/2), flags);
+	Unit.setStatusFlags(Utils.createUnitAtPoint(Const.Unit_NuclearMissile, playerID, lx2, ly1), flags);
+	Unit.setStatusFlags(Utils.createUnitAtPoint(Const.Unit_NuclearMissile, playerID, lx1, ly2), flags);
+	Unit.setStatusFlags(Utils.createUnitAtPoint(Const.Unit_NuclearMissile, playerID, lx1 + (lx2-lx1)/2, ly2), flags);
+	Unit.setStatusFlags(Utils.createUnitAtPoint(Const.Unit_NuclearMissile, playerID, lx2, ly1 + (ly2-ly1)/2), flags);
+	Unit.setStatusFlags(Utils.createUnitAtPoint(Const.Unit_NuclearMissile, playerID, lx2, ly2), flags);
+
+	Utils.setImageDrawIfCloaked(Const.Image_Nuke_Target_Dot, 0);
+	Utils.setImageDrawFunction(Const.Image_Nuke_Target_Dot, 3);
 }
 
 function missileHit(missileUnit) {

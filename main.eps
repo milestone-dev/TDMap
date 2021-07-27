@@ -31,7 +31,7 @@ const Command_Minerals = 3; // M
 const Command_Level = 4; // L
 const Command_Speed = 5; // s
 
-const PlayerSelectedUnit = EUDArray(6);
+const PlayerSelectedTower = EUDArray(6);
 const SelectedUnitID = EUDArray(6);
 var Debug_MissileMisses = 0;
 
@@ -70,8 +70,8 @@ function updateSelectedUnit(playerID) {
 	}
 }
 
-function refreshSelection(playerID) {
-	PlayerSelectedUnit[playerID] = 0;
+function RefreshTowerSelection(playerID) {
+	PlayerSelectedTower[playerID] = 0;
 }
 
 function initMap() {
@@ -206,7 +206,7 @@ function beforeTriggerExec() {
 
 		// PLACING TOWERS
 		if (selectedUnit != 0 && Unit.getUnitType(selectedUnit) == Const.Unit_Flag) {
-			PlayerSelectedUnit[playerID] = selectedUnit;
+			RefreshTowerSelection(playerID);
 			var towerTypeID = 0;
 			const orderID = Unit.getOrder(selectedUnit);
 			switch(Unit.getOrder(selectedUnit)) {
@@ -229,7 +229,7 @@ function beforeTriggerExec() {
 					if (tower != 0) {
 						SetResources(playerID, Subtract, cost, 0);
 					}
-					// refreshSelection(playerID); // TODO figure out if this is needed
+					// RefreshTowerSelection(playerID); // TODO figure out if this is needed
 				} else {
 					eprintln("Not enough minerals. Kill more mobs.");
 					PlayWAV("sound\\protoss\\advisor\\paderr00.wav");
@@ -246,7 +246,7 @@ function beforeTriggerExec() {
 					tower.update();
 					if (Unit.getBuildQueueLength(towerUnit) > 0) {
 						tower.handleButtonClick();
-						refreshSelection(playerID);
+						RefreshTowerSelection(playerID);
 					}
 				}
 			}
@@ -254,6 +254,7 @@ function beforeTriggerExec() {
 
 		// MOB DISPLAY
 		if (Unit.getPlayerID(selectedUnit) == $P7) {
+			RefreshTowerSelection(playerID);
 			Screen.printfAt(0,
 				"P{} - Unit: {} ({}), Speed {}, Priority {} O:{} {}x{} == {}x{} ET {}",
 				Unit.getPlayerID(selectedUnit)+1,
@@ -274,16 +275,16 @@ function beforeTriggerExec() {
 		if (Towers.isUnitTower(selectedUnit)) {
 			const tower = Towers.getTowerForUnit(selectedUnit);
 			if (tower != 0) {
-				if (PlayerSelectedUnit[playerID] != selectedUnit) {
+				if (PlayerSelectedTower[playerID] != selectedUnit) {
 					tower.updateInterface(playerID);
-					PlayerSelectedUnit[playerID] = selectedUnit;
+					PlayerSelectedTower[playerID] = selectedUnit;
 					Unit.setStatusFlags(selectedUnit, 0x04340008);
 					Timer.add(0, selectedUnit, EUDFuncPtr (2, 0) (function(callbackUnit, intervalCount) {
 						Unit.setStatusFlags(callbackUnit, 0x04340003);
 					}));
-				}
-				if (tower.range > 0) {
-					Towers.drawTowerRange(Unit.getPositionX(selectedUnit), Unit.getPositionY(selectedUnit), tower.range);
+					if (tower.range > 0) {
+						Towers.drawTowerRange(playerID, Unit.getPositionX(selectedUnit), Unit.getPositionY(selectedUnit), tower.range);
+					}
 				}
 				if (DebugMode) {
 					Screen.printfAt(0,
@@ -296,6 +297,8 @@ function beforeTriggerExec() {
 					);
 				}
 			}
+		} else {
+			Towers.clearTowerRange(playerID);
 		}
 	}
 	EUDEndPlayerLoop();
