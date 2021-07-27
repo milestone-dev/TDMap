@@ -35,6 +35,8 @@ const PlayerSelectedUnit = EUDArray(6);
 const SelectedUnitID = EUDArray(6);
 var Debug_MissileMisses = 0;
 
+var DebugMode = false;
+
 // Mob stuff, move out
 var MobUpdateTimer = 0;
 const MobUpdateCooldown = 12;
@@ -95,21 +97,24 @@ function initMap() {
 	}
 	EUDEndPlayerLoop();
 
-	if (bread(0x57F1E1) > 1) {
-		SetCountdownTimer(SetTo, 30);
-	} else {
+	if (DebugMode) {
 		Waves.SetLevel(1);
+	} else {
+		SetCountdownTimer(SetTo, 30);
 	}
 }
 
 function onPluginStart() {
+	if (bread(0x57F1E1) == 1) {
+		DebugMode = true;
+	}
 	randomize();
 	initMap();
 	Utils.setup();
 }
 
 function handleConsoleCommand(command, value, playerID) {
-	if (bread(0x57F1E1) > 1) {
+	if (!DebugMode) {
 		return;
 	}
 	switch(command) {
@@ -277,14 +282,12 @@ function beforeTriggerExec() {
 						Unit.setStatusFlags(callbackUnit, 0x04340003);
 					}));
 				}
-
 				if (tower.range > 0) {
 					Towers.drawTowerRange(Unit.getPositionX(selectedUnit), Unit.getPositionY(selectedUnit), tower.range);
 				}
-				if (false) {
+				if (DebugMode) {
 					Screen.printfAt(0,
-						"IsNotBase: {} Damage: {} Speed: {} Range: {} HasTarget: {} Timer: {}",
-						tower.type != 0,
+						"Damage: {} Speed: {} Range: {} HasTarget: {} Timer: {}",
 						tower.damage,
 						tower.speed,
 						tower.range,
@@ -327,7 +330,7 @@ function beforeTriggerExec() {
 	}
 
 	foreach(ptr, unit : EUDLoopPlayerUnit($P7)) {
-		if (true) {
+		if (DebugMode) {
 			// TODO: Move into UpdateMob function later.
 			Unit.setRemoveTimer(unit, Unit.getRemoveTimer(unit) + Unit.getFlingyTopSpeed(unit)/100);
 
