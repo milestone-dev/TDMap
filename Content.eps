@@ -213,8 +213,11 @@ function loadData() {
 		if(Sound.PlaySound()) { PlayWAV("sound\\terran\\firebat\\tfbfir01.wav"); }
 	});
 	FireTower.onHit = EUDFuncPtr (3, 0) (function(tower : Towers.Tower, missileUnit, targetUnit) {
-		const destroyValue = Utils.dealDamageToUnitsAtLocationDestroyValue(tower.damage/5, Utils.centerLocationOnUnit(Utils.LOCATION_ANYSIZE, targetUnit, 48, 48), $P7);
+		const killedUnits, destroyValue = Utils.dealDamageToUnitsAtLocationDestroyValue(tower.damage/5, Utils.centerLocationOnUnit(Utils.LOCATION_ANYSIZE, targetUnit, 48, 48), $P7);		
 		SetResources(tower.getPlayerID(), Add, destroyValue, 0);
+		if (killedUnits > 0) {
+			Unit.set8Flag(tower.unit, Unit.get8Flag(tower.unit) + killedUnits);
+		}
 
 		// if (Unit.getPlagueTimer(targetUnit) == 0) {
 		// 	Utils.createOverlayForUnit(targetUnit, Const.Image_Flames2_Type3_Small, 64);

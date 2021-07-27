@@ -3,12 +3,17 @@ const WelcomeText = Db("Welcome to the map");
 const Credits = Db("Map by Milestone & iDoodler");
 const SellTower = Db("s\x01\x03S\x01ell Tower");
 
-const AirTowerTitle = Db("\x1EAir Element");
-const FireTowerTitle = Db("\x11Fire Element");
-const WaterTowerTitle = Db("\x16Water Element");
-const EarthTowerTitle = Db("\x18Earth Element");
+const AirTowerTitle = Db("\x1EAir Element Tower");
+const EarthTowerTitle = Db("\x18Earth Element Tower");
+const FireTowerTitle = Db("\x11Fire Element Tower");
+const WaterTowerTitle = Db("\x16Water Element Tower");
+
+const AirTowerTooltip = Db("a\x01Build \x03A\x01ir Element Tower\n\nFast rate of fire.\nCan be upgraded to \x19Thunderstorm\x01 or \x0FTornado\x01 tower.\n\n");
+const EarthTowerTooltip = Db("e\x01Build \x03E\x01arth Element Tower\n\nEffective single-target tower.\n\x01Can be upgraded to \x15Earthquake\x01 and \x1DOvergrowth\x01 tower.\n\n");
+const FireTowerTooltip = Db("f\x01Build \x03F\x01ire Element Tower\n\nSlow rate of fire, but its missile damages enemies around the target.\n\x01Can be upgraded to \x11Wildfire\x01 and \x06Magma\x01 tower.\n\n");
+const WaterTowerTooltip = Db("w\x01Build \x03W\x01ater Element Tower\n\nWeak attack, but slows down enemies for a short duration.\nCan be upgraded to \x1FTsunami\x01 and \x04Arctic\x01 towers.\n\n");
 
 const SelectAirTower = Db("a\x01\x1ESelect \x03A\x1Eir Element");
+const SelectEarthTower = Db("e\x01\x18Select \x03E\x18arth Element");
 const SelectFireTower = Db("f\x01\x11Select \x03F\x11ire Element");
 const SelectWaterTower = Db("w\x01\x16Select \x03W\x16ater Element");
-const SelectEarthTower = Db("e\x01\x18Select \x03E\x18arth Element");

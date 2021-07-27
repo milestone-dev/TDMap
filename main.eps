@@ -35,7 +35,6 @@ const PlayerSelectedUnit = EUDArray(6);
 const SelectedUnitID = EUDArray(6);
 var Debug_MissileMisses = 0;
 
-
 // Mob stuff, move out
 var MobUpdateTimer = 0;
 const MobUpdateCooldown = 12;
@@ -96,8 +95,7 @@ function initMap() {
 	}
 	EUDEndPlayerLoop();
 
-	// Screen.print("Welcome! Type L1 in chat to get started");
-	if (Memory(0x57F1E1, AtLeast, 2)) {
+	if (bread(0x57F1E1) > 1) {
 		SetCountdownTimer(SetTo, 30);
 	} else {
 		Waves.SetLevel(1);
@@ -111,7 +109,7 @@ function onPluginStart() {
 }
 
 function handleConsoleCommand(command, value, playerID) {
-	if (Memory(0x57F1E1, AtLeast, 2)) {
+	if (bread(0x57F1E1) > 1) {
 		return;
 	}
 	switch(command) {
@@ -202,7 +200,8 @@ function beforeTriggerExec() {
 		handleConsoleInput(playerID);
 
 		// PLACING TOWERS
-		if (selectedUnit != 0 && Unit.getUnitType(selectedUnit) == Const.Unit_KhaydarinCrystalFormation) {
+		if (selectedUnit != 0 && Unit.getUnitType(selectedUnit) == Const.Unit_Flag) {
+			PlayerSelectedUnit[playerID] = selectedUnit;
 			var towerTypeID = 0;
 			const orderID = Unit.getOrder(selectedUnit);
 			switch(Unit.getOrder(selectedUnit)) {

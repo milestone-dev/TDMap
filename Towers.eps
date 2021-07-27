@@ -191,7 +191,7 @@ object TowerType {
 	var displayData : TowerDisplayData;
 	var imageData : TowerImageData;
 	var onFire: EUDFuncPtr (1, 0);
-	var onHit: EUDFuncPtr (3, 0);
+	var onHit: EUDFuncPtr (3, 1);
 	var onPlace: EUDFuncPtr (1, 0);
 	var onUpgrade: EUDFuncPtr (1, 0);
 
@@ -421,6 +421,7 @@ object Tower {
 	function updateInterface(playerID) {
 		if (IsUserCP()) {
 			// setcurpl(P1); Screen.printf("updateInterface {}", playerID);
+			// TODO Remove as towers will never be type 0
 			if (this.type == 0) {
 				// setcurpl(P1); Screen.printf("type = 0");
 				Utils.setUnitWeapon(TowerUnitType, Const.Weapon_None);
@@ -431,6 +432,9 @@ object Tower {
 				CommandCard.setButtonIcon(3, Const.Icon_ArgusJewel, Strings.SelectWaterTower);
 				CommandCard.setButtonIcon(8, Const.Icon_ReturnResources, Strings.SellTower);
 			} else {
+				settblf(196, 0, "{:s}", this.type.displayData.title);
+				settblf(1299, 0, "\x04Level: {}, Kills: {}", this.upgradeValue, Unit.get8Flag(this.unit));
+
 				// Have a unit for every player that is just there to represent the mineral cost for next upgrade        
 				// Utils.setUnitCost(100 + playerID, 10 + Unit.getRankIncrease(selectedUnit) * 10);
 				// setcurpl(P1); Screen.printf("updateInterface t{} d{} s{} r{} ", this.type, this.damage, this.speed, this.range);
@@ -489,20 +493,20 @@ function isTowerTypeValid(towerType) {
 	return towerType != 0;
 }
 
-function createBaseTower(location, playerID) : Tower {
-	const towerUnit = Utils.createUnit(TowerUnitType, Utils.OFFSCREEN_LOCATION, $P8);
-	MoveUnit(1, TowerUnitType, $P8, Utils.OFFSCREEN_LOCATION, location);
-	if (Bring($P8, AtLeast, 1, TowerUnitType, Utils.OFFSCREEN_LOCATION)) {
-		RemoveUnitAt(1, TowerUnitType, Utils.OFFSCREEN_LOCATION, $P8);
-		eprintln("You can't build there.");
-		return 0;
-	} else {
-		GiveUnits(1, TowerUnitType, $P8, location, playerID);
-	}
-	const tower = CreateTower(towerUnit);
-	tower.init();
-	return tower;
-}
+// function createBaseTower(location, playerID) : Tower {
+// 	const towerUnit = Utils.createUnit(TowerUnitType, Utils.OFFSCREEN_LOCATION, $P8);
+// 	MoveUnit(1, TowerUnitType, $P8, Utils.OFFSCREEN_LOCATION, location);
+// 	if (Bring($P8, AtLeast, 1, TowerUnitType, Utils.OFFSCREEN_LOCATION)) {
+// 		RemoveUnitAt(1, TowerUnitType, Utils.OFFSCREEN_LOCATION, $P8);
+// 		eprintln("You can't build there.");
+// 		return 0;
+// 	} else {
+// 		GiveUnits(1, TowerUnitType, $P8, location, playerID);
+// 	}
+// 	const tower = CreateTower(towerUnit);
+// 	tower.init();
+// 	return tower;
+// }
 
 function createTowerUnit(location, playerID, towerTypeID) : Tower {
 	if (towerTypeID == 0) {
@@ -511,14 +515,23 @@ function createTowerUnit(location, playerID, towerTypeID) : Tower {
 
 	const towerUnit = Utils.createUnit(TowerUnitType, Utils.OFFSCREEN_LOCATION, $P8);
 	MoveUnit(1, TowerUnitType, $P8, Utils.OFFSCREEN_LOCATION, location);
-	// MoveUnit(1, TowerUnitType, $P8, Utils.OFFSCREEN_LOCATION, Utils.offsetLocation(location, -2, -2));
-	// MoveUnit(1, TowerUnitType, $P8, Utils.OFFSCREEN_LOCATION, Utils.offsetLocation(location, 42, +4));
+	// Try shifting the location.
+	if (Bring($P8, AtLeast, 1, TowerUnitType, Utils.OFFSCREEN_LOCATION)) {
+		MoveUnit(1, TowerUnitType, $P8, Utils.OFFSCREEN_LOCATION, Utils.offsetLocation(location, -2, -2));
+	}
+	if (Bring($P8, AtLeast, 1, TowerUnitType, Utils.OFFSCREEN_LOCATION)) {
+		MoveUnit(1, TowerUnitType, $P8, Utils.OFFSCREEN_LOCATION, Utils.offsetLocation(location, +4, +4));
+	}
 	if (Bring($P8, AtLeast, 1, TowerUnitType, Utils.OFFSCREEN_LOCATION)) {
 		RemoveUnitAt(1, TowerUnitType, Utils.OFFSCREEN_LOCATION, $P8);
 		PlayWAV("sound\\protoss\\probe\\pprerr00.wav");
 		eprintln("You can't build there.");
 		return 0;
 	}
+
+	// Unit.setParasiteFlag(towerUnit, 512);
+	// Unit.setAcidSporeCount(towerUnit, 1);
+	Unit.setIsBlind(towerUnit, 1);
 
 	TowerCount[playerID]++;
 	UpdateTowerCost(playerID);
@@ -558,6 +571,7 @@ function missileHit(missileUnit) {
 		}
 		if (Unit.damage(targetUnit, tower.damage)) {
 			SetResources(tower.getPlayerID(), Add, Utils.getUnitDestroyValue(targetUnitType), 0);
+			Unit.set8Flag(tower.unit, Unit.get8Flag(tower.unit) + 1);
 			const unitType = Waves.GetNextUnitType(targetUnitType);
 			if (unitType != Const.Unit_None) {
 				const unit = Utils.createUnit(unitType, Utils.OFFSCREEN_LOCATION, $P7);
@@ -573,20 +587,20 @@ function missileHit(missileUnit) {
 
 function UpdateTowerCost(playerID) {
 	if (IsUserCP()) {
-		settblf(646, 0,
-			"a\x01Build \x03A\x01ir Element Tower\n\nFast rate of fire.\nCan be upgraded to \x19Thunderstorm\x01 or \x0FTornado\x01 tower.\n\nCost: \x1F{} Minerals",
+		settblf(646, 0, "{}Cost: \x1F{} Minerals",
+			Strings.AirTowerTooltip,
 			getTowerType(1).calculcateCost(playerID)
 		);
-		settblf(647, 0,
-			"e\x01Build \x03E\x01arth Element Tower\n\nEffective single-target tower.\n\x01Can be upgraded to \x15Earthquake\x01 and \x1DOvergrowth\x01 tower.\n\nCost: \x1F{} Minerals",
+		settblf(647, 0, "{}Cost: \x1F{} Minerals",
+			Strings.EarthTowerTooltip,
 			getTowerType(2).calculcateCost(playerID)
 		);
-		settblf(648, 0,
-			"f\x01Build \x03F\x01ire Element Tower\n\nSlow rate of fire, but its missile damages enemies around the target.\n\x01Can be upgraded to \x11Wildfire\x01 and \x06Magma\x01 tower.\n\nCost: \x1F{} Minerals",
+		settblf(648, 0, "{}Cost: \x1F{} Minerals",
+			Strings.FireTowerTooltip,
 			getTowerType(3).calculcateCost(playerID)
 		);
-		settblf(649, 0,
-			"w\x01Build \x03W\x01ater Element Tower\n\nWeak attack, but slows down enemies for a short duration.\nCan be upgraded to \x1FTsunami\x01 and \x04Arctic\x01 towers.\n\nCost: \x1F{} Minerals",
+		settblf(649, 0, "{}Cost: \x1F{} Minerals",
+			Strings.WaterTowerTooltip,
 			getTowerType(4).calculcateCost(playerID)
 		);
 	}
