@@ -530,10 +530,16 @@ function createTowerUnit(location, playerID, towerTypeID) : Tower {
 	MoveUnit(1, TowerUnitType, $P8, Utils.OFFSCREEN_LOCATION, location);
 	// Try shifting the location.
 	if (Bring($P8, AtLeast, 1, TowerUnitType, Utils.OFFSCREEN_LOCATION)) {
-		MoveUnit(1, TowerUnitType, $P8, Utils.OFFSCREEN_LOCATION, Utils.offsetLocation(location, -2, -2));
+		MoveUnit(1, TowerUnitType, $P8, Utils.OFFSCREEN_LOCATION, Utils.offsetLocation(location, 0, -2));
 	}
 	if (Bring($P8, AtLeast, 1, TowerUnitType, Utils.OFFSCREEN_LOCATION)) {
-		MoveUnit(1, TowerUnitType, $P8, Utils.OFFSCREEN_LOCATION, Utils.offsetLocation(location, +4, +4));
+		MoveUnit(1, TowerUnitType, $P8, Utils.OFFSCREEN_LOCATION, Utils.offsetLocation(location, 0, -2));
+	}
+	if (Bring($P8, AtLeast, 1, TowerUnitType, Utils.OFFSCREEN_LOCATION)) {
+		MoveUnit(1, TowerUnitType, $P8, Utils.OFFSCREEN_LOCATION, Utils.offsetLocation(location, 0, 6));
+	}
+	if (Bring($P8, AtLeast, 1, TowerUnitType, Utils.OFFSCREEN_LOCATION)) {
+		MoveUnit(1, TowerUnitType, $P8, Utils.OFFSCREEN_LOCATION, Utils.offsetLocation(location, 0, 2));
 	}
 	if (Bring($P8, AtLeast, 1, TowerUnitType, Utils.OFFSCREEN_LOCATION)) {
 		RemoveUnitAt(1, TowerUnitType, Utils.OFFSCREEN_LOCATION, $P8);
