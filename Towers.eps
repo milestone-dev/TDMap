@@ -506,21 +506,6 @@ function isTowerTypeValid(towerType) {
 	return towerType != 0;
 }
 
-// function createBaseTower(location, playerID) : Tower {
-// 	const towerUnit = Utils.createUnit(TowerUnitType, Utils.OFFSCREEN_LOCATION, $P8);
-// 	MoveUnit(1, TowerUnitType, $P8, Utils.OFFSCREEN_LOCATION, location);
-// 	if (Bring($P8, AtLeast, 1, TowerUnitType, Utils.OFFSCREEN_LOCATION)) {
-// 		RemoveUnitAt(1, TowerUnitType, Utils.OFFSCREEN_LOCATION, $P8);
-// 		eprintln("You can't build there.");
-// 		return 0;
-// 	} else {
-// 		GiveUnits(1, TowerUnitType, $P8, location, playerID);
-// 	}
-// 	const tower = CreateTower(towerUnit);
-// 	tower.init();
-// 	return tower;
-// }
-
 function createTowerUnit(location, playerID, towerTypeID) : Tower {
 	if (towerTypeID == 0) {
 		return 0;
@@ -536,13 +521,9 @@ function createTowerUnit(location, playerID, towerTypeID) : Tower {
 		return 0;
 	}
 
-	// Unit.setParasiteFlag(towerUnit, 512);
-	// Unit.setAcidSporeCount(towerUnit, 1);
 	Unit.setIsBlind(towerUnit, 1);
-
 	TowerCount[playerID]++;
 	UpdateTowerCost(playerID);
-
 	Utils.moveUtilLocationToUnit(towerUnit);
 	GiveUnits(1, TowerUnitType, $P8, Utils.UTILITY_LOCATION, playerID);
 	const tower = CreateTower(towerUnit);
