@@ -35,6 +35,8 @@ const PlayerSelectedTower = EUDArray(6);
 const SelectedUnitID = EUDArray(6);
 var Debug_MissileMisses = 0;
 
+const NumberOfPlayers = bread(0x57F1E1);
+
 var DebugMode = false;
 
 // Mob stuff, move out
@@ -87,8 +89,7 @@ function initMap() {
 
 	Content.loadData();
 
-	SetResources(AllPlayers, SetTo, 100, 1);
-	SetResources(AllPlayers, Add, 100, 0);
+	SetResources(AllPlayers, SetTo, 75, 0);
 
 	EUDPlayerLoop()();
 	if (IsUserCP()) {
@@ -105,7 +106,7 @@ function initMap() {
 }
 
 function onPluginStart() {
-	if (bread(0x57F1E1) == 1) {
+	if (NumberOfPlayers == 1) {
 		DebugMode = true;
 	}
 	randomize();

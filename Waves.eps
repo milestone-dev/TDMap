@@ -6,6 +6,7 @@ import ETK.ETKCommon as Common;
 import Balance;
 import Towers;
 const Screen = StringBuffer(64);
+const NumberOfPlayers = bread(0x57F1E1);
 
 const MobCountMultiplierConstant = 1000;
 const SpawnDurationConstant = 600;
@@ -59,8 +60,8 @@ const Level1TrackCoordinates = [
 	Common.CreatePoint(108, 39),
 	Common.CreatePoint(108, 37),
 	Common.CreatePoint(118, 37),
-	Common.CreatePoint(118, 32),
-	Common.CreatePoint(120, 32),
+	Common.CreatePoint(118, 33),
+	Common.CreatePoint(120, 33),
 	Common.CreatePoint(120, 39),
 	Common.CreatePoint(113, 39),
 	Common.CreatePoint(113, 42)
@@ -166,6 +167,11 @@ function StartWave(waveID) {
 		CurrentWaveAliveMobs = remainingMobs;
 		CurrentWaveSpawnTimerIncrement = remainingMobs * MobCountMultiplierConstant / SpawnDurationConstant;
 		setcurpl(P1); Screen.printf("Starting Wave {}", waveID);
+		EUDPlayerLoop()();
+		if (getcurpl() < $P7) {
+			Screen.printf("\x03\x13Starting Wave {}", CurrentWaveID);
+		}
+		EUDEndPlayerLoop();
 		if (remainingMobs == 0) {
 			setcurpl(P1); Screen.printf("Error: Wave is empty: {}", waveID);
 			CurrentWaveID = 0;
@@ -174,8 +180,13 @@ function StartWave(waveID) {
 }
 
 function GoToNextWave() {
+	CurrentWaveReward = CurrentWaveReward/NumberOfPlayers;
 	SetResources(AllPlayers, Add, CurrentWaveReward, 0);
-	setcurpl(P1); Screen.printf("Wave completed! Adding {} minerals.", CurrentWaveReward);
+	EUDPlayerLoop()();
+	if (getcurpl() < $P7) {
+		Screen.printf("\x03\x13Wave completed! Each player gets {} minerals each.", CurrentWaveReward);
+	}
+	EUDEndPlayerLoop();
 	CurrentWaveReward = 0;
 	StartWave(CurrentWaveID+1);
 }
