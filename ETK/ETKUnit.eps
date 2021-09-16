@@ -986,6 +986,28 @@ function setShields(unitPointer, shields) {
 
 /***
  * @Summary.us-EN
+ * Get the Shields of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+***/
+function getShieldsRaw(unitPointer) {
+    return dwread_epd(unitPointer + 0x060 / 4);
+}
+
+/***
+ * @Summary.us-EN
+ * Set the Shields of the unit.
+ * @param.unitPointer.us-EN
+ * The unit pointer
+ * @param.value.us-EN
+ * The new value
+***/
+function setShieldsRaw(unitPointer, shields) {
+    Common.dwwrite_epd(unitPointer, 0x060, shields);
+}
+
+/***
+ * @Summary.us-EN
  * Get the UnitType of the unit.
  * @param.unitPointer.us-EN
  * The unit pointer

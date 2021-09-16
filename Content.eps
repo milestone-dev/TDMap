@@ -222,12 +222,6 @@ function loadData() {
 		if(Sound.PlaySound()) { PlayWAV("sound\\terran\\firebat\\tfbfir01.wav"); }
 	});
 	FireTower.onHit = EUDFuncPtr (3, 0) (function(tower : Towers.Tower, missileUnit, targetUnit) {
-		// if (Unit.getHitpoints(targetUnit) > 0 && Unit.getPlagueTimer(targetUnit) == 0) {
-		// 	const duration = 64;
-		// 	Utils.createOverlayForUnit(targetUnit, Const.Image_Flames2_Type3_Small, duration);
-		// 	Unit.setPlagueTimer(targetUnit, duration/8);
-		// }
-
 		const damage = tower.damage/5;
 		const splashLocation =  Utils.centerLocationOnUnit(Utils.LOCATION_ANYSIZE, targetUnit, 48, 48);
 		foreach(ptr, enemyUnit : EUDLoopPlayerUnit(enemyPlayerID)) {
@@ -235,6 +229,14 @@ function loadData() {
 				Waves.DamageMob(enemyUnit, damage, tower.getPlayerID(), tower);
 			}
 		}
+
+		// if (dwrand() % (2 + 1)) {
+		// 	if (Unit.getHitpoints(targetUnit) > 0 && Unit.getPlagueTimer(targetUnit) == 0) {
+		// 		const duration = 64;
+		// 		Utils.createOverlayForUnit(targetUnit, Const.Image_Flames2_Type3_Small, duration);
+		// 		Unit.setPlagueTimer(targetUnit, duration/8);
+		// 	}
+		// }
 	});
 
 	const WaterTower = Towers.CreateTowerType(4,
@@ -268,24 +270,27 @@ function loadData() {
 	WaterTower.onHit = EUDFuncPtr (3, 0) (function(tower : Towers.Tower, missileUnit, targetUnit) {
 		if(Sound.PlaySound()) { PlayWAV("sound\\bullet\\zbghit00.wav"); }
 		if (Unit.getEnsnareTimer(targetUnit) == 0) {
-			const duration = 32;
-			Unit.setEnsnareTimer(targetUnit, duration/8);
-			const slowSpeed = 100;//Unit.getOriginalTopSpeed(targetUnit) / 10;
-			Unit.setTopSpeed(targetUnit, slowSpeed);
-			Utils.createOverlayForUnit(targetUnit, Const.Image_Acid_Spores_6_9_Overlay_Small, duration);
-			Timer.add(duration, targetUnit, EUDFuncPtr (2, 0) (function(callbackUnit, intervalCount) {
-				Unit.restoreOriginalTopSpeed(callbackUnit);
-			}));
+			// if (dwrand() % (2 + 1)) {
+			// 	const duration = 64;
+			// 	Unit.setEnsnareTimer(targetUnit, duration/8);
+			// 	const slowSpeed = 0;//Unit.getOriginalTopSpeed(targetUnit) / 10;
+			// 	Unit.setTopSpeed(targetUnit, slowSpeed);
+			// 	Utils.createOverlayForUnit(targetUnit, Const.Image_Stasis_Field_Small, duration);
+			// 	Timer.add(duration, targetUnit, EUDFuncPtr (2, 0) (function(callbackUnit, intervalCount) {
+			// 		Unit.restoreOriginalTopSpeed(callbackUnit);
+			// 	}));
+			// } else {
+				const duration = 32;
+				// Unit.setEnsnareTimer(targetUnit, duration/8);
+				// Unit.setLockdownTimer(targetUnit, duration/8);
+				Unit.setStormTimer(targetUnit, duration);
+				// const slowSpeed = 100;//Unit.getOriginalTopSpeed(targetUnit) / 10;
+				// Unit.setTopSpeed(targetUnit, slowSpeed);
+				// Utils.createOverlayForUnit(targetUnit, Const.Image_Acid_Spores_6_9_Overlay_Small, duration);
+				// Timer.add(duration, targetUnit, EUDFuncPtr (2, 0) (function(callbackUnit, intervalCount) {
+				// 	Unit.restoreOriginalTopSpeed(callbackUnit);
+				// }));
+			// }
 		}
-		// if (Unit.getEnsnareTimer(targetUnit) == 0) {
-		// 	const duration = 64;
-		// 	Unit.setEnsnareTimer(targetUnit, duration/8);
-		// 	const slowSpeed = 0;//Unit.getOriginalTopSpeed(targetUnit) / 10;
-		// 	Unit.setTopSpeed(targetUnit, slowSpeed);
-		// 	Utils.createOverlayForUnit(targetUnit, Const.Image_Stasis_Field_Small, duration);
-		// 	Timer.add(duration, targetUnit, EUDFuncPtr (2, 0) (function(callbackUnit, intervalCount) {
-		// 		Unit.restoreOriginalTopSpeed(callbackUnit);
-		// 	}));
-		// }
 	});
 }

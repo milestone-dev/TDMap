@@ -5,6 +5,7 @@ import ETK.ETKConstants as Const;
 import ETK.ETKCommon as Common;
 import Balance;
 import Towers;
+
 const Screen = StringBuffer(64);
 const NumberOfPlayers = bread(0x57F1E1);
 
@@ -17,6 +18,7 @@ const LocationSize = 8;
 const TileSize = 32;
 
 var Lives = 100;
+
 
 var CurrentWaveID = 1;
 var CurrentWaveSpawnTimer = 0;
@@ -45,6 +47,7 @@ const TestWave = [0,0,0,0,0,0,28];
 
 // Foward declare
 function StartWave(waveID);
+function CreateMobObjectForUnit(unit);
 
 
 // TODO Move to Levels.eps later
@@ -166,7 +169,6 @@ function StartWave(waveID) {
 		CurrentWaveReward = remainingMobs;
 		CurrentWaveAliveMobs = remainingMobs;
 		CurrentWaveSpawnTimerIncrement = remainingMobs * MobCountMultiplierConstant / SpawnDurationConstant;
-		setcurpl(P1); Screen.printf("Starting Wave {}", waveID);
 		EUDPlayerLoop()();
 		if (getcurpl() < $P7) {
 			Screen.printf("\x03\x13Starting Wave {}", CurrentWaveID);
@@ -268,7 +270,8 @@ function Update() {
 		if (nextUnitType != Const.Unit_None) {
 			const unit = Utils.createUnit(nextUnitType, TrackLocationFrom, MobPlayer);
 			Unit.setRemoveTimer(unit, 100);
-			Unit.setStatusFlags(unit, 0x00230005); // 5xxxx does not move, 3xxxx crashes	
+			Unit.setStatusFlags(unit, 0x00230005); // 5xxxx does not move, 3xxxx crashes
+			CreateMobObjectForUnit(unit);
 		} else {
 			if (Command(MobPlayer, Exactly, 0, Const.Unit_AnyUnit)) {
 				GoToNextWave();
@@ -309,12 +312,50 @@ function Update() {
 	}
 }
 
+object Mob {
+	var unit;
+	var permanentEffect;
+
+	var igniteIntervalCount;
+	var igniteDamage;
+
+	// Stim timer used for Staggered
+	// Lockdown timer used for Stunned
+	// Matrix timer used for Ignite
+	// Ensnare timer used for Chilled
+
+	function applyIgnite(argument) {
+		// body...
+	}
+
+	function update(argument) {
+		// body...
+	}
+
+	function destruct() {
+		//called just before free
+	}
+};
+
+function CreateMobObjectForUnit(unit) {
+	const mob = Mob.alloc();
+	mob.unit = unit;
+	Unit.setConnectedUnit(unit, mob);
+}
+
+function DestroyMobObjectForUnit(unit) {
+	const mob = Mob.cast(Unit.getConnectedUnit(unit));
+	mob.destruct();
+	Mob.free(mob);
+}
+
 // tower can be 0
 function DamageMob(targetUnit, damage, playerID, tower : Towers.Tower) {
 	if (Unit.getHitpoints(targetUnit) == 0) {
 		return;
 	}
 	if (Unit.damage(targetUnit, damage)) {
+		DestroyMobObjectForUnit(targetUnit);
 		const targetUnitType = Unit.getUnitType(targetUnit);
 		if (tower != 0) {
 			Unit.set8Flag(tower.unit, Unit.get8Flag(tower.unit) + 1);
@@ -323,6 +364,7 @@ function DamageMob(targetUnit, damage, playerID, tower : Towers.Tower) {
 		const unitType = GetNextUnitType(targetUnitType);
 		if (unitType != Const.Unit_None) {
 			const unit = Utils.createUnit(unitType, Utils.OFFSCREEN_LOCATION, $P7);
+			CreateMobObjectForUnit(unit);
 			Unit.setStatusFlags(unit, 0x00230005); // 5xxxx does not move
 			Utils.moveUnit(unit, Utils.moveUtilLocationToUnit(targetUnit));
 			Unit.setRemoveTimer(unit, Unit.getRemoveTimer(targetUnit));

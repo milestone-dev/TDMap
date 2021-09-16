@@ -257,21 +257,28 @@ function beforeTriggerExec() {
 		// MOB DISPLAY
 		if (Unit.getPlayerID(selectedUnit) == $P7) {
 			RefreshTowerSelection(playerID);
-			if (DebugMode) {
+			if (DebugMode && Unit.getConnectedUnit(selectedUnit) != 0) {
+				// Screen.printfAt(0,
+				// 	"P{} - Unit: {} ({}), Speed {}, Priority {} O:{} {}x{} == {}x{} ET {} PT {} DT {}",
+				// 	Unit.getPlayerID(selectedUnit)+1,
+				// 	Unit.getUnitType(selectedUnit),
+				// 	selectedUnit,
+				// 	Unit.getFlingyTopSpeed(selectedUnit),
+				// 	Unit.getRemoveTimer(selectedUnit),
+				// 	Unit.getOrder(selectedUnit),
+				// 	Unit.getOrderTargetX(selectedUnit),
+				// 	Unit.getOrderTargetY(selectedUnit),
+				// 	Unit.getNextMovementWaypointX(selectedUnit),
+				// 	Unit.getNextMovementWaypointY(selectedUnit),
+				// 	Unit.getEnsnareTimer(selectedUnit),
+				// 	Unit.getPlagueTimer(selectedUnit),
+				// 	Unit.getDefenseMatrixTimer(selectedUnit)
+				// );
+				const mob = Waves.Mob.cast(Unit.getConnectedUnit(selectedUnit));
 				Screen.printfAt(0,
-					"P{} - Unit: {} ({}), Speed {}, Priority {} O:{} {}x{} == {}x{} ET {} PT {}",
-					Unit.getPlayerID(selectedUnit)+1,
-					Unit.getUnitType(selectedUnit),
+					"unit {} mob.unit {}",
 					selectedUnit,
-					Unit.getFlingyTopSpeed(selectedUnit),
-					Unit.getRemoveTimer(selectedUnit),
-					Unit.getOrder(selectedUnit),
-					Unit.getOrderTargetX(selectedUnit),
-					Unit.getOrderTargetY(selectedUnit),
-					Unit.getNextMovementWaypointX(selectedUnit),
-					Unit.getNextMovementWaypointY(selectedUnit),
-					Unit.getEnsnareTimer(selectedUnit),
-					Unit.getPlagueTimer(selectedUnit)
+					mob.unit
 				);
 			}
 		}
