@@ -389,11 +389,9 @@ object Mob {
 
 	function update() {
 		const igniteTimer = this.getIgniteTimer();
-		if (igniteTimer > 0) {
-			if (igniteTimer % 5 == 0 && Unit.getCycleCounter(this.unit) == 0) {
-				// setcurpl(P1); Screen.printf("Burning by {}", this.igniteStrength);	
-				DamageMob(this.unit, this.igniteStrength, this.lastTaggedPlayer, 0);
-			}
+		if (igniteTimer > 0 && Unit.getCycleCounter(this.unit) == 0) {
+			// setcurpl(P1); Screen.printf("Burning by {}", this.igniteStrength);	
+			DamageMob(this.unit, this.igniteStrength, this.lastTaggedPlayer, 0);
 		}
 		if (igniteTimer == 0 && this.igniteStrength != 0) {
 			// setcurpl(P1); Screen.printf("Stop burn");
