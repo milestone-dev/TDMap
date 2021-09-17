@@ -367,6 +367,10 @@ function beforeTriggerExec() {
 				Utils.setUnitColor(unit, $P7);
 			}
 		}
+
+		const mob = Waves.GetMobObjectForUnit(unit);
+		mob.update();
+
 	}
 
 	if (MobUpdateTimer >= MobUpdateCooldown) {

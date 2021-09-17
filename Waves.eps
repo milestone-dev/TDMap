@@ -42,12 +42,13 @@ const Tier4Penalty = 15;
 const Tier5Penalty = 25;
 const Tier6Penalty = 60;
 
-const UseTestWave = false;
-const TestWave = [0,0,0,0,0,0,28];
+const UseTestWave = true;
+const TestWave = [0,0,0,0,0,0,10];
 
 // Foward declare
 function StartWave(waveID);
 function CreateMobObjectForUnit(unit);
+function DamageMob(targetUnit, damage, playerID, tower : Towers.Tower);
 
 
 // TODO Move to Levels.eps later
@@ -314,28 +315,116 @@ function Update() {
 
 object Mob {
 	var unit;
-	var permanentEffect;
+	var overlayUnit;
+	var lastTaggedPlayer;
 
-	var igniteIntervalCount;
-	var igniteDamage;
-
+	var igniteStrength;
+	var slowStrength;
+	var slowTopSpeed;
 	// Stim timer used for Staggered
 	// Lockdown timer used for Stunned
 	// Matrix timer used for Ignite
 	// Ensnare timer used for Chilled
+	// Timers tick 3 times per second
 
-	function applyIgnite(argument) {
-		// body...
+	function setIgniteTimer(duration) {
+		Unit.setDefenseMatrixTimer(this.unit, duration);
 	}
 
-	function update(argument) {
-		// body...
+	function getIgniteTimer() {
+		return Unit.getDefenseMatrixTimer(this.unit);
+	}
+
+	function applyIgnite(playerID, strength, duration) {
+		if (this.getIgniteTimer() == 0) {
+			this.setIgniteTimer(duration);
+			this.lastTaggedPlayer = playerID;
+			this.igniteStrength = strength;
+			this.overlayUnit = Utils.createOverlayForUnit(this.unit, Const.Image_Flames2_Type3_Small, 0);
+			setcurpl(P1); Screen.printf("Applying ignite by {} for {}", strength, duration);	
+		}
+	}
+
+	function setSlowTimer(duration) {
+		Unit.setEnsnareTimer(this.unit, duration);
+	}
+
+	function getSlowTimer() {
+		return Unit.getEnsnareTimer(this.unit);
+	}
+
+	function applySlow(playerID, strength, duration, image) {
+		if (this.slowStrength == 0 && this.getSlowTimer() == 0) {
+			this.setSlowTimer(duration);
+			this.slowStrength = strength;
+			this.slowTopSpeed = (Unit.getOriginalTopSpeed(this.unit) * strength) / 100;
+			this.lastTaggedPlayer = playerID;
+			Utils.createOverlayForUnit(this.unit, image, duration*3);
+			return true;
+		}
+		return false;
+	}
+
+	function applyChill(playerID, strength, duration) {
+		// TODO check for existing types
+		if (this.applySlow(playerID, strength, duration, Const.Image_Acid_Spores_6_9_Overlay_Small)) {
+			setcurpl(P1); Screen.printf("Applying chill by {} for {}", strength, duration);	
+		}
+	}
+
+	function applyStun(playerID, strength, duration) {
+		// TODO check for existing types
+		if (this.applySlow(playerID, strength, duration, Const.Image_Stasis_Field_Small)) {
+			setcurpl(P1); Screen.printf("Applying stun by {} for {}", strength, duration);	
+		}
+	}
+
+	function applyStagger(playerID, strength, duration) {
+		// TODO check for existing types
+		if (this.applySlow(playerID, strength, duration, Const.Image_Recall_Field)) {
+			setcurpl(P1); Screen.printf("Applying stagger by {} for {}", strength, duration);	
+		}
+	}
+
+	function update() {
+		const igniteTimer = this.getIgniteTimer();
+		if (igniteTimer > 0) {
+			if (igniteTimer % 5 == 0) {
+				setcurpl(P1); Screen.printf("Burnign by {}", this.igniteStrength);	
+				DamageMob(this.unit, this.igniteStrength, this.lastTaggedPlayer, 0);
+			}
+		}
+		if (igniteTimer == 0 && this.igniteStrength != 0) {
+			setcurpl(P1); Screen.printf("Stop burn");
+			this.igniteStrength = 0;
+			Unit.destroy(this.overlayUnit);
+		}
+
+		const slowTimer = this.getSlowTimer();
+		if (slowTimer > 0) {
+			Unit.setTopSpeed(this.unit, this.slowTopSpeed);
+			setcurpl(P1); Screen.printf("Slowtimer {}", slowTimer);
+		}
+		if (slowTimer == 0 && this.slowStrength != 0) {
+			setcurpl(P1); Screen.printf("Restoring slow");
+			Unit.restoreOriginalTopSpeed(this.unit);
+			Unit.destroy(this.overlayUnit);
+			this.slowStrength = 0;
+			this.slowTopSpeed = 0;
+		}
 	}
 
 	function destruct() {
 		//called just before free
 	}
 };
+
+function GetMobObjectForUnit(unit) : Mob {
+	if (Unit.getConnectedUnit(unit) == 0) {
+		return 0;
+	}
+	return Mob.cast(Unit.getConnectedUnit(unit));
+}
 
 function CreateMobObjectForUnit(unit) {
 	const mob = Mob.alloc();
