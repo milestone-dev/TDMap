@@ -165,7 +165,7 @@ function loadData() {
 	});
 	AirTower.onHit = EUDFuncPtr (3, 0) (function(tower : Towers.Tower, missileUnit, targetUnit) {
 		// No sound, the sprite already plays a sound
-		Waves.GetMobObjectForUnit(targetUnit).applyStagger(tower.getPlayerID(), 25, 3*2);
+		Waves.GetMobObjectForUnit(targetUnit).applyStagger(tower.getPlayerID(), 25, 2*24);
 
 	});
 
@@ -193,7 +193,7 @@ function loadData() {
 	});
 	EarthTower.onHit = EUDFuncPtr (3, 0) (function(tower : Towers.Tower, missileUnit, targetUnit) {
 		if(Sound.PlaySound()) { PlayWAV("sound\\zerg\\devourer\\goophit.wav"); }
-		Waves.GetMobObjectForUnit(targetUnit).applyStun(tower.getPlayerID(), 0, 3);
+		Waves.GetMobObjectForUnit(targetUnit).applyStun(tower.getPlayerID(), 0, 12);
 	});
 
 	const FireTower = Towers.CreateTowerType(3,
@@ -225,7 +225,7 @@ function loadData() {
 		if(Sound.PlaySound()) { PlayWAV("sound\\terran\\firebat\\tfbfir01.wav"); }
 	});
 	FireTower.onHit = EUDFuncPtr (3, 0) (function(tower : Towers.Tower, missileUnit, targetUnit) {
-		Waves.GetMobObjectForUnit(targetUnit).applyIgnite(tower.getPlayerID(), 5, 3*10);
+		Waves.GetMobObjectForUnit(targetUnit).applyIgnite(tower.getPlayerID(), 5, 10*24);
 		/*
 		const damage = tower.damage/5;
 		const splashLocation =  Utils.centerLocationOnUnit(Utils.LOCATION_ANYSIZE, targetUnit, 48, 48);
@@ -275,7 +275,7 @@ function loadData() {
 	});
 	WaterTower.onHit = EUDFuncPtr (3, 0) (function(tower : Towers.Tower, missileUnit, targetUnit) {
 		if(Sound.PlaySound()) { PlayWAV("sound\\bullet\\zbghit00.wav"); }
-		Waves.GetMobObjectForUnit(targetUnit).applyChill(tower.getPlayerID(), 90, 3*5);
+		Waves.GetMobObjectForUnit(targetUnit).applyChill(tower.getPlayerID(), 90, 5*24);
 
 		if (Unit.getEnsnareTimer(targetUnit) == 0) {
 			// if (dwrand() % (2 + 1)) {

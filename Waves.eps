@@ -42,8 +42,8 @@ const Tier4Penalty = 15;
 const Tier5Penalty = 25;
 const Tier6Penalty = 60;
 
-const UseTestWave = true;
-const TestWave = [0,0,0,0,0,0,10];
+const UseTestWave = false;
+const TestWave = [0,0,0,0,0,0,1];
 
 // Foward declare
 function StartWave(waveID);
@@ -337,10 +337,10 @@ object Mob {
 
 	function applyIgnite(playerID, strength, duration) {
 		if (this.getIgniteTimer() == 0) {
-			this.setIgniteTimer(duration);
+			this.setIgniteTimer(duration/8);
 			this.lastTaggedPlayer = playerID;
 			this.igniteStrength = strength;
-			this.overlayUnit = Utils.createOverlayForUnit(this.unit, Const.Image_Flames2_Type3_Small, 0);
+			this.overlayUnit = Utils.createOverlayForUnit(this.unit, Const.Image_Flames2_Type3_Small, duration);
 			setcurpl(P1); Screen.printf("Applying ignite by {} for {}", strength, duration);	
 		}
 	}
@@ -353,13 +353,14 @@ object Mob {
 		return Unit.getEnsnareTimer(this.unit);
 	}
 
+	// duration is in frames
 	function applySlow(playerID, strength, duration, image) {
 		if (this.slowStrength == 0 && this.getSlowTimer() == 0) {
-			this.setSlowTimer(duration);
+			this.setSlowTimer(duration/8);
 			this.slowStrength = strength;
 			this.slowTopSpeed = (Unit.getOriginalTopSpeed(this.unit) * strength) / 100;
 			this.lastTaggedPlayer = playerID;
-			Utils.createOverlayForUnit(this.unit, image, duration*3);
+			Utils.createOverlayForUnit(this.unit, image, duration);
 			return true;
 		}
 		return false;
@@ -389,13 +390,13 @@ object Mob {
 	function update() {
 		const igniteTimer = this.getIgniteTimer();
 		if (igniteTimer > 0) {
-			if (igniteTimer % 5 == 0) {
-				setcurpl(P1); Screen.printf("Burnign by {}", this.igniteStrength);	
+			if (igniteTimer % 5 == 0 && Unit.getCycleCounter(this.unit) == 0) {
+				// setcurpl(P1); Screen.printf("Burning by {}", this.igniteStrength);	
 				DamageMob(this.unit, this.igniteStrength, this.lastTaggedPlayer, 0);
 			}
 		}
 		if (igniteTimer == 0 && this.igniteStrength != 0) {
-			setcurpl(P1); Screen.printf("Stop burn");
+			// setcurpl(P1); Screen.printf("Stop burn");
 			this.igniteStrength = 0;
 			Unit.destroy(this.overlayUnit);
 		}
@@ -403,10 +404,10 @@ object Mob {
 		const slowTimer = this.getSlowTimer();
 		if (slowTimer > 0) {
 			Unit.setTopSpeed(this.unit, this.slowTopSpeed);
-			setcurpl(P1); Screen.printf("Slowtimer {}", slowTimer);
+			// setcurpl(P1); Screen.printf("Slowtimer {}", slowTimer);
 		}
 		if (slowTimer == 0 && this.slowStrength != 0) {
-			setcurpl(P1); Screen.printf("Restoring slow");
+			// setcurpl(P1); Screen.printf("Restoring slow");
 			Unit.restoreOriginalTopSpeed(this.unit);
 			Unit.destroy(this.overlayUnit);
 			this.slowStrength = 0;
