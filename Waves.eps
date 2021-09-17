@@ -341,7 +341,7 @@ object Mob {
 			this.lastTaggedPlayer = playerID;
 			this.igniteStrength = strength;
 			this.overlayUnit = Utils.createOverlayForUnit(this.unit, Const.Image_Flames2_Type3_Small, duration);
-			setcurpl(P1); Screen.printf("Applying ignite by {} for {}", strength, duration);	
+			// setcurpl(P1); Screen.printf("Applying ignite by {} for {}", strength, duration);	
 		}
 	}
 
@@ -369,21 +369,21 @@ object Mob {
 	function applyChill(playerID, strength, duration) {
 		// TODO check for existing types
 		if (this.applySlow(playerID, strength, duration, Const.Image_Acid_Spores_6_9_Overlay_Small)) {
-			setcurpl(P1); Screen.printf("Applying chill by {} for {}", strength, duration);	
+			// setcurpl(P1); Screen.printf("Applying chill by {} for {}", strength, duration);	
 		}
 	}
 
 	function applyStun(playerID, strength, duration) {
 		// TODO check for existing types
 		if (this.applySlow(playerID, strength, duration, Const.Image_Stasis_Field_Small)) {
-			setcurpl(P1); Screen.printf("Applying stun by {} for {}", strength, duration);	
+			// setcurpl(P1); Screen.printf("Applying stun by {} for {}", strength, duration);	
 		}
 	}
 
 	function applyStagger(playerID, strength, duration) {
 		// TODO check for existing types
 		if (this.applySlow(playerID, strength, duration, Const.Image_Recall_Field)) {
-			setcurpl(P1); Screen.printf("Applying stagger by {} for {}", strength, duration);	
+			// setcurpl(P1); Screen.printf("Applying stagger by {} for {}", strength, duration);	
 		}
 	}
 
