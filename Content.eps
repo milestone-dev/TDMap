@@ -275,7 +275,7 @@ function loadData() {
 	});
 	WaterTower.onHit = EUDFuncPtr (3, 0) (function(tower : Towers.Tower, missileUnit, targetUnit) {
 		if(Sound.PlaySound()) { PlayWAV("sound\\bullet\\zbghit00.wav"); }
-		Waves.GetMobObjectForUnit(targetUnit).applyFreeze(tower.getPlayerID(), 0, 32);
+		Waves.GetMobObjectForUnit(targetUnit).applyFreeze(tower.getPlayerID(), 0, 12);
 
 		if (Unit.getEnsnareTimer(targetUnit) == 0) {
 			// if (dwrand() % (2 + 1)) {
