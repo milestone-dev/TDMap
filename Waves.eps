@@ -366,21 +366,21 @@ object Mob {
 		return false;
 	}
 
-	function applyChill(playerID, strength, duration) {
+	function applyEntangle(playerID, strength, duration) {
 		// TODO check for existing types
-		if (this.applySlow(playerID, strength, duration, Const.Image_Acid_Spores_6_9_Overlay_Small)) {
+		if (this.applySlow(playerID, strength, duration, Const.Image_Ensnare_Overlay_Small)) {
 			// setcurpl(P1); Screen.printf("Applying chill by {} for {}", strength, duration);	
 		}
 	}
 
-	function applyStun(playerID, strength, duration) {
+	function applyFreeze(playerID, strength, duration) {
 		// TODO check for existing types
 		if (this.applySlow(playerID, strength, duration, Const.Image_Stasis_Field_Small)) {
-			// setcurpl(P1); Screen.printf("Applying stun by {} for {}", strength, duration);	
+			// setcurpl(P1); Screen.printf("Applying freeze by {} for {}", strength, duration);	
 		}
 	}
 
-	function applyStagger(playerID, strength, duration) {
+	function applyWind(playerID, strength, duration) {
 		// TODO check for existing types
 		if (this.applySlow(playerID, strength, duration, Const.Image_Recall_Field)) {
 			// setcurpl(P1); Screen.printf("Applying stagger by {} for {}", strength, duration);	
