@@ -27,6 +27,7 @@ const TowerFireThreshold = 2380;
 
 // Forward declaration
 function UpdateTowerCost(playerID);
+function DestroyTowerObjectForUnit(unit);
 
 function ResetMobPriorty() {
 	for (var i = 0; i < MOB_ARRAY_LENGTH; i++) {
@@ -400,6 +401,7 @@ object Tower {
 		UpdateTowerCost(playerID);
 		Utils.removeUnit(this.unit);
 		Utils.removeUnitSafe(cannonUnit);
+		DestroyTowerObjectForUnit(this.unit);
 	}
 
 	function handleButtonClick() {
@@ -470,6 +472,17 @@ object Tower {
 		}
 		Utils.refreshInterface();
 	}
+
+	function destruct() {
+		this.unit = 0;
+		this.type = 0;
+		this.currentUpgradeOptionSet = 0;
+		this.damage = 0;
+		this.range = 0;
+		this.speed = 0;
+		this.fireTimer = 0;
+		this.upgradeValue = 0;
+	}
 };
 
 // function CreateTower(type : TowerType, towerUnit) : Tower {
@@ -486,6 +499,12 @@ function getTowerForUnit(unitPointer) : Tower {
 		return 0;
 	}
 	return Tower.cast(towerObj);
+}
+
+function DestroyTowerObjectForUnit(unit) {
+	const tower = getTowerForUnit(unit);
+	tower.destruct();
+	Tower.free(tower);
 }
 
 function getTowerType(id): TowerType {

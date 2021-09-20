@@ -165,7 +165,10 @@ function loadData() {
 	});
 	AirTower.onHit = EUDFuncPtr (3, 0) (function(tower : Towers.Tower, missileUnit, targetUnit) {
 		// No sound, the sprite already plays a sound
-		Waves.GetMobObjectForUnit(targetUnit).applyWind(tower.getPlayerID(), 90, 5*24);
+		const mob = Waves.GetMobObjectForUnit(targetUnit);
+		if (mob != 0) {
+			mob.applyWind(tower.getPlayerID(), 90, 5*24);
+		}
 
 	});
 
@@ -193,7 +196,10 @@ function loadData() {
 	});
 	EarthTower.onHit = EUDFuncPtr (3, 0) (function(tower : Towers.Tower, missileUnit, targetUnit) {
 		if(Sound.PlaySound()) { PlayWAV("sound\\zerg\\devourer\\goophit.wav"); }
-		Waves.GetMobObjectForUnit(targetUnit).applyEntangle(tower.getPlayerID(), 75, 2*24);
+		const mob = Waves.GetMobObjectForUnit(targetUnit);
+		if (mob != 0) {
+			mob.applyEntangle(tower.getPlayerID(), 75, 2*24);
+		}
 	});
 
 	const FireTower = Towers.CreateTowerType(3,
@@ -225,7 +231,11 @@ function loadData() {
 		if(Sound.PlaySound()) { PlayWAV("sound\\terran\\firebat\\tfbfir01.wav"); }
 	});
 	FireTower.onHit = EUDFuncPtr (3, 0) (function(tower : Towers.Tower, missileUnit, targetUnit) {
-		Waves.GetMobObjectForUnit(targetUnit).applyIgnite(tower.getPlayerID(), 5, 10*24);
+		const damage = (tower.damage * 10) / 100;  // 10%
+		const mob = Waves.GetMobObjectForUnit(targetUnit);
+		if (mob != 0) {
+			mob.applyIgnite(tower.getPlayerID(), 5, 10*24);
+		}
 		/*
 		const damage = tower.damage/5;
 		const splashLocation =  Utils.centerLocationOnUnit(Utils.LOCATION_ANYSIZE, targetUnit, 48, 48);
@@ -275,7 +285,10 @@ function loadData() {
 	});
 	WaterTower.onHit = EUDFuncPtr (3, 0) (function(tower : Towers.Tower, missileUnit, targetUnit) {
 		if(Sound.PlaySound()) { PlayWAV("sound\\bullet\\zbghit00.wav"); }
-		Waves.GetMobObjectForUnit(targetUnit).applyFreeze(tower.getPlayerID(), 0, 12);
+		const mob = Waves.GetMobObjectForUnit(targetUnit);
+		if (mob != 0) {
+			mob.applyFreeze(tower.getPlayerID(), 0, 12);
+		}
 
 		if (Unit.getEnsnareTimer(targetUnit) == 0) {
 			// if (dwrand() % (2 + 1)) {

@@ -19,7 +19,6 @@ const TileSize = 32;
 
 var Lives = 100;
 
-
 var CurrentWaveID = 1;
 var CurrentWaveSpawnTimer = 0;
 var CurrentWaveSpawnTimerIncrement = 0;
@@ -317,7 +316,6 @@ object Mob {
 	var unit;
 	var overlayUnit;
 	var lastTaggedPlayer;
-
 	var igniteStrength;
 	var slowStrength;
 	var slowTopSpeed;
@@ -414,12 +412,18 @@ object Mob {
 	}
 
 	function destruct() {
-		//called just before free
+		this.unit = 0;
+		Unit.destroy(this.overlayUnit);	
+		this.overlayUnit = 0;
+		this.lastTaggedPlayer = 0;
+		this.igniteStrength = 0;
+		this.slowStrength = 0;
+		this.slowTopSpeed = 0;
 	}
 };
 
 function GetMobObjectForUnit(unit) : Mob {
-	if (Unit.getConnectedUnit(unit) == 0) {
+	if (Unit.getConnectedUnit(unit) == 0 || Unit.getPlayerID(unit) != $P7) {
 		return 0;
 	}
 	return Mob.cast(Unit.getConnectedUnit(unit));
