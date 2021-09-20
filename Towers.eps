@@ -392,12 +392,13 @@ object Tower {
 	}
 
 	function sell() {
-		Screen.print("Note: Selling towers not implemented yet - no minerals refunded.");
+
 		const cannonUnit = Unit.getConnectedUnit(this.unit);
 		const playerID = Unit.getPlayerID(this.unit);
 		if (TowerCount[playerID] > 0) {
 			TowerCount[playerID]--;
 		}
+		SetResources(playerID, Add, this.type.calculcateCost(playerID), 0);
 		UpdateTowerCost(playerID);
 		Utils.removeUnit(this.unit);
 		Utils.removeUnitSafe(cannonUnit);
