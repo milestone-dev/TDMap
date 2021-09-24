@@ -4,7 +4,7 @@ import ETK.ETKUnit;
 import ETK.ETKConstants;
 import ETK.ETKTimer;
 import TriggerEditor.TETools as te;
-import customText as ct;
+// import customText as ct;
 
 // TODO: Make these runtime configurable for other projects in the future
 const IMAGE_SPRITE_UNIT_TYPE = $U("Scanner Sweep");
@@ -298,7 +298,7 @@ function displayTimers(timersVar) {
 	const timers = EUDArray.cast(timersVar);
 	for (var i = 0; i < 5; i++) {
 		if (timers[i] > 0) {
-			ct.chatAnnouncement(timers[i]);
+			// ct.chatAnnouncement(timers[i]);
 		}
 	}
 }
@@ -577,12 +577,12 @@ function canExecuteCustomTargetAbility(unit, orderID, energy, targetingMode, pla
 	}
 	
 	if (!ETKUnit.hasEnergy(unit, energy)) {
-		ct.chatAnnouncement("Not enough energy");
+		// ct.chatAnnouncement("Not enough energy");
 		return false;
 	}
 	
 	if (targetingMode == 1 && !ETKUnit.isOrderTargetUnitValid(unit)) {
-		ct.chatAnnouncement("Must target units");
+		// ct.chatAnnouncement("Must target units");
 		return false;
 	}
 
