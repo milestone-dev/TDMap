@@ -10,7 +10,9 @@ const Screen = StringBuffer(64);
 const NumberOfPlayers = bread(0x57F1E1);
 
 const MobCountMultiplierConstant = 1000;
-const SpawnDurationConstant = 600;
+const SpawnDurationBase = 500;
+const SpawnDurationIncrement = 5;
+var SpawnDuration = 0;
 
 const MobPlayer = $P7;
 const LocationInset = 8;
@@ -168,7 +170,8 @@ function StartWave(waveID) {
 		const remainingMobs = CalculateCurrentWaveRemainingMobs();
 		CurrentWaveReward = remainingMobs;
 		CurrentWaveAliveMobs = remainingMobs;
-		CurrentWaveSpawnTimerIncrement = remainingMobs * MobCountMultiplierConstant / SpawnDurationConstant;
+		SpawnDuration = SpawnDurationBase + SpawnDurationIncrement * CurrentWaveID;
+		CurrentWaveSpawnTimerIncrement = remainingMobs * MobCountMultiplierConstant / SpawnDuration;
 		EUDPlayerLoop()();
 		if (getcurpl() < $P7) {
 			Screen.printf("\x03\x13Starting Wave {}", CurrentWaveID);
